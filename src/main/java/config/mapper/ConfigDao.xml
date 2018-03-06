@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+		PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"   
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">  
+<mapper namespace="com.nieyue.dao.ConfigDao">
+<!-- 添加配置 -->
+<insert id="addConfig" parameterType="Config" keyProperty="configId" flushCache="true"  >  
+   INSERT IGNORE INTO
+   		  config_tb 
+   		 (
+   		 customer_service_phone,
+   		 create_date,
+   		 update_date
+   		 )
+   VALUES
+    	 (
+    	 #{customerServicePhone},
+    	 #{createDate},
+    	 #{updateDate}
+    	 )  
+</insert>  
+<!-- 更新配置 -->
+<update id="updateConfig" parameterType="Config" >  
+    UPDATE 
+    	config_tb 
+    SET 
+    	customer_service_phone=#{customerServicePhone},
+    	create_date=#{createDate},
+    	update_date=#{updateDate}
+    WHERE
+    	 config_id=#{configId} 
+</update> 
+<!-- 删除配置-->
+<delete id="delConfig"  parameterType="Integer" >  
+    DELETE FROM
+    	 config_tb 
+    	 WHERE config_id=#{configId}
+</delete>  
+<!-- 加载配置-->
+<select id="loadConfig" parameterType="Integer" resultType="Config" >
+SELECT 
+		 config_id,
+	 	 customer_service_phone,
+   		 create_date,
+   		 update_date
+FROM config_tb 
+WHERE config_id=#{configId}
+</select>
+
+<!-- 分页查询配置-->
+<select id="browsePagingConfig" resultType="Config">  
+        SELECT
+	     config_id,
+	 	 customer_service_phone,
+   		 create_date,
+   		 update_date
+	FROM config_tb
+	WHERE ${orderName} 
+	<if test="orderWay=='asc'">
+	<![CDATA[>=]]> 
+	</if>
+	<if test="orderWay=='desc'">
+	  <![CDATA[<= ]]>
+	</if>
+	(SELECT ${orderName} FROM config_tb 
+		ORDER BY 
+			${orderName}  ${orderWay}
+		LIMIT #{pageNum}, 1
+		) 
+	ORDER BY
+		${orderName}  ${orderWay}
+	LIMIT
+		#{pageSize}
+</select> 
+
+<!-- 统计记录条数 -->
+<select id="countAll"  resultType="int">  
+	SELECT
+	 	count(config_id)
+	FROM config_tb
+</select>   
+   
+ 
+</mapper>

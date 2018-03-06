@@ -1,0 +1,65 @@
+server:
+  port: 9000
+  session:
+    #timeout: 1800 
+    timeout: 1296000 #1个月  
+    cookie: 
+      name: SESSION
+
+  tomcat: 
+    max-threads: 1000
+    min-spare-threads: 200
+    accept-count: 1000
+    max-connections: 1000
+ # connection-timeout: 60
+ 
+spring:
+   datasource: 
+     name: master
+     driver-class-name: com.mysql.jdbc.Driver
+     url: jdbc:mysql://127.0.0.1:3306/activation_code_mall_db
+     username: root
+     password: liliu 
+myPugin: 
+  session: 
+    myDomainName: null
+  projectName: ActivationCodeMall
+  requestAuth: requestAuthDev
+  activationCodeMallProjectDomainUrl: http://192.168.11.111:9000
+  alibaba: 
+    sms:
+      appkey: LTAIgDJerZxD8twJ
+      appsecret: 9PuLZNoEQRPDJm465MxL1JIXQY9Msh
+      signName: 激活码商城
+      templateCodeAcountRegister: SMS_89885232
+      templateCodePasswordUpdate: SMS_89885231
+      templateCodePhoneUpdate: SMS_89885231
+      templateCodeBankCardBind: SMS_89885231
+    alipay:
+      APP_ID: 2018011501882345 
+      APP_PRIVATE_KEY: MIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQCSWnoTpNHVDKO1gTMLl2N9yS1RusMIQQeIxW9eb5R4DSoLkVbIIF22/Q07iKFelRKneD8uUMOsnh+MwfbLFGWb2sGDUl3cHMmQTcTrp2CG1aCihY/glzbR80RT7XzIw1T+fnEwg8MDeSgoHmJsQflVvm3xReaqzB1yU0lec+kRI/1nayn2XLUob7TDXDEj8sp5iPhXevQaQaSB4RBSd+oSthqrHO85byEP80MwRkSsRCfISYzl5sPOaqDrTWU4TCDB1g3vkDKxjpdXrtZeQkimGZhu6hucO9bajH5p2i7CV634NVuSeKYPa5rytV2h9uPz0dyJz+DrEwls77PJn61fAgMBAAECggEAM91eb8G0HtVI2tS7ezseJgB6UAFohm9NNToKmqPeMKExqkHKSEe4DlYlL1jfHv6jSrgBY+95OJ4cviwqwpMq4w2mEFzLKGsHP11gEMcTHRVtxMqiT0wnQEX+i+OYmikm4L18bV30aTGxem4yIP1MWAeRPLSx5wtI0DAVyyQ2jzzxJqSk+dHlSyOtZH1e0ExoOTymu8XesKaH113OhJhE8iOoUYtOv4qz3QMTVMv0Btg8oiJtJlCDqWeQIt8SX5aS3/USMmdgMUbzxLAziL0IZeiI7R6etgP9fOsxSAPgqbZzYvs3yJe4DdzKJftpnpH0ZwIAgQHdAFFHUwR+bYwHOQKBgQDTFC4HM/aJlgu703Dn67EGHRpZ13imOO1ZmcG3bNU0vP8L0TO8lHJEkQ03u8Fh/jpvEzFs2RxT+zKP81ejgYCmjD4PbpC2abJabbu0XnGiaHw99w0Mdh8OM33Ae6y/NcwYOPMfV8ejFJ99LiwK18gkkQFaILrRZ57PH3RRerTmrQKBgQCxf/tYlrIl1CQDbcnwdVd8oT9jOhBdLIBBoHfndX5y88L1FtNybxffjVbCFD6YpKp1effkV+cKbdSi7NX8ojSHWnyq2/Bu2+c/wCnTE/29yR4TwxNkNt6+NxUcW9bx5VTB5h4mXM0GIwJvgLrt9IZuxzFhprSif3jF48FRSfaBuwKBgQCYNbYXVZ5TitK9R/TkGO7XpMbqwFltLCHj+d9aQO3iEOOuBtbTBwz7asnoRclmu6gxjtqWTl2CJeNJMMYizvERqJHcGPPbxo5pbTXtFCnHXqcxG+TZ9pfgarskwUpJvCaH1RFkqaz5aZa080WpL/9QdwxNjMqK1LkNTPZZBy5KJQKBgCtiDnq+ilg4m3zDDsJYy8NIXgfQn0NGpypjICtQSlGqRpJEu/WSNZGMKBJThGEmjgscfnwvB+dCpOAVZs/SjWgvs5zHGOLfmIu6Wf6fOjtytok5+rlZt+Nh7yT5RXXmCWtC5UeXEv1W/TdnjUivpVPaF7W4WxoEce5cFlnZ7AgVAoGABzr4o/P06GbsC6dPApCMLIsetLT6iF58d9I71mliVWG7pSVD9lTAdaTHanPAU6JzQ9/YBfBc28y9Zr7uhx3hqzjHJbm/vswmItptsa9hrCOIHuLu2YHtbSqEs1MEDsQMQMFXEs378wQ3Dwj4/hpXTT/vwZ059cnYbIqrbQDtaW0=
+      APP_PUBLIC_KEY: MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAklp6E6TR1QyjtYEzC5djfcktUbrDCEEHiMVvXm+UeA0qC5FWyCBdtv0NO4ihXpUSp3g/LlDDrJ4fjMH2yxRlm9rBg1Jd3BzJkE3E66dghtWgooWP4Jc20fNEU+18yMNU/n5xMIPDA3koKB5ibEH5Vb5t8UXmqswdclNJXnPpESP9Z2sp9ly1KG+0w1wxI/LKeYj4V3r0GkGkgeEQUnfqErYaqxzvOW8hD/NDMEZErEQnyEmM5ebDzmqg601lOEwgwdYN75AysY6XV67WXkJIphmYbuobnDvW2ox+adouwlet+DVbknimD2ua8rVdofbj89Hcic/g6xMJbO+zyZ+tXwIDAQAB
+      ALIPAY_PUBLIC_KEY: MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA1as5J4xV8WZncyzVlNkUC+xla5B4h7AjvBWsvxE5cqYpcy+70lLuxDUDkh7Yc1rGb8fkJCjBK6L4+5msq5/81b8ExZh7wJDsqKjvLnRQJBhFqX+V2k9J3JzYx034q2d2mPRy12wEurlXr/frf9LEmdlbG1dKf+kX0mcLglUhSe6lTlwayvYiSsVQSgla5xGUeXlh1sMD/8/MUVN9kqN33DcKVDNgDYGkZbSeKJOLVWW84wbrMGwhJqFhVk8uNQtmW0DeOUSjFnHLI835wzzE6dWMYrf4MaABm1srMkC7hMIytdVv5tQ6fcItbttFyL6gwhTGQLuTIw69nsjDOCiePwIDAQAB
+  weixin: 
+    weChatPayment: 
+      APPID: wx9916b928e1ae2ccb
+      SECRET: 99cfd6e70e1333472989dd9f45fca83c
+      MCH_ID: 1489128222
+      API: abb763888198076d2a4ab3a10cf0cee3
+  qiniu:
+    accessKey: JiMHrAiq4H6yHKc7iTvz9rCRzw8txedG0caUsw_s
+    secretKey: pwEvywJ8HDoUuX6XOgPQsC_iNXXsmlJa3hdw-4qr
+    bucketName: jihuoma
+    domain: p55v5f6od.bkt.clouddn.com
+  noticeXitongTitle: 系统通知
+  noticeTuangouTitle: 团购通知
+  noticeBuzuTitle: 团购卡余额不足
+  noticeDaozhangTitle: 提现到账通知
+  noticeShenqingTitle: 团购申请
+  noticeXitongImgUrl: http://p2bhwwngu.bkt.clouddn.com/o_1c5gaqqst68db2j16nno61q3cp.jpg
+  noticeTuangouImgUrl: http://p2bhwwngu.bkt.clouddn.com/o_1c5gav4cn173evs35fv1g8f1e6pu.png
+  noticeBuzuImgUrl: http://p2bhwwngu.bkt.clouddn.com/o_1c5gb3tvce1e1d7sivg5kr1naq13.png
+  noticeDaozhangImgUrl: http://p2bhwwngu.bkt.clouddn.com/o_1c5gb6olh2b49fi11hvqv914c818.png
+  noticeShenqingImgUrl: http://p2bhwwngu.bkt.clouddn.com/o_1c5gb9b7411vottl4am19qm7i81d.png
+  
+  

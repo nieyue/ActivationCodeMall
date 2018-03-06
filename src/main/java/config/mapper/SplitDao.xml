@@ -1,0 +1,261 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+		PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"   
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">  
+<mapper namespace="com.nieyue.dao.SplitDao">
+<!-- 添加拆分-->
+<insert id="addSplit" parameterType="Split" keyProperty="splitId" flushCache="true"  >  
+   INSERT IGNORE INTO
+   		  split_tb 
+   		 (
+   		 nickname,
+   		 phone,
+   		 contact_phone,
+   		 remark,
+   		 number,
+   		 price,
+   		 apply_date,
+   		 <if test="splitDate!=null">
+   		 split_date,
+   		 </if>
+   		 create_date,
+   		 update_date,
+   		 status,
+   		 <if test="recommendAccountId!=null">
+   		 recommend_account_id,
+   		 </if>
+   		 account_id,
+   		 buy_account_id,
+   		 order_id
+   		 )
+   VALUES
+    	 (
+    	 #{nickname},
+    	 #{phone},
+    	 #{contactPhone},
+    	 #{remark},
+    	 #{number},
+    	 #{price},
+    	 #{applyDate},
+    	 <if test="splitDate!=null">
+    	 #{splitDate},
+    	 </if>
+    	 #{createDate},
+    	 #{updateDate},
+    	 #{status},
+    	  <if test="recommendAccountId!=null">
+    	 #{recommendAccountId},
+    	 </if>
+    	 #{accountId},
+    	 #{buyAccountId},
+    	 #{orderId}
+    	 )  
+</insert>  
+<!-- 更新拆分-->
+<update id="updateSplit" parameterType="Split" >  
+    UPDATE 
+    	split_tb 
+    <set>
+    	<if test="nickname!=null">
+    	nickname=#{nickname},
+    	</if>
+    	<if test="phone!=null">
+    	phone=#{phone},
+    	</if>
+    	<if test="contactPhone!=null">
+    	contact_phone=#{contactPhone},
+    	</if>
+    	<if test="remark!=null">
+    	remark=#{remark},
+    	</if>
+    	<if test="number!=null">
+    	number=#{number},
+    	</if>
+    	<if test="price!=null">
+    	price=#{price},
+    	</if>
+    	<if test="applyDate!=null">
+    	apply_date=#{applyDate},
+    	</if>
+    	<if test="splitDate!=null">
+    	split_date=#{splitDate},
+    	</if>
+    	<if test="createDate!=null">
+    	create_date=#{createDate},
+    	</if>
+    	<if test="updateDate!=null">
+    	update_date=#{updateDate},
+    	</if>
+    	<if test="status!=null">
+    	status=#{status},
+    	</if>
+    	<if test="recommendAccountId!=null">
+    	recommend_account_id=#{recommendAccountId},
+    	</if>
+    	<if test="accountId!=null">
+    	account_id=#{accountId},
+    	</if>
+    	<if test="buyAccountId!=null">
+    	buy_account_id=#{buyAccountId},
+    	</if>
+    	<if test="orderId!=null">
+    	order_id=#{orderId},
+    	</if>
+    </set> 
+    WHERE
+    	 split_id=#{splitId} 
+</update> 
+<!-- 删除视频-->
+<delete id="delSplit"  parameterType="Integer" >  
+    DELETE FROM
+    	 split_tb 
+    	 WHERE split_id=#{splitId}
+</delete>  
+<!-- 加载视频-->
+<select id="loadSplit" parameterType="Integer" resultType="Split" >
+SELECT 
+		 split_id,
+	 	 nickname,
+   		 phone,
+   		 contact_phone,
+	 	 remark,
+   		 number,
+   		 price,
+   		 apply_date,
+   		 split_date,
+   		 create_date,
+   		 update_date,
+   		 status,
+   		 recommend_account_id,
+   		 account_id,
+   		 buy_account_id,
+   		 order_id
+FROM split_tb 
+WHERE split_id=#{splitId}
+</select>
+
+<!-- 分页查询视频-->
+<select id="browsePagingSplit" resultType="Split">  
+        SELECT
+	     split_id,
+	 	 nickname,
+   		 phone,
+   		 contact_phone,
+	 	 remark,
+   		 number,
+   		 price,
+   		 apply_date,
+   		 split_date,
+   		 create_date,
+   		 update_date,
+   		 status,
+   		 recommend_account_id,
+   		 account_id,
+   		 buy_account_id,
+   		 order_id
+	FROM split_tb
+	<where>
+	<if test="recommendAccountId!=null">
+		AND  recommend_account_id=#{recommendAccountId}
+		</if>
+	<if test="accountId!=null">
+		AND  account_id=#{accountId}
+		</if>
+	<if test="buyAccountId!=null">
+		AND  buy_account_id=#{buyAccountId}
+		</if>
+	<if test="applyDate!=null">
+		AND  DATE(apply_date)=DATE(#{applyDate})
+		</if>
+	<if test="splitDate!=null">
+		AND  DATE(split_date)=DATE(#{splitDate})
+		</if>
+	<if test="createDate!=null">
+		AND  DATE(create_date)=DATE(#{createDate})
+		</if>
+	<if test="updateDate!=null">
+		AND  DATE(update_date)=DATE(#{updateDate})
+		</if>
+	<if test="status!=null">
+		AND  status=#{status}
+		</if>
+	AND ${orderName} 
+	<if test="orderWay=='asc'">
+	<![CDATA[>=]]> 
+	</if>
+	<if test="orderWay=='desc'">
+	  <![CDATA[<= ]]>
+	</if>
+	(SELECT ${orderName} FROM split_tb 
+		<where>
+		<if test="recommendAccountId!=null">
+		AND  recommend_account_id=#{recommendAccountId}
+		</if>
+		<if test="accountId!=null">
+		AND  account_id=#{accountId}
+		</if>
+	<if test="buyAccountId!=null">
+		AND  buy_account_id=#{buyAccountId}
+		</if>
+	<if test="applyDate!=null">
+		AND  DATE(apply_date)=DATE(#{applyDate})
+		</if>
+	<if test="splitDate!=null">
+		AND  DATE(split_date)=DATE(#{splitDate})
+		</if>
+	<if test="createDate!=null">
+		AND  DATE(create_date)=DATE(#{createDate})
+		</if>
+	<if test="updateDate!=null">
+		AND  DATE(update_date)=DATE(#{updateDate})
+		</if>
+	<if test="status!=null">
+		AND  status=#{status}
+		</if>
+		</where>
+		ORDER BY 
+			${orderName}  ${orderWay}
+		LIMIT #{pageNum}, 1
+		) 
+	</where>
+	ORDER BY
+		${orderName}  ${orderWay}
+	LIMIT
+		#{pageSize}
+</select> 
+
+<!-- 统计记录条数 -->
+<select id="countAll"  resultType="int">  
+	SELECT
+	 	count(split_id)
+	FROM split_tb
+	<where>
+	<if test="recommendAccountId!=null">
+		AND  recommend_account_id=#{recommendAccountId}
+		</if>
+	<if test="accountId!=null">
+		AND  account_id=#{accountId}
+		</if>
+	<if test="buyAccountId!=null">
+		AND  buy_account_id=#{buyAccountId}
+		</if>
+	<if test="applyDate!=null">
+		AND  DATE(apply_date)=DATE(#{applyDate})
+		</if>
+	<if test="splitDate!=null">
+		AND  DATE(split_date)=DATE(#{splitDate})
+		</if>
+	<if test="createDate!=null">
+		AND  DATE(create_date)=DATE(#{createDate})
+		</if>
+	<if test="updateDate!=null">
+		AND  DATE(update_date)=DATE(#{updateDate})
+		</if>
+	<if test="status!=null">
+		AND  status=#{status}
+		</if>
+		</where>
+</select>   
+   
+ 
+</mapper>

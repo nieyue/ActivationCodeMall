@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+		PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"   
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">  
+<mapper namespace="com.nieyue.dao.RoleDao">
+<!-- 添加角色 -->
+<insert id="addRole" parameterType="Role" keyProperty="roleId" flushCache="true"  >  
+   INSERT IGNORE INTO
+   		  role_tb 
+   		 (name,duty,update_date)
+   VALUES
+    	 (#{name},#{duty},#{updateDate})  
+</insert>  
+<!-- 更新角色 -->
+<update id="updateRole" parameterType="Role" >  
+    UPDATE 
+    	role_tb 
+    SET 
+    	name=#{name},
+    	duty=#{duty},
+    	update_date=#{updateDate}
+    WHERE
+    	 role_id=#{roleId} 
+</update> 
+<!-- 删除角色-->
+<delete id="delRole"  parameterType="Integer" >  
+    DELETE FROM
+    	 role_tb 
+    	 WHERE role_id=#{roleId}
+</delete>  
+<!-- 加载角色-->
+<select id="loadRole" parameterType="Integer" resultType="Role" >
+SELECT 
+		role_id,
+	 	name,
+    	duty,
+    	update_date
+FROM role_tb 
+WHERE role_id=#{roleId}
+</select>
+
+<!-- 分页查询角色-->
+<select id="browsePagingRole" resultType="Role">  
+        SELECT
+	    role_id,
+	 	name,
+    	duty,
+    	update_date
+	FROM role_tb
+	WHERE ${orderName} 
+	<if test="orderWay=='asc'">
+	<![CDATA[>=]]> 
+	</if>
+	<if test="orderWay=='desc'">
+	  <![CDATA[<= ]]>
+	</if>
+	(SELECT ${orderName} FROM role_tb 
+		ORDER BY 
+			${orderName}  ${orderWay}
+		LIMIT #{pageNum}, 1
+		) 
+	ORDER BY
+		${orderName}  ${orderWay}
+	LIMIT
+		#{pageSize}
+</select> 
+
+<!-- 统计记录条数 -->
+<select id="countAll"  resultType="int">  
+	SELECT
+	 	count(role_id)
+	FROM role_tb
+</select>   
+   
+ 
+</mapper>

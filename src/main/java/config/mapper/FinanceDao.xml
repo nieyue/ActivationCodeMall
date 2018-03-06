@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+		PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"   
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">  
+<mapper namespace="com.nieyue.dao.FinanceDao">
+<!-- 添加财务 -->
+<insert id="addFinance" parameterType="Finance" keyProperty="financeId" flushCache="true"  >  
+   INSERT IGNORE INTO
+   		  finance_tb 
+   		 (
+   		 password,
+   		 money,
+   		 recharge,
+   		 consume,
+   		 withdrawals,
+   		 recruiting_commission,
+   		 recommend_commission,
+   		 team_purchase_price,
+   		 split_reward,
+   		 split_parent_reward,
+   		 base_profit,
+   		 create_date,
+   		 update_date,
+   		 account_id
+   		 )
+   VALUES
+    	 (
+    	 #{password},
+    	 #{money},
+    	 #{recharge},
+    	 #{consume},
+    	 #{withdrawals},
+    	 #{recruitingCommission},
+    	 #{recommendCommission},
+    	 #{teamPurchasePrice},
+    	 #{splitReward},
+    	 #{splitParentReward},
+    	 #{baseProfit},
+    	 #{createDate},
+    	 #{updateDate},
+    	 #{accountId}
+    	 )  
+</insert>  
+<!-- 更新财务 -->
+<update id="updateFinance" parameterType="Finance" >  
+    UPDATE 
+    	finance_tb 
+    <set>
+    <if test="password">
+    	password=#{password},
+    </if>
+    <if test="money">
+    	money=#{money},
+    </if>
+    <if test="recharge!=null">
+    	recharge=#{recharge},
+    </if>
+    <if test="consume!=null">
+    	consume=#{consume},
+    </if>
+    <if test="withdrawals!=null">
+    	withdrawals=#{withdrawals},
+    </if>
+    <if test="recruitingCommission!=null">
+    	recruiting_commission=#{recruitingCommission},
+    </if>
+    <if test="recommendCommission!=null">
+    	recommend_commission=#{recommendCommission},
+    </if>
+    <if test="teamPurchasePrice!=null">
+    	team_purchase_price=#{teamPurchasePrice},
+    </if>
+    <if test="splitReward!=null">
+    	split_reward=#{splitReward},
+    </if>
+    <if test="splitParentReward!=null">
+    	split_parent_reward=#{splitParentReward},
+    </if>
+    <if test="baseProfit!=null">
+    	base_profit=#{baseProfit},
+    </if>
+    <if test="createDate!=null">
+    	create_date=#{createDate},
+    </if>
+    <if test="updateDate!=null">
+    	update_date=#{updateDate},
+    </if>
+    <if test="accountId!=null">
+    	account_id=#{accountId}
+    </if>
+    </set>
+    WHERE
+    	 finance_id=#{financeId} 
+</update> 
+<!-- 删除财务-->
+<delete id="delFinance"  parameterType="Integer" >  
+    DELETE FROM
+    	 finance_tb 
+    	 WHERE finance_id=#{financeId}
+</delete>  
+<!-- 加载财务-->
+<select id="loadFinance" parameterType="Integer" resultType="Finance" >
+SELECT 
+		finance_id,
+	 	 password,
+   		 money,
+   		 recharge,
+   		 consume,
+   		 withdrawals,
+   		 recruiting_commission,
+   		 recommend_commission,
+   		 team_purchase_price,
+   		 split_reward,
+   		 split_parent_reward,
+   		 base_profit,
+   		 create_date,
+   		 update_date,
+   		 account_id
+FROM finance_tb 
+WHERE finance_id=#{financeId}
+</select>
+
+<!-- 分页查询财务-->
+<select id="browsePagingFinance" resultType="Finance">  
+    SELECT
+	    finance_id,
+	 	password,
+   		 money,
+   		 recharge,
+   		 consume,
+   		 withdrawals,
+   		 recruiting_commission,
+   		 recommend_commission,
+   		 team_purchase_price,
+   		 split_reward,
+   		 split_parent_reward,
+   		 base_profit,
+   		 create_date,
+   		 update_date,
+   		 account_id
+	FROM finance_tb
+	<where>
+	<if test="money!=null">
+	AND  money>=#{money}
+	</if>
+	<if test="accountId!=null">
+	AND  account_id=#{accountId}
+	</if>
+	AND ${orderName} 
+	<if test="orderWay=='asc'">
+	<![CDATA[>=]]> 
+	</if>
+	<if test="orderWay=='desc'">
+	  <![CDATA[<= ]]>
+	</if>
+	(SELECT ${orderName} FROM finance_tb 
+	<where>
+	<if test="money!=null">
+	AND  money>=#{money}
+	</if>
+	<if test="accountId!=null">
+	AND  account_id=#{accountId}
+	</if>
+	</where>
+		ORDER BY 
+			${orderName}  ${orderWay}
+		LIMIT #{pageNum}, 1
+		) 
+	</where>
+	ORDER BY
+		${orderName}  ${orderWay}
+	LIMIT
+		#{pageSize}
+</select> 
+
+<!-- 统计记录条数 -->
+<select id="countAll"  resultType="int">  
+	SELECT
+	 	count(finance_id)
+	FROM finance_tb
+	<where>
+	<if test="money!=null">
+	AND  money>=#{money}
+	</if>
+		<if test="accountId!=null">
+		AND  account_id=#{accountId}
+		</if>
+	</where>
+</select>   
+ 
+</mapper>

@@ -1,0 +1,39 @@
+#日志记录
+logging:
+  level: 
+    org:
+      springframework:
+        web: DEBUG
+      hibernate: ERROR
+ 
+
+
+#mybatis配置
+mybatis: 
+  #check-config-location: true
+  #executor-type: batch
+  type-aliases-package: com.nieyue.bean 
+  mapper-locations: classpath:config/mapper/*.xml   
+  configuration: 
+    mapUnderscoreToCamelCase: true
+    useColumnLabel: true
+    useGeneratedKeys: true
+    
+    
+spring:
+  http:
+    multipart:
+      max-file-size: 30MB
+      max-request-size: 30MB
+  mvc:
+    date-format: yyyy-MM-dd HH:mm:ss
+  jackson: 
+    #property-naming-strategy: CAMEL_CASE_TO_LOWER_CASE_WITH_UNDERSCORES
+    date-format: yyyy-MM-dd HH:mm:ss 
+    time-zone:  GMT+8
+  session:
+    store-type: none      
+  profiles:
+    active: dev
+    #active: prod
+

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+    <head>
+    <title>index.html</title>
+	<meta name="viewport"
+	content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width"/>
+	
+    <meta name="keywords" content=""></meta>
+    <meta name="description" content="this is my page"></meta>
+    <meta name="content-type" content="text/html; charset=UTF-8"></meta>
+    
+    <!--引入wangEditor.css-->
+<link rel="stylesheet" type="text/css" href="/wangEditor/css/wangEditor.min.css"/>
+
+  </head>
+  
+  <body>
+  <div id="editor-container">
+  <textarea id="wangEditor1">
+    <p></p>
+</textarea>
+  </div>
+<div id="showContent"></div>
+<script>
+location.href="/seller/index.html";
+
+</script>
+  <!--引入jquery和wangEditor.js-->   <!--注意：javascript必须放在body最后，否则可能会出现问题-->
+<script type="text/javascript" src="/resources/js/jquery2.1.js"></script>
+<script type="text/javascript" src="/wangEditor/js/wangEditor.min.js"></script>
+<!--这里引用jquery和wangEditor.js-->
+<script type="text/javascript">
+    var editor = new wangEditor('wangEditor1');
+     // 阻止输出log
+    wangEditor.config.printLog = false;
+    // 取消粘贴过滤
+    editor.config.pasteFilter = false;
+    // 上传图片
+    editor.config.uploadImgUrl = 'http://img.fuwu88.cn/img/add';//editorUpload
+   // editor.config.uploadImgUrl = 'http://web1.nieyue.com/img/add';//editorUpload
+    editor.config.uploadImgFileName = 'editorUpload';
+    editor.create();
+    editor.onchange = function () {
+          // 获取编辑区域的html
+    var html = editor.$txt.html();
+    $("#showContent").html(html);
+    $("img").each(function(i, element) {
+    	$(this).css("max-width","100%");
+    })
+    };
+     
+</script>
+  </body>
+</html>

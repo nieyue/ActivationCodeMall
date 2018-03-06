@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+		PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"   
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">  
+<mapper namespace="com.nieyue.dao.NoticeDao">
+<!-- 添加通知 -->
+<insert id="addNotice" parameterType="Notice" keyProperty="noticeId" flushCache="true"  >  
+   INSERT IGNORE INTO
+   		  notice_tb 
+   		 (title,img_address,content,status,create_date,update_date,account_id)
+   VALUES
+    	 (#{title},#{imgAddress},#{content},#{status},#{createDate},#{updateDate},#{accountId})  
+</insert>  
+<!-- 更新通知 -->
+<update id="updateNotice" parameterType="Notice" >  
+    UPDATE 
+    	notice_tb 
+    SET 
+    	title=#{title},
+    	img_address=#{imgAddress},
+    	content=#{content},
+    	status=#{status},
+    	create_date=#{createDate},
+    	update_date=#{updateDate},
+    	account_id=#{accountId}
+    WHERE
+    	 notice_id=#{noticeId} 
+</update> 
+<!-- 删除通知-->
+<delete id="delNotice"  parameterType="Integer" >  
+    DELETE FROM
+    	 notice_tb 
+    	 WHERE notice_id=#{noticeId}
+</delete>  
+<!-- 加载通知-->
+<select id="loadNotice" parameterType="Integer" resultType="Notice" >
+SELECT 
+		notice_id,
+	 	title,
+	 	img_address,
+    	content,
+    	status,
+    	create_date,
+    	update_date,
+    	account_id
+FROM notice_tb 
+WHERE notice_id=#{noticeId}
+</select>
+
+<!-- 分页查询通知-->
+<select id="browsePagingNotice" resultType="Notice">  
+ SELECT
+	    notice_id,
+	 	title,
+	 	img_address,
+    	content,
+    	status,
+    	create_date,
+    	update_date,
+    	account_id
+	FROM notice_tb
+	<where>
+	<if test="title!=null">
+		AND  title=#{title}
+		</if>
+	<if test="status!=null">
+		AND  status=#{status}
+		</if>
+	<if test="accountId!=null">
+		AND ( account_id=#{accountId}
+		OR ISNULL(account_id))
+		</if>
+	AND ${orderName} 
+	<if test="orderWay=='asc'">
+	<![CDATA[>=]]> 
+	</if>
+	<if test="orderWay=='desc'">
+	  <![CDATA[<= ]]>
+	</if>
+	(SELECT ${orderName} FROM notice_tb 
+	<where>
+	<if test="title!=null">
+		AND  title=#{title}
+		</if>
+	<if test="status!=null">
+		AND  status=#{status}
+		</if>
+	<if test="accountId!=null">
+		AND ( account_id=#{accountId}
+		OR ISNULL(account_id))
+		</if>
+	</where>
+		ORDER BY 
+			${orderName}  ${orderWay}
+		LIMIT #{pageNum}, 1
+		) 
+	</where>
+	ORDER BY
+		${orderName}  ${orderWay}
+	LIMIT
+		#{pageSize}
+</select> 
+
+<!-- 统计记录条数 -->
+<select id="countAll"  resultType="int">  
+	SELECT
+	 	count(notice_id)
+	FROM notice_tb
+	<where>
+	<if test="title!=null">
+		AND  title=#{title}
+		</if>
+	<if test="status!=null">
+		AND  status=#{status}
+		</if>
+	<if test="accountId!=null">
+		AND  account_id=#{accountId}
+		</if>
+	</where>
+</select>   
+   
+ 
+</mapper>

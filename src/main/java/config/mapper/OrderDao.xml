@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+		PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"   
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">  
+<mapper namespace="com.nieyue.dao.OrderDao">
+<!-- 添加订单 -->
+<insert id="addOrder" parameterType="Order" keyProperty="orderId" flushCache="true"  >  
+   INSERT IGNORE INTO
+   		  order_tb 
+   		 (
+   		 order_number,
+   		 type,
+   		 pay_type,
+   		 account_id,
+   		 status,
+   		 create_date,
+   		 update_date
+   		 )
+   VALUES
+    	 (
+    	 #{orderNumber},
+    	 #{type},
+    	 #{payType},
+    	 #{accountId},
+    	 #{status},
+    	 #{createDate},
+    	 #{updateDate}
+    	 )  
+</insert>  
+<!-- 更新订单 -->
+<update id="updateOrder" parameterType="Order" >  
+    UPDATE 
+    	order_tb 
+    <set>
+    	<if test="orderNumber!=null">
+    	order_number=#{orderNumber},
+    	</if>
+    	<if test="type!=null">
+    	type=#{type},
+    	</if>
+    	<if test="payType!=null">
+    	pay_type=#{payType},
+    	</if>
+    	<if test="accountId!=null">
+    	account_id=#{accountId},
+    	</if>
+    	<if test="status!=null">
+    	status=#{status},
+    	</if>
+    	<if test="createDate!=null">
+    	create_date=#{createDate},
+    	</if>
+    	<if test="updateDate!=null">
+    	update_date=#{updateDate},
+    	</if>
+    </set> 
+    WHERE
+    	 order_id=#{orderId} 
+</update> 
+<!-- 删除订单-->
+<delete id="delOrder"  parameterType="Integer" >  
+    DELETE FROM
+    	 order_tb 
+    	 WHERE order_id=#{orderId}
+</delete>  
+<!-- 加载订单-->
+<select id="loadOrder" parameterType="Integer" resultType="Order" >
+SELECT 
+		 order_id,
+	 	 order_number,
+   		 type,
+   		 pay_type,
+   		 account_id,
+   		 status,
+   		 create_date,
+   		 update_date
+FROM order_tb 
+WHERE order_id=#{orderId}
+</select>
+
+<!-- 分页查询订单-->
+<select id="browsePagingOrder" resultType="Order">  
+        SELECT
+	     order_id,
+	 	 order_number,
+   		 type,
+   		 pay_type,
+   		 account_id,
+   		 status,
+   		 create_date,
+   		 update_date
+	FROM order_tb
+	<where>
+	<if test="type!=null">
+		AND  type=#{type}
+		</if>
+	<if test="payType!=null">
+		AND  pay_type=#{payType}
+		</if>
+	<if test="accountId!=null">
+		AND  account_id=#{accountId}
+		</if>
+	<!-- <if test="status!=null">
+		AND  status=#{status}
+		</if> -->
+		<choose>
+			<when test="status!=null">  
+                AND status=#{status}  
+            </when>  
+            <otherwise>  
+                AND status!=0 
+                AND status!=-1 
+            </otherwise> 
+		</choose>
+<if test="createDate!=null">
+		AND  DATE(create_date)=DATE(#{createDate})
+		</if>
+	<if test="updateDate!=null">
+		AND  DATE(update_date)=DATE(#{updateDate})
+		</if>
+	AND ${orderName} 
+	<if test="orderWay=='asc'">
+	<![CDATA[>=]]> 
+	</if>
+	<if test="orderWay=='desc'">
+	  <![CDATA[<= ]]>
+	</if>
+	(SELECT ${orderName} FROM order_tb 
+		<where>
+		<if test="type!=null">
+		AND  type=#{type}
+		</if>
+		<if test="payType!=null">
+		AND  pay_type=#{payType}
+		</if>
+		<if test="accountId!=null">
+		AND  account_id=#{accountId}
+		</if>
+		<!-- <if test="status!=null">
+		AND  status=#{status}
+		</if> -->
+		<choose>
+			<when test="status!=null">  
+                AND status=#{status}  
+            </when>  
+            <otherwise>  
+                AND status!=0 
+                AND status!=-1 
+            </otherwise> 
+		</choose>
+	<if test="createDate!=null">
+		AND  DATE(create_date)=DATE(#{createDate})
+		</if>
+	<if test="updateDate!=null">
+		AND  DATE(update_date)=DATE(#{updateDate})
+		</if>
+		</where>
+		ORDER BY 
+			${orderName}  ${orderWay}
+		LIMIT #{pageNum}, 1
+		) 
+	</where>
+	ORDER BY
+		${orderName}  ${orderWay}
+	LIMIT
+		#{pageSize}
+</select> 
+
+<!-- 统计记录条数 -->
+<select id="countAll"  resultType="int">  
+	SELECT
+	 	count(order_id)
+	FROM order_tb
+	<where>
+	<if test="type!=null">
+		AND  type=#{type}
+		</if>
+	<if test="payType!=null">
+		AND  pay_type=#{payType}
+		</if>
+	<if test="accountId!=null">
+		AND  account_id=#{accountId}
+		</if>
+	<!-- <if test="status!=null">
+		AND  status=#{status}
+		</if> -->
+		<choose>
+			<when test="status!=null">  
+                AND status=#{status}  
+            </when>  
+            <otherwise>  
+                AND status!=0 
+                AND status!=-1 
+            </otherwise> 
+		</choose>
+<if test="createDate!=null">
+		AND  DATE(create_date)=DATE(#{createDate})
+		</if>
+	<if test="updateDate!=null">
+		AND  DATE(update_date)=DATE(#{updateDate})
+		</if>
+		</where>
+</select>   
+   
+ 
+</mapper>

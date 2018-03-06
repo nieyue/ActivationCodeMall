@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+		PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"   
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">  
+<mapper namespace="com.nieyue.dao.OrderDetailDao">
+<!-- 添加订单详情 -->
+<insert id="addOrderDetail" parameterType="OrderDetail" keyProperty="orderDetailId" flushCache="true"  >  
+   INSERT IGNORE INTO
+   		  order_detail_tb 
+   		 (
+   		 name,
+   		 img_address,
+   		 total_price,
+   		 number,
+   		 create_date,
+   		 update_date,
+   		 business_id,
+   		 order_id
+   		 )
+   VALUES
+    	 (
+    	 #{name},
+    	 #{imgAddress},
+    	 #{totalPrice},
+    	 #{number},
+    	 #{createDate},
+    	 #{updateDate},
+    	 #{businessId},
+    	 #{orderId}
+    	 )  
+</insert>  
+<!-- 更新订单详情 -->
+<update id="updateOrderDetail" parameterType="OrderDetail" >  
+    UPDATE 
+    	order_detail_tb 
+    <set>
+    	<if test="name!=null">
+    	name=#{name},
+    	</if>
+    	<if test="imgAddress!=null">
+    	img_address=#{imgAddress},
+    	</if>
+    	<if test="totalPrice!=null">
+    	total_price=#{totalPrice},
+    	</if>
+    	<if test="number!=null">
+    	number=#{number},
+    	</if>
+    	<if test="createDate!=null">
+    	create_date=#{createDate},
+    	</if>
+    	<if test="updateDate!=null">
+    	update_date=#{updateDate},
+    	</if>
+    	<if test="businessId!=null">
+    	business_id=#{businessId},
+    	</if>
+    	<if test="orderId!=null">
+    	order_id=#{orderId},
+    	</if>
+    </set> 
+    WHERE
+    	 order_detail_id=#{orderDetailId} 
+</update> 
+<!-- 删除订单详情-->
+<delete id="delOrderDetail"  parameterType="Integer" >  
+    DELETE FROM
+    	 order_detail_tb 
+    	 WHERE order_detail_id=#{orderDetailId}
+</delete>  
+<!-- 加载订单详情-->
+<select id="loadOrderDetail" parameterType="Integer" resultType="OrderDetail" >
+SELECT 
+		 order_detail_id,
+	 	 name,
+   		 img_address,
+   		 total_price,
+   		 number,
+   		 create_date,
+   		 update_date,
+   		 business_id,
+   		 order_id
+FROM order_detail_tb 
+WHERE order_detail_id=#{orderDetailId}
+</select>
+
+<!-- 分页查询订单详情-->
+<select id="browsePagingOrderDetail" resultType="OrderDetail">  
+        SELECT
+	     order_detail_id,
+	 	 name,
+   		 img_address,
+   		 total_price,
+   		 number,
+   		 create_date,
+   		 update_date,
+   		 business_id,
+   		 order_id
+	FROM order_detail_tb
+	<where>
+	<if test="orderId!=null">
+		AND  order_id=#{orderId}
+		</if>
+	<if test="createDate!=null">
+		AND  DATE(create_date)=DATE(#{createDate})
+		</if>
+	<if test="updateDate!=null">
+		AND  DATE(update_date)=DATE(#{updateDate})
+		</if>
+	AND ${orderName} 
+	<if test="orderWay=='asc'">
+	<![CDATA[>=]]> 
+	</if>
+	<if test="orderWay=='desc'">
+	  <![CDATA[<= ]]>
+	</if>
+	(SELECT ${orderName} FROM order_detail_tb 
+		<where>
+		<if test="orderId!=null">
+		AND  order_id=#{orderId}
+		</if>
+	<if test="createDate!=null">
+		AND  DATE(create_date)=DATE(#{createDate})
+		</if>
+	<if test="updateDate!=null">
+		AND  DATE(update_date)=DATE(#{updateDate})
+		</if>
+		</where>
+		order BY 
+			${orderName}  ${orderWay}
+		LIMIT #{pageNum}, 1
+		) 
+	</where>
+	order BY
+		${orderName}  ${orderWay}
+	LIMIT
+		#{pageSize}
+</select> 
+
+<!-- 统计记录条数 -->
+<select id="countAll"  resultType="int">  
+	SELECT
+	 	count(order_detail_id)
+	FROM order_detail_tb
+	<where>
+	<if test="orderId!=null">
+		AND  order_id=#{orderId}
+		</if>
+	<if test="createDate!=null">
+		AND  DATE(create_date)=DATE(#{createDate})
+		</if>
+	<if test="updateDate!=null">
+		AND  DATE(update_date)=DATE(#{updateDate})
+		</if>
+		</where>
+</select>   
+   
+ 
+</mapper>

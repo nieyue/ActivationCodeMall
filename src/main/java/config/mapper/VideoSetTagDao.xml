@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+		PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"   
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">  
+<mapper namespace="com.nieyue.dao.VideoSetTagDao">
+<!-- 添加视频集标签 -->
+<insert id="addVideoSetTag" parameterType="VideoSetTag" keyProperty="videoSetTagId" flushCache="true"  >  
+   INSERT IGNORE INTO
+   		  video_set_tag_tb 
+   		 (
+   		 name,
+   		 update_date,
+   		 video_set_id
+   		 )
+   VALUES
+    	 (
+    	 #{name},
+    	 #{updateDate},
+    	 #{videoSetId}
+    	 )  
+</insert>  
+<!-- 更新视频集标签 -->
+<update id="updateVideoSetTag" parameterType="VideoSetTag" >  
+    UPDATE 
+    	video_set_tag_tb 
+    SET 
+    	name=#{name},
+    	update_date=#{updateDate},
+    	video_set_id=#{videoSetId}
+    WHERE
+    	 video_set_tag_id=#{videoSetTagId} 
+</update> 
+<!-- 删除视频集标签-->
+<delete id="delVideoSetTag"  parameterType="Integer" >  
+    DELETE FROM
+    	 video_set_tag_tb 
+    	 WHERE video_set_tag_id=#{videoSetTagId}
+</delete>  
+<!-- 加载视频集标签-->
+<select id="loadVideoSetTag" parameterType="Integer" resultType="VideoSetTag" >
+SELECT 
+		video_set_tag_id,
+	 	name,
+    	update_date,
+	 	video_set_id
+FROM video_set_tag_tb 
+WHERE video_set_tag_id=#{videoSetTagId}
+</select>
+
+<!-- 分页查询视频集标签-->
+<select id="browsePagingVideoSetTag" resultType="VideoSetTag">  
+        SELECT
+	    video_set_tag_id,
+	 	name,
+    	update_date,
+	 	video_set_id
+	FROM video_set_tag_tb
+	<where>
+	<if test="videoSetId!=null">
+		AND  video_set_id=#{videoSetId}
+		</if>
+	AND ${orderName}
+	<if test="orderWay=='asc'">
+	<![CDATA[>=]]> 
+	</if>
+	<if test="orderWay=='desc'">
+	  <![CDATA[<= ]]>
+	</if>
+	(SELECT ${orderName} FROM video_set_tag_tb 
+	<where>
+	<if test="videoSetId!=null">
+		AND  video_set_id=#{videoSetId}
+		</if>
+	</where>
+		ORDER BY 
+			${orderName}  ${orderWay}
+		LIMIT #{pageNum}, 1
+		) 
+	</where>
+	ORDER BY
+		${orderName}  ${orderWay}
+	LIMIT
+		#{pageSize}
+</select> 
+
+<!-- 统计记录条数 -->
+<select id="countAll"  resultType="int">  
+	SELECT
+	 	count(video_set_tag_id)
+	FROM video_set_tag_tb
+	<where>
+	<if test="videoSetId!=null">
+		AND  video_set_id=#{videoSetId}
+		</if>
+	</where>
+</select>   
+   
+ 
+</mapper>

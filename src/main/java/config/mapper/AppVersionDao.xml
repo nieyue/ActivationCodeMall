@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+		PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"   
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">  
+<mapper namespace="com.nieyue.dao.AppVersionDao">
+<!-- 添加App版本 -->
+<insert id="addAppVersion" parameterType="AppVersion" keyProperty="appVersionId" flushCache="true"  >  
+   INSERT IGNORE INTO
+   		  app_version_tb 
+   		 (platform,name,type,content,link,update_date,status)
+   VALUES
+    	 (#{platform},#{name},#{type},#{content},#{link},#{updateDate},#{status})  
+</insert>  
+<!-- 更新App版本 -->
+<update id="updateAppVersion" parameterType="AppVersion" >  
+    UPDATE 
+    	app_version_tb 
+    SET 
+    	platform=#{platform},
+    	name=#{name},
+    	type=#{type},
+    	content=#{content},
+    	link=#{link},
+    	update_date=#{updateDate},
+    	status=#{status}
+    WHERE
+    	 app_version_id=#{appVersionId} 
+</update> 
+<!-- 删除App版本-->
+<delete id="delAppVersion"  parameterType="Integer" >  
+    DELETE FROM
+    	 app_version_tb 
+    	 WHERE app_version_id=#{appVersionId}
+</delete>  
+<!-- 加载App版本-->
+<select id="loadAppVersion" parameterType="Integer" resultType="AppVersion" >
+SELECT 
+		app_version_id,
+	 	platform,
+	 	name,
+	 	type,
+	 	content,
+    	link,
+    	update_date,
+    	status
+FROM app_version_tb 
+WHERE app_version_id=#{appVersionId}
+</select>
+
+<!-- 分页查询App版本-->
+<select id="browsePagingAppVersion" resultType="AppVersion">  
+        SELECT
+	    app_version_id,
+	 	platform,
+	 	name,
+	 	type,
+	 	content,
+    	link,
+    	update_date,
+    	status
+	FROM app_version_tb
+	<where>
+	<if test="platform!=null">
+		AND  platform=#{platform}
+		</if>
+	<if test="status!=null">
+		AND  status=#{status}
+		</if>
+	 AND ${orderName} 
+	<if test="orderWay=='asc'">
+	<![CDATA[>=]]> 
+	</if>
+	<if test="orderWay=='desc'">
+	  <![CDATA[<= ]]>
+	</if>
+	(SELECT ${orderName} FROM app_version_tb
+	<where>
+	<if test="platform!=null">
+		AND  platform=#{platform}
+		</if>
+	<if test="status!=null">
+		AND  status=#{status}
+		</if>
+	</where> 
+		ORDER BY 
+			${orderName}  ${orderWay}
+		LIMIT #{pageNum}, 1
+		) 
+	</where> 
+	ORDER BY
+		${orderName}  ${orderWay}
+	LIMIT
+		#{pageSize}
+</select> 
+
+<!-- 统计记录条数 -->
+<select id="countAll"  resultType="int">  
+	SELECT
+	 	count(app_version_id)
+	FROM app_version_tb
+	<where>
+	<if test="platform!=null">
+		AND  platform=#{platform}
+		</if>
+	<if test="status!=null">
+		AND  status=#{status}
+		</if>
+	</where> 
+</select>   
+   
+ 
+</mapper>

@@ -1,0 +1,238 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+		PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"   
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">  
+<mapper namespace="com.nieyue.dao.VideoSetDao">
+<!-- 添加视频集 -->
+<insert id="addVideoSet" parameterType="VideoSet" keyProperty="videoSetId" flushCache="true"  >  
+   INSERT IGNORE INTO
+   		  video_set_tb 
+   		 (
+   		 name,
+   		 img_address,
+   		 author,
+   		 summary,
+   		 recommend,
+   		 cost,
+   		 total_price,
+   		 number,
+   		 play_number,
+   		 status,
+   		 video_set_cate_id,
+   		 create_date,
+   		 update_date
+   		 )
+   VALUES
+    	 (
+    	 #{name},
+    	 #{imgAddress},
+    	 #{author},
+    	 #{summary},
+    	 #{recommend},
+    	 #{cost},
+    	 #{totalPrice},
+    	 #{number},
+    	 #{playNumber},
+    	 #{status},
+    	 #{videoSetCateId},
+    	 #{createDate},
+    	 #{updateDate}
+    	 )  
+</insert>  
+<!-- 更新视频集 -->
+<update id="updateVideoSet" parameterType="VideoSet" >  
+    UPDATE 
+    	video_set_tb 
+    <set>
+    	<if test="name!=null">
+    	name=#{name},
+    	</if>
+    	<if test="imgAddress!=null">
+    	img_address=#{imgAddress},
+    	</if>
+    	<if test="author!=null">
+    	author=#{author},
+    	</if>
+    	<if test="summary!=null">
+    	summary=#{summary},
+    	</if>
+    	<if test="recommend!=null">
+    	recommend=#{recommend},
+    	</if>
+    	<if test="cost!=null">
+    	cost=#{cost},
+    	</if>
+    	<if test="totalPrice!=null">
+    	total_price=#{totalPrice},
+    	</if>
+    	<if test="number!=null">
+    	number=#{number},
+    	</if>
+    	<if test="playNumber!=null">
+    	play_number=#{playNumber},
+    	</if>
+    	<if test="status!=null">
+    	status=#{status},
+    	</if>
+    	<if test="videoSetCateId!=null">
+    	video_set_cate_id=#{videoSetCateId},
+    	</if>
+    	<if test="createDate!=null">
+    	create_date=#{createDate},
+    	</if>
+    	<if test="updateDate!=null">
+    	update_date=#{updateDate},
+    	</if>
+    </set> 
+    WHERE
+    	 video_set_id=#{videoSetId} 
+</update> 
+<!-- 删除视频集-->
+<delete id="delVideoSet"  parameterType="Integer" >  
+    DELETE FROM
+    	 video_set_tb 
+    	 WHERE video_set_id=#{videoSetId}
+</delete>  
+<!-- 加载视频集-->
+<select id="loadVideoSet" parameterType="Integer" resultType="VideoSet" >
+SELECT 
+		 video_set_id,
+	 	 name,
+   		 img_address,
+   		 author,
+   		 summary,
+   		 recommend,
+   		 cost,
+   		 total_price,
+   		 number,
+   		 play_number,
+   		 status,
+   		 video_set_cate_id,
+   		 create_date,
+   		 update_date
+FROM video_set_tb 
+WHERE video_set_id=#{videoSetId}
+</select>
+<!-- 观看视频集-->
+<update id="watchVideoSet" parameterType="Integer" >  
+    UPDATE 
+    	video_set_tb 
+    SET
+    	play_number=play_number+1
+    WHERE
+ 		video_set_id=#{videoSetId} 
+</update> 
+<!-- 分页查询视频集-->
+<select id="browsePagingVideoSet" resultType="VideoSet">  
+        SELECT
+	     video_set_id,
+	 	 name,
+   		 img_address,
+   		 author,
+   		 summary,
+   		 recommend,
+   		 cost,
+   		 total_price,
+   		 number,
+   		 play_number,
+   		 status,
+   		 video_set_cate_id,
+   		 create_date,
+   		 update_date
+	FROM video_set_tb
+	<where>
+	<if test="name!=null">
+		AND  name like CONCAT('%','${name}','%' )
+		</if>
+	<if test="recommend!=null">
+		AND  recommend=#{recommend}
+		</if>
+	<if test="cost!=null">
+		AND  cost=#{cost}
+		</if>
+	<if test="videoSetCateId!=null">
+		AND  video_set_cate_id=#{videoSetCateId}
+		</if>
+	<if test="createDate!=null">
+		AND  DATE(create_date)=DATE(#{createDate})
+		</if>
+	<if test="updateDate!=null">
+		AND  DATE(update_date)=DATE(#{updateDate})
+		</if>
+	<if test="status!=null">
+		AND  status=#{status}
+		</if>
+	AND ${orderName} 
+	<if test="orderWay=='asc'">
+	<![CDATA[>=]]> 
+	</if>
+	<if test="orderWay=='desc'">
+	  <![CDATA[<= ]]>
+	</if>
+	(SELECT ${orderName} FROM video_set_tb 
+		<where>
+		<if test="name!=null">
+		AND  name like CONCAT('%','${name}','%' )
+		</if>
+		<if test="recommend!=null">
+		AND  recommend=#{recommend}
+		</if>
+	<if test="cost!=null">
+		AND  cost=#{cost}
+		</if>
+	<if test="videoSetCateId!=null">
+		AND  video_set_cate_id=#{videoSetCateId}
+		</if>
+	<if test="createDate!=null">
+		AND  DATE(create_date)=DATE(#{createDate})
+		</if>
+	<if test="updateDate!=null">
+		AND  DATE(update_date)=DATE(#{updateDate})
+		</if>
+	<if test="status!=null">
+		AND  status=#{status}
+		</if>
+		</where>
+		ORDER BY 
+			${orderName}  ${orderWay}
+		LIMIT #{pageNum}, 1
+		) 
+	</where>
+	ORDER BY
+		${orderName}  ${orderWay}
+	LIMIT
+		#{pageSize}
+</select> 
+
+<!-- 统计记录条数 -->
+<select id="countAll"  resultType="int">  
+	SELECT
+	 	count(video_set_id)
+	FROM video_set_tb
+	<where>
+	<if test="name!=null">
+		AND  name like CONCAT('%','${name}','%' )
+		</if>
+	<if test="recommend!=null">
+		AND  recommend=#{recommend}
+		</if>
+	<if test="cost!=null">
+		AND  cost=#{cost}
+		</if>
+	<if test="videoSetCateId!=null">
+		AND  video_set_cate_id=#{videoSetCateId}
+		</if>
+	<if test="createDate!=null">
+		AND  DATE(create_date)=DATE(#{createDate})
+		</if>
+	<if test="updateDate!=null">
+		AND  DATE(update_date)=DATE(#{updateDate})
+		</if>
+	<if test="status!=null">
+		AND  status=#{status}
+		</if>
+		</where>
+</select>   
+   
+ 
+</mapper>

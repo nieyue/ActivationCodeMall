@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+		PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"   
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">  
+<mapper namespace="com.nieyue.dao.AccountLevelDao">
+<!-- 添加等级 -->
+<insert id="addAccountLevel" parameterType="AccountLevel" keyProperty="accountLevelId" flushCache="true"  >  
+   INSERT IGNORE INTO
+   		  account_level_tb 
+   		 (
+   		 name,
+   		 level,
+   		 img_address,
+   		 team_purchase_price,
+   		 recommend_commission,
+   		 split_reward,
+   		 split_parent_reward,
+   		 split_platform_reward,
+   		 number,
+   		 discount_price,
+   		 total_price,
+   		 mark,
+   		 update_date
+   		 )
+   VALUES
+    	 (
+    	 #{name},
+    	 #{level},
+    	 #{imgAddress},
+    	 #{teamPurchasePrice},
+    	 #{recommendCommission},
+    	 #{splitReward},
+    	 #{splitParentReward},
+    	 #{splitPlatformReward},
+    	 #{number},
+    	 #{discountPrice},
+    	 #{totalPrice},
+    	 #{mark},
+    	 #{updateDate}
+    	 )  
+</insert>  
+<!-- 更新等级 -->
+<update id="updateAccountLevel" parameterType="AccountLevel" >  
+    UPDATE 
+    	account_level_tb 
+    <set>
+    	<if test="name!=null">
+    	name=#{name},
+    	</if>
+    	<if test="level!=null">
+    	level=#{level},
+    	</if>
+    	<if test="imgAddress!=null">
+    	img_address=#{imgAddress},
+    	</if>
+    	<if test="teamPurchasePrice!=null">
+    	team_purchase_price=#{teamPurchasePrice},
+    	</if>
+    	<if test="recommendCommission!=null">
+    	recommend_commission=#{recommendCommission},
+    	</if>
+    	<if test="splitReward!=null">
+    	split_reward=#{splitReward},
+    	</if>
+    	<if test="splitParentReward!=null">
+    	split_parent_reward=#{splitParentReward},
+    	</if>
+    	<if test="splitPlatformReward!=null">
+    	split_platform_reward=#{splitPlatformReward},
+    	</if>
+    	<if test="number!=null">
+    	number=#{number},
+    	</if>
+    	<if test="discountPrice!=null">
+    	discount_price=#{discountPrice},
+    	</if>
+    	<if test="totalPrice!=null">
+    	total_price=#{totalPrice},
+    	</if>
+    	<if test="mark!=null">
+    	mark=#{mark},
+    	</if>
+    	<if test="updateDate!=null">
+    	update_date=#{updateDate}
+    	</if>
+    </set>
+    WHERE
+    	 account_level_id=#{accountLevelId} 
+</update> 
+<!-- 删除等级-->
+<delete id="delAccountLevel"  parameterType="Integer" >  
+    DELETE FROM
+    	 account_level_tb 
+    	 WHERE account_level_id=#{accountLevelId}
+</delete>  
+<!-- 加载等级-->
+<select id="loadAccountLevel" parameterType="Integer" resultType="AccountLevel" >
+SELECT 
+		 account_level_id,
+	 	 name,
+   		 level,
+   		 img_address,
+   		 team_purchase_price,
+   		 recommend_commission,
+   		 split_reward,
+   		 split_parent_reward,
+   		 split_platform_reward,
+   		 number,
+   		 discount_price,
+   		 total_price,
+   		 mark,
+   		 update_date
+FROM account_level_tb 
+WHERE account_level_id=#{accountLevelId}
+</select>
+
+<!-- 分页查询等级-->
+<select id="browsePagingAccountLevel" resultType="AccountLevel">  
+        SELECT
+	     account_level_id,
+	 	 name,
+   		 level,
+   		 img_address,
+   		 team_purchase_price,
+   		 recommend_commission,
+   		 split_reward,
+   		 split_parent_reward,
+   		 split_platform_reward,
+   		 number,
+   		 discount_price,
+   		 total_price,
+   		 mark,
+   		 update_date
+	FROM account_level_tb
+	<where>
+	 	<if test="level!=null">
+	 	level=#{level}
+		</if>
+	 	<if test="teamPurchasePrice!=null">
+	 	team_purchase_price=#{teamPurchasePrice}
+		</if>
+	 AND ${orderName} 
+	<if test="orderWay=='asc'">
+	<![CDATA[>=]]> 
+	</if>
+	<if test="orderWay=='desc'">
+	  <![CDATA[<= ]]>
+	</if>
+	(SELECT ${orderName} FROM account_level_tb 
+	<where>
+	 	<if test="level!=null">
+	 	level=#{level}
+		</if>
+	 	<if test="teamPurchasePrice!=null">
+	 	team_purchase_price=#{teamPurchasePrice}
+		</if>
+	</where>
+		ORDER BY 
+			${orderName}  ${orderWay}
+		LIMIT #{pageNum}, 1
+		) 
+	</where>
+	ORDER BY
+		${orderName}  ${orderWay}
+	LIMIT
+		#{pageSize}
+</select> 
+
+<!-- 统计记录条数 -->
+<select id="countAll"  resultType="int">  
+	SELECT
+	 	count(account_level_id)
+	FROM account_level_tb
+	<where>
+	 	<if test="level!=null">
+	 	level=#{level}
+		</if>
+	 	<if test="teamPurchasePrice!=null">
+	 	team_purchase_price=#{teamPurchasePrice}
+		</if>
+	</where>
+</select>   
+   
+ 
+</mapper>

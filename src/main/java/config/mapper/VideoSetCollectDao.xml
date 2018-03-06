@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+		PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"   
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">  
+<mapper namespace="com.nieyue.dao.VideoSetCollectDao">
+<!-- 添加视频集收藏 -->
+<insert id="addVideoSetCollect" parameterType="VideoSetCollect" keyProperty="videoSetCollectId" flushCache="true"  >  
+   INSERT IGNORE INTO
+   		  video_set_collect_tb 
+   		 (
+   		 name,
+   		 img_address,
+   		 duration,
+   		 size,
+   		 account_id,
+   		 create_date,
+   		 video_set_id
+   		 )
+   VALUES
+    	 (
+    	 #{name},
+    	 #{imgAddress},
+    	 #{duration},
+    	 #{size},
+    	 #{accountId},
+    	 #{createDate},
+    	 #{videoSetId}
+    	 )  
+</insert>  
+<!-- 更新视频集收藏 -->
+<update id="updateVideoSetCollect" parameterType="VideoSetCollect" >  
+    UPDATE 
+    	video_set_collect_tb 
+    <set>
+    	<if test="name!=null">
+    	name=#{name},
+    	</if>
+    	<if test="imgAddress!=null">
+    	img_address=#{imgAddress},
+    	</if>
+    	<if test="duration!=null">
+    	duration=#{duration},
+    	</if>
+    	<if test="size!=null">
+    	size=#{size},
+    	</if>
+    	<if test="accountId!=null">
+    	account_id=#{accountId},
+    	</if>
+    	<if test="createDate!=null">
+    	create_date=#{createDate},
+    	</if>
+    	<if test="videoSetId!=null">
+    	video_set_id=#{videoSetId},
+    	</if>
+    </set> 
+    WHERE
+    	 video_set_collect_id=#{videoSetCollectId} 
+</update> 
+<!-- 删除视频集收藏-->
+<delete id="delVideoSetCollect"  parameterType="Integer" >  
+    DELETE FROM
+    	 video_set_collect_tb 
+    	 WHERE video_set_collect_id=#{videoSetCollectId}
+</delete>  
+<!-- 加载视频集收藏-->
+<select id="loadVideoSetCollect" parameterType="Integer" resultType="VideoSetCollect" >
+SELECT 
+		 video_set_collect_id,
+	 	 name,
+   		 img_address,
+   		 duration,
+   		 size,
+   		 account_id,
+   		 create_date,
+   		 video_set_id
+FROM video_set_collect_tb 
+WHERE video_set_collect_id=#{videoSetCollectId}
+</select>
+
+<!-- 分页查询视频集收藏-->
+<select id="browsePagingVideoSetCollect" resultType="VideoSetCollect">  
+        SELECT
+	     video_set_collect_id,
+	 	 name,
+   		 img_address,
+   		 duration,
+   		 size,
+   		 account_id,
+   		 create_date,
+   		 video_set_id
+	FROM video_set_collect_tb
+	<where>
+	<if test="videoSetId!=null">
+		AND  video_set_id=#{videoSetId}
+		</if>
+	<if test="accountId!=null">
+		AND  account_id=#{accountId}
+		</if>
+	AND ${orderName} 
+	<if test="orderWay=='asc'">
+	<![CDATA[>=]]> 
+	</if>
+	<if test="orderWay=='desc'">
+	  <![CDATA[<= ]]>
+	</if>
+	(SELECT ${orderName} FROM video_set_collect_tb 
+		<where>
+		<if test="videoSetId!=null">
+		AND  video_set_id=#{videoSetId}
+		</if>
+	<if test="accountId!=null">
+		AND  account_id=#{accountId}
+		</if>
+		</where>
+		ORDER BY 
+			${orderName}  ${orderWay}
+		LIMIT #{pageNum}, 1
+		) 
+	</where>
+	ORDER BY
+		${orderName}  ${orderWay}
+	LIMIT
+		#{pageSize}
+</select> 
+
+<!-- 统计记录条数 -->
+<select id="countAll"  resultType="int">  
+	SELECT
+	 	count(video_set_collect_id)
+	FROM video_set_collect_tb
+	<where>
+	<if test="videoSetId!=null">
+		AND  video_set_id=#{videoSetId}
+		</if>
+	<if test="accountId!=null">
+		AND  account_id=#{accountId}
+		</if>
+		</where>
+</select>   
+   
+ 
+</mapper>

@@ -1,0 +1,236 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+		PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"   
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">  
+<mapper namespace="com.nieyue.dao.PaymentDao">
+<!-- 添加支付 -->
+<insert id="addPayment" parameterType="Payment" keyProperty="paymentId" flushCache="true"  >  
+   INSERT IGNORE INTO
+   		  payment_tb 
+   		 (
+   		 subject,
+   		 body,
+   		 notify_url,
+   		 type,
+   		 order_number,
+   		 money,
+   		 status,
+   		 business_type,
+   		 business_id,
+   		 business_notify_url,
+   		 account_id,
+   		 create_date,
+   		 update_date)
+   VALUES
+    	 (
+    	 #{subject},
+    	 #{body},
+    	 #{notifyUrl},
+    	 #{type},
+    	 #{orderNumber},
+    	 #{money},
+    	 #{status},
+    	 #{businessType},
+    	 #{businessId},
+    	 #{businessNotifyUrl},
+    	 #{accountId},
+    	 #{createDate},
+    	 #{updateDate})  
+</insert>  
+<!-- 更新支付 -->
+<update id="updatePayment" parameterType="Payment" >  
+    UPDATE 
+    	payment_tb 
+   <set>
+    	<if test="subject!=null">
+    	subject=#{subject},
+    	</if>
+    	<if test="body!=null">
+    	body=#{body},
+    	</if>
+    	<if test="notifyUrl!=null">
+    	notify_url=#{notifyUrl},
+    	</if>
+    	<if test="type!=null">
+    	type=#{type},
+    	</if>
+    	<if test="orderNumber!=null">
+    	order_number=#{orderNumber},
+    	</if>
+    	<if test="money!=null">
+    	money=#{money},
+    	</if>
+    	<if test="status!=null">
+    	status=#{status},
+    	</if>
+    	<if test="businessType!=null">
+    	business_type=#{businessType},
+    	</if>
+    	<if test="businessId!=null">
+    	business_id=#{businessId},
+    	</if>
+    	<if test="businessNotifyUrl!=null">
+    	business_notify_url=#{businessNotifyUrl},
+    	</if>
+    	<if test="accountId!=null">
+    	account_id=#{accountId},
+    	</if>
+    	<if test="createDate!=null">
+    	create_date=#{createDate},
+    	</if>
+    	<if test="updateDate!=null">
+    	update_date=#{updateDate}
+    	</if>
+   </set> 
+    WHERE
+    	 payment_id=#{paymentId} 
+</update> 
+<!-- 删除支付-->
+<delete id="delPayment"  parameterType="Integer" >  
+    DELETE FROM
+    	 payment_tb 
+    	 WHERE payment_id=#{paymentId}
+</delete>  
+<!-- 加载支付-->
+<select id="loadPayment" parameterType="Integer" resultType="Payment" >
+SELECT 
+		 payment_id,
+		 subject,
+		 body,
+		 notify_url,
+	 	 type,
+	 	 order_number,
+   		 money,
+   		 status,
+   		 business_type,
+   		 business_id,
+   		 business_notify_url,
+   		 account_id,
+   		 create_date,
+   		 update_date
+FROM payment_tb 
+WHERE payment_id=#{paymentId}
+</select>
+<!-- 分页查询支付-->
+<select id="browsePagingPayment" resultType="Payment">  
+        SELECT
+	     payment_id,
+	     subject,
+		 body,
+		 notify_url,
+	 	 type,
+	 	 order_number,
+   		 money,
+   		 status,
+   		 business_type,
+   		 business_id,
+   		 business_notify_url,
+   		 account_id,
+   		 create_date,
+   		 update_date
+	FROM payment_tb
+	<where>
+	<if test="orderNumber!=null">
+	AND order_number=#{orderNumber}
+	</if>
+	<if test="type!=null">
+	AND type=#{type}
+	</if>
+	<if test="businessType!=null">
+	AND business_type=#{businessType}
+	</if>
+	<if test="businessId!=null">
+	AND business_id=#{businessId}
+	</if>
+	<if test="accountId!=null">
+	AND account_id=#{accountId}
+	</if>
+	<if test="createDate!=null">
+	AND DATE(create_date)=DATE(#{createDate})
+	</if>
+	<if test="updateDate!=null">
+	AND DATE(update_date)=DATE(#{updateDate})
+	</if>
+	<if test="status!=null">
+	AND status=#{status}
+	</if>
+	AND ${orderName} 
+	<if test="orderWay=='asc'">
+	<![CDATA[>=]]> 
+	</if>
+	<if test="orderWay=='desc'">
+	  <![CDATA[<= ]]>
+	</if>
+	(SELECT ${orderName} FROM payment_tb 
+	<where>
+	<if test="orderNumber!=null">
+	AND order_number=#{orderNumber}
+	</if>
+		<if test="type!=null">
+	AND type=#{type}
+	</if>
+	<if test="businessType!=null">
+	AND business_type=#{businessType}
+	</if>
+	<if test="businessId!=null">
+	AND business_id=#{businessId}
+	</if>
+	<if test="accountId!=null">
+	AND account_id=#{accountId}
+	</if>
+	<if test="createDate!=null">
+	AND DATE(create_date)=DATE(#{createDate})
+	</if>
+	<if test="updateDate!=null">
+	AND DATE(update_date)=DATE(#{updateDate})
+	</if>
+	<if test="status!=null">
+	AND status=#{status}
+	</if>
+	</where>
+		ORDER BY 
+			${orderName}  ${orderWay}
+		LIMIT #{pageNum}, 1
+		) 
+	</where>
+	ORDER BY
+		${orderName}  ${orderWay}
+	LIMIT
+		#{pageSize}
+</select> 
+
+<!-- 统计记录条数 -->
+<select id="countAll"  resultType="int">  
+	SELECT
+	 	count(payment_id)
+	FROM payment_tb
+	<where>
+	<if test="orderNumber!=null">
+	AND order_number=#{orderNumber}
+	</if>
+		<if test="type!=null">
+	AND type=#{type}
+	</if>
+	<if test="businessType!=null">
+	AND business_type=#{businessType}
+	</if>
+	<if test="businessId!=null">
+	AND business_id=#{businessId}
+	</if>
+	<if test="accountId!=null">
+	AND account_id=#{accountId}
+	</if>
+	<if test="createDate!=null">
+	AND DATE(create_date)=DATE(#{createDate})
+	</if>
+	<if test="updateDate!=null">
+	AND DATE(update_date)=DATE(#{updateDate})
+	</if>
+	<if test="status!=null">
+	AND status=#{status}
+	</if>
+	</where>
+</select>   
+   
+ 
+</mapper>

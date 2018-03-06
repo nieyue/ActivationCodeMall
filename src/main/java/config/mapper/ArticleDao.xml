@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+		PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"   
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">  
+<mapper namespace="com.nieyue.dao.ArticleDao">
+<!-- 添加文章 -->
+<insert id="addArticle" parameterType="Article" keyProperty="articleId" flushCache="true"  >  
+   INSERT IGNORE INTO
+   		  article_tb 
+   		 (
+   		 title,
+   		 subtitle,
+   		 img_address,
+   		 redirect_url,
+   		 content,
+   		 comment_number,
+   		 status,
+   		 create_date,
+   		 update_date,
+   		 article_cate_id
+   		 )
+   VALUES
+    	 (
+    	 #{title},
+    	 #{subtitle},
+    	 #{imgAddress},
+    	 #{redirectUrl},
+    	 #{content},
+    	 #{commentNumber},
+    	 #{status},
+    	 #{createDate},
+    	 #{updateDate},
+    	 #{articleCateId}
+    	 )  
+</insert>  
+<!-- 更新文章 -->
+<update id="updateArticle" parameterType="Article" >  
+    UPDATE 
+    	article_tb 
+    <set>
+    	<if test="title!=null">
+    	title=#{title},
+    	</if>
+    	<if test="subtitle!=null">
+    	subtitle=#{subtitle},
+    	</if>
+    	<if test="imgAddress!=null">
+    	img_address=#{imgAddress},
+    	</if>
+    	<if test="redirectUrl!=null">
+    	redirect_url=#{redirectUrl},
+    	</if>
+    	<if test="content!=null">
+    	content=#{content},
+    	</if>
+    	<if test="commentNumber!=null">
+    	comment_number=#{commentNumber},
+    	</if>
+    	<if test="status!=null">
+    	status=#{status},
+    	</if>
+    	<if test="createDate!=null">
+    	create_date=#{createDate},
+    	</if>
+    	<if test="updateDate!=null">
+    	update_Date=#{updateDate},
+    	</if>
+    	<if test="articleCateId!=null">
+    	article_cate_id=#{articleCateId},
+    	</if>
+    </set> 
+    WHERE
+    	 article_id=#{articleId} 
+</update> 
+<!-- 删除文章-->
+<delete id="delArticle"  parameterType="Integer" >  
+    DELETE FROM
+    	 article_tb 
+    	 WHERE article_id=#{articleId}
+</delete>  
+<!-- 加载文章-->
+<select id="loadArticle" parameterType="Integer" resultType="Article" >
+SELECT 
+		 article_id,
+	 	 title,
+	 	 subtitle,
+	 	 img_address,
+   		 redirect_url,
+   		 content,
+   		 comment_number,
+   		 status,
+   		 create_date,
+   		 update_date,
+   		 article_cate_id
+FROM article_tb 
+WHERE article_id=#{articleId}
+</select>
+
+<!-- 分页查询文章-->
+<select id="browsePagingArticle" resultType="Article">  
+        SELECT
+	     article_id,
+	 	 title,
+	 	 subtitle,
+	 	 img_address,
+   		 redirect_url,
+   		 <!-- content, -->
+   		 comment_number,
+   		 status,
+   		 create_date,
+   		 update_date,
+   		 article_cate_id
+	FROM article_tb
+	<where>
+	<if test="articleCateId!=null">
+		AND  article_cate_id=#{articleCateId}
+		</if>
+	<if test="commentNumber!=null">
+		AND  comment_number=#{commentNumber}
+		</if>
+	<if test="createDate!=null">
+		AND  DATE(create_date)=DATE(#{createDate})
+		</if>
+	<if test="updateDate!=null">
+		AND  DATE(update_date)=DATE(#{updateDate})
+		</if>
+	<if test="status!=null">
+		AND  status=#{status}
+		</if>
+	AND ${orderName} 
+	<if test="orderWay=='asc'">
+	<![CDATA[>=]]> 
+	</if>
+	<if test="orderWay=='desc'">
+	  <![CDATA[<= ]]>
+	</if>
+	(SELECT ${orderName} FROM article_tb 
+		<where>
+		<if test="articleCateId!=null">
+		AND  article_cate_id=#{articleCateId}
+		</if>
+		<if test="commentNumber!=null">
+		AND  comment_number=#{commentNumber}
+		</if>
+	<if test="createDate!=null">
+		AND  DATE(create_date)=DATE(#{createDate})
+		</if>
+	<if test="updateDate!=null">
+		AND  DATE(update_date)=DATE(#{updateDate})
+		</if>
+	<if test="status!=null">
+		AND  status=#{status}
+		</if>
+		</where>
+		ORDER BY 
+			${orderName}  ${orderWay}
+		LIMIT #{pageNum}, 1
+		) 
+	</where>
+	ORDER BY
+		${orderName}  ${orderWay}
+	LIMIT
+		#{pageSize}
+</select> 
+
+<!-- 统计记录条数 -->
+<select id="countAll"  resultType="int">  
+	SELECT
+	 	count(article_id)
+	FROM article_tb
+	<where>
+	<if test="articleCateId!=null">
+		AND  article_cate_id=#{articleCateId}
+		</if>
+		<if test="commentNumber!=null">
+		AND  comment_number=#{commentNumber}
+		</if>
+	<if test="createDate!=null">
+		AND  DATE(create_date)=DATE(#{createDate})
+		</if>
+	<if test="updateDate!=null">
+		AND  DATE(update_date)=DATE(#{updateDate})
+		</if>
+	<if test="status!=null">
+		AND  status=#{status}
+		</if>
+		</where>
+</select>   
+   
+ 
+</mapper>

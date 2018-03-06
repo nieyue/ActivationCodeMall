@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+		PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"   
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">  
+<mapper namespace="com.nieyue.dao.MedalDao">
+<!-- 添加勋章-->
+<insert id="addMedal" parameterType="Medal" keyProperty="medalId" flushCache="true"  >  
+   INSERT IGNORE INTO
+   		  medal_tb 
+   		 (
+   		 name,
+   		 img_address,
+   		 content,
+   		 create_date,
+   		 update_date,
+   		 account_id,
+   		 medal_term_id
+   		 )
+   VALUES
+    	 (
+    	 #{name},
+    	 #{imgAddress},
+    	 #{content},
+    	 #{createDate},
+    	 #{updateDate},
+    	 #{accountId},
+    	 #{medalTermId}
+    	 )  
+</insert>  
+<!-- 更新勋章-->
+<update id="updateMedal" parameterType="Medal" >  
+    UPDATE 
+    	medal_tb 
+    <set>
+    	<if test="name!=null">
+    	name=#{name},
+    	</if>
+    	<if test="imgAddress!=null">
+    	img_address=#{imgAddress},
+    	</if>
+    	<if test="content!=null">
+    	content=#{content},
+    	</if>
+    	<if test="createDate!=null">
+    	create_date=#{createDate},
+    	</if>
+    	<if test="updateDate!=null">
+    	update_date=#{updateDate},
+    	</if>
+    	<if test="accountId!=null">
+    	account_id=#{accountId},
+    	</if>
+    	<if test="medalTermId!=null">
+    	medal_term_id=#{medalTermId},
+    	</if>
+    </set> 
+    WHERE
+    	 medal_id=#{medalId} 
+</update> 
+<!-- 删除勋章-->
+<delete id="delMedal"  parameterType="Integer" >  
+    DELETE FROM
+    	 medal_tb 
+    	 WHERE medal_id=#{medalId}
+</delete>  
+<!-- 加载勋章-->
+<select id="loadMedal" parameterType="Integer" resultType="Medal" >
+SELECT 
+		 medal_id,
+	 	 name,
+   		 img_address,
+   		 content,
+   		 create_date,
+   		 update_date,
+   		 account_id,
+   		 medal_term_id
+FROM medal_tb 
+WHERE medal_id=#{medalId}
+</select>
+
+<!-- 分页查询勋章-->
+<select id="browsePagingMedal" resultType="Medal">  
+        SELECT
+	     medal_id,
+	 	 name,
+   		 img_address,
+   		 content,
+   		 create_date,
+   		 update_date,
+   		 account_id,
+   		 medal_term_id
+	FROM medal_tb
+	<where>
+	<if test="medalTermId!=null">
+		AND  medal_term_id=#{medalTermId}
+		</if>
+	<if test="accountId!=null">
+		AND  account_id=#{accountId}
+		</if>
+	<if test="createDate!=null">
+		AND  DATE(create_date)=DATE(#{createDate})
+		</if>
+	<if test="updateDate!=null">
+		AND  DATE(update_date)=DATE(#{updateDate})
+		</if>
+	AND ${orderName} 
+	<if test="orderWay=='asc'">
+	<![CDATA[>=]]> 
+	</if>
+	<if test="orderWay=='desc'">
+	  <![CDATA[<= ]]>
+	</if>
+	(SELECT ${orderName} FROM medal_tb 
+		<where>
+	<if test="medalTermId!=null">
+		AND  medal_term_id=#{medalTermId}
+		</if>
+	<if test="accountId!=null">
+		AND  account_id=#{accountId}
+		</if>
+	<if test="createDate!=null">
+		AND  DATE(create_date)=DATE(#{createDate})
+		</if>
+	<if test="updateDate!=null">
+		AND  DATE(update_date)=DATE(#{updateDate})
+		</if>
+		</where>
+		ORDER BY 
+			${orderName}  ${orderWay}
+		LIMIT #{pageNum}, 1
+		) 
+	</where>
+	ORDER BY
+		${orderName}  ${orderWay}
+	LIMIT
+		#{pageSize}
+</select> 
+
+<!-- 统计记录条数 -->
+<select id="countAll"  resultType="int">  
+	SELECT
+	 	count(medal_id)
+	FROM medal_tb
+	<where>
+	<if test="medalTermId!=null">
+		AND  medal_term_id=#{medalTermId}
+		</if>
+	<if test="accountId!=null">
+		AND  account_id=#{accountId}
+		</if>
+	<if test="createDate!=null">
+		AND  DATE(create_date)=DATE(#{createDate})
+		</if>
+	<if test="updateDate!=null">
+		AND  DATE(update_date)=DATE(#{updateDate})
+		</if>
+		</where>
+</select>   
+   
+ 
+</mapper>

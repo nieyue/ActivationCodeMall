@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+		PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"   
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">  
+<mapper namespace="com.nieyue.dao.IntegralDetailDao">
+<!-- 添加积分详情 -->
+<insert id="addIntegralDetail" parameterType="IntegralDetail" keyProperty="integralDetailId" flushCache="true"  >  
+   INSERT IGNORE INTO
+   		  integral_detail_tb 
+   		 (
+   		 type,
+   		 integral,
+   		 create_date,
+   		 update_date,
+   		 account_id
+   		 )
+   VALUES
+    	 (
+    	 #{type},
+    	 #{integral},
+    	 #{createDate},
+    	 #{updateDate},
+    	 #{accountId}
+    	 )  
+</insert>  
+<!-- 更新积分详情 -->
+<update id="updateIntegralDetail" parameterType="IntegralDetail" >  
+    UPDATE 
+    	integral_detail_tb 
+    <set>
+    	<if test="type!=null">
+    	type=#{type},
+    	</if>
+    	<if test="integral!=null">
+    	integral=#{integral},
+    	</if>
+    	<if test="createDate!=null">
+    	create_date=#{createDate},
+    	</if>
+    	<if test="updateDate!=null">
+    	update_date=#{updateDate},
+    	</if>
+    	<if test="accountId!=null">
+    	account_id=#{accountId},
+    	</if>
+    </set> 
+    WHERE
+    	 integral_detail_id=#{integralDetailId} 
+</update> 
+<!-- 删除积分详情-->
+<delete id="delIntegralDetail"  parameterType="Integer" >  
+    DELETE FROM
+    	 integral_detail_tb 
+    	 WHERE integral_detail_id=#{integralDetailId}
+</delete>  
+<!-- 加载积分详情-->
+<select id="loadIntegralDetail" parameterType="Integer" resultType="IntegralDetail" >
+SELECT 
+		 integral_detail_id,
+	 	 type,
+   		 integral,
+   		 create_date,
+   		 update_date,
+   		 account_id
+FROM integral_detail_tb 
+WHERE integral_detail_id=#{integralDetailId}
+</select>
+
+<!-- 分页查询积分详情-->
+<select id="browsePagingIntegralDetail" resultType="IntegralDetail">  
+        SELECT
+	     integral_detail_id,
+	 	 type,
+   		 integral,
+   		 create_date,
+   		 update_date,
+   		 account_id
+	FROM integral_detail_tb
+	<where>
+	<if test="type!=null">
+		AND  type=#{type}
+		</if>
+	<if test="accountId!=null">
+		AND  account_id=#{accountId}
+		</if>
+	<if test="createDate!=null">
+		AND  DATE(create_date)=DATE(#{createDate})
+		</if>
+	<if test="updateDate!=null">
+		AND  DATE(update_date)=DATE(#{updateDate})
+		</if>
+	AND ${orderName} 
+	<if test="orderWay=='asc'">
+	<![CDATA[>=]]> 
+	</if>
+	<if test="orderWay=='desc'">
+	  <![CDATA[<= ]]>
+	</if>
+	(SELECT ${orderName} FROM integral_detail_tb 
+		<where>
+		<if test="type!=null">
+		AND  type=#{type}
+		</if>
+	<if test="accountId!=null">
+		AND  account_id=#{accountId}
+		</if>
+	<if test="createDate!=null">
+		AND  DATE(create_date)=DATE(#{createDate})
+		</if>
+	<if test="updateDate!=null">
+		AND  DATE(update_date)=DATE(#{updateDate})
+		</if>
+		</where>
+		ORDER BY 
+			${orderName}  ${orderWay}
+		LIMIT #{pageNum}, 1
+		) 
+	</where>
+	ORDER BY
+		${orderName}  ${orderWay}
+	LIMIT
+		#{pageSize}
+</select> 
+
+<!-- 统计记录条数 -->
+<select id="countAll"  resultType="int">  
+	SELECT
+	 	count(integral_detail_id)
+	FROM integral_detail_tb
+	<where>
+	<if test="type!=null">
+		AND  type=#{type}
+		</if>
+	<if test="accountId!=null">
+		AND  account_id=#{accountId}
+		</if>
+	<if test="createDate!=null">
+		AND  DATE(create_date)=DATE(#{createDate})
+		</if>
+	<if test="updateDate!=null">
+		AND  DATE(update_date)=DATE(#{updateDate})
+		</if>
+		</where>
+</select>   
+   
+ 
+</mapper>

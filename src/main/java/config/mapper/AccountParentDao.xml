@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+		PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"   
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">  
+<mapper namespace="com.nieyue.dao.AccountParentDao">
+<!-- 添加账户上级-->
+<insert id="addAccountParent" parameterType="AccountParent" keyProperty="accountParentId" flushCache="true"  >  
+   INSERT IGNORE INTO
+   		  account_parent_tb 
+   		 (
+   		 account_id,
+   		 realname,
+   		 phone,
+   		 subordinate_number,
+   		 master_id,
+   		 real_master_id,
+   		 account_level_id,
+   		 name,
+   		 create_date,
+   		 update_date
+   		 )
+   VALUES
+    	 (
+    	 #{accountId},
+    	 #{realname},
+    	 #{phone},
+    	 #{subordinateNumber},
+    	 #{masterId},
+    	 #{realMasterId},
+    	 #{accountLevelId},
+    	 #{name},
+    	 #{createDate},
+    	 #{updateDate}
+    	 )  
+</insert>  
+<!-- 更新账户上级-->
+<update id="updateAccountParent" parameterType="AccountParent" >  
+    UPDATE 
+    	account_parent_tb 
+    <set>
+    	<if test="accountId!=null">
+    	account_id=#{accountId},
+    	</if>
+    	<if test="realname!=null">
+    	realname=#{realname},
+    	</if>
+    	<if test="phone!=null">
+    	phone=#{phone},
+    	</if>
+    	<if test="subordinateNumber!=null">
+    	subordinate_number=#{subordinateNumber},
+    	</if>
+    	<if test="masterId!=null">
+    	master_id=#{masterId},
+    	</if>
+    	<if test="realMasterId!=null">
+    	real_master_id=#{realMasterId},
+    	</if>
+    	<if test="accountLevelId!=null">
+    	account_level_id=#{accountLevelId},
+    	</if>
+    	<if test="name!=null">
+    	name=#{name},
+    	</if>
+    	<if test="createDate!=null">
+    	create_date=#{createDate},
+    	</if>
+    	<if test="updateDate!=null">
+    	update_date=#{updateDate},
+    	</if>
+    </set> 
+    WHERE
+    	 account_parent_id=#{accountParentId} 
+</update> 
+<!-- 删除平台日-->
+<delete id="delAccountParent"  parameterType="Integer" >  
+    DELETE FROM
+    	 account_parent_tb 
+    	 WHERE account_parent_id=#{accountParentId}
+</delete>  
+<!-- 加载平台日-->
+<select id="loadAccountParent" parameterType="Integer" resultType="AccountParent" >
+SELECT 
+		 account_parent_id,
+		 account_id,
+	 	 realname,
+   		 phone,
+   		 subordinate_number,
+   		 master_id,
+   		 real_master_id,
+   		 account_level_id,
+   		 name,
+   		 create_date,
+   		 update_date
+FROM account_parent_tb 
+WHERE account_parent_id=#{accountParentId}
+</select>
+
+<!-- 分页查询平台日-->
+<select id="browsePagingAccountParent" resultType="AccountParent">  
+        SELECT
+	     account_parent_id,
+	     account_id,
+	 	 realname,
+   		 phone,
+   		 subordinate_number,
+   		 master_id,
+   		 real_master_id,
+   		 account_level_id,
+   		 name,
+   		 create_date,
+   		 update_date
+	FROM account_parent_tb
+	<where>
+	<if test="phone!=null">
+		AND  phone like CONCAT('%','${phone}','%' )
+		</if>
+	<if test="accountLevelId!=null">
+		AND  account_level_id=#{accountLevelId}
+		</if>
+	<if test="accountId!=null">
+		AND  account_id=#{accountId}
+		</if>
+	<if test="masterId!=null">
+		AND  master_id=#{masterId}
+		</if>
+	<if test="realMasterId!=null">
+		AND  real_master_id=#{realMasterId}
+		</if>
+	<if test="createDate!=null">
+		AND  DATE(create_date)=DATE(#{createDate})
+		</if>
+	<if test="updateDate!=null">
+		AND  DATE(update_date)=DATE(#{updateDate})
+		</if>
+	AND ${orderName} 
+	<if test="orderWay=='asc'">
+	<![CDATA[>=]]> 
+	</if>
+	<if test="orderWay=='desc'">
+	  <![CDATA[<= ]]>
+	</if>
+	(SELECT ${orderName} FROM account_parent_tb 
+		<where>
+	<if test="phone!=null">
+		AND  phone like CONCAT('%','${phone}','%' )
+		</if>
+	<if test="accountLevelId!=null">
+		AND  account_level_id=#{accountLevelId}
+		</if>
+	<if test="accountId!=null">
+		AND  account_id=#{accountId}
+		</if>
+	<if test="masterId!=null">
+		AND  master_id=#{masterId}
+		</if>
+	<if test="realMasterId!=null">
+		AND  real_master_id=#{realMasterId}
+		</if>
+	<if test="createDate!=null">
+		AND  DATE(create_date)=DATE(#{createDate})
+		</if>
+	<if test="updateDate!=null">
+		AND  DATE(update_date)=DATE(#{updateDate})
+		</if>
+		</where>
+		ORDER BY 
+			${orderName}  ${orderWay}
+		LIMIT #{pageNum}, 1
+		) 
+	</where>
+	ORDER BY
+		${orderName}  ${orderWay}
+	LIMIT
+		#{pageSize}
+</select> 
+
+<!-- 统计记录条数 -->
+<select id="countAll"  resultType="int">  
+	SELECT
+	 	count(account_parent_id)
+	FROM account_parent_tb
+	<where>
+	<if test="phone!=null">
+		AND  phone like CONCAT('%','${phone}','%' )
+		</if>
+	<if test="accountLevelId!=null">
+		AND  account_level_id=#{accountLevelId}
+		</if>
+	<if test="accountId!=null">
+		AND  account_id=#{accountId}
+		</if>
+	<if test="masterId!=null">
+		AND  master_id=#{masterId}
+		</if>
+	<if test="realMasterId!=null">
+		AND  real_master_id=#{realMasterId}
+		</if>
+	<if test="createDate!=null">
+		AND  DATE(create_date)=DATE(#{createDate})
+		</if>
+	<if test="updateDate!=null">
+		AND  DATE(update_date)=DATE(#{updateDate})
+		</if>
+		</where>
+</select>   
+   
+ 
+</mapper>

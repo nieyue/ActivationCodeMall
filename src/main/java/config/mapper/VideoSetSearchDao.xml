@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+		PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"   
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">  
+<mapper namespace="com.nieyue.dao.VideoSetSearchDao">
+<!-- 添加视频集搜索 -->
+<insert id="addVideoSetSearch" parameterType="VideoSetSearch" keyProperty="videoSetSearchId" flushCache="true"  >  
+   INSERT IGNORE INTO
+   		  video_set_search_tb 
+   		 (
+   		 name,
+   		 number,
+   		 update_date
+   		 )
+   VALUES
+    	 (
+    	 #{name},
+    	 #{number},
+    	 #{updateDate}
+    	 )  
+</insert>  
+<!-- 更新视频集搜索 -->
+<update id="updateVideoSetSearch" parameterType="VideoSetSearch" >  
+    UPDATE 
+    	video_set_search_tb 
+    SET 
+    	name=#{name},
+    	number=#{number},
+    	update_date=#{updateDate}
+    WHERE
+    	 video_set_search_id=#{videoSetSearchId} 
+</update> 
+<!-- 删除视频集搜索-->
+<delete id="delVideoSetSearch"  parameterType="Integer" >  
+    DELETE FROM
+    	 video_set_search_tb 
+    	 WHERE video_set_search_id=#{videoSetSearchId}
+</delete>  
+<!-- 加载视频集搜索-->
+<select id="loadVideoSetSearch" parameterType="Integer" resultType="VideoSetSearch" >
+SELECT 
+		video_set_search_id,
+	 	name,
+	 	number,
+    	update_date
+FROM video_set_search_tb 
+WHERE video_set_search_id=#{videoSetSearchId}
+</select>
+
+<!-- 分页查询视频集搜索-->
+<select id="browsePagingVideoSetSearch" resultType="VideoSetSearch">  
+        SELECT
+	    video_set_search_id,
+	 	name,
+	 	number,
+    	update_date
+	FROM video_set_search_tb
+	<where>
+	<if test="name!=null">
+		AND  name=#{name}
+		</if>
+	<if test="number!=null">
+		AND  number=#{number}
+		</if>
+	AND ${orderName}
+	<if test="orderWay=='asc'">
+	<![CDATA[>=]]> 
+	</if>
+	<if test="orderWay=='desc'">
+	  <![CDATA[<= ]]>
+	</if>
+	(SELECT ${orderName} FROM video_set_search_tb 
+	<where>
+	<if test="name!=null">
+		AND  name=#{name}
+		</if>
+	<if test="number!=null">
+		AND  number=#{number}
+		</if>
+	</where>
+		ORDER BY 
+			${orderName}  ${orderWay}
+		LIMIT #{pageNum}, 1
+		) 
+	</where>
+	ORDER BY
+		${orderName}  ${orderWay}
+	LIMIT
+		#{pageSize}
+</select> 
+
+<!-- 统计记录条数 -->
+<select id="countAll"  resultType="int">  
+	SELECT
+	 	count(video_set_search_id)
+	FROM video_set_search_tb
+	<where>
+	<if test="name!=null">
+		AND  name=#{name}
+		</if>
+	<if test="number!=null">
+		AND  number=#{number}
+		</if>
+	</where>
+</select>   
+   
+ 
+</mapper>

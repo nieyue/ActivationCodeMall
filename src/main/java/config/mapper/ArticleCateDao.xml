@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+		PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"   
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">  
+<mapper namespace="com.nieyue.dao.ArticleCateDao">
+<!-- 添加文章类型 -->
+<insert id="addArticleCate" parameterType="ArticleCate" keyProperty="articleCateId" flushCache="true"  >  
+   INSERT IGNORE INTO
+   		  article_cate_tb 
+   		 (
+   		 name,
+   		 update_date
+   		 )
+   VALUES
+    	 (
+    	 #{name},
+    	 #{updateDate}
+    	 )  
+</insert>  
+<!-- 更新文章类型 -->
+<update id="updateArticleCate" parameterType="ArticleCate" >  
+    UPDATE 
+    	article_cate_tb 
+    SET 
+    	name=#{name},
+    	update_date=#{updateDate}
+    WHERE
+    	 article_cate_id=#{articleCateId} 
+</update> 
+<!-- 删除文章类型-->
+<delete id="delArticleCate"  parameterType="Integer" >  
+    DELETE FROM
+    	 article_cate_tb 
+    	 WHERE article_cate_id=#{articleCateId}
+</delete>  
+<!-- 加载文章类型-->
+<select id="loadArticleCate" parameterType="Integer" resultType="ArticleCate" >
+SELECT 
+		article_cate_id,
+	 	name,
+    	update_date
+FROM article_cate_tb 
+WHERE article_cate_id=#{articleCateId}
+</select>
+
+<!-- 分页查询文章类型-->
+<select id="browsePagingArticleCate" resultType="ArticleCate">  
+        SELECT
+	    article_cate_id,
+	 	name,
+    	update_date
+	FROM article_cate_tb
+	WHERE ${orderName} 
+	<if test="orderWay=='asc'">
+	<![CDATA[>=]]> 
+	</if>
+	<if test="orderWay=='desc'">
+	  <![CDATA[<= ]]>
+	</if>
+	(SELECT ${orderName} FROM article_cate_tb 
+		ORDER BY 
+			${orderName}  ${orderWay}
+		LIMIT #{pageNum}, 1
+		) 
+	ORDER BY
+		${orderName}  ${orderWay}
+	LIMIT
+		#{pageSize}
+</select> 
+
+<!-- 统计记录条数 -->
+<select id="countAll"  resultType="int">  
+	SELECT
+	 	count(article_cate_id)
+	FROM article_cate_tb
+</select>   
+   
+ 
+</mapper>

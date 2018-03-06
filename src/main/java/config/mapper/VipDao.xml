@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+		PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"   
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">  
+<mapper namespace="com.nieyue.dao.VipDao">
+<!-- 添加vip -->
+<insert id="addVip" parameterType="Vip" keyProperty="vipId" flushCache="true"  >  
+   INSERT IGNORE INTO
+   		  vip_tb 
+   		 (
+   		 name,
+   		 level,
+   		 status,
+   		 expire_date,
+   		 create_date,
+   		 update_date,
+   		 account_id
+   		 )
+   VALUES
+    	 (
+    	 #{name},
+    	 #{level},
+    	 #{status},
+    	 #{expireDate},
+    	 #{createDate},
+    	 #{updateDate},
+    	 #{accountId}
+    	 )  
+</insert>  
+<!-- 更新vip -->
+<update id="updateVip" parameterType="Vip" >  
+    UPDATE 
+    	vip_tb 
+    <set>
+    	<if test="name!=null">
+    	name=#{name},
+    	</if>
+    	<if test="level!=null">
+    	level=#{level},
+    	</if>
+    	<if test="status!=null">
+    	status=#{status},
+    	</if>
+    	<if test="expireDate!=null">
+    	expire_date=#{expireDate},
+    	</if>
+    	<if test="createDate!=null">
+    	create_date=#{createDate},
+    	</if>
+    	<if test="updateDate!=null">
+    	update_date=#{updateDate},
+    	</if>
+    	<if test="accountId!=null">
+    	account_id=#{accountId},
+    	</if>
+    </set> 
+    WHERE
+    	 vip_id=#{vipId} 
+</update> 
+<!-- 删除vip-->
+<delete id="delVip"  parameterType="Integer" >  
+    DELETE FROM
+    	 vip_tb 
+    	 WHERE vip_id=#{vipId}
+</delete>  
+<!-- 加载vip-->
+<select id="loadVip" parameterType="Integer" resultType="Vip" >
+SELECT 
+		 vip_id,
+	 	 name,
+   		 level,
+   		 status,
+   		 expire_date,
+   		 create_date,
+   		 update_date,
+   		 account_id
+FROM vip_tb 
+WHERE vip_id=#{vipId}
+</select>
+
+<!-- 分页查询vip-->
+<select id="browsePagingVip" resultType="Vip">  
+        SELECT
+	      vip_id,
+	 	  name,
+   		  level,
+   		  status,
+   		  expire_date,
+   		  create_date,
+   		  update_date,
+   		  account_id
+	FROM vip_tb
+	<where>
+	<if test="accountId!=null">
+		AND  account_id=#{accountId}
+		</if>
+	<if test="level!=null">
+		AND  level=#{level}
+		</if>
+	<if test="createDate!=null">
+		AND  DATE(create_date)=DATE(#{createDate})
+		</if>
+	AND ${orderName} 
+	<if test="orderWay=='asc'">
+	<![CDATA[>=]]> 
+	</if>
+	<if test="orderWay=='desc'">
+	  <![CDATA[<= ]]>
+	</if>
+	(SELECT ${orderName} FROM vip_tb 
+		<where>
+	<if test="accountId!=null">
+		AND  account_id=#{accountId}
+		</if>
+	<if test="level!=null">
+		AND  level=#{level}
+		</if>
+	<if test="createDate!=null">
+		AND  DATE(create_date)=DATE(#{createDate})
+		</if>
+		</where>
+		ORDER BY 
+			${orderName}  ${orderWay}
+		LIMIT #{pageNum}, 1
+		) 
+	</where>
+	ORDER BY
+		${orderName}  ${orderWay}
+	LIMIT
+		#{pageSize}
+</select> 
+
+<!-- 统计记录条数 -->
+<select id="countAll"  resultType="int">  
+	SELECT
+	 	count(vip_id)
+	FROM vip_tb
+		<where>
+			<if test="accountId!=null">
+				AND  account_id=#{accountId}
+				</if>
+			<if test="level!=null">
+				AND  level=#{level}
+				</if>
+			<if test="createDate!=null">
+				AND  DATE(create_date)=DATE(#{createDate})
+				</if>
+		</where>
+</select>   
+   
+ 
+</mapper>

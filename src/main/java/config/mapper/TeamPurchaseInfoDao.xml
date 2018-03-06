@@ -1,0 +1,222 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+		PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"   
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">  
+<mapper namespace="com.nieyue.dao.TeamPurchaseInfoDao">
+<!-- 添加团购信息 -->
+<insert id="addTeamPurchaseInfo" parameterType="TeamPurchaseInfo" keyProperty="teamPurchaseInfoId" flushCache="true"  >  
+   INSERT IGNORE INTO
+   		  team_purchase_info_tb 
+   		 (
+   		 team_purchase_card_allowance,
+   		 already_team_purchase,
+   		 wait_dispose,
+   		 wait_dispose_price,
+   		 wait_dispose_update_date,
+   		 team_purchase_success,
+   		 team_purchase_success_price,
+   		 team_purchase_success_update_date,
+   		 already_split,
+   		 already_split_price,
+   		 already_split_update_date,
+   		 already_recommend,
+   		 already_recommend_price,
+   		 already_recommend_update_date,
+   		 create_date,
+   		 update_date,
+   		 account_id
+   		 )
+   VALUES
+    	 (
+    	 #{teamPurchaseCardAllowance},
+    	 #{alreadyTeamPurchase},
+    	 #{waitDispose},
+    	 #{waitDisposePrice},
+    	 #{waitDisposeUpdateDate},
+    	 #{teamPurchaseSuccess},
+    	 #{teamPurchaseSuccessPrice},
+    	 #{teamPurchaseSuccessUpdateDate},
+    	 #{alreadySplit},
+    	 #{alreadySplitPrice},
+    	 #{alreadySplitUpdateDate},
+    	 #{alreadyRecommend},
+    	 #{alreadyRecommendPrice},
+    	 #{alreadyRecommendUpdateDate},
+    	 #{createDate},
+    	 #{updateDate},
+    	 #{accountId}
+    	 )  
+</insert>  
+<!-- 更新团购信息 -->
+<update id="updateTeamPurchaseInfo" parameterType="TeamPurchaseInfo" >  
+    UPDATE 
+    	team_purchase_info_tb 
+    <set>
+    	<if test="teamPurchaseCardAllowance!=null">
+    	team_purchase_card_allowance=#{teamPurchaseCardAllowance},
+    	</if>
+    	<if test="alreadyTeamPurchase!=null">
+    	already_team_purchase=#{alreadyTeamPurchase},
+    	</if>
+    	<if test="waitDispose!=null">
+    	wait_dispose=#{waitDispose},
+    	</if>
+    	<if test="waitDisposePrice!=null">
+    	wait_dispose_price=#{waitDisposePrice},
+    	</if>
+    	<if test="waitDisposeUpdateDate!=null">
+    	wait_dispose_update_date=#{waitDisposeUpdateDate},
+    	</if>
+    	<if test="teamPurchaseSuccess!=null">
+    	team_purchase_success=#{teamPurchaseSuccess},
+    	</if>
+    	<if test="teamPurchaseSuccessPrice!=null">
+    	team_purchase_success_price=#{teamPurchaseSuccessPrice},
+    	</if>
+    	<if test="teamPurchaseSuccessUpdateDate!=null">
+    	team_purchase_success_update_date=#{teamPurchaseSuccessUpdateDate},
+    	</if>
+    	<if test="alreadySplit!=null">
+    	already_split=#{alreadySplit},
+    	</if>
+    	<if test="alreadySplitPrice!=null">
+    	already_split_price=#{alreadySplitPrice},
+    	</if>
+    	<if test="alreadySplitUpdateDate!=null">
+    	already_split_update_date=#{alreadySplitUpdateDate},
+    	</if>
+    	<if test="alreadyRecommend!=null">
+    	already_recommend=#{alreadyRecommend},
+    	</if>
+    	<if test="alreadyRecommendPrice!=null">
+    	already_recommend_price=#{alreadyRecommendPrice},
+    	</if>
+    	<if test="alreadyRecommendUpdateDate!=null">
+    	already_recommend_update_date=#{alreadyRecommendUpdateDate},
+    	</if>
+    	<if test="createDate!=null">
+    	create_date=#{createDate},
+    	</if>
+    	<if test="updateDate!=null">
+    	update_date=#{updateDate},
+    	</if>
+    	<if test="accountId!=null">
+    	account_id=#{accountId},
+    	</if>
+    </set> 
+    WHERE
+    	 team_purchase_info_id=#{teamPurchaseInfoId} 
+</update> 
+<!-- 删除团购信息-->
+<delete id="delTeamPurchaseInfo"  parameterType="Integer" >  
+    DELETE FROM
+    	 team_purchase_info_tb 
+    	 WHERE team_purchase_info_id=#{teamPurchaseInfoId}
+</delete>  
+<!-- 加载团购信息-->
+<select id="loadTeamPurchaseInfo" parameterType="Integer" resultType="TeamPurchaseInfo" >
+SELECT 
+		 team_purchase_info_id,
+	 	 team_purchase_card_allowance,
+   		 already_team_purchase,
+   		 wait_dispose,
+   		 wait_dispose_price,
+   		 wait_dispose_update_date,
+   		 team_purchase_success,
+   		 team_purchase_success_price,
+   		 team_purchase_success_update_date,
+   		 already_split,
+   		 already_split_price,
+   		 already_split_update_date,
+   		 already_recommend,
+   		 already_recommend_price,
+   		 already_recommend_update_date,
+   		 create_date,
+   		 update_date,
+   		 account_id
+FROM team_purchase_info_tb 
+WHERE team_purchase_info_id=#{teamPurchaseInfoId}
+</select>
+
+<!-- 分页查询团购信息-->
+<select id="browsePagingTeamPurchaseInfo" resultType="TeamPurchaseInfo">  
+        SELECT
+	     team_purchase_info_id,
+	 	 team_purchase_card_allowance,
+   		 already_team_purchase,
+   		 wait_dispose,
+   		 wait_dispose_price,
+   		 wait_dispose_update_date,
+   		 team_purchase_success,
+   		 team_purchase_success_price,
+   		 team_purchase_success_update_date,
+   		 already_split,
+   		 already_split_price,
+   		 already_split_update_date,
+   		 already_recommend,
+   		 already_recommend_price,
+   		 already_recommend_update_date,
+   		 create_date,
+   		 update_date,
+   		 account_id
+	FROM team_purchase_info_tb
+	<where>
+	<if test="accountId!=null">
+		AND  account_id=#{accountId}
+		</if>
+	<if test="createDate!=null">
+		AND  DATE(create_date)=DATE(#{createDate})
+		</if>
+	<if test="updateDate!=null">
+		AND  DATE(update_date)=DATE(#{updateDate})
+		</if>
+	AND ${orderName} 
+	<if test="orderWay=='asc'">
+	<![CDATA[>=]]> 
+	</if>
+	<if test="orderWay=='desc'">
+	  <![CDATA[<= ]]>
+	</if>
+	(SELECT ${orderName} FROM team_purchase_info_tb 
+		<where>
+		<if test="accountId!=null">
+		AND  account_id=#{accountId}
+		</if>
+	<if test="createDate!=null">
+		AND  DATE(create_date)=DATE(#{createDate})
+		</if>
+	<if test="updateDate!=null">
+		AND  DATE(update_date)=DATE(#{updateDate})
+		</if>
+		</where>
+		ORDER BY 
+			${orderName}  ${orderWay}
+		LIMIT #{pageNum}, 1
+		) 
+	</where>
+	ORDER BY
+		${orderName}  ${orderWay}
+	LIMIT
+		#{pageSize}
+</select> 
+
+<!-- 统计记录条数 -->
+<select id="countAll"  resultType="int">  
+	SELECT
+	 	count(team_purchase_info_id)
+	FROM team_purchase_info_tb
+	<where>
+	<if test="accountId!=null">
+		AND  account_id=#{accountId}
+		</if>
+	<if test="createDate!=null">
+		AND  DATE(create_date)=DATE(#{createDate})
+		</if>
+	<if test="updateDate!=null">
+		AND  DATE(update_date)=DATE(#{updateDate})
+		</if>
+		</where>
+</select>   
+   
+ 
+</mapper>

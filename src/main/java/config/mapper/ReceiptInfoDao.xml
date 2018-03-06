@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+		PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"   
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">  
+<mapper namespace="com.nieyue.dao.ReceiptInfoDao">
+<!-- 添加收货信息-->
+<insert id="addReceiptInfo" parameterType="ReceiptInfo" keyProperty="receiptInfoId" flushCache="true"  >  
+   INSERT IGNORE INTO
+   		  receipt_info_tb 
+   		 (
+   		 name,
+   		 phone,
+   		 address,
+   		 is_default,
+   		 create_date,
+   		 update_date,
+   		 account_id)
+   VALUES
+    	 (
+    	 #{name},
+    	 #{phone},
+    	 #{address},
+    	 #{isDefault},
+    	 #{createDate},
+    	 #{updateDate},
+    	 #{accountId})  
+</insert>  
+<!-- 更新收货信息-->
+<update id="updateReceiptInfo" parameterType="ReceiptInfo" >  
+    UPDATE 
+    	receipt_info_tb 
+    <set>
+    	<if test="name!=null">
+    	name=#{name},
+    	</if>
+    	<if test="phone!=null">
+    	phone=#{phone},
+    	</if>
+    	<if test="address!=null">
+    	address=#{address},
+    	</if>
+    	<if test="isDefault!=null">
+    	is_default=#{isDefault},
+    	</if>
+    	<if test="accountId!=null">
+    	account_id=#{accountId},
+    	</if>
+    	<if test="createDate!=null">
+    	create_date=#{createDate},
+    	</if>
+    	<if test="updateDate!=null">
+    	update_date=#{updateDate},
+    	</if>
+    </set>
+    WHERE
+    	 receipt_info_id=#{receiptInfoId} 
+</update> 
+<!-- 删除商品-->
+<delete id="delReceiptInfo"  parameterType="Integer" >  
+    DELETE FROM
+    	 receipt_info_tb 
+    	 WHERE receipt_info_id=#{receiptInfoId}
+</delete>  
+<!-- 加载商品-->
+<select id="loadReceiptInfo" parameterType="Integer" resultType="ReceiptInfo" >
+SELECT 
+		 receipt_info_id,
+	 	 name,
+   		 phone,
+   		 address,
+   		 is_default,
+   		 create_date,
+   		 update_date,
+   		 account_id
+FROM receipt_info_tb 
+WHERE receipt_info_id=#{receiptInfoId}
+</select>
+
+<!-- 分页查询商品-->
+<select id="browsePagingReceiptInfo" resultType="ReceiptInfo">  
+        SELECT
+	     receipt_info_id,
+	 	 name,
+   		 phone,
+   		 address,
+   		 is_default,
+   		 create_date,
+   		 update_date,
+   		 account_id
+	FROM receipt_info_tb
+	<where>
+	<if test="accountId!=null">
+	AND account_id=#{accountId}
+	</if>
+	<if test="isDefault!=null">
+	AND is_default=#{isDefault}
+	</if>
+	<if test="createDate!=null">
+	AND DATE(create_date)=DATE(#{createDate})
+	</if>
+	<if test="updateDate!=null">
+	AND DATE(update_date)=DATE(#{updateDate})
+	</if>
+	AND ${orderName} 
+	<if test="orderWay=='asc'">
+	<![CDATA[>=]]> 
+	</if>
+	<if test="orderWay=='desc'">
+	  <![CDATA[<= ]]>
+	</if>
+	(SELECT ${orderName} FROM receipt_info_tb 
+	<where>
+	<if test="accountId!=null">
+	AND account_id=#{accountId}
+	</if>
+	<if test="isDefault!=null">
+	AND is_default=#{isDefault}
+	</if>
+	<if test="createDate!=null">
+	AND DATE(create_date)=DATE(#{createDate})
+	</if>
+	<if test="updateDate!=null">
+	AND DATE(update_date)=DATE(#{updateDate})
+	</if>
+	</where>
+		ORDER BY 
+			${orderName}  ${orderWay}
+		LIMIT #{pageNum}, 1
+		) 
+	</where>
+	ORDER BY
+		${orderName}  ${orderWay}
+	LIMIT
+		#{pageSize}
+</select> 
+
+<!-- 统计记录条数 -->
+<select id="countAll"  resultType="int">  
+	SELECT
+	 	count(receipt_info_id)
+	FROM receipt_info_tb
+	<where>
+	<if test="accountId!=null">
+	AND account_id=#{accountId}
+	</if>
+	<if test="isDefault!=null">
+	AND is_default=#{isDefault}
+	</if>
+	<if test="createDate!=null">
+	AND DATE(create_date)=DATE(#{createDate})
+	</if>
+	<if test="updateDate!=null">
+	AND DATE(update_date)=DATE(#{updateDate})
+	</if>
+	</where>
+</select>   
+   
+ 
+</mapper>

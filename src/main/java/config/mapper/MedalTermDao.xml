@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+		PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"   
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">  
+<mapper namespace="com.nieyue.dao.MedalTermDao">
+<!-- 添加勋章项 -->
+<insert id="addMedalTerm" parameterType="MedalTerm" keyProperty="medalTermId" flushCache="true"  >  
+   INSERT IGNORE INTO
+   		  medal_term_tb 
+   		 (
+   		 name,
+   		 img_address,
+   		 content,
+   		 update_date
+   		 )
+   VALUES
+    	 (
+    	 #{name},
+    	 #{imgAddress},
+    	 #{content},
+    	 #{updateDate}
+    	 )  
+</insert>  
+<!-- 更新勋章项 -->
+<update id="updateMedalTerm" parameterType="medalTerm" >  
+    UPDATE 
+    	medal_term_tb 
+    SET 
+    	name=#{name},
+    	img_address=#{imgAddress},
+    	content=#{content},
+    	update_date=#{updateDate}
+    WHERE
+    	 medal_term_id=#{medalTermId} 
+</update> 
+<!-- 删除勋章项-->
+<delete id="delMedalTerm"  parameterType="Integer" >  
+    DELETE FROM
+    	 medal_term_tb 
+    	 WHERE medal_term_id=#{medalTermId}
+</delete>  
+<!-- 加载勋章项-->
+<select id="loadMedalTerm" parameterType="Integer" resultType="MedalTerm" >
+SELECT 
+		medal_term_id,
+	 	name,
+	 	img_address,
+	 	content,
+    	update_date
+FROM medal_term_tb 
+WHERE medal_term_id=#{medalTermId}
+</select>
+
+<!-- 分页查询勋章项-->
+<select id="browsePagingMedalTerm" resultType="MedalTerm">  
+        SELECT
+	    medal_term_id,
+	 	name,
+	 	img_address,
+	 	content,
+    	update_date
+	FROM medal_term_tb
+	WHERE ${orderName} 
+	<if test="orderWay=='asc'">
+	<![CDATA[>=]]> 
+	</if>
+	<if test="orderWay=='desc'">
+	  <![CDATA[<= ]]>
+	</if>
+	(SELECT ${orderName} FROM medal_term_tb 
+		ORDER BY 
+			${orderName}  ${orderWay}
+		LIMIT #{pageNum}, 1
+		) 
+	ORDER BY
+		${orderName}  ${orderWay}
+	LIMIT
+		#{pageSize}
+</select> 
+
+<!-- 统计记录条数 -->
+<select id="countAll"  resultType="int">  
+	SELECT
+	 	count(medal_term_id)
+	FROM medal_term_tb
+</select>   
+   
+ 
+</mapper>

@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+		PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"   
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">  
+<mapper namespace="com.nieyue.dao.VipNumberDao">
+<!-- 添加vip购买次数 -->
+<insert id="addVipNumber" parameterType="VipNumber" keyProperty="vipNumberId" flushCache="true"  >  
+   INSERT IGNORE INTO
+   		  vip_number_tb 
+   		 (
+   		 number,
+   		 create_date,
+   		 update_date,
+   		 account_id,
+   		 real_master_id,
+   		 status
+   		 )
+   VALUES
+    	 (
+    	 #{number},
+    	 #{createDate},
+    	 #{updateDate},
+    	 #{accountId},
+    	 #{realMasterId},
+    	 #{status}
+    	 )  
+</insert>  
+<!-- 更新vip购买次数 -->
+<update id="updateVipNumber" parameterType="VipNumber" >  
+    UPDATE 
+    	vip_number_tb 
+    <set>
+    	<if test="number!=null">
+    	number=#{number},
+    	</if>
+    	<if test="createDate!=null">
+    	create_date=#{createDate},
+    	</if>
+    	<if test="updateDate!=null">
+    	update_Date=#{updateDate},
+    	</if>
+    	<if test="accountId!=null">
+    	account_id=#{accountId},
+    	</if>
+    	<if test="realMasterId!=null">
+    	real_master_id=#{realMasterId},
+    	</if>
+    	<if test="status!=null">
+    	status=#{status},
+    	</if>
+    </set> 
+    WHERE
+    	 vip_number_id=#{vipNumberId} 
+</update> 
+<!-- 删除vip购买次数-->
+<delete id="delVipNumber"  parameterType="Integer" >  
+    DELETE FROM
+    	 vip_number_tb 
+    	 WHERE vip_number_id=#{vipNumberId}
+</delete>  
+<!-- 加载vip购买次数-->
+<select id="loadVipNumber" parameterType="Integer" resultType="VipNumber" >
+SELECT 
+		 vip_number_id,
+	 	 number,
+   		 create_date,
+   		 update_date,
+   		 account_id,
+   		 real_master_id,
+   		 status
+FROM vip_number_tb 
+WHERE vip_number_id=#{vipNumberId}
+</select>
+
+<!-- 分页查询vip购买次数-->
+<select id="browsePagingVipNumber" resultType="VipNumber">  
+        SELECT
+	     vip_number_id,
+	 	 number,
+   		 create_date,
+   		 update_date,
+   		 account_id,
+   		 real_master_id,
+   		 status
+	FROM vip_number_tb
+	<where>
+	<if test="number!=null">
+		AND  number=#{number}
+		</if>
+	<if test="accountId!=null">
+		AND  account_id=#{accountId}
+		</if>
+	<if test="realMasterId=null">
+		AND  real_master_id=#{realMasterId}
+		</if>
+	<if test="createDate!=null">
+		AND  DATE(create_date)=DATE(#{createDate})
+		</if>
+	<if test="updateDate!=null">
+		AND  DATE(update_date)=DATE(#{updateDate})
+		</if>
+	<if test="status!=null">
+		AND  status=#{status}
+		</if>
+	AND ${orderName} 
+	<if test="orderWay=='asc'">
+	<![CDATA[>=]]> 
+	</if>
+	<if test="orderWay=='desc'">
+	  <![CDATA[<= ]]>
+	</if>
+	(SELECT ${orderName} FROM vip_number_tb 
+		<where>
+		<if test="number!=null">
+		AND  number=#{number}
+		</if>
+	<if test="accountId!=null">
+		AND  account_id=#{accountId}
+		</if>
+		<if test="realMasterId=null">
+		AND  real_master_id=#{realMasterId}
+		</if>
+	<if test="createDate!=null">
+		AND  DATE(create_date)=DATE(#{createDate})
+		</if>
+	<if test="updateDate!=null">
+		AND  DATE(update_date)=DATE(#{updateDate})
+		</if>
+	<if test="status!=null">
+		AND  status=#{status}
+		</if>
+		</where>
+		ORDER BY 
+			${orderName}  ${orderWay}
+		LIMIT #{pageNum}, 1
+		) 
+	</where>
+	ORDER BY
+		${orderName}  ${orderWay}
+	LIMIT
+		#{pageSize}
+</select> 
+
+<!-- 统计记录条数 -->
+<select id="countAll"  resultType="int">  
+	SELECT
+	 	count(vip_number_id)
+	FROM vip_number_tb
+	<where>
+	<if test="number!=null">
+		AND  number=#{number}
+		</if>
+	<if test="accountId!=null">
+		AND  account_id=#{accountId}
+		</if>
+		<if test="realMasterId=null">
+		AND  real_master_id=#{realMasterId}
+		</if>
+	<if test="createDate!=null">
+		AND  DATE(create_date)=DATE(#{createDate})
+		</if>
+	<if test="updateDate!=null">
+		AND  DATE(update_date)=DATE(#{updateDate})
+		</if>
+	<if test="status!=null">
+		AND  status=#{status}
+		</if>
+		</where>
+</select>   
+   
+ 
+</mapper>

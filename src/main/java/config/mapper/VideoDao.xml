@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+		PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"   
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">  
+<mapper namespace="com.nieyue.dao.VideoDao">
+<!-- 添加视频 -->
+<insert id="addVideo" parameterType="Video" keyProperty="videoId" flushCache="true"  >  
+   INSERT IGNORE INTO
+   		  video_tb 
+   		 (
+   		 name,
+   		 img_address,
+   		 duration,
+   		 size,
+   		 url,
+   		 play_number,
+   		 status,
+   		 video_set_id,
+   		 create_date,
+   		 update_date
+   		 )
+   VALUES
+    	 (
+    	 #{name},
+    	 #{imgAddress},
+    	 #{duration},
+    	 #{size},
+    	 #{url},
+    	 #{playNumber},
+    	 #{status},
+    	 #{videoSetId},
+    	 #{createDate},
+    	 #{updateDate}
+    	 )  
+</insert>  
+<!-- 更新视频 -->
+<update id="updateVideo" parameterType="Video" >  
+    UPDATE 
+    	video_tb 
+    <set>
+    	<if test="name!=null">
+    	name=#{name},
+    	</if>
+    	<if test="imgAddress!=null">
+    	img_address=#{imgAddress},
+    	</if>
+    	<if test="duration!=null">
+    	duration=#{duration},
+    	</if>
+    	<if test="size!=null">
+    	size=#{size},
+    	</if>
+    	<if test="url!=null">
+    	url=#{url},
+    	</if>
+    	<if test="playNumber!=null">
+    	play_number=#{playNumber},
+    	</if>
+    	<if test="status!=null">
+    	status=#{status},
+    	</if>
+    	<if test="videoSetId!=null">
+    	video_set_id=#{videoSetId},
+    	</if>
+    	<if test="createDate!=null">
+    	create_date=#{createDate},
+    	</if>
+    	<if test="updateDate!=null">
+    	update_date=#{updateDate},
+    	</if>
+    </set> 
+    WHERE
+    	 video_id=#{videoId} 
+</update> 
+<!-- 删除视频-->
+<delete id="delVideo"  parameterType="Integer" >  
+    DELETE FROM
+    	 video_tb 
+    	 WHERE video_id=#{videoId}
+</delete>  
+<!-- 加载视频-->
+<select id="loadVideo" parameterType="Integer" resultType="video" >
+SELECT 
+		 video_id,
+	 	 name,
+   		 img_address,
+   		 duration,
+   		 size,
+   		 url,
+   		 play_number,
+   		 status,
+   		 video_set_id,
+   		 create_date,
+   		 update_date
+FROM video_tb 
+WHERE video_id=#{videoId}
+</select>
+<!-- 观看视频-->
+<update id="watchVideo" parameterType="Integer" >  
+    UPDATE 
+    	video_tb 
+    SET
+    	play_number=play_number+1
+       WHERE
+    	 video_id=#{videoId} 
+</update> 
+
+<!-- 分页查询视频-->
+<select id="browsePagingVideo" resultType="Video">  
+        SELECT
+	     video_id,
+	 	 name,
+   		 img_address,
+   		 duration,
+   		 size,
+   		 url,
+   		 play_number,
+   		 status,
+   		 video_set_id,
+   		 create_date,
+   		 update_date
+	FROM video_tb
+	<where>
+	<if test="videoSetId!=null">
+		AND  video_set_id=#{videoSetId}
+		</if>
+	<if test="createDate!=null">
+		AND  DATE(create_date)=DATE(#{createDate})
+		</if>
+	<if test="updateDate!=null">
+		AND  DATE(update_date)=DATE(#{updateDate})
+		</if>
+	<if test="status!=null">
+		AND  status=#{status}
+		</if>
+	AND ${orderName} 
+	<if test="orderWay=='asc'">
+	<![CDATA[>=]]> 
+	</if>
+	<if test="orderWay=='desc'">
+	  <![CDATA[<= ]]>
+	</if>
+	(SELECT ${orderName} FROM video_tb 
+		<where>
+		<if test="videoSetId!=null">
+		AND  video_set_id=#{videoSetId}
+		</if>
+	<if test="createDate!=null">
+		AND  DATE(create_date)=DATE(#{createDate})
+		</if>
+	<if test="updateDate!=null">
+		AND  DATE(update_date)=DATE(#{updateDate})
+		</if>
+	<if test="status!=null">
+		AND  status=#{status}
+		</if>
+		</where>
+		ORDER BY 
+			${orderName}  ${orderWay}
+		LIMIT #{pageNum}, 1
+		) 
+	</where>
+	ORDER BY
+		${orderName}  ${orderWay}
+	LIMIT
+		#{pageSize}
+</select> 
+
+<!-- 统计记录条数 -->
+<select id="countAll"  resultType="int">  
+	SELECT
+	 	count(video_id)
+	FROM video_tb
+	<where>
+	<if test="videoSetId!=null">
+		AND  video_set_id=#{videoSetId}
+		</if>
+	<if test="createDate!=null">
+		AND  DATE(create_date)=DATE(#{createDate})
+		</if>
+	<if test="updateDate!=null">
+		AND  DATE(update_date)=DATE(#{updateDate})
+		</if>
+	<if test="status!=null">
+		AND  status=#{status}
+		</if>
+		</where>
+</select>   
+   
+ 
+</mapper>

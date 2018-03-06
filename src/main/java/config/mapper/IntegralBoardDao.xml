@@ -1,0 +1,265 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+		PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"   
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">  
+<mapper namespace="com.nieyue.dao.IntegralBoardDao">
+<!-- 添加积分榜 -->
+<insert id="addIntegralBoard" parameterType="IntegralBoard" keyProperty="integralBoardId" flushCache="true"  >  
+   INSERT IGNORE INTO
+   		  integral_board_tb 
+   		 (
+   		 type,
+   		 time_type,
+   		 realname,
+   		 icon,
+   		 integral,
+   		 record_time,
+   		 create_date,
+   		 update_date,
+   		 account_id
+   		 )
+   VALUES
+    	 (
+    	 #{type},
+    	 #{timeType},
+    	 #{realname},
+    	 #{icon},
+    	 #{integral},
+    	 #{recordTime},
+    	 #{createDate},
+    	 #{updateDate},
+    	 #{accountId}
+    	 )  
+</insert>  
+<!-- 存储或更新数据 -->
+<insert id="saveOrUpdateIntegralBoard" >  
+  <selectKey keyProperty="count" resultType="int" order="BEFORE">  
+    select count(integral_board_id) from integral_board_tb 
+    where 
+    type = #{IntegralBoard.type}
+    AND   
+    time_type = #{IntegralBoard.timeType}
+    AND   
+    account_id = #{IntegralBoard.accountId}
+    AND   
+    record_time = #{IntegralBoard.recordTime} 
+  </selectKey>  
+  <if test="count > 0">  
+    update integral_board_tb   
+    set 
+    	integral=integral+ #{integral},
+    	update_date=#{IntegralBoard.updateDate}
+    WHERE 
+    type = #{IntegralBoard.type}
+    AND   
+    time_type = #{IntegralBoard.timeType}
+    AND   
+    account_id = #{IntegralBoard.accountId}
+    AND   
+    record_time = #{IntegralBoard.recordTime} 
+  </if>  
+  <if test="count==0">  
+     INSERT IGNORE INTO
+   		  integral_board_tb 
+   		 (
+   		 type,
+   		 time_type,
+   		 realname,
+   		 icon,
+   		 integral,
+   		 record_time,
+   		 create_date,
+   		 update_date,
+   		 account_id
+   		 )
+   VALUES
+    	 (
+    	 #{IntegralBoard.type},
+    	 #{IntegralBoard.timeType},
+    	 #{IntegralBoard.realname},
+    	 #{IntegralBoard.icon},
+    	 #{integral},
+    	 #{IntegralBoard.recordTime},
+    	 #{IntegralBoard.createDate},
+    	 #{IntegralBoard.updateDate},
+    	 #{IntegralBoard.accountId}
+    	 )
+  </if>  
+</insert> 
+<!-- 更新积分榜 -->
+<update id="updateIntegralBoard" parameterType="IntegralBoard" >  
+    UPDATE 
+    	integral_board_tb 
+    <set>
+    	<if test="type!=null">
+    	type=#{type},
+    	</if>
+    	<if test="timeType!=null">
+    	time_type=#{timeType},
+    	</if>
+    	<if test="realname!=null">
+    	realname=#{realname},
+    	</if>
+    	<if test="icon!=null">
+    	icon=#{icon},
+    	</if>
+    	<if test="integral!=null">
+    	integral=#{integral},
+    	</if>
+    	<if test="recordTime!=null">
+    	record_time=#{recordTime},
+    	</if>
+    	<if test="createDate!=null">
+    	create_date=#{createDate},
+    	</if>
+    	<if test="updateDate!=null">
+    	update_date=#{updateDate},
+    	</if>
+    	<if test="accountId!=null">
+    	account_id=#{accountId},
+    	</if>
+    </set> 
+    WHERE
+    	 integral_board_id=#{integralBoardId} 
+</update> 
+<!-- 删除积分榜-->
+<delete id="delIntegralBoard"  parameterType="Integer" >  
+    DELETE FROM
+    	 integral_board_tb 
+    	 WHERE integral_board_id=#{integralBoardId}
+</delete>  
+<!-- 加载积分榜-->
+<select id="loadIntegralBoard" parameterType="Integer" resultType="IntegralBoard" >
+SELECT 
+		 integral_board_id,
+	 	 type,
+   		 time_type,
+   		 realname,
+   		 icon,
+   		 integral,
+   		 record_time,
+   		 create_date,
+   		 update_date,
+   		 account_id
+FROM integral_board_tb 
+WHERE integral_board_id=#{integralBoardId}
+</select>
+<!-- 获取当前人的排行-->
+<select id="getLevel" resultType="java.lang.Integer" >
+	SELECT count(1) as level
+		from integral_board_tb 
+		WHERE type=#{type}
+		AND  time_type=#{timeType}
+		AND  DATE(record_time)=DATE(#{recordTime})
+		AND  integral >=
+	 
+		 (select integral FROM integral_board_tb 
+		 WHERE type=#{type}
+		AND  time_type=#{timeType}
+		AND  account_id=#{accountId}
+		AND  DATE(record_time)=DATE(#{recordTime})
+		)
+		 
+</select>
+
+<!-- 分页查询积分榜-->
+<select id="browsePagingIntegralBoard" resultType="IntegralBoard">  
+        SELECT
+	     integral_board_id,
+	 	 type,
+   		 time_type,
+   		 realname,
+   		 icon,
+   		 integral,
+   		 record_time,
+   		 create_date,
+   		 update_date,
+   		 account_id
+	FROM integral_board_tb
+	<where>
+	<if test="type!=null">
+		AND  type=#{type}
+		</if>
+	<if test="timeType!=null">
+		AND  time_type=#{timeType}
+		</if>
+	<if test="accountId!=null">
+		AND  account_id=#{accountId}
+		</if>
+	<if test="recordTime!=null">
+		AND  DATE(record_time)=DATE(#{recordTime})
+		</if>
+	<if test="createDate!=null">
+		AND  DATE(create_date)=DATE(#{createDate})
+		</if>
+	<if test="updateDate!=null">
+		AND  DATE(update_date)=DATE(#{updateDate})
+		</if>
+	AND ${orderName} 
+	<if test="orderWay=='asc'">
+	<![CDATA[>=]]> 
+	</if>
+	<if test="orderWay=='desc'">
+	  <![CDATA[<= ]]>
+	</if>
+	(SELECT ${orderName} FROM integral_board_tb 
+		<where>
+		<if test="type!=null">
+		AND  type=#{type}
+		</if>
+		<if test="timeType!=null">
+		AND  time_type=#{timeType}
+		</if>
+	<if test="accountId!=null">
+		AND  account_id=#{accountId}
+		</if>
+		<if test="recordTime!=null">
+		AND  DATE(record_time)=DATE(#{recordTime})
+		</if>
+	<if test="createDate!=null">
+		AND  DATE(create_date)=DATE(#{createDate})
+		</if>
+	<if test="updateDate!=null">
+		AND  DATE(update_date)=DATE(#{updateDate})
+		</if>
+		</where>
+		ORDER BY 
+			${orderName}  ${orderWay}
+		LIMIT #{pageNum}, 1
+		) 
+	</where>
+	ORDER BY
+		${orderName}  ${orderWay}
+	LIMIT
+		#{pageSize}
+</select> 
+
+<!-- 统计记录条数 -->
+<select id="countAll"  resultType="int">  
+	SELECT
+	 	count(integral_board_id)
+	FROM integral_board_tb
+	<where>
+	<if test="type!=null">
+		AND  type=#{type}
+		</if>
+		<if test="timeType!=null">
+		AND  time_type=#{timeType}
+		</if>
+	<if test="accountId!=null">
+		AND  account_id=#{accountId}
+		</if>
+		<if test="recordTime!=null">
+		AND  DATE(record_time)=DATE(#{recordTime})
+		</if>
+	<if test="createDate!=null">
+		AND  DATE(create_date)=DATE(#{createDate})
+		</if>
+	<if test="updateDate!=null">
+		AND  DATE(update_date)=DATE(#{updateDate})
+		</if>
+		</where>
+</select>   
+   
+ 
+</mapper>
