@@ -24,15 +24,23 @@ myPugin:
   projectName: ActivationCodeMall
   requestAuth: requestAuthProd
   activationCodeMallProjectDomainUrl: http://app.jiehao9.com
+  paypal:
+    payCancelUrl: http://app.jiehao9.com/payCancel.html
+    paySuccessUrl: http://app.jiehao9.com/paySuccess.html
+    mode: live
+    client: 
+      app: AW_Y_UZgVqf_LI8qTc8FqkuNFkCC4BSZqKegRdJF5oKORhYCKUsLnQNR7bpFWh_0EJzGHHcQU6K20HLe
+      secret: EMyCJzjq4IOyOZg3QsNduppaF-YcydW1vp-sl5z6TSSEeTK-SGiDXEar9mkzxqVCtIKXd3mpOyTgaGA0
+
   alibaba: 
     sms:
-      appkey: LTAIgDJerZxD8twJ
-      appsecret: 9PuLZNoEQRPDJm465MxL1JIXQY9Msh
+      appkey: LTAIC9ZQBJZr7Gpz
+      appsecret: hHSkf87dAg1aQzQnBPNbH42oKiDdef
       signName: 激活码商城
-      templateCodeAcountRegister: SMS_89885232
-      templateCodePasswordUpdate: SMS_89885231
-      templateCodePhoneUpdate: SMS_89885231
-      templateCodeBankCardBind: SMS_89885231
+      templateCodeAcountRegister: SMS_126363887
+      templateCodePasswordUpdate: SMS_126620523
+      templateCodePhoneUpdate: SMS_126640526
+      templateCodeAuthenticationBind: SMS_126570469
     alipay:
       APP_ID: 2018011501882345 
       APP_PRIVATE_KEY: MIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQCSWnoTpNHVDKO1gTMLl2N9yS1RusMIQQeIxW9eb5R4DSoLkVbIIF22/Q07iKFelRKneD8uUMOsnh+MwfbLFGWb2sGDUl3cHMmQTcTrp2CG1aCihY/glzbR80RT7XzIw1T+fnEwg8MDeSgoHmJsQflVvm3xReaqzB1yU0lec+kRI/1nayn2XLUob7TDXDEj8sp5iPhXevQaQaSB4RBSd+oSthqrHO85byEP80MwRkSsRCfISYzl5sPOaqDrTWU4TCDB1g3vkDKxjpdXrtZeQkimGZhu6hucO9bajH5p2i7CV634NVuSeKYPa5rytV2h9uPz0dyJz+DrEwls77PJn61fAgMBAAECggEAM91eb8G0HtVI2tS7ezseJgB6UAFohm9NNToKmqPeMKExqkHKSEe4DlYlL1jfHv6jSrgBY+95OJ4cviwqwpMq4w2mEFzLKGsHP11gEMcTHRVtxMqiT0wnQEX+i+OYmikm4L18bV30aTGxem4yIP1MWAeRPLSx5wtI0DAVyyQ2jzzxJqSk+dHlSyOtZH1e0ExoOTymu8XesKaH113OhJhE8iOoUYtOv4qz3QMTVMv0Btg8oiJtJlCDqWeQIt8SX5aS3/USMmdgMUbzxLAziL0IZeiI7R6etgP9fOsxSAPgqbZzYvs3yJe4DdzKJftpnpH0ZwIAgQHdAFFHUwR+bYwHOQKBgQDTFC4HM/aJlgu703Dn67EGHRpZ13imOO1ZmcG3bNU0vP8L0TO8lHJEkQ03u8Fh/jpvEzFs2RxT+zKP81ejgYCmjD4PbpC2abJabbu0XnGiaHw99w0Mdh8OM33Ae6y/NcwYOPMfV8ejFJ99LiwK18gkkQFaILrRZ57PH3RRerTmrQKBgQCxf/tYlrIl1CQDbcnwdVd8oT9jOhBdLIBBoHfndX5y88L1FtNybxffjVbCFD6YpKp1effkV+cKbdSi7NX8ojSHWnyq2/Bu2+c/wCnTE/29yR4TwxNkNt6+NxUcW9bx5VTB5h4mXM0GIwJvgLrt9IZuxzFhprSif3jF48FRSfaBuwKBgQCYNbYXVZ5TitK9R/TkGO7XpMbqwFltLCHj+d9aQO3iEOOuBtbTBwz7asnoRclmu6gxjtqWTl2CJeNJMMYizvERqJHcGPPbxo5pbTXtFCnHXqcxG+TZ9pfgarskwUpJvCaH1RFkqaz5aZa080WpL/9QdwxNjMqK1LkNTPZZBy5KJQKBgCtiDnq+ilg4m3zDDsJYy8NIXgfQn0NGpypjICtQSlGqRpJEu/WSNZGMKBJThGEmjgscfnwvB+dCpOAVZs/SjWgvs5zHGOLfmIu6Wf6fOjtytok5+rlZt+Nh7yT5RXXmCWtC5UeXEv1W/TdnjUivpVPaF7W4WxoEce5cFlnZ7AgVAoGABzr4o/P06GbsC6dPApCMLIsetLT6iF58d9I71mliVWG7pSVD9lTAdaTHanPAU6JzQ9/YBfBc28y9Zr7uhx3hqzjHJbm/vswmItptsa9hrCOIHuLu2YHtbSqEs1MEDsQMQMFXEs378wQ3Dwj4/hpXTT/vwZ059cnYbIqrbQDtaW0=

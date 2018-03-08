@@ -44,7 +44,6 @@ import com.nieyue.service.VideoCacheService;
 import com.nieyue.service.VideoPlayRecordService;
 import com.nieyue.service.VideoSetCollectService;
 import com.nieyue.service.VipService;
-import com.nieyue.thirdparty.yun.YunSms;
 import com.nieyue.util.MyDESutil;
 import com.nieyue.util.MyValidator;
 import com.nieyue.util.ResultUtil;
@@ -88,8 +87,6 @@ public class AccountController {
 	private IntegralService integralService;
 	@Resource
 	private NoticeService noticeService;
-	@Resource
-	private YunSms yunSms;
 	@Value("${myPugin.projectName}")
 	String projectName;
 
@@ -519,11 +516,11 @@ public class AccountController {
 		
 		session.setAttribute("validCode", userValidCode.toString());
 		 
-			try {
-				yunSms.sendMsg(adminName,templateCode,String.valueOf(userValidCode));
-			} catch (IOException e) {
-				return ResultUtil.getSlefSRFailList(l);
-			}
+//			try {
+//				yunSms.sendMsg(adminName,templateCode,String.valueOf(userValidCode));
+//			} catch (IOException e) {
+//				return ResultUtil.getSlefSRFailList(l);
+//			}
 		 //l.add(userValidCode.toString());			
 		
 		

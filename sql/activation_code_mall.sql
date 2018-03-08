@@ -18,7 +18,6 @@ PRIMARY KEY (role_id)
 #创建账户表 
 CREATE TABLE account_tb(
 account_id int(11) NOT NULL AUTO_INCREMENT COMMENT '账户id',
-level int(11) COMMENT '注册手机号',
 phone varchar(255) COMMENT '注册手机号',
 password varchar(255) COMMENT '密码',
 nickname varchar(255) COMMENT '昵称',
@@ -73,7 +72,7 @@ INDEX INDEX_UPDATEDATE (update_date) USING BTREE
 CREATE TABLE finance_record_tb(
 finance_record_id int(11) NOT NULL AUTO_INCREMENT COMMENT '财务记录id',
 method tinyint(4) COMMENT '方式，1支付宝，2微信,3百度钱包,4Paypal,5网银',
-type tinyint(4) COMMENT '类型，1购买商品，2账户提现,3退款',
+type tinyint(4) COMMENT '类型，1购买商品，2账户提现，3退款，4诚信押金',
 transaction_number varchar(255) COMMENT '交易单号',
 money decimal(11,2) DEFAULT 0 COMMENT '金额',
 status tinyint(4) COMMENT '状态，默认1待处理，2成功，3已拒绝',
@@ -93,7 +92,9 @@ INDEX INDEX_UPDATEDATE (update_date) USING BTREE
 #创建积分表 
 CREATE TABLE integral_tb(
 integral_id int(11) NOT NULL AUTO_INCREMENT COMMENT '积分id',
+level int(11) COMMENT '等级',
 integral decimal(11,2) DEFAULT 0 COMMENT '剩余积分',
+upgrade_integral decimal(11,2) DEFAULT 0 COMMENT '升级积分',
 consume decimal(11,2) DEFAULT 0 COMMENT '消费积分',
 base_profit decimal(11,2) DEFAULT 0 COMMENT '赠送积分',
 create_date datetime COMMENT '创建时间',
@@ -108,7 +109,7 @@ INDEX INDEX_UPDATEDATE (update_date) USING BTREE
 #创建积分详细表 
 CREATE TABLE integral_detail_tb(
 integral_detail_id int(11) NOT NULL AUTO_INCREMENT COMMENT '积分详细id',
-type tinyint(4) DEFAULT 0 COMMENT '类型,0失去，1获得',
+type tinyint(4) DEFAULT 0 COMMENT '类型,1增长积分，2扣除积分，3售出一单，4好评积分，5差评积分，6登录奖励，7推荐自营积分',
 integral decimal(11,2) DEFAULT 0 COMMENT '积分',
 create_date datetime COMMENT '创建时间',
 update_date datetime COMMENT '更新时间',
@@ -120,26 +121,20 @@ INDEX INDEX_CREATEDATE (create_date) USING BTREE,
 INDEX INDEX_UPDATEDATE (update_date) USING BTREE
 )ENGINE = InnoDB AUTO_INCREMENT=1000 DEFAULT CHARSET=utf8 COMMENT='积分详细表';
 
-#创建积分榜表 
-CREATE TABLE integral_board_tb(
-integral_board_id int(11) NOT NULL AUTO_INCREMENT COMMENT '积分榜id',
-type tinyint(4) DEFAULT 1 COMMENT '类型,1个人，2团队',
-time_type tinyint(4) DEFAULT 1 COMMENT '时间类型,1周，2月，3总',
-realname varchar(255) COMMENT '真实姓名',
-icon varchar(255) COMMENT '图像',
-integral decimal(11,2) DEFAULT 0 COMMENT '积分',
-record_time datetime COMMENT '记录时间',
+#创建诚信表 
+CREATE TABLE sincerity_tb(
+sincerity_id int(11) NOT NULL AUTO_INCREMENT COMMENT '诚信id',
+level int(11) COMMENT '诚信等级',
+money decimal(11,2) DEFAULT 0 COMMENT '已充值金额',
+upgrade_money decimal(11,2) DEFAULT 0 COMMENT '升级金额',
 create_date datetime COMMENT '创建时间',
 update_date datetime COMMENT '更新时间',
 account_id int(11) COMMENT '账户id外键',
-PRIMARY KEY (integral_board_id),
-INDEX INDEX_TYPE (type) USING BTREE,
-INDEX INDEX_TIMETYPE (time_type) USING BTREE,
+PRIMARY KEY (sincerity_id),
 INDEX INDEX_ACCOUNTID (account_id) USING BTREE,
-INDEX INDEX_RECORDTIME (record_time) USING BTREE,
 INDEX INDEX_CREATEDATE (create_date) USING BTREE,
 INDEX INDEX_UPDATEDATE (update_date) USING BTREE
-)ENGINE = InnoDB AUTO_INCREMENT=1000 DEFAULT CHARSET=utf8 COMMENT='积分榜表';
+)ENGINE = InnoDB AUTO_INCREMENT=1000 DEFAULT CHARSET=utf8 COMMENT='诚信表';
 
 #创建视频集类型表 
 CREATE TABLE video_set_cate_tb(

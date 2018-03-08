@@ -1,9 +1,15 @@
 package com.nieyue.util;
 
+import java.awt.Graphics;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Date;
+
+import javax.imageio.ImageIO;
 
 import com.nieyue.bean.Account;
 
@@ -70,7 +76,15 @@ public class Test1 {
 		          
 		        return object;  
 		} 
-	public static void main(String[] args) {
-		System.out.println((new Test1().dispose(new Account())).toString());
+	
+	public static void main(String[] args) throws IOException {
+		//System.out.println((new Test1().dispose(new Account())).toString());
+		  //设置Headless模式
+        System.setProperty("java.awt.headless","true");
+        BufferedImage bi = new BufferedImage(200, 100,BufferedImage.TYPE_INT_RGB);
+        Graphics g = bi.getGraphics();
+        String s ="Headless模式测试";
+        g.drawString(new String(s.getBytes(),"UTF8"), 50, 50);
+        ImageIO.write(bi,"jpeg", new File("test.jpg"));
 	}
 }

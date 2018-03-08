@@ -86,6 +86,46 @@ public class AlipayUtil {
 		 
 	 }
 	 /**
+	  * 电脑网站支付支付
+	  * @param payment
+	  * @return
+	  * @throws UnsupportedEncodingException
+	  */
+	 public String getPcWebPayment(Payment payment) throws UnsupportedEncodingException{
+		 //实例化客户端
+		 AlipayClient alipayClient = new DefaultAlipayClient("https://openapi.alipay.com/gateway.do", APP_ID, APP_PRIVATE_KEY, "json", "UTF-8", ALIPAY_PUBLIC_KEY, "RSA2");
+		 //实例化具体API对应的request类,类名称和接口名称对应,当前调用接口名称：alipay.trade.app.pay
+		 AlipayTradeAppPayRequest request = new AlipayTradeAppPayRequest();
+		 //SDK已经封装掉了公共参数，这里只需要传入业务参数。以下方法为sdk的model入参方式(model和biz_content同时存在的情况下取biz_content)。
+		 AlipayTradeAppPayModel model = new AlipayTradeAppPayModel();
+		 request.setReturnUrl("http://localhost:9000/404.html");//同步返回地址
+		 //存储payment
+		 boolean b = paymentService.addPayment(payment);
+		 if(!b){
+			 return null;
+		 }
+		 model.setBody(payment.getBody());//主题
+		 model.setSubject(payment.getSubject());//名称
+		 model.setOutTradeNo(payment.getOrderNumber());//订单号
+		 model.setTimeoutExpress("30m");
+		 model.setTotalAmount(String.valueOf(payment.getMoney()));//金额
+		 model.setProductCode("QUICK_MSECURITY_PAY");
+		 model.setPassbackParams(payment.getPaymentId().toString());//支付id
+		 request.setBizModel(model);
+		 if(payment.getNotifyUrl()!=null && !payment.getNotifyUrl().equals("")){
+			 request.setNotifyUrl(payment.getNotifyUrl());//回调
+		 }
+		 try {
+			 //这里和普通的接口调用不同，使用的是sdkExecute
+			 AlipayTradeAppPayResponse response = alipayClient.pageExecute(request);
+			 return response.getBody();
+		 } catch (AlipayApiException e) {
+			 e.printStackTrace();
+			 return "";
+		 }
+		 
+	 }
+	 /**
 	  * 统一收单线下交易查询
 	  * @param outTradeNo自己平台订单号
 	  * @param tradeNo支付宝平台订单号
