@@ -1,7 +1,5 @@
 package com.nieyue.util;
 
-import java.util.List;
-
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
@@ -10,14 +8,14 @@ import io.swagger.annotations.ApiModelProperty;
  * @author yy
  *
  */
-@ApiModel(value="返回状态List",description="返回状态List")
-public class StateResultList {
+@ApiModel(value="返回状态Data",description="返回状态Data")
+public class StateResultList<Data> {
 	@ApiModelProperty(value="返回码",example="返回码")
 	private Integer code;
 	@ApiModelProperty(value="返回信息",example="返回信息")
 	private String msg;
-	@ApiModelProperty(value="返回列表",example="返回列表")
-	private List<?> list;
+	@ApiModelProperty(value="返回数据")
+	private Data data;
 	public StateResultList() {
 		super();
 	}
@@ -32,11 +30,11 @@ public class StateResultList {
 
 
 
-	public StateResultList(Integer code, String msg, List<?> list) {
+	public StateResultList(Integer code, String msg, Data data) {
 		super();
 		this.code = code;
 		this.msg = msg;
-		this.list = list;
+		this.data = data;
 	}
 
 
@@ -65,14 +63,14 @@ public class StateResultList {
 
 
 
-	public List<?> getList() {
-		return list;
+	public Data getData() {
+		return data;
 	}
 
 
 
-	public void setList(List<?> list) {
-		this.list = list;
+	public void setData(Data data) {
+		this.data = data;
 	}
 
 }

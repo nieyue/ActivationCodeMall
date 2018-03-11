@@ -1,7 +1,5 @@
 package com.nieyue.util;
 
-import java.util.List;
-
 /**
  * 返回状态工具
  * 包装 StateResult和StateResultList
@@ -9,7 +7,7 @@ import java.util.List;
  *
  */
 public class ResultUtil {
-
+	
 	public ResultUtil() {
 		super();
 	}
@@ -60,24 +58,24 @@ public class ResultUtil {
 		 * 自定义获取返回状态
 		 * @param bl 
 		 */
-		public static StateResultList getSlefSRSuccessList(List<?> list){
-			StateResultList srl = new StateResultList(200,"成功",list);
+		public static <Data>StateResultList<Data> getSlefSRSuccessList(Data data){
+			StateResultList<Data> srl = new StateResultList<>(200,"成功",data);
 			return srl;
 		}
 		/**
 		 * 自定义获取返回状态
 		 * @param bl 
 		 */
-		public static StateResultList getSlefSRFailList(List<?> list){
-			StateResultList srl = new StateResultList(40000,"失败",list);
+		public static <Data>StateResultList<Data>  getSlefSRFailList(Data data){
+			StateResultList<Data>  srl = new StateResultList<> (40000,"失败",data);
 			return srl;
 		}
 		/**
 		 * 自定义获取返回状态
 		 * @param bl 
 		 */
-		public static StateResultList getSlefSRList(String code,String msg,List<?> list){
-			StateResultList srl = new StateResultList(Integer.valueOf(code),msg,list);
+		public static <Data>StateResultList<Data>  getSlefSRList(String code,String msg,Data data){
+			StateResultList<Data>  srl = new StateResultList<> (Integer.valueOf(code),msg,data);
 			return srl;
 		}
 		
