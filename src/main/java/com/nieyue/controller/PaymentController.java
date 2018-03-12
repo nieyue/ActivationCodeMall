@@ -19,6 +19,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.alipay.api.AlipayApiException;
 import com.nieyue.bean.Payment;
+import com.nieyue.exception.NotAnymoreException;
+import com.nieyue.exception.NotIsNotExistException;
 import com.nieyue.pay.AlipayUtil;
 import com.nieyue.service.PaymentService;
 import com.nieyue.util.ResultUtil;
@@ -87,7 +89,7 @@ public class PaymentController {
 			if(list.size()>0){
 				return ResultUtil.getSlefSRSuccessList(list);
 			}else{
-				return ResultUtil.getSlefSRFailList(list);
+				throw new NotAnymoreException();//没有更多
 			}
 	}
 	/**
@@ -201,7 +203,7 @@ public class PaymentController {
 				list.add(payment);
 				return ResultUtil.getSlefSRSuccessList(list);
 			}else{
-				return ResultUtil.getSlefSRFailList(list);
+				throw new NotIsNotExistException("支付");//不存在
 			}
 	}
 	

@@ -1,6 +1,5 @@
 package com.nieyue.controller;
 
-import java.io.IOException;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
@@ -29,8 +28,17 @@ import com.nieyue.bean.Finance;
 import com.nieyue.bean.Integral;
 import com.nieyue.bean.Role;
 import com.nieyue.bean.Vip;
+import com.nieyue.exception.AccountAlreadyAuthException;
+import com.nieyue.exception.AccountAuthAuditException;
 import com.nieyue.exception.AccountIsExistException;
+import com.nieyue.exception.AccountIsNotExistException;
+import com.nieyue.exception.AccountIsNotLoginException;
+import com.nieyue.exception.AccountLockException;
+import com.nieyue.exception.AccountNotMasterIdException;
+import com.nieyue.exception.AccountPhoneException;
+import com.nieyue.exception.AccountPhoneIsExistException;
 import com.nieyue.exception.MySessionException;
+import com.nieyue.exception.NotAnymoreException;
 import com.nieyue.exception.RequestLimitException;
 import com.nieyue.exception.VerifyCodeErrorException;
 import com.nieyue.service.AccountLevelService;
@@ -131,7 +139,7 @@ public class AccountController {
 				return ResultUtil.getSlefSRSuccessList(list);
 				
 			}else{
-				return ResultUtil.getSlefSRFailList(list);
+				throw new NotAnymoreException();//没有更多
 			}
 	}
 
@@ -149,13 +157,12 @@ public class AccountController {
 		if(accountService.loginAccount(account.getPhone(), null,account.getAccountId())!=null
 				//||accountService.loginAccount(account.getEmail(), null,Account.getAccountId())!=null
 				){
-			return ResultUtil.getSlefSRFailList(list);
+			throw new AccountIsExistException();//
 		}
 		if(account.getPassword()!=null){
 			account.setPassword(MyDESutil.getMD5(account.getPassword()));
 		}
 		boolean um = accountService.updateAccount(account);
-		System.err.println(111123);
 		if(um){
 		session.setAttribute("account", account);
 		list.add(account);
@@ -183,12 +190,11 @@ public class AccountController {
 			@RequestParam("password")String password,
 			@RequestParam(value="validCode",required=false) String validCode,
 			HttpSession session) throws VerifyCodeErrorException  {
-		List<Object> list=new ArrayList<Object>();
+		List<Account> list=new ArrayList<>();
 		//判断是否存在
 		Account ac = accountService.loginAccount(adminName, null, null);
 		if(ac==null || ac.getAccountId()==null){
-			list.add("账户不存在");
-			return ResultUtil.getSlefSRFailList(list); 
+			throw new AccountIsNotExistException();//账户不存在
 		}
 		//手机验证码
 		String vc=(String) session.getAttribute("validCode");
@@ -241,7 +247,7 @@ public class AccountController {
 		List<Account> list=new ArrayList<>();
 		Account newa = accountService.loadAccount(accountId);
 		if(!((Account)session.getAttribute("account")).getAccountId().equals(accountId)){
-			return ResultUtil.getSlefSRFailList(list);
+			throw new MySessionException();//没有权限
 		}
 		if(icon!=null){
 			newa.setIcon(icon);			
@@ -328,6 +334,12 @@ public class AccountController {
 			}
 			return ResultUtil.getSlefSRFailList(list);
 			}else{
+				if(account.getAuth().equals(1)){
+					throw new AccountAuthAuditException();//审核中
+					
+				}else if(account.getAuth().equals(2)){
+					throw new AccountAlreadyAuthException();//已经认证
+				}
 				return ResultUtil.getSlefSRFailList(list);
 			}
 	}
@@ -412,7 +424,7 @@ public class AccountController {
 				list.add(account);
 				return ResultUtil.getSlefSRSuccessList(list);
 			}else{
-				return ResultUtil.getSlefSRFailList(list);
+				throw new AccountIsNotExistException();//账户不存在
 			}
 	}
 	/**
@@ -436,13 +448,11 @@ public class AccountController {
 		String ran= (String) session.getAttribute("random");
 		List<Account> list = new ArrayList<Account>();
 		if(!ran.equals(random)){
-			return ResultUtil.getSlefSRFailList(list);
+			throw new VerifyCodeErrorException();
 		}
 		Account account = accountService.loginAccount(adminName, MyDESutil.getMD5(password),null);
 		if(account.getStatus().equals(1)){
-			List<String> l1 = new ArrayList<String>();
-			l1.add("账户锁定");
-			return ResultUtil.getSlefSRFailList(l1);
+			throw new AccountLockException();//账户锁定
 		}else if(account!=null&&!account.equals("")){
 			account.setLoginDate(new Date());
 			boolean b = accountService.updateAccount(account);
@@ -493,14 +503,14 @@ public class AccountController {
 		}
 		//修改密码
 		if(accountService.loginAccount(adminName, null,null)==null && templateCode==2){
-			return ResultUtil.getSlefSRFailList(l);
+			throw new  AccountIsNotExistException();//账户不存在
 		}
 		//修改交易密码
 		if(accountService.loginAccount(adminName, null,null)==null && templateCode==3){
-			return ResultUtil.getSlefSRFailList(l);
+			throw new  AccountIsNotExistException();//账户不存在
 		}
 		if(!Pattern.matches(MyValidator.REGEX_PHONE,adminName)){
-					return ResultUtil.getSlefSRFailList(l);
+			throw new  AccountPhoneException();//账户手机号错误
 		}
 		Integer userValidCode=(int) (Math.random()*9000)+1000;
 		if(session.getAttribute("validCodeDate")==null){//验证时间
@@ -519,7 +529,7 @@ public class AccountController {
 //			try {
 //				yunSms.sendMsg(adminName,templateCode,String.valueOf(userValidCode));
 //			} catch (IOException e) {
-//				return ResultUtil.getSlefSRFailList(l);
+//				throw new AccountMessageException();//短信发送异常
 //			}
 		 //l.add(userValidCode.toString());			
 		
@@ -562,6 +572,7 @@ public class AccountController {
 			Integer roleId = account.getRoleId();
 			Role r = roleService.loadRole(roleId);
 			session.setAttribute("role", r);
+			
 			List<Finance> f = financeService.browsePagingFinance(null,account.getAccountId(), 1, 1, "finance_id", "asc");
 			session.setAttribute("finance", f.get(0));
 			Map<Object,Object> map=new HashMap<>();
@@ -606,9 +617,7 @@ public class AccountController {
 			return ResultUtil.getSlefSRSuccessList(list);
 			}
 		}else if(account.getStatus().equals(1)){
-			List<String> l1 = new ArrayList<String>();
-			l1.add("账户锁定");
-			return ResultUtil.getSlefSRFailList(l1);
+			throw new AccountLockException();//账户锁定
 		}
 		return ResultUtil.getSlefSRFailList(list);
 	}
@@ -642,18 +651,18 @@ public class AccountController {
 		//判断是否存在
 		Account ac = accountService.loginAccount(adminName, null, null);
 		if(ac!=null&&ac.getAccountId()!=null){
-			throw new AccountIsExistException();
+			throw new AccountIsExistException();//账户已经存在
 		}
 			//新用户注册登录
 				Account account=new Account();
 				if(masterId==null){
-					throw new MySessionException();
+					throw new AccountNotMasterIdException();//缺少邀请码;
 				}
 				//获取masterId
 				if(masterId!=null&&!masterId.equals("")){
 					Account masterAcount = accountService.loadAccount(masterId);
 					if(masterAcount==null){
-						throw new MySessionException();
+						throw new AccountNotMasterIdException();//缺少邀请码;
 					}
 					account.setMasterId(masterId);
 				}
@@ -736,10 +745,7 @@ public class AccountController {
 		//判断是否存在
 		Account ac = accountService.loginAccount(phone, null, null);
 		if(ac!=null&&ac.getAccountId()!=null){
-		   list.add("已经存在");
-		   return ResultUtil.getSlefSRFailList(list);
-		 }else{
-		   list.add("不存在");			 
+		   throw new AccountPhoneIsExistException();//手机号已存在
 		 }
 		return ResultUtil.getSlefSRSuccessList(list);
 	}
@@ -757,7 +763,7 @@ public class AccountController {
 			list.add(Account);
 			return ResultUtil.getSlefSRSuccessList(list);
 		}
-		return ResultUtil.getSlefSRFailList(list);
+		throw new AccountIsNotLoginException();//没有登录
 	}
 	/**
 	 * 登出

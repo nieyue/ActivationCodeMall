@@ -525,6 +525,12 @@ PRIMARY KEY (feedback_id)
 CREATE TABLE config_tb(
 config_id int(11) NOT NULL AUTO_INCREMENT COMMENT '配置id',
 customer_service_phone varchar(255)  COMMENT '客服电话',
+order_mer_max_number int(11)  COMMENT '最大订单商品数量',
+seller_integral_per decimal(11,2) DEFAULT 0  COMMENT '商户每盈利一元钱获得积分',
+user_integral_per decimal(11,2) DEFAULT 0  COMMENT '用户每消费一元钱获得积分',
+seller_upgrade_integral decimal(11,2) DEFAULT 0  COMMENT '商户升级积分',
+user_upgrade_integral decimal(11,2) DEFAULT 0  COMMENT '用户升级积分',
+seller_sincerity_upgrade_money decimal(11,2) DEFAULT 0  COMMENT '商户诚信升级金额',
 create_date datetime COMMENT '创建时间',
 update_date datetime COMMENT '更新时间',
 PRIMARY KEY (config_id)
@@ -562,27 +568,11 @@ INDEX INDEX_UPDATEDATE (update_date) USING BTREE
 INSERT IGNORE INTO role_tb (name,duty,update_date) 
 VALUES ("超级管理员","超级管理员",now());
 INSERT IGNORE INTO role_tb (name,duty,update_date) 
+VALUES ("商户","商户",now());
+INSERT IGNORE INTO role_tb (name,duty,update_date) 
+VALUES ("推广户","推广户",now());
+INSERT IGNORE INTO role_tb (name,duty,update_date) 
 VALUES ("用户","用户",now());
-
-#初始化账户等级
-INSERT IGNORE INTO account_level_tb 
-(name,level,img_address,team_purchase_price,recommend_commission,split_reward,split_parent_reward,split_platform_reward,number,discount_price,total_price,mark,update_date) 
-VALUES ('学徒',0,'',0,0,0,0,0,0,0,0,'学徒，浏览，互动，购买产品，升级vip',now()); 
-INSERT IGNORE INTO account_level_tb 
-(name,level,img_address,team_purchase_price,recommend_commission,split_reward,split_parent_reward,split_platform_reward,number,discount_price,total_price,mark,update_date) 
-VALUES ('普通vip',1,'',0,0,0,0,0,0,0,0,'普通vip，团购权限，推广权益，免费看所有视频（不含售卖视频）',now()); 
-INSERT IGNORE INTO account_level_tb 
-(name,level,img_address,team_purchase_price,recommend_commission,split_reward,split_parent_reward,split_platform_reward,number,discount_price,total_price,mark,update_date) 
-VALUES ('钻石vip',2,'',0,0,0,0,0,0,0,0,'钻石vip,团购权限，推广权益，免费看所有视频（不含售卖视频），分成',now()); 
-INSERT IGNORE INTO account_level_tb 
-(name,level,img_address,team_purchase_price,recommend_commission,split_reward,split_parent_reward,split_platform_reward,number,discount_price,total_price,mark,update_date) 
-VALUES ('联合发起人',3,'',0,0,0,0,0,0,0,0,'联合发起人，团购权限，推广权益，免费看所有视频（不含售卖视频），分成',now()); 
-INSERT IGNORE INTO account_level_tb 
-(name,level,img_address,team_purchase_price,recommend_commission,split_reward,split_parent_reward,split_platform_reward,number,discount_price,total_price,mark,update_date) 
-VALUES ('高级合伙人',4,'',0,0,0,0,0,0,0,0,'高级合伙人，团购权限，推广权益，免费看所有视频（不含售卖视频），分成，有机会与平台合作红利',now()); 
-INSERT IGNORE INTO account_level_tb 
-(name,level,img_address,team_purchase_price,recommend_commission,split_reward,split_parent_reward,split_platform_reward,number,discount_price,total_price,mark,update_date) 
-VALUES ('创始股东',5,'',0,0,0,0,0,0,0,0,'创始股东，团购权限，推广权益，免费看所有视频（不含售卖视频），分成，与平台合作红利。',now()); 
  
 #设置初始管理员密码MD5加密123456
 INSERT IGNORE INTO account_tb (nickname,phone,email,password,create_date,login_date,role_id,role_name) 

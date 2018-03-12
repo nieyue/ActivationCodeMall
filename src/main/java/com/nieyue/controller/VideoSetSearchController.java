@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.nieyue.bean.VideoSet;
 import com.nieyue.bean.VideoSetSearch;
+import com.nieyue.exception.NotAnymoreException;
+import com.nieyue.exception.NotIsNotExistException;
 import com.nieyue.service.VideoSetSearchService;
 import com.nieyue.service.VideoSetService;
 import com.nieyue.util.ResultUtil;
@@ -70,7 +72,7 @@ public class VideoSetSearchController {
 			if(list.size()>0){
 				return ResultUtil.getSlefSRSuccessList(list);
 			}else{
-				return ResultUtil.getSlefSRFailList(list);
+				throw new NotAnymoreException();//没有更多
 			}
 	}
 	/**
@@ -179,7 +181,7 @@ public class VideoSetSearchController {
 				list.add(videoSetSearch);
 				return ResultUtil.getSlefSRSuccessList(list);
 			}else{
-				return ResultUtil.getSlefSRFailList(list);
+				throw new NotIsNotExistException("视频集搜索");//不存在
 			}
 	}
 	

@@ -2,11 +2,11 @@ package com.nieyue.exception;
 
 
 /**
- * 账户已经存在异常
+ * 账户短信发送异常
  * @author 聂跃
  * @date 2017年8月8日
  */
-public class AccountIsExistException extends RuntimeException {
+public class AccountMessageException extends RuntimeException {
 
 	/**
 	 * 

@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.nieyue.bean.MedalTerm;
+import com.nieyue.exception.NotAnymoreException;
+import com.nieyue.exception.NotIsNotExistException;
 import com.nieyue.service.MedalTermService;
 import com.nieyue.util.ResultUtil;
 import com.nieyue.util.StateResult;
@@ -62,7 +64,7 @@ public class MedalTermController {
 			if(list.size()>0){
 				return ResultUtil.getSlefSRSuccessList(list);
 			}else{
-				return ResultUtil.getSlefSRFailList(list);
+				throw new NotAnymoreException();//没有更多
 			}
 	}
 	/**
@@ -124,7 +126,7 @@ public class MedalTermController {
 				list.add(medalTerm);
 				return ResultUtil.getSlefSRSuccessList(list);
 			}else{
-				return ResultUtil.getSlefSRFailList(list);
+				throw new NotIsNotExistException("勋章项");//不存在
 			}
 	}
 	

@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.nieyue.bean.Video;
 import com.nieyue.bean.VideoSet;
+import com.nieyue.exception.NotAnymoreException;
+import com.nieyue.exception.NotIsNotExistException;
 import com.nieyue.service.VideoService;
 import com.nieyue.service.VideoSetService;
 import com.nieyue.util.ResultUtil;
@@ -75,7 +77,7 @@ public class VideoController {
 			if(list.size()>0){
 				return ResultUtil.getSlefSRSuccessList(list);
 			}else{
-				return ResultUtil.getSlefSRFailList(list);
+				throw new NotAnymoreException();//没有更多
 			}
 	}
 	/**
@@ -148,7 +150,7 @@ public class VideoController {
 				list.add(video);
 				return ResultUtil.getSlefSRSuccessList(list);
 			}else{
-				return ResultUtil.getSlefSRFailList(list);
+				throw new NotIsNotExistException("视频");//不存在
 			}
 	}
 	/**
@@ -172,7 +174,7 @@ public class VideoController {
 			list.add(videoSet);
 			return ResultUtil.getSlefSRSuccessList(list);
 		}else{
-			return ResultUtil.getSlefSRFailList(list);
+			throw new NotIsNotExistException("视频");//不存在
 		}
 	}
 	/**

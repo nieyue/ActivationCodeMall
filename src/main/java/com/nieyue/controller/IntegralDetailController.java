@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.nieyue.bean.IntegralDetail;
+import com.nieyue.exception.NotAnymoreException;
+import com.nieyue.exception.NotIsNotExistException;
 import com.nieyue.service.IntegralDetailService;
 import com.nieyue.util.ResultUtil;
 import com.nieyue.util.StateResult;
@@ -71,7 +73,7 @@ public class IntegralDetailController {
 			if(list.size()>0){
 				return ResultUtil.getSlefSRSuccessList(list);
 			}else{
-				return ResultUtil.getSlefSRFailList(list);
+				throw new NotAnymoreException();//没有更多
 			}
 	}
 	/**
@@ -144,7 +146,7 @@ public class IntegralDetailController {
 				list.add(integralDetail);
 				return ResultUtil.getSlefSRSuccessList(list);
 			}else{
-				return ResultUtil.getSlefSRFailList(list);
+				throw new NotIsNotExistException("积分详情");//不存在
 			}
 	}
 	

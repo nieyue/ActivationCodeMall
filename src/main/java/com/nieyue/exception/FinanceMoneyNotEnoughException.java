@@ -2,11 +2,11 @@ package com.nieyue.exception;
 
 
 /**
- * 账户已经存在异常
+ * 财务余额不足异常
  * @author 聂跃
  * @date 2017年8月8日
  */
-public class AccountIsExistException extends RuntimeException {
+public class FinanceMoneyNotEnoughException extends RuntimeException {
 
 	/**
 	 * 

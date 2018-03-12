@@ -24,7 +24,7 @@ public class ResultUtil {
 		 * 
 		 */
 		public static StateResult getFail(){
-			StateResult sr=new StateResult(40000,"失败");
+			StateResult sr=new StateResult(40000,"系统内部错误");
 			return sr;
 		}
 		/**
@@ -67,7 +67,7 @@ public class ResultUtil {
 		 * @param bl 
 		 */
 		public static <Data>StateResultList<Data>  getSlefSRFailList(Data data){
-			StateResultList<Data>  srl = new StateResultList<> (40000,"失败",data);
+			StateResultList<Data>  srl = new StateResultList<> (40000,"系统内部错误",data);
 			return srl;
 		}
 		/**

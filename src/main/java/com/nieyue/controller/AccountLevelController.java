@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.nieyue.bean.AccountLevel;
 import com.nieyue.business.AccountLevelBusiness;
+import com.nieyue.exception.NotAnymoreException;
+import com.nieyue.exception.NotIsNotExistException;
 import com.nieyue.service.AccountLevelService;
 import com.nieyue.service.AccountParentService;
 import com.nieyue.util.ResultUtil;
@@ -72,7 +74,7 @@ public class AccountLevelController {
 			if(list.size()>0){
 				return ResultUtil.getSlefSRSuccessList(list);
 			}else{
-				return ResultUtil.getSlefSRFailList(list);
+				throw new NotAnymoreException();//没有更多
 			}
 	}
 	/**
@@ -90,7 +92,7 @@ public class AccountLevelController {
 			
 			return ResultUtil.getSlefSRSuccessList(alist);
 		}
-		return ResultUtil.getSlefSRFailList(alist);
+		throw new NotAnymoreException();//没有更多
 	}
 	/**
 	 * 等级修改
@@ -154,8 +156,8 @@ public class AccountLevelController {
 				list.add(accountLevel);
 				return ResultUtil.getSlefSRSuccessList(list);
 			}else{
-				return ResultUtil.getSlefSRFailList(list);
-			}
+				throw new NotIsNotExistException("等级");//不存在
 	}
 	
+}
 }

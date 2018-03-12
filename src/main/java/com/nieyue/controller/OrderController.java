@@ -19,6 +19,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.nieyue.bean.Order;
 import com.nieyue.bean.OrderDetail;
+import com.nieyue.exception.NotAnymoreException;
+import com.nieyue.exception.NotIsNotExistException;
 import com.nieyue.service.OrderDetailService;
 import com.nieyue.service.OrderService;
 import com.nieyue.util.ResultUtil;
@@ -82,7 +84,7 @@ public class OrderController {
 			if(list.size()>0){
 				return ResultUtil.getSlefSRSuccessList(list);
 			}else{
-				return ResultUtil.getSlefSRFailList(list);
+				throw new NotAnymoreException();//没有更多
 			}
 	}
 	/**
@@ -245,7 +247,7 @@ public class OrderController {
 				list.add(order);
 				return ResultUtil.getSlefSRSuccessList(list);
 			}else{
-				return ResultUtil.getSlefSRFailList(list);
+				throw new NotIsNotExistException("订单");//不存在
 			}
 	}
 	

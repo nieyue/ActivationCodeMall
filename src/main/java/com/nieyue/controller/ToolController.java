@@ -48,7 +48,7 @@ public class ToolController {
 	 * 首页
 	 * @return
 	 */
-	@ApiOperation(value = "首页", notes = "/seller/index.html")
+	@ApiOperation(value = "首页", notes = "首页/seller/index.html")
 	@RequestMapping(value={"/"}, method = {RequestMethod.GET,RequestMethod.POST})
 	public RedirectView index(){
 		return new RedirectView("/seller/index.html");

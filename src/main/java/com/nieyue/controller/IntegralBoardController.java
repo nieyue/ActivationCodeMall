@@ -18,6 +18,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.nieyue.bean.IntegralBoard;
+import com.nieyue.exception.NotAnymoreException;
+import com.nieyue.exception.NotIsNotExistException;
 import com.nieyue.service.IntegralBoardService;
 import com.nieyue.util.DateUtil;
 import com.nieyue.util.ResultUtil;
@@ -78,7 +80,7 @@ public class IntegralBoardController {
 			if(list.size()>0){
 				return ResultUtil.getSlefSRSuccessList(list);
 			}else{
-				return ResultUtil.getSlefSRFailList(list);
+				throw new NotAnymoreException();//没有更多
 			}
 	}
 	/**
@@ -116,16 +118,15 @@ public class IntegralBoardController {
 		}
 		//榜单
 		List<IntegralBoard> ibl = integralBoardService.browsePagingIntegralBoard(type, timeType, null, recordTime, null, null, pageNum, pageSize, orderName, orderWay);
-		if(ibl.size()>0){
-			
+		if(ibl.size()<=0){
+			ibl=new ArrayList<IntegralBoard>();
+		}	
 		Map<Object,Object> map=new HashMap<Object,Object>();
 		map.put("integralBoardList",ibl);
 		Integer level = integralBoardService.getLevel(type, timeType, accountId, recordTime);
 		map.put("level",level);
 		list.add(map);
 		return ResultUtil.getSlefSRSuccessList(list);
-		}
-		return ResultUtil.getSlefSRFailList(list);
 	}
 	/**
 	 * 积分榜修改
@@ -201,7 +202,7 @@ public class IntegralBoardController {
 				list.add(integralBoard);
 				return ResultUtil.getSlefSRSuccessList(list);
 			}else{
-				return ResultUtil.getSlefSRFailList(list);
+				throw new NotIsNotExistException("积分榜");//不存在
 			}
 	}
 	

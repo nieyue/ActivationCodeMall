@@ -23,13 +23,17 @@ import com.nieyue.bean.Finance;
 import com.nieyue.bean.FinanceRecord;
 import com.nieyue.bean.Payment;
 import com.nieyue.business.OrderBusiness;
+import com.nieyue.exception.AccountIsNotExistException;
+import com.nieyue.exception.AccountNotAuthException;
+import com.nieyue.exception.FinanceMoneyNotEnoughException;
+import com.nieyue.exception.NotAnymoreException;
+import com.nieyue.exception.NotIsNotExistException;
 import com.nieyue.exception.PayException;
 import com.nieyue.exception.VerifyCodeErrorException;
 import com.nieyue.pay.AlipayUtil;
 import com.nieyue.service.AccountService;
 import com.nieyue.service.FinanceRecordService;
 import com.nieyue.service.FinanceService;
-import com.nieyue.util.DateUtil;
 import com.nieyue.util.MyDESutil;
 import com.nieyue.util.ResultUtil;
 import com.nieyue.util.StateResult;
@@ -92,7 +96,7 @@ public class FinanceController {
 				
 				return ResultUtil.getSlefSRSuccessList(list);
 			}else{
-				return ResultUtil.getSlefSRFailList(list);
+				throw new NotAnymoreException();//没有更多
 			}
 	}
 	/**
@@ -188,10 +192,10 @@ public class FinanceController {
 		Account a = accountService.loadAccount(accountId);
 		List<Object> list=new ArrayList<Object>();
 		if(a==null){
-			return ResultUtil.getSlefSRFailList(list);		
+			throw new AccountIsNotExistException();	//账户不存在
 		}
 		if(a.getAuth()==null||a.getAuth()!=2){//没认证
-			return ResultUtil.getSlefSRList("40000", "没认证", list);
+			throw new AccountNotAuthException();//账户未认证
 		}
 		String result="";
 		String transactionNumber = orderBusiness.getOrderNumber(accountId);
@@ -213,7 +217,7 @@ public class FinanceController {
 			try {
 				result=alipayUtil.getAppPayment(payment);
 			} catch (UnsupportedEncodingException e) {
-				throw new PayException();//回滚
+				throw new PayException();//支付异常
 			}
 			list.add(result);
 			
@@ -265,17 +269,17 @@ public class FinanceController {
 		Account a = accountService.loadAccount(accountId);
 		List<Finance> list=new ArrayList<Finance>();
 		if(a==null){
-			return ResultUtil.getSlefSRFailList(list);		
+			throw new AccountIsNotExistException();	//账户不存在
 		}
-		if(a.getAuth()!=2){//没认证
-			return ResultUtil.getSlefSRList("40000", "没认证", list);
+		if(a.getAuth()==null||a.getAuth()!=2){//没认证
+			throw new AccountNotAuthException();//账户未认证
 		}
 		List<Finance> fl = financeService.browsePagingFinance(null, accountId, 1, 1, "finance_id", "asc");
 		boolean b=false;
 		if(fl.size()==1){
 			Finance f = fl.get(0);
 			if(f.getMoney()-money<0){
-				return ResultUtil.getSlefSRFailList(list);
+				throw new FinanceMoneyNotEnoughException();//余额不足
 			}
 			f.setMoney(f.getMoney()-money);
 			f.setWithdrawals(f.getWithdrawals()+money);
@@ -355,7 +359,7 @@ public class FinanceController {
 				list.add(finance);
 				return ResultUtil.getSlefSRSuccessList(list);
 			}else{
-				return ResultUtil.getSlefSRFailList(list);
+				throw new NotIsNotExistException("财务");//不存在
 			}
 	}
 	

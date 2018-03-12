@@ -18,6 +18,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.nieyue.bean.FinanceRecord;
 import com.nieyue.bean.Notice;
 import com.nieyue.business.NoticeBusiness;
+import com.nieyue.exception.NotAnymoreException;
+import com.nieyue.exception.NotIsNotExistException;
 import com.nieyue.service.FinanceRecordService;
 import com.nieyue.service.NoticeService;
 import com.nieyue.util.ResultUtil;
@@ -84,7 +86,7 @@ public class FinanceRecordController {
 			if(list.size()>0){
 				return ResultUtil.getSlefSRSuccessList(list);
 			}else{
-				return ResultUtil.getSlefSRFailList(list);
+				throw new NotAnymoreException();//没有更多
 			}
 	}
 	/**
@@ -163,7 +165,7 @@ public class FinanceRecordController {
 				list.add(financeRecord);
 				return ResultUtil.getSlefSRSuccessList(list);
 			}else{
-				return ResultUtil.getSlefSRFailList(list);
+				throw new NotIsNotExistException("财务记录");//不存在
 			}
 	}
 	/**

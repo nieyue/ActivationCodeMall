@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.nieyue.bean.VideoCache;
+import com.nieyue.exception.NotAnymoreException;
+import com.nieyue.exception.NotIsNotExistException;
 import com.nieyue.service.VideoCacheService;
 import com.nieyue.util.ResultUtil;
 import com.nieyue.util.StateResult;
@@ -66,7 +68,7 @@ public class VideoCacheController {
 			if(list.size()>0){
 				return ResultUtil.getSlefSRSuccessList(list);
 			}else{
-				return ResultUtil.getSlefSRFailList(list);
+				throw new NotAnymoreException();//没有更多
 			}
 	}
 	/**
@@ -86,6 +88,9 @@ public class VideoCacheController {
 	@ApiOperation(value = "视频缓存增加", notes = "视频缓存增加")
 	@RequestMapping(value = "/add", method = {RequestMethod.GET,RequestMethod.POST})
 	public @ResponseBody StateResult addVideoCache(@ModelAttribute VideoCache videoCache, HttpSession session) {
+		if(videoCache.getAccountId()==null||videoCache.getVideoId()==null){
+			return ResultUtil.getSlefSR(50000, "缺少参数");
+		}
 		boolean am = videoCacheService.addVideoCache(videoCache);
 		return ResultUtil.getSR(am);
 	}
@@ -125,7 +130,7 @@ public class VideoCacheController {
 	 */
 	@ApiOperation(value = "视频缓存单个加载", notes = "视频缓存单个加载")
 	@ApiImplicitParams({
-		  @ApiImplicitParam(name="VideoCacheId",value="视频缓存ID",dataType="int", paramType = "path",required=true)
+		  @ApiImplicitParam(name="videoCacheId",value="视频缓存ID",dataType="int", paramType = "path",required=true)
 		  })
 	@RequestMapping(value = "/{videoCacheId}", method = {RequestMethod.GET,RequestMethod.POST})
 	public  StateResultList loadVideoCache(@PathVariable("videoCacheId") Integer videoCacheId,HttpSession session)  {
@@ -135,7 +140,7 @@ public class VideoCacheController {
 				list.add(VideoCache);
 				return ResultUtil.getSlefSRSuccessList(list);
 			}else{
-				return ResultUtil.getSlefSRFailList(list);
+				throw new NotIsNotExistException("视频缓存");//不存在
 			}
 	}
 	
