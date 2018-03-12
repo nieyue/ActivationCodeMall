@@ -34,7 +34,7 @@ public class SessionControllerInterceptor implements HandlerInterceptor {
         }
         HandlerMethod handlerMethod = (HandlerMethod) handler;
         Method method = handlerMethod.getMethod();
-       System.out.println(method.getDefaultValue());
+      // System.out.println(method.getDefaultValue());
         
        
         Account sessionAccount = null;
@@ -48,6 +48,7 @@ public class SessionControllerInterceptor implements HandlerInterceptor {
         sessionAccount = (Account) request.getSession().getAttribute("account");
         sessionRole = (Role) request.getSession().getAttribute("role");
         sessionFinance = (Finance) request.getSession().getAttribute("finance");
+   
         }
 //        Integer i=1;
 //        Integer j=1;
@@ -182,12 +183,11 @@ public class SessionControllerInterceptor implements HandlerInterceptor {
         	//超级管理员
         	if(sessionRole.getName().equals("超级管理员")
         			){
-        		System.out.println(2);
         		return true;
         	}
-        	System.out.println(3);
         	//admin中只许修改自己的值
         	if(sessionRole.getName().equals("用户")){
+        			
         		//角色全不许
         		if( request.getRequestURI().indexOf("/role")>-1 ){
         			throw new MySessionException();
@@ -310,9 +310,15 @@ public class SessionControllerInterceptor implements HandlerInterceptor {
         				|| request.getRequestURI().indexOf("/finance/update")>-1 
         				|| request.getRequestURI().indexOf("/finance/list")>-1 
         				|| request.getRequestURI().indexOf("/finance/add")>-1 
+        				|| request.getRequestURI().indexOf("/finance/passwordValid")>-1 
         				||method.getName().equals("loadFinance")){
         			//修改交易密码
         			if((request.getRequestURI().indexOf("/finance/updatePassword")>-1)
+        					&& request.getParameter("accountId").equals(sessionAccount.getAccountId().toString())){
+        				return true;
+        			}
+        			//交易密码验证
+        			if((request.getRequestURI().indexOf("/finance/passwordValid")>-1)
         					&& request.getParameter("accountId").equals(sessionAccount.getAccountId().toString())){
         				return true;
         			}

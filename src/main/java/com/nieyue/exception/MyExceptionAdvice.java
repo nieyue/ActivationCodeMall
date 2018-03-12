@@ -21,15 +21,25 @@ import com.nieyue.util.StateResult;
 @RestControllerAdvice
 public class MyExceptionAdvice {
 	
+	@ExceptionHandler(value=CommonRollbackException.class)
+	@ResponseBody
+	public StateResult commonRollbackExceptionHandler( CommonRollbackException e) throws Exception {
+		return ResultUtil.getSlefSR(30000, e.getTitle());
+	}
+	@ExceptionHandler(value=CommonNotRollbackException.class)
+	@ResponseBody
+	public StateResult commonNotRollbackExceptionHandler( CommonNotRollbackException e) throws Exception {
+		return ResultUtil.getSlefSR(30001, e.getTitle());
+	}
 	@ExceptionHandler(value=NotAnymoreException.class)
 	@ResponseBody
 	public StateResult notAnymoreExceptionHandler( Exception e) throws Exception {
-		return ResultUtil.getSlefSR(30000, "没有更多");
+		return ResultUtil.getSlefSR(30002, "没有更多");
 	}
 	@ExceptionHandler(value=NotIsNotExistException.class)
 	@ResponseBody
 	public StateResult notIsNotExistExceptionHandler( NotIsNotExistException e) throws Exception {
-		return ResultUtil.getSlefSR(30001, e.getTitle()+"不存在");
+		return ResultUtil.getSlefSR(30003, e.getTitle()+"不存在");
 	}
 	@ExceptionHandler(value=Exception.class)
 	@ResponseBody
@@ -110,6 +120,11 @@ public class MyExceptionAdvice {
 	@ResponseBody
 	public StateResult financeMoneyNotEnoughExceptionHandler( Exception e) throws Exception {
 		return ResultUtil.getSlefSR(41000, "余额不足");
+	}
+	@ExceptionHandler(value=FinancePasswordException.class)
+	@ResponseBody
+	public StateResult financePasswordExceptionHandler( Exception e) throws Exception {
+		return ResultUtil.getSlefSR(41001, "交易密码错误");
 	}
 	@ExceptionHandler(value=BindException.class)
 	@ResponseBody

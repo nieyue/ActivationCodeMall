@@ -15,6 +15,20 @@ update_date datetime COMMENT '更新时间',
 PRIMARY KEY (role_id)
 )ENGINE = InnoDB AUTO_INCREMENT=1000 DEFAULT CHARSET=utf8 COMMENT='角色表';
 
+#创建等级表
+CREATE TABLE account_level_tb(
+account_level_id int(11) NOT NULL AUTO_INCREMENT COMMENT '账户等级id',
+name varchar(255) COMMENT '等级名',
+level tinyint(4) DEFAULT 0 COMMENT '等级,默认是0，数字越大，等级越高',
+img_address varchar(255) COMMENT '等级图片',
+seller_upgrade_integral decimal(11,2) DEFAULT 0  COMMENT '商户升级积分',
+user_upgrade_integral decimal(11,2) DEFAULT 0  COMMENT '用户升级积分',
+mark varchar(255) COMMENT '备注（权益）',
+update_date datetime COMMENT '更新时间',
+PRIMARY KEY (account_level_id),
+INDEX INDEX_LEVEL (level) USING BTREE
+)ENGINE = InnoDB AUTO_INCREMENT=1000 DEFAULT CHARSET=utf8 COMMENT='等级表';
+
 #创建账户表 
 CREATE TABLE account_tb(
 account_id int(11) NOT NULL AUTO_INCREMENT COMMENT '账户id',
@@ -528,9 +542,10 @@ customer_service_phone varchar(255)  COMMENT '客服电话',
 order_mer_max_number int(11)  COMMENT '最大订单商品数量',
 seller_integral_per decimal(11,2) DEFAULT 0  COMMENT '商户每盈利一元钱获得积分',
 user_integral_per decimal(11,2) DEFAULT 0  COMMENT '用户每消费一元钱获得积分',
-seller_upgrade_integral decimal(11,2) DEFAULT 0  COMMENT '商户升级积分',
-user_upgrade_integral decimal(11,2) DEFAULT 0  COMMENT '用户升级积分',
 seller_sincerity_upgrade_money decimal(11,2) DEFAULT 0  COMMENT '商户诚信升级金额',
+freeze_day_number int(11) DEFAULT 0  COMMENT '冻结天数',
+platform_proportion decimal(11,2) DEFAULT 0  COMMENT '平台分成比例，单位%',
+spread_proportion decimal(11,2) DEFAULT 0  COMMENT '推广分成比例，单位%',
 create_date datetime COMMENT '创建时间',
 update_date datetime COMMENT '更新时间',
 PRIMARY KEY (config_id)

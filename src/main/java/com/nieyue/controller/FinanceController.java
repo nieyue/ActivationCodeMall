@@ -26,6 +26,7 @@ import com.nieyue.business.OrderBusiness;
 import com.nieyue.exception.AccountIsNotExistException;
 import com.nieyue.exception.AccountNotAuthException;
 import com.nieyue.exception.FinanceMoneyNotEnoughException;
+import com.nieyue.exception.FinancePasswordException;
 import com.nieyue.exception.NotAnymoreException;
 import com.nieyue.exception.NotIsNotExistException;
 import com.nieyue.exception.PayException;
@@ -159,6 +160,27 @@ public class FinanceController {
 				list.add(finance);
 				return ResultUtil.getSlefSRSuccessList(list);
 			}
+		}
+		return ResultUtil.getSlefSRFailList(list);
+	}
+	/**
+	 *  交易密码验证
+	 * @return
+	 */
+	@ApiOperation(value = "交易密码验证", notes = "交易密码验证")
+	@RequestMapping(value = "/passwordValid", method = {RequestMethod.GET,RequestMethod.POST})
+	public @ResponseBody StateResultList passwordValid(
+			@RequestParam(value="accountId")Integer accountId,
+			@RequestParam(value="password")String password,
+			HttpSession session)  {
+		List<Finance> list=new ArrayList<>();
+		List<Finance> fl = financeService.browsePagingFinance(null, accountId, 1, 1, "finance_id", "asc");
+		if(fl.size()==1){
+			Finance finance = fl.get(0);
+			if(finance!=null &&finance.getPassword().equals(MyDESutil.getMD5(password))){
+				return ResultUtil.getSlefSRSuccessList(list);
+			}
+			throw new FinancePasswordException();//交易密码错误
 		}
 		return ResultUtil.getSlefSRFailList(list);
 	}
