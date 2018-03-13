@@ -48,7 +48,7 @@ public class MyExceptionAdvice {
 	    }
 	@ExceptionHandler(value=AccountIsExistException.class)
 	@ResponseBody
-	public StateResult acountIsExistExceptionHandler( Exception e) throws Exception {
+	public StateResult accountIsExistExceptionHandler( Exception e) throws Exception {
 		return ResultUtil.getSlefSR(40001, "账户已存在");
 	}
 	@ExceptionHandler(value=VerifyCodeErrorException.class)
@@ -58,63 +58,68 @@ public class MyExceptionAdvice {
 	}
 	@ExceptionHandler(value=AccountIsLoginException.class)
 	@ResponseBody
-	public StateResult acountIsLoginErrorHandler( Exception e) throws Exception {
+	public StateResult accountIsLoginErrorHandler( Exception e) throws Exception {
 		return ResultUtil.getSlefSR(40003, "账户已登录");
 	}
 	@ExceptionHandler(value=AccountIsNotLoginException.class)
 	@ResponseBody
-	public StateResult acountIsNotLoginExceptionHandler( Exception e) throws Exception {
+	public StateResult accountIsNotLoginExceptionHandler( Exception e) throws Exception {
 		return ResultUtil.getSlefSR(40004, "账户没登录");
 	}
 	@ExceptionHandler(value=AccountIsNotExistException.class)
 	@ResponseBody
-	public StateResult acountIsNotExistExceptionHandler( Exception e) throws Exception {
+	public StateResult accountIsNotExistExceptionHandler( Exception e) throws Exception {
 		return ResultUtil.getSlefSR(40005, "账户不存在");
 	}
 	@ExceptionHandler(value=AccountNotAuthException.class)
 	@ResponseBody
-	public StateResult acountNotAuthExceptionHandler( Exception e) throws Exception {
+	public StateResult accountNotAuthExceptionHandler( Exception e) throws Exception {
 		return ResultUtil.getSlefSR(40006, "账户没认证");
 	}
 	@ExceptionHandler(value=AccountAuthAuditException.class)
 	@ResponseBody
-	public StateResult acountAuthAuditExceptionHandler( Exception e) throws Exception {
+	public StateResult accountAuthAuditExceptionHandler( Exception e) throws Exception {
 		return ResultUtil.getSlefSR(40007, "账户认证审核中");
 	}
 	@ExceptionHandler(value=AccountAlreadyAuthException.class)
 	@ResponseBody
-	public StateResult acountAlreadyAuthExceptionHandler( Exception e) throws Exception {
+	public StateResult accountAlreadyAuthExceptionHandler( Exception e) throws Exception {
 		return ResultUtil.getSlefSR(40008, "账户已认证");
 	}
 	@ExceptionHandler(value=AccountPhoneException.class)
 	@ResponseBody
-	public StateResult acountPhoneExceptionHandler( Exception e) throws Exception {
+	public StateResult accountPhoneExceptionHandler( Exception e) throws Exception {
 		return ResultUtil.getSlefSR(40009, "手机号错误");
 	}
 	@ExceptionHandler(value=AccountPhoneIsExistException.class)
 	@ResponseBody
-	public StateResult acountPhoneIsExistExceptionHandler( Exception e) throws Exception {
+	public StateResult accountPhoneIsExistExceptionHandler( Exception e) throws Exception {
 		return ResultUtil.getSlefSR(40010, "手机号已存在");
 	}
 	@ExceptionHandler(value=AccountPhoneIsNotExistException.class)
 	@ResponseBody
-	public StateResult acountPhoneIsNotExistExceptionHandler( Exception e) throws Exception {
+	public StateResult accountPhoneIsNotExistExceptionHandler( Exception e) throws Exception {
 		return ResultUtil.getSlefSR(40011, "手机号不存在");
 	}
 	@ExceptionHandler(value=AccountMessageException.class)
 	@ResponseBody
-	public StateResult acountMessageExceptionHandler( Exception e) throws Exception {
+	public StateResult accountMessageExceptionHandler( Exception e) throws Exception {
 		return ResultUtil.getSlefSR(40012, "手机短信发送异常，请重试");
 	}
 	@ExceptionHandler(value=AccountLockException.class)
 	@ResponseBody
-	public StateResult acountLockExceptionHandler( Exception e) throws Exception {
+	public StateResult accountLockExceptionHandler( Exception e) throws Exception {
 		return ResultUtil.getSlefSR(40013, "账户锁定");
 	}
 	@ExceptionHandler(value=AccountNotMasterIdException.class)
 	@ResponseBody
-	public StateResult ainanceMoneyNotEnoughExceptionHandler( Exception e) throws Exception {
+	public StateResult accountMoneyNotEnoughExceptionHandler( Exception e) throws Exception {
 		return ResultUtil.getSlefSR(40014, "缺少邀请码");
+	}
+	@ExceptionHandler(value=AccountLoginException.class)
+	@ResponseBody
+	public StateResult accountLoginExceptionHandler( Exception e) throws Exception {
+		return ResultUtil.getSlefSR(40015, "账户或密码错误");
 	}
 	@ExceptionHandler(value=FinanceMoneyNotEnoughException.class)
 	@ResponseBody

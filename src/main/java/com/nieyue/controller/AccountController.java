@@ -1,5 +1,6 @@
 package com.nieyue.controller;
 
+import java.io.IOException;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
@@ -34,6 +35,8 @@ import com.nieyue.exception.AccountIsExistException;
 import com.nieyue.exception.AccountIsNotExistException;
 import com.nieyue.exception.AccountIsNotLoginException;
 import com.nieyue.exception.AccountLockException;
+import com.nieyue.exception.AccountLoginException;
+import com.nieyue.exception.AccountMessageException;
 import com.nieyue.exception.AccountNotMasterIdException;
 import com.nieyue.exception.AccountPhoneException;
 import com.nieyue.exception.AccountPhoneIsExistException;
@@ -95,6 +98,8 @@ public class AccountController {
 	private IntegralService integralService;
 	@Resource
 	private NoticeService noticeService;
+//	@Resource
+//	private YunSms yunSms;
 	@Value("${myPugin.projectName}")
 	String projectName;
 
@@ -451,24 +456,26 @@ public class AccountController {
 			throw new VerifyCodeErrorException();
 		}
 		Account account = accountService.loginAccount(adminName, MyDESutil.getMD5(password),null);
+		if(account==null||account.equals("")){
+			throw new AccountLoginException();//账户或密码错误
+		}
 		if(account.getStatus().equals(1)){
 			throw new AccountLockException();//账户锁定
-		}else if(account!=null&&!account.equals("")){
-			account.setLoginDate(new Date());
-			boolean b = accountService.updateAccount(account);
-			if(b){
-			Integer roleId = account.getRoleId();
-			Role r = roleService.loadRole(roleId);
-			if(r.getName().equals("用户")){
-			throw new MySessionException();//没权限	
-			}
-			session.setAttribute("account", account);
-			session.setAttribute("role", r);
-			List<Finance> f = financeService.browsePagingFinance(null,account.getAccountId(), 1, 1, "finance_id", "asc");
-			session.setAttribute("finance", f.get(0));
-			list.add(account);
-			return ResultUtil.getSlefSRSuccessList(list);
-			}
+		}
+		account.setLoginDate(new Date());
+		boolean b = accountService.updateAccount(account);
+		if(b){
+		Integer roleId = account.getRoleId();
+		Role r = roleService.loadRole(roleId);
+		if(r.getName().equals("用户")){
+		throw new MySessionException();//没权限	
+		}
+		session.setAttribute("account", account);
+		session.setAttribute("role", r);
+		List<Finance> f = financeService.browsePagingFinance(null,account.getAccountId(), 1, 1, "finance_id", "asc");
+		session.setAttribute("finance", f.get(0));
+		list.add(account);
+		return ResultUtil.getSlefSRSuccessList(list);
 		}
 		return ResultUtil.getSlefSRFailList(list);
 	}
@@ -564,7 +571,10 @@ public class AccountController {
 		if(account==null|| account.equals("")){
 			account=accountService.loginAccount(adminName, password, null);
 		}
-		if(account!=null&&!account.equals("")&&(account.getStatus().equals(0)||account.getStatus().equals(2))){
+		if(account==null||account.equals("")){
+			throw new AccountLoginException();//账户或密码错误
+		}
+		if(account.getStatus().equals(0)||account.getStatus().equals(2)){
 			account.setLoginDate(new Date());
 			boolean b = accountService.updateAccount(account);
 			if(b){
@@ -572,6 +582,11 @@ public class AccountController {
 			Integer roleId = account.getRoleId();
 			Role r = roleService.loadRole(roleId);
 			session.setAttribute("role", r);
+			//当前sessionId放入单例map
+//			if(r.getName().equals("用户")){
+//				HashMap<String,Object> smap=  SingletonHashMap.getInstance(); 
+//				smap.put("accountId"+account.getAccountId(), session.getId());		
+//			 }
 			
 			List<Finance> f = financeService.browsePagingFinance(null,account.getAccountId(), 1, 1, "finance_id", "asc");
 			session.setAttribute("finance", f.get(0));
@@ -684,6 +699,12 @@ public class AccountController {
 				
 				session.setAttribute("account", account);
 				Role role = roleService.loadRole(account.getRoleId());
+//				//当前sessionId放入单例map
+//				if(role.getName().equals("用户")){
+//					HashMap<String,Object> smap=  SingletonHashMap.getInstance(); 
+//					smap.put("accountId"+account.getAccountId(), session.getId());
+//					
+//				 }
 				session.setAttribute("role", role);
 				List<Finance> f = financeService.browsePagingFinance(null,account.getAccountId(), 1, 1, "finance_id", "asc");
 				//System.out.println(f.get(0).toString());
@@ -757,10 +778,10 @@ public class AccountController {
 	@RequestMapping(value = "/islogin", method = {RequestMethod.GET,RequestMethod.POST})
 	public @ResponseBody StateResultList isLoginAccount(
 			HttpSession session)  {
-		Account Account = (Account) session.getAttribute("account");
+		Account account = (Account) session.getAttribute("account");
 		List<Account> list = new ArrayList<Account>();
-		if(Account!=null && !Account.equals("")){
-			list.add(Account);
+		if(account!=null && !account.equals("")){
+			list.add(account);
 			return ResultUtil.getSlefSRSuccessList(list);
 		}
 		throw new AccountIsNotLoginException();//没有登录
