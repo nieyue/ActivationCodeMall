@@ -8,6 +8,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Date;
+import java.util.HashMap;
 
 import javax.imageio.ImageIO;
 
@@ -86,5 +87,9 @@ public class Test1 {
         String s ="Headless模式测试";
         g.drawString(new String(s.getBytes(),"UTF8"), 50, 50);
         ImageIO.write(bi,"jpeg", new File("test.jpg"));
-	}
+        HashMap hash = new HashMap();
+        hash.put("a1", "sdf");
+        hash.put("a", "sdf1212");
+        System.out.println(hash);
+        }
 }

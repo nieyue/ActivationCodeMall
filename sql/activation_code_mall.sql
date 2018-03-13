@@ -153,42 +153,40 @@ INDEX INDEX_CREATEDATE (create_date) USING BTREE,
 INDEX INDEX_UPDATEDATE (update_date) USING BTREE
 )ENGINE = InnoDB AUTO_INCREMENT=1000 DEFAULT CHARSET=utf8 COMMENT='诚信表';
 
-#创建视频集类型表 
-CREATE TABLE video_set_cate_tb(
-video_set_cate_id int(11) NOT NULL AUTO_INCREMENT COMMENT '视频集类型id',
-name varchar(255) COMMENT '视频集类型名称',
-summary varchar(255) COMMENT '简介',
-icon varchar(255) COMMENT '视频集类型图标',
-imgAddress varchar(255) COMMENT '封面',
-play_number int(11) DEFAULT 0  COMMENT '播放总次数',
-update_date datetime COMMENT '更新时间',
-PRIMARY KEY (video_set_cate_id)
-)ENGINE = InnoDB AUTO_INCREMENT=1000 DEFAULT CHARSET=utf8 COMMENT='视频集类型表';
-
-#创建视频集标签表 
-CREATE TABLE video_set_tag_tb(
-video_set_tag_id int(11) NOT NULL AUTO_INCREMENT COMMENT '视频集标签id',
-name varchar(255) COMMENT '视频集标签名称',
-update_date datetime COMMENT '更新时间',
-video_set_id int(11) COMMENT '视频集id',
-PRIMARY KEY (video_set_tag_id),
-INDEX INDEX_VIDEOSETID (video_set_id) USING BTREE
-)ENGINE = InnoDB AUTO_INCREMENT=1000 DEFAULT CHARSET=utf8 COMMENT='视频集标签表';
-
-#创建视频集搜索表 
-CREATE TABLE video_set_search_tb(
-video_set_search_id int(11) NOT NULL AUTO_INCREMENT COMMENT '视频集搜索id',
-name varchar(255) COMMENT '视频集搜索名称',
+#创建商品搜索表 
+CREATE TABLE mer_search_tb(
+mer_search_id int(11) NOT NULL AUTO_INCREMENT COMMENT '商品搜索id',
+name varchar(255) COMMENT '商品搜索名称',
 number int(11) COMMENT '次数',
 update_date datetime COMMENT '更新时间',
-PRIMARY KEY (video_set_search_id),
+PRIMARY KEY (mer_search_id),
 INDEX INDEX_NAME (name) USING BTREE,
 INDEX INDEX_NUMBER (number) USING BTREE
-)ENGINE = InnoDB AUTO_INCREMENT=1000 DEFAULT CHARSET=utf8 COMMENT='视频集搜索表';
+)ENGINE = InnoDB AUTO_INCREMENT=1000 DEFAULT CHARSET=utf8 COMMENT='商品搜索表';
 
-#创建视频集表 
-CREATE TABLE video_set_tb(
-video_set_id int(11) NOT NULL AUTO_INCREMENT COMMENT '视频集id',
+#创建商品类型表 
+CREATE TABLE mer_cate_tb(
+mer_cate_id int(11) NOT NULL AUTO_INCREMENT COMMENT '商品类型id',
+name varchar(255) COMMENT '商品类型名称',
+summary varchar(255) COMMENT '简介',
+update_date datetime COMMENT '更新时间',
+PRIMARY KEY (mer_cate_id)
+)ENGINE = InnoDB AUTO_INCREMENT=1000 DEFAULT CHARSET=utf8 COMMENT='商品类型表';
+
+#创建商品标签表 
+CREATE TABLE mer_tag_tb(
+mer_tag_id int(11) NOT NULL AUTO_INCREMENT COMMENT '商品标签id',
+name varchar(255) COMMENT '商品标签名称',
+update_date datetime COMMENT '更新时间',
+mer_id int(11) COMMENT '商品id',
+PRIMARY KEY (mer_tag_id),
+INDEX INDEX_VIDEOSETID (mer_id) USING BTREE
+)ENGINE = InnoDB AUTO_INCREMENT=1000 DEFAULT CHARSET=utf8 COMMENT='商品标签表';
+
+
+#创建商品表 
+CREATE TABLE mer_tb(
+mer_id int(11) NOT NULL AUTO_INCREMENT COMMENT '商品id',
 name varchar(255) COMMENT '名称',
 img_address varchar(255) COMMENT '封面',
 author varchar(255) COMMENT '作者',
@@ -196,21 +194,21 @@ summary longtext COMMENT '简介',
 recommend tinyint(4) DEFAULT 0 COMMENT '推荐，默认0不推，1封推，2热门推荐，3专栏',
 cost tinyint(4) DEFAULT 0 COMMENT '是否收费，0免费，1vip免费，2付费课程',
 total_price decimal(11,2) DEFAULT 0 COMMENT '总价，默认为0，若为0则免费',
-number int(11) DEFAULT 0  COMMENT '视频集数',
+number int(11) DEFAULT 0  COMMENT '商品数',
 play_number int(11) DEFAULT 0  COMMENT '播放总次数',
 status tinyint(4) DEFAULT 1 COMMENT '状态0下架,默认1上架',
-video_set_cate_id int(11) COMMENT '视频集类型id,外键',
+mer_cate_id int(11) COMMENT '商品类型id,外键',
 create_date datetime  COMMENT '创建时间',
 update_date datetime  COMMENT '更新时间',
-PRIMARY KEY (video_set_id),
+PRIMARY KEY (mer_id),
 INDEX INDEX_NAME (name) USING BTREE,
 INDEX INDEX_RECOMMEND (recommend) USING BTREE,
 INDEX INDEX_COST (cost) USING BTREE,
-INDEX INDEX_VIDEOSETCATEID (video_set_cate_id) USING BTREE,
+INDEX INDEX_VIDEOSETCATEID (mer_cate_id) USING BTREE,
 INDEX INDEX_CREATEDATE (create_date) USING BTREE,
 INDEX INDEX_UPDATEDATE (update_date) USING BTREE,
 INDEX INDEX_STATUS (status) USING BTREE
-)ENGINE = InnoDB AUTO_INCREMENT=1000 DEFAULT CHARSET=utf8 COMMENT='视频集表';
+)ENGINE = InnoDB AUTO_INCREMENT=1000 DEFAULT CHARSET=utf8 COMMENT='商品表';
 
 #创建视频表 
 CREATE TABLE video_tb(
@@ -222,30 +220,30 @@ size varchar(255) COMMENT '容量，单位MB',
 url varchar(255) COMMENT '链接',
 play_number int(11) DEFAULT 0  COMMENT '播放次数',
 status tinyint(4) DEFAULT 1 COMMENT '状态0下架,默认1上架',
-video_set_id int(11) COMMENT '视频集id,外键',
+mer_id int(11) COMMENT '商品id,外键',
 create_date datetime  COMMENT '创建时间',
 update_date datetime  COMMENT '更新时间',
 PRIMARY KEY (video_id),
-INDEX INDEX_VIDEOSETID (video_set_id) USING BTREE,
+INDEX INDEX_VIDEOSETID (mer_id) USING BTREE,
 INDEX INDEX_CREATEDATE (create_date) USING BTREE,
 INDEX INDEX_UPDATEDATE (update_date) USING BTREE,
 INDEX INDEX_STATUS (status) USING BTREE
 )ENGINE = InnoDB AUTO_INCREMENT=1000 DEFAULT CHARSET=utf8 COMMENT='视频表';
 
-#创建视频集收藏表 
-CREATE TABLE video_set_collect_tb(
-video_set_collect_id int(11) NOT NULL AUTO_INCREMENT COMMENT '视频集收藏id',
+#创建商品收藏表 
+CREATE TABLE mer_collect_tb(
+mer_collect_id int(11) NOT NULL AUTO_INCREMENT COMMENT '商品收藏id',
 name varchar(255) COMMENT '名称',
 img_address varchar(255) COMMENT '封面',
 duration varchar(255) COMMENT '时长',
 size varchar(255) COMMENT '容量，单位byte',
 account_id int(11) COMMENT '收藏人id外键',
 create_date datetime COMMENT '创建时间',
-video_set_id int(11) COMMENT '视频集id外键',
-PRIMARY KEY (video_set_collect_id),
-INDEX INDEX_VIDEOSETID (video_set_id) USING BTREE,
+mer_id int(11) COMMENT '商品id外键',
+PRIMARY KEY (mer_collect_id),
+INDEX INDEX_VIDEOSETID (mer_id) USING BTREE,
 INDEX INDEX_ACCOUNTID (account_id) USING BTREE
-)ENGINE = InnoDB AUTO_INCREMENT=1000 DEFAULT CHARSET=utf8 COMMENT='视频集收藏表';
+)ENGINE = InnoDB AUTO_INCREMENT=1000 DEFAULT CHARSET=utf8 COMMENT='商品收藏表';
 
 #创建视频播放记录表 
 CREATE TABLE video_play_record_tb(
