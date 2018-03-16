@@ -39,6 +39,7 @@ icon varchar(255) COMMENT '图像',
 sex tinyint(4) DEFAULT 0 COMMENT '性别,默认为0未知，为1男性，为2女性',
 realname varchar(255) COMMENT '真实姓名',
 email varchar(255) COMMENT 'email',
+country varchar(255) COMMENT '国家,默认中国',
 safety_grade tinyint(4) COMMENT '安全等级，1低，2中，3高',
 auth tinyint(4) COMMENT '认证，0没认证，1审核中，2已认证',
 card_secret_receive tinyint(4) COMMENT '卡密接受方式，0全部接收，1本账号内，2邮箱接收，3手机接收',
@@ -60,6 +61,21 @@ INDEX INDEX_LOGINDATE (login_date) USING BTREE,
 INDEX INDEX_ROLEID (role_id) USING BTREE,
 INDEX INDEX_STATUS (status) USING BTREE
 )ENGINE = InnoDB AUTO_INCREMENT=1000 DEFAULT CHARSET=utf8 COMMENT='账户表';
+
+#创建银行卡表
+CREATE TABLE bank_card_tb(
+bank_card_id int(11) NOT NULL AUTO_INCREMENT COMMENT '银行卡id',
+realname varchar(255) COMMENT '姓名',
+identity varchar(255) COMMENT '身份证',
+bank_name varchar(255) COMMENT '银行名',
+number varchar(255) COMMENT '银行卡卡号',
+phone varchar(255) COMMENT '预留手机号',
+create_date datetime COMMENT '创建时间',
+update_date datetime COMMENT '更新时间',
+account_id int(11) COMMENT '账户id',
+PRIMARY KEY (bank_card_id),
+INDEX INDEX_ACCOUNTID (account_id) USING BTREE
+)ENGINE = InnoDB AUTO_INCREMENT=1000 DEFAULT CHARSET=utf8 COMMENT='银行卡表';
 
 #创建财务表 
 CREATE TABLE finance_tb(
@@ -109,6 +125,7 @@ INDEX INDEX_UPDATEDATE (update_date) USING BTREE
 #创建积分表 
 CREATE TABLE integral_tb(
 integral_id int(11) NOT NULL AUTO_INCREMENT COMMENT '积分id',
+name varchar(255) COMMENT '名称',
 level int(11) COMMENT '等级',
 integral decimal(11,2) DEFAULT 0 COMMENT '剩余积分',
 upgrade_integral decimal(11,2) DEFAULT 0 COMMENT '升级积分',
@@ -126,7 +143,7 @@ INDEX INDEX_UPDATEDATE (update_date) USING BTREE
 #创建积分详细表 
 CREATE TABLE integral_detail_tb(
 integral_detail_id int(11) NOT NULL AUTO_INCREMENT COMMENT '积分详细id',
-type tinyint(4) DEFAULT 0 COMMENT '类型,1增长积分，2扣除积分，3售出一单，4好评积分，5差评积分，6登录奖励，7推荐自营积分',
+type tinyint(4) DEFAULT 0 COMMENT '类型,1增长积分',
 integral decimal(11,2) DEFAULT 0 COMMENT '积分',
 create_date datetime COMMENT '创建时间',
 update_date datetime COMMENT '更新时间',
@@ -164,6 +181,14 @@ INDEX INDEX_NAME (name) USING BTREE,
 INDEX INDEX_NUMBER (number) USING BTREE
 )ENGINE = InnoDB AUTO_INCREMENT=1000 DEFAULT CHARSET=utf8 COMMENT='商品搜索表';
 
+#创建商品公用表 
+CREATE TABLE mer_common_tb(
+mer_common_id int(11) NOT NULL AUTO_INCREMENT COMMENT '商品公用id',
+guide longtext COMMENT '购物指南',
+guarantee longtext COMMENT '售后保障',
+PRIMARY KEY (mer_common_id)
+)ENGINE = InnoDB AUTO_INCREMENT=1000 DEFAULT CHARSET=utf8 COMMENT='商品公用表';
+
 #创建商品类型表 
 CREATE TABLE mer_cate_tb(
 mer_cate_id int(11) NOT NULL AUTO_INCREMENT COMMENT '商品类型id',
@@ -173,162 +198,200 @@ update_date datetime COMMENT '更新时间',
 PRIMARY KEY (mer_cate_id)
 )ENGINE = InnoDB AUTO_INCREMENT=1000 DEFAULT CHARSET=utf8 COMMENT='商品类型表';
 
-#创建商品标签表 
-CREATE TABLE mer_tag_tb(
-mer_tag_id int(11) NOT NULL AUTO_INCREMENT COMMENT '商品标签id',
-name varchar(255) COMMENT '商品标签名称',
-update_date datetime COMMENT '更新时间',
-mer_id int(11) COMMENT '商品id',
-PRIMARY KEY (mer_tag_id),
-INDEX INDEX_VIDEOSETID (mer_id) USING BTREE
-)ENGINE = InnoDB AUTO_INCREMENT=1000 DEFAULT CHARSET=utf8 COMMENT='商品标签表';
-
-
 #创建商品表 
 CREATE TABLE mer_tb(
 mer_id int(11) NOT NULL AUTO_INCREMENT COMMENT '商品id',
+region tinyint(4) COMMENT '范围，1官网自营，2商家自营',
+platform_proportion decimal(11,2) DEFAULT 5  COMMENT '平台分成比例，单位%',
+type tinyint(4) COMMENT '类型，1普通商品，2降价商品，3预购商品',
+deliver_end_date datetime  COMMENT '最迟发货时间，预购商品可选',
 name varchar(255) COMMENT '名称',
-img_address varchar(255) COMMENT '封面',
-author varchar(255) COMMENT '作者',
 summary longtext COMMENT '简介',
-recommend tinyint(4) DEFAULT 0 COMMENT '推荐，默认0不推，1封推，2热门推荐，3专栏',
-cost tinyint(4) DEFAULT 0 COMMENT '是否收费，0免费，1vip免费，2付费课程',
-total_price decimal(11,2) DEFAULT 0 COMMENT '总价，默认为0，若为0则免费',
-number int(11) DEFAULT 0  COMMENT '商品数',
-play_number int(11) DEFAULT 0  COMMENT '播放总次数',
+img_address varchar(255) COMMENT '封面',
+platform varchar(255) COMMENT '平台',
+recommend tinyint(4) DEFAULT 0 COMMENT '推荐，默认0不推，1封推，2推荐',
+old_unit_price decimal(11,2) DEFAULT 0 COMMENT '原始单价',
+unit_price decimal(11,2) DEFAULT 0 COMMENT '单价',
+discount decimal(11,2) DEFAULT 0 COMMENT '折扣',
+sale_number int(11) DEFAULT 0  COMMENT '销量',
+stock_number int(11)   COMMENT '库存数',
+mer_score decimal(11,2)  COMMENT '商品评分',
+mer_comment_number int(11)  COMMENT '商品评论数',
+details longtext  COMMENT '商品详情',
+configuration longtext  COMMENT '配置要求',
+install_activation longtext  COMMENT '安装激活',
 status tinyint(4) DEFAULT 1 COMMENT '状态0下架,默认1上架',
 mer_cate_id int(11) COMMENT '商品类型id,外键',
+seller_account_id int(11) COMMENT '商户账户id,外键',
 create_date datetime  COMMENT '创建时间',
 update_date datetime  COMMENT '更新时间',
 PRIMARY KEY (mer_id),
+INDEX INDEX_REGION (region) USING BTREE,
 INDEX INDEX_NAME (name) USING BTREE,
 INDEX INDEX_RECOMMEND (recommend) USING BTREE,
-INDEX INDEX_COST (cost) USING BTREE,
+INDEX INDEX_UNITPRICE (unit_price) USING BTREE,
+INDEX INDEX_SALENUMBER (sale_number) USING BTREE,
+INDEX INDEX_MERSCORE (mer_score) USING BTREE,
 INDEX INDEX_VIDEOSETCATEID (mer_cate_id) USING BTREE,
+INDEX INDEX_SELLERACCOUNTID (seller_account_id) USING BTREE,
 INDEX INDEX_CREATEDATE (create_date) USING BTREE,
 INDEX INDEX_UPDATEDATE (update_date) USING BTREE,
 INDEX INDEX_STATUS (status) USING BTREE
 )ENGINE = InnoDB AUTO_INCREMENT=1000 DEFAULT CHARSET=utf8 COMMENT='商品表';
 
-#创建视频表 
-CREATE TABLE video_tb(
-video_id int(11) NOT NULL AUTO_INCREMENT COMMENT '视频id',
-name varchar(255) COMMENT '名称',
-img_address varchar(255) COMMENT '封面',
-duration varchar(255) COMMENT '时长',
-size varchar(255) COMMENT '容量，单位MB',
-url varchar(255) COMMENT '链接',
-play_number int(11) DEFAULT 0  COMMENT '播放次数',
-status tinyint(4) DEFAULT 1 COMMENT '状态0下架,默认1上架',
-mer_id int(11) COMMENT '商品id,外键',
-create_date datetime  COMMENT '创建时间',
-update_date datetime  COMMENT '更新时间',
-PRIMARY KEY (video_id),
-INDEX INDEX_VIDEOSETID (mer_id) USING BTREE,
-INDEX INDEX_CREATEDATE (create_date) USING BTREE,
-INDEX INDEX_UPDATEDATE (update_date) USING BTREE,
-INDEX INDEX_STATUS (status) USING BTREE
-)ENGINE = InnoDB AUTO_INCREMENT=1000 DEFAULT CHARSET=utf8 COMMENT='视频表';
+#创建商品关系表 
+CREATE TABLE mer_relation_tb(
+mer_relation_id int(11) NOT NULL AUTO_INCREMENT COMMENT '商品关系id',
+create_date datetime COMMENT '创建时间',
+platform_mer_id int(11) COMMENT '平台商品id',
+seller_mer_id int(11) COMMENT '商家商品id',
+seller_account_id int(11) COMMENT '商家账户id外键',
+PRIMARY KEY (mer_relation_id),
+INDEX INDEX_PLATFORMMERID (platform_mer_id) USING BTREE,
+INDEX INDEX_SELLERMERID (seller_mer_id) USING BTREE,
+INDEX INDEX_SELLERACCOUNTID (seller_account_id) USING BTREE
+)ENGINE = InnoDB AUTO_INCREMENT=1000 DEFAULT CHARSET=utf8 COMMENT='商品关系表';
 
-#创建商品收藏表 
-CREATE TABLE mer_collect_tb(
-mer_collect_id int(11) NOT NULL AUTO_INCREMENT COMMENT '商品收藏id',
-name varchar(255) COMMENT '名称',
-img_address varchar(255) COMMENT '封面',
-duration varchar(255) COMMENT '时长',
-size varchar(255) COMMENT '容量，单位byte',
-account_id int(11) COMMENT '收藏人id外键',
+#创建商品卡密表 
+CREATE TABLE mer_card_cipher_tb(
+mer_card_cipher_id int(11) NOT NULL AUTO_INCREMENT COMMENT '商品卡密id',
+code varchar(255) COMMENT '卡密码',
+img_address varchar(255) COMMENT '图片地址',
 create_date datetime COMMENT '创建时间',
 mer_id int(11) COMMENT '商品id外键',
-PRIMARY KEY (mer_collect_id),
-INDEX INDEX_VIDEOSETID (mer_id) USING BTREE,
-INDEX INDEX_ACCOUNTID (account_id) USING BTREE
-)ENGINE = InnoDB AUTO_INCREMENT=1000 DEFAULT CHARSET=utf8 COMMENT='商品收藏表';
+PRIMARY KEY (mer_card_cipher_id),
+INDEX INDEX_MERID (mer_id) USING BTREE
+)ENGINE = InnoDB AUTO_INCREMENT=1000 DEFAULT CHARSET=utf8 COMMENT='商品卡密表';
 
-#创建视频播放记录表 
-CREATE TABLE video_play_record_tb(
-video_play_record_id int(11) NOT NULL AUTO_INCREMENT COMMENT '视频播放记录id',
-name varchar(255) COMMENT '名称',
-img_address varchar(255) COMMENT '封面',
-duration varchar(255) COMMENT '时长',
-size varchar(255) COMMENT '容量，单位byte',
-account_id int(11) COMMENT '观看者id外键',
+#创建商品公告表 
+CREATE TABLE mer_notice_tb(
+mer_notice_id int(11) NOT NULL AUTO_INCREMENT COMMENT '商品公告id',
+title varchar(255) COMMENT '标题',
+content longtext COMMENT '内容',
 create_date datetime COMMENT '创建时间',
-video_id int(11) COMMENT '视频id外键',
-PRIMARY KEY (video_play_record_id),
-INDEX INDEX_VIDEOID (video_id) USING BTREE,
-INDEX INDEX_ACCOUNTID (account_id) USING BTREE
-)ENGINE = InnoDB AUTO_INCREMENT=1000 DEFAULT CHARSET=utf8 COMMENT='视频播放记录表';
+mer_id int(11) COMMENT '商品id外键',
+PRIMARY KEY (mer_notice_id),
+INDEX INDEX_MERID (mer_id) USING BTREE
+)ENGINE = InnoDB AUTO_INCREMENT=1000 DEFAULT CHARSET=utf8 COMMENT='商品公告表';
 
-#创建视频缓存表 
-CREATE TABLE video_cache_tb(
-video_cache_id int(11) NOT NULL AUTO_INCREMENT COMMENT '视频缓存id',
-name varchar(255) COMMENT '名称',
-img_address varchar(255) COMMENT '封面',
-duration varchar(255) COMMENT '时长',
-size varchar(255) COMMENT '容量，单位byte',
-account_id int(11) COMMENT '播放记录id外键',
+#创建商品图片表 
+CREATE TABLE mer_img_tb(
+mer_img_id int(11) NOT NULL AUTO_INCREMENT COMMENT '商品图片id',
+img_address varchar(255) COMMENT '图片地址',
+number int(11) COMMENT '图片顺序',
+mer_id int(11) COMMENT '商品id外键',
+PRIMARY KEY (mer_img_id)
+)ENGINE = InnoDB AUTO_INCREMENT=1000 DEFAULT CHARSET=utf8 COMMENT='商品图片表';
+
+#创建购物车商品表 
+CREATE TABLE cart_mer_tb(
+cart_mer_id int(11) NOT NULL AUTO_INCREMENT COMMENT '购物车商品id',
+number int(11) COMMENT '数量',
+total_price decimal(11,2) COMMENT '总价',
 create_date datetime COMMENT '创建时间',
-video_id int(11) COMMENT '视频id外键',
-PRIMARY KEY (video_cache_id),
-INDEX INDEX_VIDEOID (video_id) USING BTREE,
-INDEX INDEX_ACCOUNTID (account_id) USING BTREE
-)ENGINE = InnoDB AUTO_INCREMENT=1000 DEFAULT CHARSET=utf8 COMMENT='视频缓存表';
-
-#vip购买次数
-CREATE TABLE vip_number_tb(
-vip_number_id int(11) NOT NULL AUTO_INCREMENT COMMENT 'vip购买次数id',
-number tinyint(4) COMMENT '次数',
-create_date datetime  COMMENT '创建时间',
-update_date datetime  COMMENT '更新时间',
-account_id int(11) COMMENT '购买人id',
-real_master_id int(11) COMMENT '真实上级id',
-status tinyint(4) COMMENT '状态，1待处理，2已处理，3已超次',
-PRIMARY KEY (vip_number_id),
+order_problem_id int(11) COMMENT '商品订单问题id外键',
+mer_id int(11) COMMENT '商品id外键',
+account_id int(11) COMMENT '账户id外键',
+PRIMARY KEY (cart_mer_id),
 INDEX INDEX_NUMBER (number) USING BTREE,
-INDEX INDEX_ACCOUNTID (account_id) USING BTREE,
-INDEX INDEX_REALMASTERID (real_master_id) USING BTREE,
-INDEX INDEX_STATUS (status) USING BTREE,
-INDEX INDEX_CREATEDATE (create_date) USING BTREE,
-INDEX INDEX_UPDATEDATE (update_date) USING BTREE
-)ENGINE = InnoDB AUTO_INCREMENT=1000 DEFAULT CHARSET=utf8 COMMENT='vip购买次数表';
-
+INDEX INDEX_MERID (mer_id) USING BTREE,
+INDEX INDEX_ACCOUNTID (account_id) USING BTREE
+)ENGINE = InnoDB AUTO_INCREMENT=1000 DEFAULT CHARSET=utf8 COMMENT='购物车商品表';
 
 #创建订单表 
 CREATE TABLE order_tb(
 order_id int(11) NOT NULL AUTO_INCREMENT COMMENT '订单id',
 order_number varchar(255) COMMENT '订单号',
-type tinyint(4) DEFAULT 0 COMMENT '类型，1VIP购买，2团购卡团购，3付费课程',
-pay_type tinyint(4) COMMENT '支付类型，1支付宝，2微信,3余额支付,4ios内购',
+type tinyint(4) COMMENT '类型，1购买商品，2账户提现，3退款，4诚信押金',
+pay_type tinyint(4) COMMENT '方式，1支付宝，2微信,3百度钱包,4Paypal,5网银',
 create_date datetime  COMMENT '创建时间',
 update_date datetime  COMMENT '更新时间',
+payment_date datetime  COMMENT '支付日期',
 account_id int(11) COMMENT '下单人',
-status tinyint(4) COMMENT '订单状态，-1待处理删除，0已完成删除,1待处理，2已完成',
+status tinyint(4) COMMENT '订单状态，1冻结单，2待支付，3已支付,4预购商品，5问题单，6已取消，7已删除',
+substatus tinyint(4) COMMENT '子状态，1(1冻结单)，2（1待支付），3（1已支付），4（1等待发货），5（1待解决（买家提问后），2解决中（卖家回复后），3申请退款，4已退款，5已解决），6（1已取消），7（1已删除）',
 PRIMARY KEY (order_id),
-INDEX INDEX_TYPE (type) USING BTREE,
 INDEX INDEX_PAYTYPE (pay_type) USING BTREE,
 INDEX INDEX_ACCOUNTID (account_id) USING BTREE,
 INDEX INDEX_STATUS (status) USING BTREE,
+INDEX INDEX_SUBSTATUS (substatus) USING BTREE,
 INDEX INDEX_CREATEDATE (create_date) USING BTREE,
 INDEX INDEX_UPDATEDATE (update_date) USING BTREE
-)ENGINE = InnoDB AUTO_INCREMENT=1000 DEFAULT CHARSET=utf8 COMMENT='视频订单表';
+)ENGINE = InnoDB AUTO_INCREMENT=1000 DEFAULT CHARSET=utf8 COMMENT='订单表';
 
 #创建订单详情表 
 CREATE TABLE order_detail_tb(
 order_detail_id int(11) NOT NULL AUTO_INCREMENT COMMENT '订单详情id',
 name varchar(255) COMMENT '名称',
-img_address varchar(255) COMMENT '封面',
+img_address varchar(255) COMMENT '商品图片',
+mer_cate_name varchar(255) COMMENT '类型名名称',
+unit_price decimal(11,2) COMMENT '单价',
+number int(11) COMMENT '数量',
 total_price decimal(11,2) COMMENT '总价',
-number decimal(11,2) COMMENT '数量/集数',
+discount decimal(11,2) COMMENT '折扣卷',
 create_date datetime  COMMENT '创建时间',
 update_date datetime  COMMENT '更新时间',
-business_id int(11) COMMENT '业务ID',
+mer_id int(11) COMMENT '商品ID',
 order_id int(11) COMMENT '订单ID',
 PRIMARY KEY (order_detail_id),
 INDEX INDEX_ORDERID (order_id) USING BTREE,
 INDEX INDEX_CREATEDATE (create_date) USING BTREE,
 INDEX INDEX_UPDATEDATE (update_date) USING BTREE
 )ENGINE = InnoDB AUTO_INCREMENT=1000 DEFAULT CHARSET=utf8 COMMENT='订单详情表';
+
+#创建商品订单卡密表 
+CREATE TABLE mer_order_card_cipher_tb(
+mer_order_card_cipher_id int(11) NOT NULL AUTO_INCREMENT COMMENT '商品订单卡密id',
+code varchar(255) COMMENT '卡密码',
+img_address varchar(255) COMMENT '图片地址',
+create_date datetime COMMENT '创建时间',
+order_id int(11) COMMENT '商品id外键',
+PRIMARY KEY (mer_order_card_cipher_id),
+INDEX INDEX_ORDERID (order_id) USING BTREE
+)ENGINE = InnoDB AUTO_INCREMENT=1000 DEFAULT CHARSET=utf8 COMMENT='商品订单卡密表';
+
+#创建商品订单评论表 
+CREATE TABLE mer_order_comment_tb(
+mer_order_comment_id int(11) NOT NULL AUTO_INCREMENT COMMENT '商品订单评论id',
+mer_score decimal(11,2) COMMENT '评分',
+content varchar(255) COMMENT '内容',
+create_date datetime COMMENT '创建时间',
+mer_id int(11) COMMENT '商品id外键',
+order_id int(11) COMMENT '订单id外键',
+account_id int(11) COMMENT '评论人id外键',
+PRIMARY KEY (mer_order_comment_id),
+INDEX INDEX_MERSCORE (mer_score) USING BTREE,
+INDEX INDEX_MERID (mer_id) USING BTREE,
+INDEX INDEX_ORDERID (order_id) USING BTREE,
+INDEX INDEX_ACCOUNTID (account_id) USING BTREE
+)ENGINE = InnoDB AUTO_INCREMENT=1000 DEFAULT CHARSET=utf8 COMMENT='商品订单评论表';
+
+#创建商品订单问题表 
+CREATE TABLE order_problem_tb(
+order_problem_id int(11) NOT NULL AUTO_INCREMENT COMMENT '商品订单问题id',
+reason tinyint(4) COMMENT '原因，0其他，1不能充值，2卡密无效，3提示卡密错误',
+number tinyint(4) COMMENT '顺序，默认1初次，2二次，以此类推',
+content varchar(255) COMMENT '内容',
+create_date datetime COMMENT '创建时间',
+mer_id int(11) COMMENT '商品id外键',
+order_id int(11) COMMENT '订单id外键',
+account_id int(11) COMMENT '提问人id外键',
+PRIMARY KEY (order_problem_id),
+INDEX INDEX_NUMBER (number) USING BTREE,
+INDEX INDEX_MERID (mer_id) USING BTREE,
+INDEX INDEX_ORDERID (order_id) USING BTREE,
+INDEX INDEX_ACCOUNTID (account_id) USING BTREE
+)ENGINE = InnoDB AUTO_INCREMENT=1000 DEFAULT CHARSET=utf8 COMMENT='商品订单问题表';
+
+#创建商品订单问题反馈表 
+CREATE TABLE order_problem_answer_tb(
+order_problem_answer_id int(11) NOT NULL AUTO_INCREMENT COMMENT '商品订单问题反馈id',
+content varchar(255) COMMENT '内容',
+create_date datetime COMMENT '创建时间',
+order_problem_id int(11) COMMENT '商品订单问题id外键',
+account_id int(11) COMMENT '回复人id外键',
+PRIMARY KEY (order_problem_answer_id)
+)ENGINE = InnoDB AUTO_INCREMENT=1000 DEFAULT CHARSET=utf8 COMMENT='商品订单问题反馈表';
 
 #创建文章类型表 
 CREATE TABLE article_cate_tb(
@@ -343,61 +406,59 @@ CREATE TABLE article_tb(
 article_id int(11) NOT NULL AUTO_INCREMENT COMMENT '文章id',
 title varchar(255) COMMENT '标题',
 subtitle varchar(255) COMMENT '子标题',
+resource varchar(255) COMMENT '来源',
 imgAddress varchar(255) COMMENT '封面',
 redirect_url varchar(255)  COMMENT '跳转url',
 content longtext  COMMENT '内容',
-comment_number bigint(20) DEFAULT 0 COMMENT '评论数',
+reading_number bigint(20) DEFAULT 0 COMMENT '阅读数',
 status tinyint(4) COMMENT '状态,下架0，上架1',
 create_date datetime COMMENT '创建时间',
 update_date datetime COMMENT '更新时间',
 article_cate_id int(11) COMMENT '文章类型id外键',
 PRIMARY KEY (article_id),
 INDEX INDEX_ARTICLECATEID (article_cate_id) USING BTREE,
-INDEX INDEX_COMMENTNUMBER (comment_number) USING BTREE,
+INDEX INDEX_READINGNUMBER (reading_number) USING BTREE,
 INDEX INDEX_CREATEDATE (create_date) USING BTREE,
 INDEX INDEX_UPDATEDATE (update_date) USING BTREE,
 INDEX INDEX_STATUS (status) USING BTREE
 )ENGINE = InnoDB AUTO_INCREMENT=1000 DEFAULT CHARSET=utf8 COMMENT='文章表';
 
-#创建文章评论表 
-CREATE TABLE article_comment_tb(
-article_comment_id int(11) NOT NULL AUTO_INCREMENT COMMENT '文章评论id',
-content varchar(255) COMMENT '内容',
-point_number int(11) DEFAULT 0 COMMENT '点赞数',
-create_date datetime COMMENT '创建时间',
-article_id int(11) COMMENT '文章id外键',
-account_id int(11) COMMENT '评论人id外键',
-nickname varchar(255) COMMENT '昵称',
-icon varchar(255) COMMENT '图像',
-PRIMARY KEY (article_comment_id),
-INDEX INDEX_POINTNUMBER (point_number) USING BTREE,
-INDEX INDEX_ARTICLEID (article_id) USING BTREE,
-INDEX INDEX_ACCOUNTID (account_id) USING BTREE
-)ENGINE = InnoDB AUTO_INCREMENT=1000 DEFAULT CHARSET=utf8 COMMENT='文章评论表';
-
 #创建通知表 
 CREATE TABLE notice_tb(
 notice_id int(11) NOT NULL AUTO_INCREMENT COMMENT '通知id',
-type tinyint(4) COMMENT '类型，1系统消息，2商品动态，3问题单反馈，4商品申请自营，5提现申请',
-title varchar(255) COMMENT '标题，比如：系统通知',
+region tinyint(4) COMMENT '范围，1全局，2个人',
+type tinyint(4) COMMENT '类型，1系统消息，2商品动态，3问题单反馈，4商品申请自营，5提现申请，6新增商品类型',
+title varchar(255) COMMENT '标题',
 img_address varchar(255) COMMENT '图片地址',
 content longtext COMMENT '内容',
 status tinyint(4) COMMENT '状态，默认为1审核中，2申请成功，3申请失败',
 create_date datetime COMMENT '创建时间',
 update_date datetime COMMENT '更新时间',
-account_id int(11) COMMENT '通知人id外键',
+account_id int(11) COMMENT '申请人id',
+receive_account_id int(11) COMMENT '接收人id外键',
+business_id int(11) COMMENT '业务id,外键',
 PRIMARY KEY (notice_id),
+INDEX INDEX_REGION (region) USING BTREE,
 INDEX INDEX_TYPE (type) USING BTREE,
-INDEX INDEX_TITLE (title) USING BTREE,
 INDEX INDEX_STATUS (status) USING BTREE,
-INDEX INDEX_ACCOUNTID (account_id) USING BTREE
+INDEX INDEX_RECEIVEACCOUNTID (receive_account_id) USING BTREE,
+INDEX INDEX_ACCOUNTID (account_id) USING BTREE,
+INDEX INDEX_BUSINESSID (business_id) USING BTREE
 )ENGINE = InnoDB AUTO_INCREMENT=1000 DEFAULT CHARSET=utf8 COMMENT='通知表';
 
 #创建收货信息表 
 CREATE TABLE receipt_info_tb(
 receipt_info_id int(11) NOT NULL AUTO_INCREMENT COMMENT '收货信息id',
 name varchar(255) COMMENT '收货地址姓名',
-phone varchar(255) COMMENT '收货地址手机号',
+phone varchar(255) COMMENT '手机号',
+telephone_area varchar(255) COMMENT '电话区号',
+telephone varchar(255) COMMENT '电话号',
+telephone_extension varchar(255) COMMENT '电话分机',
+postcode varchar(255) COMMENT '邮政编码',
+country varchar(255) COMMENT '国家',
+province varchar(255) COMMENT '省',
+city varchar(255) COMMENT '市',
+area varchar(255) COMMENT '区',
 address varchar(255) COMMENT '收货地址',
 is_default tinyint(4) DEFAULT 0 COMMENT '默认为0不是，1是',
 create_date datetime   COMMENT '创建时间',
@@ -410,133 +471,44 @@ INDEX INDEX_CREATEDATE (create_date) USING BTREE,
 INDEX INDEX_UPDATEDATE (update_date) USING BTREE
 )ENGINE = InnoDB AUTO_INCREMENT=1000 DEFAULT CHARSET=utf8 COMMENT='收货地址表 ';
 
-#创建团购信息表 
-CREATE TABLE team_purchase_info_tb(
-team_purchase_info_id int(11) NOT NULL AUTO_INCREMENT COMMENT '团购信息id',
-team_purchase_card_allowance int(11) COMMENT '团购卡余量',
-already_team_purchase int(11) COMMENT '已团购（张）',
-wait_dispose int(11) COMMENT '待处理（张）',
-wait_dispose_price decimal(11,2) COMMENT '待处理总额',
-wait_dispose_update_date datetime   COMMENT '待处理更新时间',
-team_purchase_success int(11) COMMENT '团购成功（张）',
-team_purchase_success_price decimal(11,2) COMMENT '团购成功总额',
-team_purchase_success_update_date datetime  COMMENT '团购成功更新时间',
-already_split int(11) COMMENT '已拆分（张）',
-already_split_price decimal(11,2) COMMENT '已拆分总额',
-already_split_update_date datetime  COMMENT '已拆分更新时间',
-already_recommend int(11) COMMENT '已推荐给上级（张）',
-already_recommend_price decimal(11,2) COMMENT '已推荐给上级总额',
-already_recommend_update_date datetime  COMMENT '已推荐给上级更新时间',
-create_date datetime   COMMENT '创建时间',
-update_date datetime   COMMENT '更新时间',
-account_id int(11) COMMENT '账户id,外键',
-PRIMARY KEY (team_purchase_info_id),
-INDEX INDEX_ACCOUNTID (account_id) USING BTREE,
-INDEX INDEX_CREATEDATE (create_date) USING BTREE,
-INDEX INDEX_UPDATEDATE (update_date) USING BTREE
-)ENGINE = InnoDB AUTO_INCREMENT=1000 DEFAULT CHARSET=utf8 COMMENT='团购信息表 ';
-
-#创建分发表 
-CREATE TABLE distribute_tb(
-distribute_id int(11) NOT NULL AUTO_INCREMENT COMMENT '分发id',
-realname varchar(255) COMMENT '购买人',
-number int(4) COMMENT '数量，默认1张',
-price decimal(11,2) COMMENT '金额',
-distribute_date datetime COMMENT '分发时间',
-create_date datetime COMMENT '创建时间',
-update_date datetime COMMENT '更新时间',
-status tinyint(4)  COMMENT '分发状态，默认1已分发',
-account_id int(11) COMMENT '账户自身id,邀请码',
-buy_account_id int(11) COMMENT '购买者id,外键',
-PRIMARY KEY (distribute_id),
-INDEX INDEX_ACCOUNTID (account_id) USING BTREE,
-INDEX INDEX_BUYACCOUNTID (buy_account_id) USING BTREE,
-INDEX INDEX_DISTRIBUTEDATE (distribute_date) USING BTREE,
-INDEX INDEX_CREATEDATE (create_date) USING BTREE,
-INDEX INDEX_UPDATEDATE (update_date) USING BTREE,
-INDEX INDEX_STATUS (status) USING BTREE
-)ENGINE = InnoDB AUTO_INCREMENT=1000 DEFAULT CHARSET=utf8 COMMENT='分发表';
-
-#创建拆分表 
-CREATE TABLE split_tb(
-split_id int(11) NOT NULL AUTO_INCREMENT COMMENT '拆分id',
-nickname varchar(255) COMMENT '昵称',
-phone varchar(255) COMMENT '会员账号',
-contact_phone varchar(255) COMMENT '联系电话',
-remark varchar(255) COMMENT '备注',
-number int(4) COMMENT '数量',
-price decimal(11,2) COMMENT '金额',
-apply_date datetime COMMENT '申请时间',
-split_date datetime COMMENT '拆分时间',
-create_date datetime COMMENT '创建时间',
-update_date datetime COMMENT '更新时间',
-status tinyint(4)  COMMENT '拆分状态，默认0已申请，1已拆分，2已拒绝，3已退款，4已推荐给上级',
-recommend_account_id int(11) COMMENT '推荐人id',
-account_id int(11) COMMENT '购买者上级id',
-buy_account_id int(11) COMMENT '申请人邀请码，购买者',
-order_id int(11) COMMENT '订单id,外键',
-PRIMARY KEY (split_id),
-INDEX INDEX_ACCOUNTID (account_id) USING BTREE,
-INDEX INDEX_BUYACCOUNTID (buy_account_id) USING BTREE,
-INDEX INDEX_RECOMMENDACCOUNTID (recommend_account_id) USING BTREE,
-INDEX INDEX_APPLYDATE (apply_date) USING BTREE,
-INDEX INDEX_SPLITDATE (split_date) USING BTREE,
-INDEX INDEX_CREATEDATE (create_date) USING BTREE,
-INDEX INDEX_UPDATEDATE (update_date) USING BTREE,
-INDEX INDEX_STATUS (status) USING BTREE
-)ENGINE = InnoDB AUTO_INCREMENT=1000 DEFAULT CHARSET=utf8 COMMENT='拆分表';
-
-#创建app版本表 
-CREATE TABLE app_version_tb(
-app_version_id int(11) NOT NULL AUTO_INCREMENT COMMENT 'app版本id',
-platform tinyint(4)  COMMENT 'app平台，默认0安卓，1为IOS',
-name varchar(255)  COMMENT 'app版本名',
-type tinyint(4) DEFAULT 0 COMMENT 'app类型，默认0普通，1为强制',
-content varchar(255)  COMMENT 'app更新内容',
-link varchar(255)  COMMENT 'app版本链接',
-update_date datetime COMMENT '更新时间',
-status tinyint(4)  COMMENT 'app状态，默认0上线，1为未上线',
-PRIMARY KEY (app_version_id),
-INDEX INDEX_PLATFORM (platform) USING BTREE,
-INDEX INDEX_STATUS (status) USING BTREE
-)ENGINE = InnoDB AUTO_INCREMENT=1000 DEFAULT CHARSET=utf8 COMMENT='app版本表';
-
-#创建勋章项表 
-CREATE TABLE medal_term_tb(
-medal_term_id int(11) NOT NULL AUTO_INCREMENT COMMENT '勋章项id',
+#创建优惠劵项表 
+CREATE TABLE coupon_term_tb(
+coupon_term_id int(11) NOT NULL AUTO_INCREMENT COMMENT '优惠劵项id',
 name varchar(255) COMMENT '名称',
 img_address varchar(255) COMMENT '图片',
+discount decimal(11,2) COMMENT '折扣',
 content varchar(255) COMMENT '内容',
 update_date datetime COMMENT '更新时间',
-PRIMARY KEY (medal_term_id)
-)ENGINE = InnoDB AUTO_INCREMENT=1000 DEFAULT CHARSET=utf8 COMMENT='勋章项表';
+mer_cate_id int(11) COMMENT '商品类型id,外键',
+PRIMARY KEY (coupon_term_id)
+)ENGINE = InnoDB AUTO_INCREMENT=1000 DEFAULT CHARSET=utf8 COMMENT='优惠劵项表';
 
-#创建勋章表 
-CREATE TABLE medal_tb(
-medal_id int(11) NOT NULL AUTO_INCREMENT COMMENT '勋章id',
+#创建优惠劵表 
+CREATE TABLE coupon_tb(
+coupon_id int(11) NOT NULL AUTO_INCREMENT COMMENT '优惠劵id',
+code varchar(255) COMMENT '优惠劵码',
 name varchar(255) COMMENT '名称',
 img_address varchar(255) COMMENT '图片',
+discount decimal(11,2) COMMENT '折扣',
 content varchar(255) COMMENT '内容',
 create_date datetime COMMENT '创建时间',
 update_date datetime COMMENT '更新时间',
-account_id int(11) COMMENT '勋章人ID',
-medal_term_id int(11) COMMENT '勋章项ID',
-PRIMARY KEY (medal_id),
-INDEX INDEX_MEDALTERMID (medal_term_id) USING BTREE,
+start_date datetime COMMENT '开始时间',
+end_date datetime COMMENT '结束时间',
+status tinyint(4)  COMMENT '状态，默认1可用，2已用，3已失效',
+mer_cate_id int(11) COMMENT '商品类型id,次商品类型才能使用',
+account_id int(11) COMMENT '优惠劵人ID，此id账户才能使用',
+coupon_term_id int(11) COMMENT '优惠劵项ID',
+PRIMARY KEY (coupon_id),
+INDEX INDEX_CODE (code) USING BTREE,
+INDEX INDEX_MERCATEID (mer_cate_id) USING BTREE,
+INDEX INDEX_COUPONTERMID (coupon_term_id) USING BTREE,
 INDEX INDEX_ACCOUNTID (account_id) USING BTREE,
+INDEX INDEX_STARTDATE (start_date) USING BTREE,
+INDEX INDEX_ENDDATE (end_date) USING BTREE,
 INDEX INDEX_CREATEDATE (create_date) USING BTREE,
 INDEX INDEX_UPDATEDATE (update_date) USING BTREE
-)ENGINE = InnoDB AUTO_INCREMENT=1000 DEFAULT CHARSET=utf8 COMMENT='勋章表';
-
-#创建意见反馈表 
-CREATE TABLE feedback_tb(
-feedback_id int(11) NOT NULL AUTO_INCREMENT COMMENT '意见反馈id',
-content varchar(255) COMMENT '内容',
-create_date datetime COMMENT '创建时间',
-account_id int(11) COMMENT '提交人账户id外键',
-phone varchar(255) COMMENT '提交人注册手机号',
-PRIMARY KEY (feedback_id)
-)ENGINE = InnoDB AUTO_INCREMENT=1000 DEFAULT CHARSET=utf8 COMMENT='意见反馈表';
+)ENGINE = InnoDB AUTO_INCREMENT=1000 DEFAULT CHARSET=utf8 COMMENT='优惠劵表';
 
 #创建配置表 
 CREATE TABLE config_tb(
@@ -547,7 +519,7 @@ seller_integral_per decimal(11,2) DEFAULT 1  COMMENT '商户每盈利一元钱�
 user_integral_per decimal(11,2) DEFAULT 1  COMMENT '用户每消费一元钱获得积分',
 seller_sincerity_upgrade_money decimal(11,2) DEFAULT 0  COMMENT '商户诚信升级金额',
 freeze_day_number int(11) DEFAULT 0  COMMENT '冻结天数',
-platform_proportion decimal(11,2) DEFAULT 3  COMMENT '平台分成比例，单位%',
+platform_proportion decimal(11,2) DEFAULT 5  COMMENT '平台分成比例，单位%',
 spread_proportion decimal(11,2) DEFAULT 1  COMMENT '推广分成比例，单位%',
 min_withdrawals decimal(11,2) DEFAULT 500  COMMENT '提现最低额度',
 withdrawals_proportion decimal(11,2) DEFAULT 3  COMMENT '提现手续费比例，单位%',
@@ -563,11 +535,11 @@ payment_id int(11) NOT NULL AUTO_INCREMENT COMMENT '支付id',
 subject varchar(255) COMMENT '主题',
 body varchar(255) COMMENT '内容',
 notify_url varchar(255) COMMENT '异步通知',
-type tinyint(4) COMMENT '支付类型，默认1支付宝支付，2微信支付，3银联支付,4ios内购',
+type tinyint(4) COMMENT '支付类型，1支付宝，2微信,3百度钱包,4Paypal,5网银',
 order_number varchar(255) COMMENT '平台订单号',
 money decimal(11,2) COMMENT '金额',
 status tinyint(4) DEFAULT 1 COMMENT '状态，1已下单-未支付，2支付成功，3支付失败,4异常',
-business_type tinyint(4) COMMENT '业务类型，1VIP购买，2团购卡团购，3付费课程',
+business_type tinyint(4) COMMENT '业务类型，1商品购买',
 business_id int(11) COMMENT '业务id,外键',
 business_notify_url longtext COMMENT '业务回调,外键',
 account_id int(11) COMMENT '账户id,外键',
@@ -599,5 +571,5 @@ VALUES ("用户","用户",now());
 INSERT IGNORE INTO account_tb (nickname,phone,email,password,create_date,login_date,role_id,role_name) 
 VALUES ("聂跃","15111336587","278076304@qq.com","11874bb6149dd45428da628c9766b252",now(),now(),"1000","超级管理员"); 
 #财务
-INSERT IGNORE INTO finance_tb (money,recharge,consume,withdrawals,recruiting_commission,recommend_commission,team_purchase_price,split_reward,split_parent_reward,base_profit,create_date,update_date,account_id) 
-VALUES (0,0,0,0,0,0,0,0,0,0,now(),now(),1000);   
+INSERT IGNORE INTO finance_tb (money,recharge,consume,withdrawals,refund,frozen,recommend_commission,base_profit,create_date,update_date,account_id) 
+VALUES (10000,0,0,0,0,0,0,0,now(),now(),1000);   

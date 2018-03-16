@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.nieyue.bean.Order;
 import com.nieyue.bean.OrderDetail;
+import com.nieyue.exception.CommonNotRollbackException;
 import com.nieyue.exception.NotAnymoreException;
 import com.nieyue.exception.NotIsNotExistException;
 import com.nieyue.service.OrderDetailService;
@@ -90,6 +91,7 @@ public class OrderController {
 	/**
 	 * 申请订单 类型，1VIP购买，2团购卡团购，3付费课程
 	 * @return 
+	 * @throws CommonNotRollbackException 
 	 */
 	@ApiOperation(value = "申请订单", notes = "申请订单,返回值都是list里面的map格式,(生产环境，payType=3,mapkey是“order”,其他的返回 “result”，拿着这个result去请求支付。测试环境都是“order”)")
 	@ApiImplicitParams({
@@ -110,7 +112,7 @@ public class OrderController {
 			@RequestParam(value="nickname",required=false)String nickname,
 			@RequestParam(value="phone",required=false)String phone,
 			@RequestParam(value="contactPhone",required=false)String contactPhone,
-			 HttpSession session) {
+			 HttpSession session) throws CommonNotRollbackException {
 		List<Map<Object,Object>> list=new ArrayList<>();
 		if(payType==3){//余额支付
 			boolean b= orderService.balancePaymentOrder(type, payType, accountId, businessId,nickname,phone,contactPhone);

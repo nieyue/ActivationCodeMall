@@ -23,15 +23,25 @@ public class Integral implements Serializable {
 	@ApiModelProperty(value="积分id",example="积分id")
 	private Integer integralId;
 	/**
+	 * 名称
+	 */
+	@ApiModelProperty(value="名称",example="名称")
+	private String name;
+	/**
+	 * 等级
+	 */
+	@ApiModelProperty(value="等级",example="等级")
+	private Integer level;
+	/**
 	 * 剩余积分
 	 */
 	@ApiModelProperty(value="剩余积分",example="剩余积分")
 	private Double integral;
 	/**
-	 * 充值积分
+	 * 升级积分
 	 */
-	@ApiModelProperty(value="充值积分",example="充值积分")
-	private Double recharge;
+	@ApiModelProperty(value="升级积分",example="升级积分")
+	private Double upgradeIntegral;
 	/**
 	 * 消费积分
 	 */
@@ -63,17 +73,29 @@ public class Integral implements Serializable {
 	public void setIntegralId(Integer integralId) {
 		this.integralId = integralId;
 	}
+	public String getName() {
+		return name;
+	}
+	public void setName(String name) {
+		this.name = name;
+	}
+	public Integer getLevel() {
+		return level;
+	}
+	public void setLevel(Integer level) {
+		this.level = level;
+	}
 	public Double getIntegral() {
 		return integral;
 	}
 	public void setIntegral(Double integral) {
 		this.integral = integral;
 	}
-	public Double getRecharge() {
-		return recharge;
+	public Double getUpgradeIntegral() {
+		return upgradeIntegral;
 	}
-	public void setRecharge(Double recharge) {
-		this.recharge = recharge;
+	public void setUpgradeIntegral(Double upgradeIntegral) {
+		this.upgradeIntegral = upgradeIntegral;
 	}
 	public Double getConsume() {
 		return consume;

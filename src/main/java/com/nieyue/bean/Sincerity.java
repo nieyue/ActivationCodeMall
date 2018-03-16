@@ -5,51 +5,44 @@ import java.util.Date;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-
 /**
- * vip
- * @author yy
- *
+ * 诚信
+ * @author 聂跃
  */
-@ApiModel(value="vip",description="vip")
-public class Vip implements Serializable{
+@ApiModel(value="诚信",description="诚信")
+public class Sincerity implements Serializable {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 	/**
-	 * vipid
+	 * 诚信id
 	 */
-	@ApiModelProperty(value="vipid",example="vipid")
-	private Integer vipId;
+	@ApiModelProperty(value="诚信id",example="诚信id")
+	private Integer sincerityId;
 	/**
-	 * 等级名
+	 * 诚信等级
 	 */
-	@ApiModelProperty(value="等级名",example="等级名")
-	private String name;
-	/**
-	 * 等级,默认是0，数字越大，等级越高
-	 */
-	@ApiModelProperty(value="等级,默认是0，数字越大，等级越高",example="等级,默认是0，数字越大，等级越高")
+	@ApiModelProperty(value="诚信等级",example="诚信等级")
 	private Integer level;
 	/**
-	 * 状态，0到期,1没到期
+	 * 已充值金额
 	 */
-	@ApiModelProperty(value="状态，0到期,1没到期",example="状态，0到期,1没到期")
-	private Integer status;
+	@ApiModelProperty(value="已充值金额",example="已充值金额")
+	private Double money;
 	/**
-	 * 到期时间
+	 * 升级金额
 	 */
-	@ApiModelProperty(value="到期时间",example="到期时间")
-	private Date expireDate;
+	@ApiModelProperty(value="升级金额",example="升级金额")
+	private Double upgradeMoney;
 	/**
-	 * vip创建时间
+	 * 创建时间
 	 */
 	@ApiModelProperty(value="创建时间",example="创建时间")
 	private Date createDate;
 	/**
-	 * vip更新时间
+	 * 更新时间
 	 */
 	@ApiModelProperty(value="更新时间",example="更新时间")
 	private Date updateDate;
@@ -58,17 +51,11 @@ public class Vip implements Serializable{
 	 */
 	@ApiModelProperty(value="账户id外键",example="账户id外键")
 	private Integer accountId;
-	public Integer getVipId() {
-		return vipId;
+	public Integer getSincerityId() {
+		return sincerityId;
 	}
-	public void setVipId(Integer vipId) {
-		this.vipId = vipId;
-	}
-	public String getName() {
-		return name;
-	}
-	public void setName(String name) {
-		this.name = name;
+	public void setSincerityId(Integer sincerityId) {
+		this.sincerityId = sincerityId;
 	}
 	public Integer getLevel() {
 		return level;
@@ -76,17 +63,17 @@ public class Vip implements Serializable{
 	public void setLevel(Integer level) {
 		this.level = level;
 	}
-	public Integer getStatus() {
-		return status;
+	public Double getMoney() {
+		return money;
 	}
-	public void setStatus(Integer status) {
-		this.status = status;
+	public void setMoney(Double money) {
+		this.money = money;
 	}
-	public Date getExpireDate() {
-		return expireDate;
+	public Double getUpgradeMoney() {
+		return upgradeMoney;
 	}
-	public void setExpireDate(Date expireDate) {
-		this.expireDate = expireDate;
+	public void setUpgradeMoney(Double upgradeMoney) {
+		this.upgradeMoney = upgradeMoney;
 	}
 	public Date getCreateDate() {
 		return createDate;

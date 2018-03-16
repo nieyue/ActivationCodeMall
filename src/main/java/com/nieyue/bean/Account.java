@@ -23,11 +23,6 @@ public class Account implements Serializable {
 	@ApiModelProperty(value="账户id",example="账户id")
 	private Integer accountId;
 	/**
-	 * 签名
-	 */
-	@ApiModelProperty(value="签名",example="签名")
-	private String sign;
-	/**
 	 * 注册手机号
 	 */
 	@ApiModelProperty(value="注册手机号",example="注册手机号")
@@ -37,11 +32,6 @@ public class Account implements Serializable {
 	 */
 	@ApiModelProperty(value="密码",example="密码")
 	private String password;
-	/**
-	 * 联系手机号，可以任意修改
-	 */
-	@ApiModelProperty(value="联系手机号，可以任意修改",example="联系手机号，可以任意修改")
-	private String contactPhone;
 	/**
 	 * 昵称
 	 */
@@ -58,26 +48,6 @@ public class Account implements Serializable {
 	@ApiModelProperty(value="性别,默认为0未知，为1男性，为2女性",example="性别,默认为0未知，为1男性，为2女性")
 	private Integer sex;
 	/**
-	 * 年龄
-	 */
-	@ApiModelProperty(value="年龄",example="年龄")
-	private Integer age;
-	/**
-	 * 国家
-	 */
-	@ApiModelProperty(value="国家",example="国家")
-	private String country;
-	/**
-	 * 省
-	 */
-	@ApiModelProperty(value="省",example="省")
-	private String province;
-	/**
-	 * 城市
-	 */
-	@ApiModelProperty(value="城市",example="城市")
-	private String city;
-	/**
 	 * 真实姓名
 	 */
 	@ApiModelProperty(value="真实姓名",example="真实姓名")
@@ -88,15 +58,35 @@ public class Account implements Serializable {
 	@ApiModelProperty(value="email",example="email")
 	private String email;
 	/**
+	 * 国家
+	 */
+	@ApiModelProperty(value="国家",example="国家")
+	private String country;
+	/**
+	 * 安全等级，1低，2中，3高
+	 */
+	@ApiModelProperty(value="安全等级，1低，2中，3高",example="安全等级，1低，2中，3高")
+	private Integer safetyGrade;
+	/**
 	 * 认证，0没认证，1审核中，2已认证
 	 */
 	@ApiModelProperty(value="认证，0没认证，1审核中，2已认证",example="认证，0没认证，1审核中，2已认证")
 	private Integer auth;
 	/**
+	 * 卡密接受方式，0全部接收，1本账号内，2邮箱接收，3手机接收
+	 */
+	@ApiModelProperty(value="卡密接受方式，0全部接收，1本账号内，2邮箱接收，3手机接收",example="卡密接受方式，0全部接收，1本账号内，2邮箱接收，3手机接收")
+	private Integer cardSecretReceive;
+	/**
 	 * 身份证
 	 */
 	@ApiModelProperty(value="身份证",example="身份证")
 	private String identityCards;
+	/**
+	 * 手持身份证上半身照
+	 */
+	@ApiModelProperty(value="手持身份证上半身照",example="手持身份证上半身照")
+	private String identityCardsHoldImg;
 	/**
 	 * 身份证正面
 	 */
@@ -107,16 +97,6 @@ public class Account implements Serializable {
 	 */
 	@ApiModelProperty(value="身份证反面",example="身份证反面")
 	private String identityCardsBackImg;
-	/**
-	 * 微信号
-	 */
-	@ApiModelProperty(value="微信号",example="微信号")
-	private String wechat;
-	/**
-	 * 支付宝账号
-	 */
-	@ApiModelProperty(value="支付宝账号",example="支付宝账号")
-	private String alipay;
 	/**
 	 * 创建时间
 	 */
@@ -132,11 +112,6 @@ public class Account implements Serializable {
 	 */
 	@ApiModelProperty(value="状态 0是正常，1是锁定，2是异常",example="状态 0是正常，1是锁定，2是异常")
 	private Integer status;
-	/**
-	 * 直接上级id外键
-	 */
-	@ApiModelProperty(value="直接上级id外键",example="直接上级id外键")
-	private Integer masterId;
 	/**
 	 * 角色id外键
 	 */
@@ -165,12 +140,6 @@ public class Account implements Serializable {
 	public void setPassword(String password) {
 		this.password = password;
 	}
-	public String getContactPhone() {
-		return contactPhone;
-	}
-	public void setContactPhone(String contactPhone) {
-		this.contactPhone = contactPhone;
-	}
 	public String getNickname() {
 		return nickname;
 	}
@@ -189,30 +158,6 @@ public class Account implements Serializable {
 	public void setSex(Integer sex) {
 		this.sex = sex;
 	}
-	public Integer getAge() {
-		return age;
-	}
-	public void setAge(Integer age) {
-		this.age = age;
-	}
-	public String getCountry() {
-		return country;
-	}
-	public void setCountry(String country) {
-		this.country = country;
-	}
-	public String getProvince() {
-		return province;
-	}
-	public void setProvince(String province) {
-		this.province = province;
-	}
-	public String getCity() {
-		return city;
-	}
-	public void setCity(String city) {
-		this.city = city;
-	}
 	public String getRealname() {
 		return realname;
 	}
@@ -225,17 +170,41 @@ public class Account implements Serializable {
 	public void setEmail(String email) {
 		this.email = email;
 	}
+	public String getCountry() {
+		return country;
+	}
+	public void setCountry(String country) {
+		this.country = country;
+	}
+	public Integer getSafetyGrade() {
+		return safetyGrade;
+	}
+	public void setSafetyGrade(Integer safetyGrade) {
+		this.safetyGrade = safetyGrade;
+	}
 	public Integer getAuth() {
 		return auth;
 	}
 	public void setAuth(Integer auth) {
 		this.auth = auth;
 	}
+	public Integer getCardSecretReceive() {
+		return cardSecretReceive;
+	}
+	public void setCardSecretReceive(Integer cardSecretReceive) {
+		this.cardSecretReceive = cardSecretReceive;
+	}
 	public String getIdentityCards() {
 		return identityCards;
 	}
 	public void setIdentityCards(String identityCards) {
 		this.identityCards = identityCards;
+	}
+	public String getIdentityCardsHoldImg() {
+		return identityCardsHoldImg;
+	}
+	public void setIdentityCardsHoldImg(String identityCardsHoldImg) {
+		this.identityCardsHoldImg = identityCardsHoldImg;
 	}
 	public String getIdentityCardsFrontImg() {
 		return identityCardsFrontImg;
@@ -248,18 +217,6 @@ public class Account implements Serializable {
 	}
 	public void setIdentityCardsBackImg(String identityCardsBackImg) {
 		this.identityCardsBackImg = identityCardsBackImg;
-	}
-	public String getWechat() {
-		return wechat;
-	}
-	public void setWechat(String wechat) {
-		this.wechat = wechat;
-	}
-	public String getAlipay() {
-		return alipay;
-	}
-	public void setAlipay(String alipay) {
-		this.alipay = alipay;
 	}
 	public Date getCreateDate() {
 		return createDate;
@@ -293,29 +250,6 @@ public class Account implements Serializable {
 	}
 	public static long getSerialversionuid() {
 		return serialVersionUID;
-	}
-	public String getSign() {
-		return sign;
-	}
-	public void setSign(String sign) {
-		this.sign = sign;
-	}
-	public Integer getMasterId() {
-		return masterId;
-	}
-	public void setMasterId(Integer masterId) {
-		this.masterId = masterId;
-	}
-	@Override
-	public String toString() {
-		return "Account [accountId=" + accountId + ", sign=" + sign + ", phone=" + phone + ", password=" + password
-				+ ", contactPhone=" + contactPhone + ", nickname=" + nickname + ", icon=" + icon + ", sex=" + sex
-				+ ", age=" + age + ", country=" + country + ", province=" + province + ", city=" + city + ", realname="
-				+ realname + ", email=" + email + ", auth=" + auth + ", identityCards=" + identityCards
-				+ ", identityCardsFrontImg=" + identityCardsFrontImg + ", identityCardsBackImg=" + identityCardsBackImg
-				+ ", wechat=" + wechat + ", alipay=" + alipay + ", createDate=" + createDate + ", loginDate="
-				+ loginDate + ", status=" + status + ", masterId=" + masterId + ", roleId=" + roleId + ", roleName="
-				+ roleName + "]";
 	}
 	
 	

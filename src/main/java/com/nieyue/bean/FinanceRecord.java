@@ -23,14 +23,14 @@ public class FinanceRecord implements Serializable {
 	@ApiModelProperty(value="财务记录id",example="财务记录id")
 	private Integer financeRecordId;
 	/**
-	 * 方式，1支付宝，2微信,3余额支付,4ios内购
+	 * 方式，1支付宝，2微信,3百度钱包,4Paypal,5网银
 	 */
-	@ApiModelProperty(value="方式，1支付宝，2微信,3余额支付,4ios内购",example="方式，1支付宝，2微信,3余额支付,4ios内购")
+	@ApiModelProperty(value="方式，1支付宝，2微信,3百度钱包,4Paypal,5网银",example="方式，1支付宝，2微信,3百度钱包,4Paypal,5网银")
 	private Integer method;
 	/**
-	 * 类型，1账户充值，2账户提现,3招收学员佣金,4推荐佣金,5团购账单,6拆分账单
+	 * 类型，1购买商品，2账户提现，3退款，4诚信押金
 	 */
-	@ApiModelProperty(value="类型，1账户充值，2账户提现,3招收学员佣金,4推荐佣金,5团购账单,6拆分账单,7二级团购奖励,8vip购买,9分发奖励，10二级购买vip奖励,11付费课程购买")
+	@ApiModelProperty(value="类型，1购买商品，2账户提现，3退款，4诚信押金",example="类型，1购买商品，2账户提现，3退款，4诚信押金")
 	private Integer type;
 	/**
 	 * 交易单号
@@ -38,10 +38,20 @@ public class FinanceRecord implements Serializable {
 	@ApiModelProperty(value="交易单号",example="交易单号")
 	private String transactionNumber;
 	/**
+	 * 手续费
+	 */
+	@ApiModelProperty(value="手续费",example="手续费")
+	private Double brokerage;
+	/**
 	 * 金额
 	 */
 	@ApiModelProperty(value="金额",example="金额")
 	private Double money;
+	/**
+	 * 实际金额
+	 */
+	@ApiModelProperty(value="实际金额",example="实际金额")
+	private Double realMoney;
 	/**
 	 * 状态，默认1待处理，2成功，3已拒绝
 	 */
@@ -62,6 +72,11 @@ public class FinanceRecord implements Serializable {
 	 */
 	@ApiModelProperty(value="账户id外键",example="账户id外键")
 	private Integer accountId;
+	/**
+	 * 真实姓名
+	 */
+	@ApiModelProperty(value="真实姓名",example="真实姓名")
+	private String realname;
 	public Integer getFinanceRecordId() {
 		return financeRecordId;
 	}
@@ -86,11 +101,29 @@ public class FinanceRecord implements Serializable {
 	public void setTransactionNumber(String transactionNumber) {
 		this.transactionNumber = transactionNumber;
 	}
+	public Double getBrokerage() {
+		return brokerage;
+	}
+	public void setBrokerage(Double brokerage) {
+		this.brokerage = brokerage;
+	}
 	public Double getMoney() {
 		return money;
 	}
 	public void setMoney(Double money) {
 		this.money = money;
+	}
+	public Double getRealMoney() {
+		return realMoney;
+	}
+	public void setRealMoney(Double realMoney) {
+		this.realMoney = realMoney;
+	}
+	public Integer getStatus() {
+		return status;
+	}
+	public void setStatus(Integer status) {
+		this.status = status;
 	}
 	public Date getCreateDate() {
 		return createDate;
@@ -110,14 +143,14 @@ public class FinanceRecord implements Serializable {
 	public void setAccountId(Integer accountId) {
 		this.accountId = accountId;
 	}
+	public String getRealname() {
+		return realname;
+	}
+	public void setRealname(String realname) {
+		this.realname = realname;
+	}
 	public static long getSerialversionuid() {
 		return serialVersionUID;
 	}
-	public Integer getStatus() {
-		return status;
-	}
-	public void setStatus(Integer status) {
-		this.status = status;
-	}
-	
+
 }

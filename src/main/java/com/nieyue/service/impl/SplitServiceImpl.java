@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.nieyue.bean.Account;
 import com.nieyue.bean.AccountLevel;
 import com.nieyue.bean.AccountParent;
 import com.nieyue.bean.Finance;
@@ -23,9 +22,9 @@ import com.nieyue.bean.VipNumber;
 import com.nieyue.business.AccountLevelBusiness;
 import com.nieyue.business.FinanceBusiness;
 import com.nieyue.dao.SplitDao;
+import com.nieyue.exception.CommonNotRollbackException;
 import com.nieyue.exception.PayException;
 import com.nieyue.service.AccountParentService;
-import com.nieyue.service.AccountService;
 import com.nieyue.service.FinanceRecordService;
 import com.nieyue.service.FinanceService;
 import com.nieyue.service.OrderService;
@@ -34,6 +33,7 @@ import com.nieyue.service.TeamPurchaseInfoService;
 import com.nieyue.service.VipGrowthRecordService;
 import com.nieyue.service.VipNumberService;
 import com.nieyue.service.VipService;
+import com.nieyue.util.Arith;
 import com.nieyue.util.DateUtil;
 @Service
 public class SplitServiceImpl implements SplitService{
@@ -194,7 +194,7 @@ public class SplitServiceImpl implements SplitService{
 			TeamPurchaseInfo tpi = tpil.get(0);
 			tpi.setUpdateDate(new Date());//更新时间
 			tpi.setAlreadyRecommend(tpi.getAlreadyRecommend()+split.getNumber());//已推荐给上级张数
-			tpi.setAlreadyRecommendPrice(tpi.getAlreadyRecommendPrice()+split.getPrice());//已推荐个上级总额
+			tpi.setAlreadyRecommendPrice(Arith.add(tpi.getAlreadyRecommendPrice(),split.getPrice()));//已推荐个上级总额
 			tpi.setAlreadyRecommendUpdateDate(new Date());//已推荐给上级更新时间
 			b=teamPurchaseInfoService.updateTeamPurchaseInfo(tpi);
 			if(!b){
@@ -211,7 +211,7 @@ public class SplitServiceImpl implements SplitService{
 		return b;
 	}
 	@Override
-	public boolean immediatelySplit(Integer splitId, Integer accountId) {
+	public boolean immediatelySplit(Integer splitId, Integer accountId) throws CommonNotRollbackException {
 		boolean b=false;
 		//获取拆分表
 		Split split =splitDao.loadSplit(splitId);
@@ -243,7 +243,8 @@ public class SplitServiceImpl implements SplitService{
 							}
 							vipNumberService.updateVipNumber(vn);
 						}
-						return false;//让部分执行
+						throw new CommonNotRollbackException("团购卡不足");
+						//return false;//让部分执行
 					}
 		//获取订单
 		Order order = orderService.loadOrder(split.getOrderId());
@@ -295,10 +296,10 @@ public class SplitServiceImpl implements SplitService{
 			tpi.setUpdateDate(new Date());//更新时间
 			tpi.setTeamPurchaseCardAllowance(tpi.getTeamPurchaseCardAllowance()+accountLevel.getNumber());//团购卡余量增加
 			tpi.setWaitDispose(tpi.getWaitDispose()-accountLevel.getNumber());//待处理（张）
-			tpi.setWaitDisposePrice(tpi.getWaitDisposePrice()-accountLevel.getTeamPurchasePrice());//待处理总额
+			tpi.setWaitDisposePrice(Arith.sub(tpi.getWaitDisposePrice(),accountLevel.getTeamPurchasePrice()));//待处理总额
 			tpi.setWaitDisposeUpdateDate(new Date());//待处理更新时间
 			tpi.setTeamPurchaseSuccess(tpi.getTeamPurchaseSuccess()+accountLevel.getNumber());//团购成功张数
-			tpi.setTeamPurchaseSuccessPrice(tpi.getTeamPurchaseSuccessPrice()+accountLevel.getTeamPurchasePrice());//团购成功总额
+			tpi.setTeamPurchaseSuccessPrice(Arith.add(tpi.getTeamPurchaseSuccessPrice(),accountLevel.getTeamPurchasePrice()));//团购成功总额
 			tpi.setTeamPurchaseSuccessUpdateDate(new Date());
 			b=teamPurchaseInfoService.updateTeamPurchaseInfo(tpi);
 	/**
@@ -310,8 +311,8 @@ public class SplitServiceImpl implements SplitService{
 		Finance xf = xfl.get(0);
 		//推荐人推荐佣金
 		Double recommendCommission = accountLevel.getRecommendCommission();
-		xf.setMoney(xf.getMoney()+recommendCommission);//余额
-		xf.setRecommendCommission(xf.getRecommendCommission()+recommendCommission);//推荐佣金
+		xf.setMoney(Arith.add(xf.getMoney(),recommendCommission));//余额
+		xf.setRecommendCommission(Arith.add(xf.getRecommendCommission(),recommendCommission));//推荐佣金
 		b=financeService.updateFinance(xf);
 		if(!b){
 			throw new PayException();
@@ -339,8 +340,8 @@ public class SplitServiceImpl implements SplitService{
 	Finance sf = sfl.get(0);
 	//拆分人拆分金额
 	Double splitReward = accountLevel.getSplitReward();
-	sf.setMoney(sf.getMoney()+splitReward);//余额
-	sf.setSplitReward(sf.getSplitReward()+splitReward);//拆分金额
+	sf.setMoney(Arith.add(sf.getMoney(),splitReward));//余额
+	sf.setSplitReward(Arith.add(sf.getSplitReward(),splitReward));//拆分金额
 	b=financeService.updateFinance(sf);
 	if(!b){
 		throw new PayException();
@@ -362,7 +363,7 @@ public class SplitServiceImpl implements SplitService{
 	stpi.setUpdateDate(new Date());//更新时间
 	stpi.setTeamPurchaseCardAllowance(stpi.getTeamPurchaseCardAllowance()-accountLevel.getNumber());//团购卡余量减少
 	stpi.setAlreadySplit(stpi.getAlreadySplit()+accountLevel.getNumber());//拆分张数
-	stpi.setAlreadySplitPrice(stpi.getAlreadySplitPrice()+accountLevel.getTeamPurchasePrice());//已拆分总额
+	stpi.setAlreadySplitPrice(Arith.add(stpi.getAlreadySplitPrice(),accountLevel.getTeamPurchasePrice()));//已拆分总额
 	stpi.setAlreadySplitUpdateDate(new Date());//已拆分更新时间
 	b=teamPurchaseInfoService.updateTeamPurchaseInfo(stpi);
 	if(!b){
@@ -381,8 +382,8 @@ public class SplitServiceImpl implements SplitService{
 	Finance ssf = ssfl.get(0);
 	//拆分人上级的拆分上级金额
 	Double splitParentReward = accountLevel.getSplitParentReward();
-	ssf.setMoney(ssf.getMoney()+splitParentReward);//余额
-	sf.setSplitParentReward(sf.getSplitParentReward()+splitParentReward);//拆分上级金额
+	ssf.setMoney(Arith.add(ssf.getMoney(),splitParentReward));//余额
+	sf.setSplitParentReward(Arith.add(sf.getSplitParentReward(),splitParentReward));//拆分上级金额
 	b=financeService.updateFinance(sf);
 	if(!b){
 		throw new PayException();

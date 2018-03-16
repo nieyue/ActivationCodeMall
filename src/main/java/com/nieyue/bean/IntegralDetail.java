@@ -22,9 +22,9 @@ public class IntegralDetail implements Serializable {
 	@ApiModelProperty(value="积分详情id",example="积分详情id")
 	private Integer integralDetailId;
 	/**
-	 * 类型,0失去，1获得
+	 * 类型,1增长积分
 	 */
-	@ApiModelProperty(value="类型,0失去，1获得",example="类型,0失去，1获得")
+	@ApiModelProperty(value="类型,1增长积分",example="类型,1增长积分")
 	private Integer type;
 	/**
 	 * 积分
@@ -46,6 +46,7 @@ public class IntegralDetail implements Serializable {
 	 */
 	@ApiModelProperty(value="账户id外键",example="账户id外键")
 	private Integer accountId;
+	
 	public Integer getIntegralDetailId() {
 		return integralDetailId;
 	}

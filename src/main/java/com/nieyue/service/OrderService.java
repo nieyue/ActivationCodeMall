@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.List;
 
 import com.nieyue.bean.Order;
+import com.nieyue.exception.CommonNotRollbackException;
 
 /**
  * 订单逻辑层接口
@@ -19,7 +20,8 @@ public interface OrderService {
 	public boolean updateOrder(Order order);
 	/** 装载订单 */	
 	public Order loadOrder(Integer orderId);
-	/** 余额支付订单请求 */	
+	/** 余额支付订单请求 
+	 * @throws CommonNotRollbackException */	
 	public boolean balancePaymentOrder(
 			Integer type,
 			Integer payType,
@@ -28,8 +30,9 @@ public interface OrderService {
 			String nickname,
 			String phone,
 			String contactPhone
-			);
-	/** 第三方支付订单请求 */	
+			) throws CommonNotRollbackException;
+	/** 第三方支付订单请求 
+	 * @throws CommonNotRollbackException */	
 	public String thirdPartyPaymentOrder(
 			Integer type,
 			Integer payType,
@@ -38,7 +41,7 @@ public interface OrderService {
 			String nickname,
 			String phone,
 			String contactPhone
-			);
+			) throws CommonNotRollbackException;
 	/** 订单总共数目 */	
 	public int countAll(
 			Integer type,

@@ -23,6 +23,9 @@ import com.nieyue.bean.TeamPurchaseInfo;
 import com.nieyue.bean.Vip;
 import com.nieyue.bean.VipGrowthRecord;
 import com.nieyue.bean.VipNumber;
+import com.nieyue.exception.CommonNotRollbackException;
+import com.nieyue.exception.CommonRollbackException;
+import com.nieyue.exception.FinanceMoneyNotEnoughException;
 import com.nieyue.service.AccountLevelService;
 import com.nieyue.service.AccountParentService;
 import com.nieyue.service.AccountService;
@@ -37,6 +40,7 @@ import com.nieyue.service.VideoSetService;
 import com.nieyue.service.VipGrowthRecordService;
 import com.nieyue.service.VipNumberService;
 import com.nieyue.service.VipService;
+import com.nieyue.util.Arith;
 import com.nieyue.util.DateUtil;
 
 /**
@@ -93,6 +97,7 @@ public class FinanceBusiness {
 	 * @param contactPhone 联系手机
 	 * @param money 金额
 	 * @return -1不成功 ，0脱离事物，部分执行，1.成功
+	 * @throws CommonNotRollbackException 
 	 */
 	public int financeExcute(
 			Integer type,
@@ -103,12 +108,13 @@ public class FinanceBusiness {
 			String nickname,
 			String phone,
 			String contactPhone
-			){
+			) throws CommonNotRollbackException{
 		boolean b=true;//默认true
 		//获取订单详情
 		OrderDetail orderDetail = paymentBusiness.getPaymentType(type, payType, accountId, businessId);
 		if(orderDetail==null){
-			return -1;
+			//return -1;
+			throw new CommonRollbackException("获取订单详情失败");
 		}
 			/**
 			 * vip购买
@@ -134,11 +140,12 @@ public class FinanceBusiness {
 				if(payType==3){
 					//如果价格小于0 或者 余额小于订单价格，返回失败
 					if(money<=0 || (f.getMoney()<money)){
-						return -1;
+						//return -1;
+						throw new FinanceMoneyNotEnoughException();//余额不足
 					}
 					//自身财务
-					f.setMoney(f.getMoney()-money);//余额=原来的-花掉的
-					f.setConsume(f.getConsume()+money);//消费余额
+					f.setMoney(Arith.sub(f.getMoney(), money));//余额=原来的-花掉的
+					f.setConsume(Arith.add(f.getConsume(),money));//消费余额
 					b=financeService.updateFinance(f);
 				}
 				if(b){
@@ -168,6 +175,7 @@ public class FinanceBusiness {
 	 * @param accountId 账户id
 	 * @param money 金额
 	 * @return -1不成功 ，0脱离事物，部分执行，1.成功
+	 * @throws CommonNotRollbackException 
 	 */
 	public int financeExcuteVIP(
 			Integer type,
@@ -175,7 +183,7 @@ public class FinanceBusiness {
 			Integer accountId,
 			String orderNumber,
 			OrderDetail orderDetail
-			){
+			) throws CommonNotRollbackException{
 		Double money=orderDetail.getTotalPrice();
 		boolean b=true;//默认true
 		//获取当前人的财务信息
@@ -205,7 +213,8 @@ public class FinanceBusiness {
 							VipNumber vn = vnl.get(0);
 							//相同一天，不能执行
 							if(DateUtil.isSameDate(vn.getUpdateDate(), new Date())){
-								return -1;
+								throw new CommonRollbackException("升级vip一天一次");
+								//return -1;
 							}
 							vn.setNumber(vn.getNumber()+1);
 							if(vn.getNumber()>=3){
@@ -213,7 +222,8 @@ public class FinanceBusiness {
 							}
 							vipNumberService.updateVipNumber(vn);
 						}
-						return 0;//让部分执行
+						//return 0;//让部分执行
+						throw new CommonNotRollbackException("上级团购卡不足");
 					}
 				//升级人的等级	
 				AccountLevel al = accountLevelService.loadAccountLevel(ap.getAccountLevelId());
@@ -232,11 +242,12 @@ public class FinanceBusiness {
 					if(payType==3){
 						//如果价格小于0 或者 余额小于订单价格，返回失败
 						if(money<=0 || (f.getMoney()<money)){
-							return -1;
+							//return -1;
+							throw new FinanceMoneyNotEnoughException();//余额不足
 						}
 						//自身财务
-						f.setMoney(f.getMoney()-money);//余额=原来的-花掉的
-						f.setConsume(f.getConsume()+money);//消费余额
+						f.setMoney(Arith.sub(f.getMoney(),money));//余额=原来的-花掉的
+						f.setConsume(Arith.add(f.getConsume(),money));//消费余额
 						b=financeService.updateFinance(f);
 					}
 					if(b){
@@ -259,8 +270,8 @@ public class FinanceBusiness {
 					//上级财务
 					List<Finance> sfinancel= financeService.browsePagingFinance(null, aprmid, 1, 1, "finance_id", "asc");
 					Finance sfinance = sfinancel.get(0);
-					sfinance.setMoney(sfinance.getMoney()+splitReward);//余额
-					sfinance.setSplitReward(sfinance.getSplitReward()+splitReward);//拆分奖励
+					sfinance.setMoney(Arith.add(sfinance.getMoney(),splitReward));//余额
+					sfinance.setSplitReward(Arith.add(sfinance.getSplitReward(),splitReward));//拆分奖励
 					b=financeService.updateFinance(sfinance);
 					if(!b){
 						return -1;
@@ -289,8 +300,8 @@ public class FinanceBusiness {
 					//上上级财务
 					List<Finance> ssfinancel= financeService.browsePagingFinance(null, saprmid, 1, 1, "finance_id", "asc");
 					Finance ssfinance = ssfinancel.get(0);
-					ssfinance.setMoney(ssfinance.getMoney()+splitParentReward);//余额
-					ssfinance.setSplitParentReward(ssfinance.getSplitParentReward()+splitParentReward);//拆分上级奖励
+					ssfinance.setMoney(Arith.add(ssfinance.getMoney(),splitParentReward));//余额
+					ssfinance.setSplitParentReward(Arith.add(ssfinance.getSplitParentReward(),splitParentReward));//拆分上级奖励
 					b=financeService.updateFinance(ssfinance);
 					if(!b){
 						return -1;
@@ -411,19 +422,22 @@ public class FinanceBusiness {
 			OrderDetail orderDetail
 			){
 		if(nickname==null||phone==null||contactPhone==null){
-			return -1;//必传参数
+			throw new CommonRollbackException("填写信息不完整");
+			//return -1;//必传参数
 		}
 		//如果有升级订单还没完成
 		List<Order> oool = orderService.browsePagingOrder(type, payType, accountId, 1, null, null, 1, 1, "order_id", "asc");
 		if(oool.size()>0){
-			return -1;
+			throw new CommonRollbackException("上个订单未完成");
+			//return -1;
 		}
 		Double money=orderDetail.getTotalPrice();
 		boolean b=true;//默认true
 		//该业务id是否包含在可选中
 		b = accountLevelBusiness.isContain(accountId, businessId);
 		if(!b){
-			return -1;
+			throw new CommonRollbackException("没有权限升级该业务");
+			//return -1;
 		}
 		//获取当前业务账户等级
 		AccountLevel currentAccountLevel = accountLevelBusiness.getAccountLevel(businessId);
@@ -445,12 +459,13 @@ public class FinanceBusiness {
 					if(payType==3){
 						//如果价格小于0 或者 余额小于订单价格，返回失败
 						if(money<=0 || (f.getMoney()<money)){
-							return -1;
+							//return -1;
+							throw new FinanceMoneyNotEnoughException();//余额不足
 						}
 						//自身财务
-						f.setMoney(f.getMoney()-money);//余额=原来的-花掉的
-						f.setConsume(f.getConsume()+money);//消费余额
-						f.setTeamPurchasePrice(f.getTeamPurchasePrice()+money);//团购账单
+						f.setMoney(Arith.sub(f.getMoney(),money));//余额=原来的-花掉的
+						f.setConsume(Arith.add(f.getConsume(),money));//消费余额
+						f.setTeamPurchasePrice(Arith.add(f.getTeamPurchasePrice(),money));//团购账单
 						b=financeService.updateFinance(f);
 					}
 					if(b){
@@ -507,7 +522,7 @@ public class FinanceBusiness {
 					tpi.setAlreadyTeamPurchase(tpi.getAlreadyTeamPurchase()+currentAccountLevel.getNumber());//已团购（张）
 					tpi.setUpdateDate(new Date());//更新时间
 					tpi.setWaitDispose(tpi.getWaitDispose()+currentAccountLevel.getNumber());//待处理（张）
-					tpi.setWaitDisposePrice(tpi.getWaitDisposePrice()+currentAccountLevel.getTeamPurchasePrice());//待处理总额
+					tpi.setWaitDisposePrice(Arith.add(tpi.getWaitDisposePrice(),currentAccountLevel.getTeamPurchasePrice()));//待处理总额
 					tpi.setWaitDisposeUpdateDate(new Date());//待处理更新时间
 					b=teamPurchaseInfoService.updateTeamPurchaseInfo(tpi);
 					//团购通知  （当前申请人收到）
@@ -529,6 +544,7 @@ public class FinanceBusiness {
 	 * @param phone 会员账号 手机号
 	 * @param contactPhone 联系手机
 	 * return false 不满足， true满足
+	 * @throws CommonNotRollbackException 
 	 */
 	public boolean canThirdPay(
 			Integer type,
@@ -538,13 +554,14 @@ public class FinanceBusiness {
 			String nickname,
 			String phone,
 			String contactPhone
-			){
+			) throws CommonNotRollbackException{
 		boolean b=true;
 		//获取订单详情
 		OrderDetail orderDetail = paymentBusiness.getPaymentType(type, payType, accountId, businessId);
 		if(orderDetail==null){
 			b=false;
-			return b;
+			throw new CommonRollbackException("获取订单详情失败");
+			//return b;
 		}
 		if(type==1){
 		//账户上级表
@@ -580,22 +597,29 @@ public class FinanceBusiness {
 							}
 							vipNumberService.updateVipNumber(vn);
 						}
-						return false;//让部分执行
+						throw new CommonNotRollbackException("上级团购卡不足");
+						//return false;//让部分执行
 					}	
 		}else if(type==2){
 			if(nickname==null||phone==null||contactPhone==null){
 				b=false;
-				return b;//必传参数
+				//return b;//必传参数
+				throw new CommonRollbackException("填写信息不完整");
 			}
 			//如果有升级订单还没完成
 			List<Order> oool = orderService.browsePagingOrder(type, payType, accountId, 1, null, null, 1, 1, "order_id", "asc");
 			if(oool.size()>0){
 				b=false;
-				return b;
+				//return b;
+				throw new CommonRollbackException("上个订单未完成");
 			}
 			//该业务id是否包含在可选中
 			b = accountLevelBusiness.isContain(accountId, businessId);
-				return b;
+			if(!b){
+				throw new CommonRollbackException("没有权限升级该业务");
+				//return -1;
+			}
+			return  b;
 		}
 		return b;
 	}
@@ -616,8 +640,8 @@ public class FinanceBusiness {
 			List<Finance> fl = financeService.browsePagingFinance(null, payment.getAccountId(), 1, 1, "finance_id", "asc");
 			if(fl.size()==1){
 				Finance f = fl.get(0);
-				f.setMoney(f.getMoney()+payment.getMoney());
-				f.setRecharge(f.getRecharge()+payment.getMoney());
+				f.setMoney(Arith.add(f.getMoney(),payment.getMoney()));
+				f.setRecharge(Arith.add(f.getRecharge(),payment.getMoney()));
 				b= financeService.updateFinance(f);
 				return b;
 			}

@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.List;
 
 import com.nieyue.bean.Split;
+import com.nieyue.exception.CommonNotRollbackException;
 
 /**
  * 拆分逻辑层接口
@@ -21,8 +22,9 @@ public interface SplitService {
 	public Split loadSplit(Integer splitId);	
 	/** 推荐给上级 */	
 	public boolean recommendParent(Integer splitId,Integer accountId);	
-	/** 立即拆分 */	
-	public boolean immediatelySplit(Integer splitId,Integer accountId);	
+	/** 立即拆分 
+	 * @throws CommonNotRollbackException */	
+	public boolean immediatelySplit(Integer splitId,Integer accountId) throws CommonNotRollbackException;	
 	/** 拆分总共数目 */	
 	public int countAll(
 			Integer recommendAccountId,

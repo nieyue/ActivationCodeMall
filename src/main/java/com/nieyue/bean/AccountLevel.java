@@ -40,45 +40,15 @@ public class AccountLevel implements Serializable{
 	@ApiModelProperty(value="等级图片",example="等级图片")
 	private String imgAddress;
 	/**
-	 * 团购金额
+	 * 商户升级积分
 	 */
-	@ApiModelProperty(value="团购金额",example="团购金额")
-	private Double teamPurchasePrice;
+	@ApiModelProperty(value="商户升级积分",example="商户升级积分")
+	private Double sellerUpgradeIntegral;
 	/**
-	 * 推荐佣金,默认是0表示不是推荐，无佣金
+	 * 用户升级积分
 	 */
-	@ApiModelProperty(value="推荐佣金,默认是0表示不是推荐，无佣金",example="推荐佣金,默认是0表示不是推荐，无佣金")
-	private Double recommendCommission;
-	/**
-	 * 拆分奖励
-	 */
-	@ApiModelProperty(value="拆分奖励",example="拆分奖励")
-	private Double splitReward;
-	/**
-	 * 拆分上级奖励
-	 */
-	@ApiModelProperty(value="拆分上级奖励",example="拆分上级奖励")
-	private Double splitParentReward;
-	/**
-	 * 拆分平台奖励
-	 */
-	@ApiModelProperty(value="拆分平台奖励",example="拆分平台奖励")
-	private Double splitPlatformReward;
-	/**
-	 * VIP名额，默认为0表示普通vip
-	 */
-	@ApiModelProperty(value="VIP名额，默认为0表示普通vip",example="VIP名额，默认为0表示普通vip")
-	private Integer number;
-	/**
-	 * 优惠价格
-	 */
-	@ApiModelProperty(value="优惠价格",example="优惠价格")
-	private Double discountPrice;
-	/**
-	 * 总价值
-	 */
-	@ApiModelProperty(value="总价值",example="总价值")
-	private Double totalPrice;
+	@ApiModelProperty(value="用户升级积分",example="用户升级积分")
+	private Double userUpgradeIntegral;
 	/**
 	 * 备注（权益）
 	 */
@@ -113,53 +83,17 @@ public class AccountLevel implements Serializable{
 	public void setImgAddress(String imgAddress) {
 		this.imgAddress = imgAddress;
 	}
-	public Double getTeamPurchasePrice() {
-		return teamPurchasePrice;
+	public Double getSellerUpgradeIntegral() {
+		return sellerUpgradeIntegral;
 	}
-	public void setTeamPurchasePrice(Double teamPurchasePrice) {
-		this.teamPurchasePrice = teamPurchasePrice;
+	public void setSellerUpgradeIntegral(Double sellerUpgradeIntegral) {
+		this.sellerUpgradeIntegral = sellerUpgradeIntegral;
 	}
-	public Double getRecommendCommission() {
-		return recommendCommission;
+	public Double getUserUpgradeIntegral() {
+		return userUpgradeIntegral;
 	}
-	public void setRecommendCommission(Double recommendCommission) {
-		this.recommendCommission = recommendCommission;
-	}
-	public Double getSplitReward() {
-		return splitReward;
-	}
-	public void setSplitReward(Double splitReward) {
-		this.splitReward = splitReward;
-	}
-	public Double getSplitParentReward() {
-		return splitParentReward;
-	}
-	public void setSplitParentReward(Double splitParentReward) {
-		this.splitParentReward = splitParentReward;
-	}
-	public Double getSplitPlatformReward() {
-		return splitPlatformReward;
-	}
-	public void setSplitPlatformReward(Double splitPlatformReward) {
-		this.splitPlatformReward = splitPlatformReward;
-	}
-	public Integer getNumber() {
-		return number;
-	}
-	public void setNumber(Integer number) {
-		this.number = number;
-	}
-	public Double getDiscountPrice() {
-		return discountPrice;
-	}
-	public void setDiscountPrice(Double discountPrice) {
-		this.discountPrice = discountPrice;
-	}
-	public Double getTotalPrice() {
-		return totalPrice;
-	}
-	public void setTotalPrice(Double totalPrice) {
-		this.totalPrice = totalPrice;
+	public void setUserUpgradeIntegral(Double userUpgradeIntegral) {
+		this.userUpgradeIntegral = userUpgradeIntegral;
 	}
 	public String getMark() {
 		return mark;
@@ -176,7 +110,5 @@ public class AccountLevel implements Serializable{
 	public static long getSerialversionuid() {
 		return serialVersionUID;
 	}
-
-
 	
 }

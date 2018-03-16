@@ -1,6 +1,7 @@
 package com.nieyue.controller;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -14,11 +15,16 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.nieyue.bean.Account;
 import com.nieyue.bean.ArticleComment;
+import com.nieyue.exception.CommonNotRollbackException;
 import com.nieyue.exception.NotAnymoreException;
 import com.nieyue.exception.NotIsNotExistException;
+import com.nieyue.service.AccountService;
 import com.nieyue.service.ArticleCommentService;
+import com.nieyue.util.DateUtil;
 import com.nieyue.util.ResultUtil;
+import com.nieyue.util.SingletonHashMap;
 import com.nieyue.util.StateResult;
 import com.nieyue.util.StateResultList;
 
@@ -40,6 +46,8 @@ import net.sf.json.JSONObject;
 public class ArticleCommentController {
 	@Resource
 	private ArticleCommentService articleCommentService;
+	@Resource
+	private AccountService accountService;
 	
 	/**
 	 * 文章评论分页浏览
@@ -69,6 +77,10 @@ public class ArticleCommentController {
 			List<ArticleComment> list = new ArrayList<ArticleComment>();
 			list= articleCommentService.browsePagingArticleComment(pointNumber,articleId,accountId,pageNum, pageSize, orderName, orderWay);
 			if(list.size()>0){
+				list.forEach((articleComment)->{
+					Account account = accountService.loadAccount(articleComment.getAccountId());
+					articleComment.setAccount(account);
+				});
 				return ResultUtil.getSlefSRSuccessList(list);
 			}else{
 				throw new NotAnymoreException();//没有更多
@@ -148,17 +160,25 @@ public class ArticleCommentController {
 	/**
 	 * 点赞
 	 * @return
+	 * @throws CommonNotRollbackException 
 	 */
 	@RequestMapping(value = "/point", method = {RequestMethod.GET,RequestMethod.POST})
 	public  StateResultList pointComment(
 			@RequestParam("articleCommentId") Integer articleCommentId,
 			@RequestParam("articleId") Integer articleId,
 			@RequestParam("accountId") Integer accountId,
-			HttpSession session)  {
+			HttpSession session) throws CommonNotRollbackException  {
 		List<JSONObject> list = new ArrayList<JSONObject>();
 		ArticleComment articleComment = articleCommentService.loadArticleComment(articleCommentId);
+		//当前sessionId放入单例map
+		HashMap<String,Object> smap=  SingletonHashMap.getInstance(); 
+		String value = (String) smap.get("pointaid"+accountId+"acid"+articleCommentId);
+		if(value.equals(DateUtil.getImgDir())){//相等是同一天，不成功
+			throw new CommonNotRollbackException("已经点赞过了");
+		}
+			smap.put("pointaid"+accountId+"acid"+articleCommentId, DateUtil.getImgDir());
 		//session.setAttribute("pointaid"+accountId+"acid"+articleCommentId+, value);
-		JSONObject json = new JSONObject();
+			JSONObject json = new JSONObject();
 			articleComment.setPointNumber(articleComment.getPointNumber()+1);
 			articleCommentService.updateArticleComment(articleComment);
 			json.put("isPoint", 1);

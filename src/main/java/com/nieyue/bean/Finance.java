@@ -23,9 +23,9 @@ public class Finance implements Serializable {
 	@ApiModelProperty(value="财务id",example="财务id")
 	private Integer financeId;
 	/**
-	 * 支付密码
+	 * 提现密码
 	 */
-	@ApiModelProperty(value="支付密码",example="支付密码")
+	@ApiModelProperty(value="提现密码",example="提现密码")
 	private String password;
 	/**
 	 * 余额
@@ -48,30 +48,20 @@ public class Finance implements Serializable {
 	@ApiModelProperty(value="提现金额",example="提现金额")
 	private Double withdrawals;
 	/**
-	 * 招收学员佣金
+	 * 退款金额
 	 */
-	@ApiModelProperty(value="招收学员佣金",example="招收学员佣金")
-	private Double recruitingCommission;
+	@ApiModelProperty(value="退款金额",example="退款金额")
+	private Double refund;
+	/**
+	 * 冻结金额
+	 */
+	@ApiModelProperty(value="冻结金额",example="冻结金额")
+	private Double frozen;
 	/**
 	 * 推荐佣金
 	 */
 	@ApiModelProperty(value="推荐佣金",example="推荐佣金")
 	private Double recommendCommission;
-	/**
-	 * 团购账单
-	 */
-	@ApiModelProperty(value="团购账单",example="团购账单")
-	private Double teamPurchasePrice;
-	/**
-	 * 拆分奖励
-	 */
-	@ApiModelProperty(value="拆分奖励",example="拆分奖励")
-	private Double splitReward;
-	/**
-	 * 拆分上级奖励
-	 */
-	@ApiModelProperty(value="拆分上级奖励",example="拆分上级奖励")
-	private Double splitParentReward;
 	/**
 	 * 赠送金钱
 	 */
@@ -128,35 +118,23 @@ public class Finance implements Serializable {
 	public void setWithdrawals(Double withdrawals) {
 		this.withdrawals = withdrawals;
 	}
-	public Double getRecruitingCommission() {
-		return recruitingCommission;
+	public Double getRefund() {
+		return refund;
 	}
-	public void setRecruitingCommission(Double recruitingCommission) {
-		this.recruitingCommission = recruitingCommission;
+	public void setRefund(Double refund) {
+		this.refund = refund;
+	}
+	public Double getFrozen() {
+		return frozen;
+	}
+	public void setFrozen(Double frozen) {
+		this.frozen = frozen;
 	}
 	public Double getRecommendCommission() {
 		return recommendCommission;
 	}
 	public void setRecommendCommission(Double recommendCommission) {
 		this.recommendCommission = recommendCommission;
-	}
-	public Double getTeamPurchasePrice() {
-		return teamPurchasePrice;
-	}
-	public void setTeamPurchasePrice(Double teamPurchasePrice) {
-		this.teamPurchasePrice = teamPurchasePrice;
-	}
-	public Double getSplitReward() {
-		return splitReward;
-	}
-	public void setSplitReward(Double splitReward) {
-		this.splitReward = splitReward;
-	}
-	public Double getSplitParentReward() {
-		return splitParentReward;
-	}
-	public void setSplitParentReward(Double splitParentReward) {
-		this.splitParentReward = splitParentReward;
 	}
 	public Double getBaseProfit() {
 		return baseProfit;
@@ -185,6 +163,5 @@ public class Finance implements Serializable {
 	public static long getSerialversionuid() {
 		return serialVersionUID;
 	}
-	
 	
 }

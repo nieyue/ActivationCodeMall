@@ -125,7 +125,7 @@ public class AccountController {
 	  @ApiImplicitParam(name="orderWay",value="排序方式",dataType="string", paramType = "query",defaultValue="desc")
 	  })
 	@RequestMapping(value = "/list", method = {RequestMethod.GET,RequestMethod.POST})
-	public @ResponseBody StateResultList browsePagingAccount(
+	public @ResponseBody StateResultList<List<Account>> browsePagingAccount(
 			@RequestParam(value="accountId",required=false)Integer  accountId,
 			@RequestParam(value="auth",required=false)Integer auth,
 			@RequestParam(value="phone",required=false)String phone,

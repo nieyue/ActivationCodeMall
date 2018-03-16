@@ -23,6 +23,7 @@ import com.nieyue.bean.Finance;
 import com.nieyue.bean.FinanceRecord;
 import com.nieyue.bean.Payment;
 import com.nieyue.business.OrderBusiness;
+import com.nieyue.exception.AccountAuthAuditException;
 import com.nieyue.exception.AccountIsNotExistException;
 import com.nieyue.exception.AccountNotAuthException;
 import com.nieyue.exception.FinanceMoneyNotEnoughException;
@@ -35,6 +36,7 @@ import com.nieyue.pay.AlipayUtil;
 import com.nieyue.service.AccountService;
 import com.nieyue.service.FinanceRecordService;
 import com.nieyue.service.FinanceService;
+import com.nieyue.util.Arith;
 import com.nieyue.util.MyDESutil;
 import com.nieyue.util.ResultUtil;
 import com.nieyue.util.StateResult;
@@ -216,8 +218,11 @@ public class FinanceController {
 		if(a==null){
 			throw new AccountIsNotExistException();	//账户不存在
 		}
-		if(a.getAuth()==null||a.getAuth()!=2){//没认证
+		if(a.getAuth()==null||a.getAuth()==0){//没认证
 			throw new AccountNotAuthException();//账户未认证
+		}
+		if(a.getAuth()==1){//审核中
+			throw new AccountAuthAuditException();//账户审核中
 		}
 		String result="";
 		String transactionNumber = orderBusiness.getOrderNumber(accountId);
@@ -293,8 +298,11 @@ public class FinanceController {
 		if(a==null){
 			throw new AccountIsNotExistException();	//账户不存在
 		}
-		if(a.getAuth()==null||a.getAuth()!=2){//没认证
+		if(a.getAuth()==null||a.getAuth()==0){//没认证
 			throw new AccountNotAuthException();//账户未认证
+		}
+		if(a.getAuth()==1){//审核中
+			throw new AccountAuthAuditException();//账户审核中
 		}
 		List<Finance> fl = financeService.browsePagingFinance(null, accountId, 1, 1, "finance_id", "asc");
 		boolean b=false;
@@ -303,7 +311,7 @@ public class FinanceController {
 			if(f.getMoney()-money<0){
 				throw new FinanceMoneyNotEnoughException();//余额不足
 			}
-			f.setMoney(f.getMoney()-money);
+			f.setMoney(Arith.sub(f.getMoney(), money));
 			f.setWithdrawals(f.getWithdrawals()+money);
 			b= financeService.updateFinance(f);
 			if(b){

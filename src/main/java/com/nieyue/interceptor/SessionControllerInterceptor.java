@@ -1,6 +1,7 @@
 package com.nieyue.interceptor;
 
 import java.lang.reflect.Method;
+import java.util.HashMap;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -13,7 +14,9 @@ import org.springframework.web.servlet.ModelAndView;
 import com.nieyue.bean.Account;
 import com.nieyue.bean.Finance;
 import com.nieyue.bean.Role;
+import com.nieyue.exception.AccountIsLoginException;
 import com.nieyue.exception.MySessionException;
+import com.nieyue.util.SingletonHashMap;
 
 /**
  * 用户session控制拦截器
@@ -187,6 +190,15 @@ public class SessionControllerInterceptor implements HandlerInterceptor {
         	}
         	//admin中只许修改自己的值
         	if(sessionRole.getName().equals("用户")){
+        		   //当前sessionId放入单例map
+        			HashMap<String,Object> smap=  SingletonHashMap.getInstance(); 
+        			if(smap.get("accountId"+sessionAccount.getAccountId())==null
+        					||smap.get("accountId"+sessionAccount.getAccountId()).equals("")
+        					//非最后一个登陆的用户不能调用
+        					||!smap.get("accountId"+sessionAccount.getAccountId()).equals(request.getSession().getId())){
+        				//账户已经登陆
+        				throw new AccountIsLoginException();
+        			}
         			
         		//角色全不许
         		if( request.getRequestURI().indexOf("/role")>-1 ){
@@ -562,6 +574,8 @@ public class SessionControllerInterceptor implements HandlerInterceptor {
         				|| request.getRequestURI().indexOf("/articleComment/add")>-1){
         			//自身
         			if((request.getRequestURI().indexOf("/articleComment/add")>-1
+        					||request.getRequestURI().indexOf("/articleComment/delete")>-1 
+            				|| request.getRequestURI().indexOf("/articleComment/update")>-1 
         					|| request.getRequestURI().indexOf("/articleComment/point")>-1 
         					)
         					&& request.getParameter("accountId").equals(sessionAccount.getAccountId().toString())){

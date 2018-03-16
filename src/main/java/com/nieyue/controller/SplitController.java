@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.nieyue.bean.Split;
+import com.nieyue.exception.CommonNotRollbackException;
 import com.nieyue.exception.NotAnymoreException;
 import com.nieyue.exception.NotIsNotExistException;
 import com.nieyue.service.SplitService;
@@ -88,6 +89,7 @@ public class SplitController {
 	/**
 	 * 立即拆分
 	 * @return
+	 * @throws CommonNotRollbackException 
 	 */
 	@ApiOperation(value = "立即拆分", notes = "立即拆分")
 	@ApiImplicitParams({
@@ -98,7 +100,7 @@ public class SplitController {
 	public @ResponseBody StateResult immediatelySplit(
 			@RequestParam(value="splitId")Integer splitId,
 			@RequestParam(value="accountId")Integer accountId,
-			HttpSession session)  {
+			HttpSession session) throws CommonNotRollbackException  {
 		boolean b = splitService.immediatelySplit(splitId, accountId);
 		return ResultUtil.getSR(b);
 		
