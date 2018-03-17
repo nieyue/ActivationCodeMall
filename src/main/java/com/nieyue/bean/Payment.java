@@ -31,7 +31,7 @@ public class Payment implements Serializable{
 	 */
 	private String notifyUrl;
 	/**
-	 * 支付类型，默认1支付宝支付，2微信支付，3银联支付,4ios内购
+	 * 支付类型，1支付宝，2微信,3百度钱包,4Paypal,5网银
 	 */
 	private Integer type;
 	/**
@@ -47,7 +47,7 @@ public class Payment implements Serializable{
 	 */
 	private Integer status;
 	/**
-	 *业务类型默认1VIP购买，2团购卡团购，3付费课程,4充值
+	 *业务类型，1购买商品，2账户提现，3退款，4诚信押金
 	 */
 	private Integer businessType;
 	/**
@@ -55,7 +55,7 @@ public class Payment implements Serializable{
 	 */
 	private Integer businessId;
 	/**
-	 *业务回调 ，如果是微服务就存带参数url，本项目直接存json参数
+	 *业务回调
 	 */
 	private String businessNotifyUrl;
 	/**
@@ -74,8 +74,6 @@ public class Payment implements Serializable{
 	public Payment() {
 		super();
 	}
-
-
 
 	public Integer getPaymentId() {
 		return paymentId;

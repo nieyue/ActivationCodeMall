@@ -7,7 +7,6 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -54,7 +53,7 @@ public class RoleController {
 	  @ApiImplicitParam(name="orderWay",value="排序方式",dataType="string", paramType = "query",defaultValue="desc")
 	  })
 	@RequestMapping(value = "/list", method = {RequestMethod.GET,RequestMethod.POST})
-	public @ResponseBody StateResultList browsePagingRole(
+	public @ResponseBody StateResultList<List<Role>> browsePagingRole(
 			@RequestParam(value="pageNum",defaultValue="1",required=false)int pageNum,
 			@RequestParam(value="pageSize",defaultValue="10",required=false) int pageSize,
 			@RequestParam(value="orderName",required=false,defaultValue="update_date") String orderName,
@@ -116,10 +115,10 @@ public class RoleController {
 	 */
 	@ApiOperation(value = "角色单个加载", notes = "角色单个加载")
 	@ApiImplicitParams({
-		  @ApiImplicitParam(name="roleId",value="角色ID",dataType="int", paramType = "path",required=true)
+		  @ApiImplicitParam(name="roleId",value="角色ID",dataType="int", paramType = "query",required=true)
 		  })
-	@RequestMapping(value = "/{roleId}", method = {RequestMethod.GET,RequestMethod.POST})
-	public  StateResultList loadRole(@PathVariable("roleId") Integer roleId,HttpSession session)  {
+	@RequestMapping(value = "/load", method = {RequestMethod.GET,RequestMethod.POST})
+	public  StateResultList<List<Role>> loadRole(@RequestParam("roleId") Integer roleId,HttpSession session)  {
 		List<Role> list = new ArrayList<Role>();
 		Role role = roleService.loadRole(roleId);
 			if(role!=null &&!role.equals("")){

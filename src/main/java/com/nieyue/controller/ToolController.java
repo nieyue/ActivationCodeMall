@@ -88,9 +88,9 @@ public class ToolController {
 	 * @return
 	 */
 	@RequestMapping(value={"/tool/qiniuToken"}, method = {RequestMethod.GET,RequestMethod.POST})
-	public StateResultList getQiniuToken(
+	public StateResultList<List<String>> getQiniuToken(
 			){
-		List<Object> list = new ArrayList<Object>();
+		List<String> list = new ArrayList<>();
 		list.add(qiniuUtil.getQiniuUploadToken());
 		return ResultUtil.getSlefSRSuccessList(list);
 		
@@ -121,7 +121,7 @@ public class ToolController {
 	 */
 	@ApiOperation(value = "二维码Url", notes = "二维码Url")
 	@RequestMapping(value="/getBarcodeUrl", method = {RequestMethod.GET,RequestMethod.POST})
-	public StateResultList getBarcodeUrl(
+	public StateResultList<List<String>> getBarcodeUrl(
 			@RequestParam("acountId")Integer acountId,
 			HttpSession session,HttpServletRequest request,HttpServletResponse response) throws Exception{
 		List<String> list = new ArrayList<String>();

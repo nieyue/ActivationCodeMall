@@ -7,7 +7,6 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 /**
  * 文章
- * @author 聂跃
  */
 @ApiModel(value="文章",description="文章")
 public class Article implements Serializable {
@@ -32,6 +31,11 @@ public class Article implements Serializable {
 	@ApiModelProperty(value="子标题",example="子标题")
 	private String subtitle;
 	/**
+	 * 来源
+	 */
+	@ApiModelProperty(value="来源",example="来源")
+	private String resource;
+	/**
 	 *封面
 	 */
 	@ApiModelProperty(value="封面",example="封面")
@@ -47,10 +51,10 @@ public class Article implements Serializable {
 	@ApiModelProperty(value="内容",example="内容")
 	private String content;
 	/**
-	 * 评论数
+	 * 阅读数
 	 */
-	@ApiModelProperty(value="评论数",example="评论数")
-	private Integer commentNumber;
+	@ApiModelProperty(value="阅读数",example="阅读数")
+	private Long readingNumber;
 	/**
 	 * 状态,下架0，上架1
 	 */
@@ -83,6 +87,24 @@ public class Article implements Serializable {
 	public void setTitle(String title) {
 		this.title = title;
 	}
+	public String getSubtitle() {
+		return subtitle;
+	}
+	public void setSubtitle(String subtitle) {
+		this.subtitle = subtitle;
+	}
+	public String getResource() {
+		return resource;
+	}
+	public void setResource(String resource) {
+		this.resource = resource;
+	}
+	public String getImgAddress() {
+		return imgAddress;
+	}
+	public void setImgAddress(String imgAddress) {
+		this.imgAddress = imgAddress;
+	}
 	public String getRedirectUrl() {
 		return redirectUrl;
 	}
@@ -95,11 +117,11 @@ public class Article implements Serializable {
 	public void setContent(String content) {
 		this.content = content;
 	}
-	public Integer getCommentNumber() {
-		return commentNumber;
+	public Long getReadingNumber() {
+		return readingNumber;
 	}
-	public void setCommentNumber(Integer commentNumber) {
-		this.commentNumber = commentNumber;
+	public void setReadingNumber(Long readingNumber) {
+		this.readingNumber = readingNumber;
 	}
 	public Integer getStatus() {
 		return status;
@@ -127,18 +149,6 @@ public class Article implements Serializable {
 	}
 	public static long getSerialversionuid() {
 		return serialVersionUID;
-	}
-	public String getImgAddress() {
-		return imgAddress;
-	}
-	public void setImgAddress(String imgAddress) {
-		this.imgAddress = imgAddress;
-	}
-	public String getSubtitle() {
-		return subtitle;
-	}
-	public void setSubtitle(String subtitle) {
-		this.subtitle = subtitle;
 	}
 	
 }

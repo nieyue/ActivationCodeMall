@@ -38,7 +38,8 @@ myPugin:
       appsecret: hHSkf87dAg1aQzQnBPNbH42oKiDdef
       signName: 激活码商城
       templateCodeAcountRegister: SMS_126363887
-      templateCodePasswordUpdate: SMS_126620523
+      templateCodePasswordUpdate: SMS_18805473
+      templateCodeWithdrawalsPasswordUpdate: SMS_126620523
       templateCodePhoneUpdate: SMS_126640526
       templateCodeAuthenticationBind: SMS_126570469
     alipay:

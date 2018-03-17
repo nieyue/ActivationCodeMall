@@ -11,17 +11,12 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.nieyue.bean.Account;
 import com.nieyue.bean.AccountLevel;
-import com.nieyue.bean.AccountParent;
 import com.nieyue.bean.Finance;
 import com.nieyue.bean.Integral;
-import com.nieyue.bean.Vip;
 import com.nieyue.dao.AccountDao;
 import com.nieyue.dao.AccountLevelDao;
-import com.nieyue.dao.AccountParentDao;
 import com.nieyue.dao.FinanceDao;
 import com.nieyue.dao.IntegralDao;
-import com.nieyue.dao.VipDao;
-import com.nieyue.exception.MySessionException;
 import com.nieyue.service.AccountService;
 @Service
 public class AccountServiceImpl implements AccountService{
@@ -32,17 +27,13 @@ public class AccountServiceImpl implements AccountService{
 	@Resource
 	AccountLevelDao accountLevelDao;
 	@Resource
-	AccountParentDao accountParentDao;
-	@Resource
-	VipDao vipDao;
-	@Resource
 	IntegralDao integralDao;
 	
 	@Transactional(propagation=Propagation.REQUIRED)
 	@Override
 	public boolean addAccount(Account account) {
 		boolean b=false;
-		List<AccountLevel> accountLevell = accountLevelDao.browsePagingAccountLevel(0, null, 0, 1, "account_level_id", "asc");
+		List<AccountLevel> accountLevell = accountLevelDao.browsePagingAccountLevel(0, 0, 1, "account_level_id", "asc");
 		if(accountLevell.size()!=1){
 			return b;
 		}
@@ -57,11 +48,9 @@ public class AccountServiceImpl implements AccountService{
 		finance.setRecharge(0.0);//充值金额
 		finance.setConsume(0.0);//消费金额
 		finance.setWithdrawals(0.0);//提现金额
-		finance.setRecruitingCommission(0.0);//招收学员佣金
+		finance.setRefund(0.0);//退款金额
+		finance.setFrozen(0.0);//冻结金额
 		finance.setRecommendCommission(0.0);//推荐佣金
-		finance.setTeamPurchasePrice(0.0);//团购账单
-		finance.setSplitReward(0.0);//拆分奖励
-		finance.setSplitParentReward(0.0);//拆分上级奖励
 		Double unitBaseProfit=0.0;//赠送金钱
 		finance.setBaseProfit(unitBaseProfit);
 		finance.setMoney(finance.getBaseProfit());//初始余额=赠送金钱+0.0
@@ -75,46 +64,13 @@ public class AccountServiceImpl implements AccountService{
 		integral.setAccountId(account.getAccountId());
 		integral.setBaseProfit(0.0);
 		integral.setIntegral(0.0);
-		integral.setRecharge(0.0);
 		integral.setConsume(0.0);
+		integral.setLevel(0);
+		integral.setName("");
+		integral.setUpgradeIntegral(0.0);//升级积分
 		integral.setCreateDate(new Date());
 		integral.setUpdateDate(new Date());
 		b=integralDao.addIntegral(integral);
-		//增加vip
-		Vip vip=new Vip();
-		vip.setName(accountLevell.get(0).getName());
-		vip.setLevel(0);//默认0，学徒没有vip
-		vip.setStatus(0);//到期
-		vip.setExpireDate(new Date());
-		vip.setCreateDate(new Date());
-		vip.setUpdateDate(new Date());
-		vip.setAccountId(account.getAccountId());
-		b=vipDao.addVip(vip);
-		
-		//账户上级
-		if(account.getMasterId()!=null){	
-		AccountParent accountParent=new AccountParent();
-		accountParent.setAccountId(account.getAccountId());
-		accountParent.setPhone(account.getPhone());
-		accountParent.setSubordinateNumber(0);//默认0个学员
-		accountParent.setMasterId(account.getMasterId());
-		accountParent.setRealMasterId(account.getMasterId());
-		accountParent.setAccountLevelId(accountLevell.get(0).getAccountLevelId());
-		accountParent.setName(accountLevell.get(0).getName());
-		accountParent.setCreateDate(new Date());
-		accountParent.setUpdateDate(new Date());
-		b=accountParentDao.addAccountParent(accountParent);
-		}
-		//注册账户的上级增加学员数
-		List<AccountParent> accountl = accountParentDao.browsePagingAccountParent(null, null, account.getMasterId(), null, null, null, null, 0, 1, "account_parent_id", "asc");
-		if(accountl.size()==1){
-			AccountParent ap = accountl.get(0);
-			ap.setSubordinateNumber(ap.getSubordinateNumber()+1);
-			b=accountParentDao.updateAccountParent(ap);
-		}
-		if(!b){
-			throw new MySessionException();			
-		}
 		return b;
 	}
 	@Transactional(propagation=Propagation.REQUIRED)
@@ -141,6 +97,7 @@ public class AccountServiceImpl implements AccountService{
 			Integer accountId,
 			Integer auth,
 			String phone,
+			String email,
 			String realname,
 			Integer roleId,
 			Integer status,
@@ -150,6 +107,7 @@ public class AccountServiceImpl implements AccountService{
 				accountId,
 				auth,
 				phone,
+				email,
 				realname,
 				roleId,
 				status,
@@ -163,6 +121,7 @@ public class AccountServiceImpl implements AccountService{
 			Integer accountId,
 			Integer auth,
 			String phone,
+			String email,
 			String realname,
 			Integer roleId,
 			Integer status,
@@ -182,6 +141,7 @@ public class AccountServiceImpl implements AccountService{
 				accountId,
 				auth,
 				phone,
+				email,
 				realname,
 				roleId,
 				status,

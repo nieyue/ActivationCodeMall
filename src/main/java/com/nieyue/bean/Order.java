@@ -28,14 +28,14 @@ public class Order implements Serializable {
 	@ApiModelProperty(value="订单号",example="订单号")
 	private String orderNumber;
 	/**
-	 * 类型，1VIP购买，2团购卡团购，3付费课程
+	 * 类型，1购买商品，2账户提现，3退款，4诚信押金
 	 */
-	@ApiModelProperty(value="类型，1VIP购买，2团购卡团购，3付费课程",example="类型，1VIP购买，2团购卡团购，3付费课程")
+	@ApiModelProperty(value="类型，1购买商品，2账户提现，3退款，4诚信押金",example="类型，1购买商品，2账户提现，3退款，4诚信押金")
 	private Integer type;
 	/**
-	 * 支付类型，1支付宝，2微信,3余额支付,4ios内购
+	 * 方式，1支付宝，2微信,3百度钱包,4Paypal,5网银
 	 */
-	@ApiModelProperty(value="支付类型，1支付宝，2微信,3余额支付,4ios内购",example="支付类型，1支付宝，2微信,3余额支付,4ios内购")
+	@ApiModelProperty(value="方式，1支付宝，2微信,3百度钱包,4Paypal,5网银",example="方式，1支付宝，2微信,3百度钱包,4Paypal,5网银")
 	private Integer payType;
 	/**
 	 * 创建时间
@@ -48,10 +48,20 @@ public class Order implements Serializable {
 	@ApiModelProperty(value="更新时间",example="更新时间")
 	private Date updateDate;
 	/**
-	 * 订单状态，-1待处理删除，0已完成删除,1待处理，2已完成
+	 * 支付日期
 	 */
-	@ApiModelProperty(value="订单状态，-1待处理删除，0已完成删除,1待处理，2已完成",example="订单状态，-1待处理删除，0已完成删除,1待处理，2已完成")
+	@ApiModelProperty(value="支付日期",example="支付日期")
+	private Date paymentDate;
+	/**
+	 * 订单状态，1冻结单，2待支付，3已支付,4预购商品，5问题单，6已取消，7已删除
+	 */
+	@ApiModelProperty(value="订单状态，1冻结单，2待支付，3已支付,4预购商品，5问题单，6已取消，7已删除",example="订单状态，1冻结单，2待支付，3已支付,4预购商品，5问题单，6已取消，7已删除")
 	private Integer status;
+	/**
+	 * 子状态，1(1冻结单)，2（1待支付），3（1已支付），4（1等待发货），5（1待解决（买家提问后），2解决中（卖家回复后），3申请退款，4已退款，5已解决），6（1已取消），7（1已删除）
+	 */
+	@ApiModelProperty(value="子状态，1(1冻结单)，2（1待支付），3（1已支付），4（1等待发货），5（1待解决（买家提问后），2解决中（卖家回复后），3申请退款，4已退款，5已解决），6（1已取消），7（1已删除）",example="子状态，1(1冻结单)，2（1待支付），3（1已支付），4（1等待发货），5（1待解决（买家提问后），2解决中（卖家回复后），3申请退款，4已退款，5已解决），6（1已取消），7（1已删除）")
+	private Integer substatus;
 	/**
 	 * 下单人
 	 */
@@ -67,11 +77,23 @@ public class Order implements Serializable {
 	public void setOrderId(Integer orderId) {
 		this.orderId = orderId;
 	}
+	public String getOrderNumber() {
+		return orderNumber;
+	}
+	public void setOrderNumber(String orderNumber) {
+		this.orderNumber = orderNumber;
+	}
 	public Integer getType() {
 		return type;
 	}
 	public void setType(Integer type) {
 		this.type = type;
+	}
+	public Integer getPayType() {
+		return payType;
+	}
+	public void setPayType(Integer payType) {
+		this.payType = payType;
 	}
 	public Date getCreateDate() {
 		return createDate;
@@ -85,14 +107,11 @@ public class Order implements Serializable {
 	public void setUpdateDate(Date updateDate) {
 		this.updateDate = updateDate;
 	}
-	public Integer getAccountId() {
-		return accountId;
+	public Date getPaymentDate() {
+		return paymentDate;
 	}
-	public void setAccountId(Integer accountId) {
-		this.accountId = accountId;
-	}
-	public static long getSerialversionuid() {
-		return serialVersionUID;
+	public void setPaymentDate(Date paymentDate) {
+		this.paymentDate = paymentDate;
 	}
 	public Integer getStatus() {
 		return status;
@@ -100,11 +119,17 @@ public class Order implements Serializable {
 	public void setStatus(Integer status) {
 		this.status = status;
 	}
-	public String getOrderNumber() {
-		return orderNumber;
+	public Integer getSubstatus() {
+		return substatus;
 	}
-	public void setOrderNumber(String orderNumber) {
-		this.orderNumber = orderNumber;
+	public void setSubstatus(Integer substatus) {
+		this.substatus = substatus;
+	}
+	public Integer getAccountId() {
+		return accountId;
+	}
+	public void setAccountId(Integer accountId) {
+		this.accountId = accountId;
 	}
 	public List<OrderDetail> getOrderDetailList() {
 		return orderDetailList;
@@ -112,10 +137,8 @@ public class Order implements Serializable {
 	public void setOrderDetailList(List<OrderDetail> orderDetailList) {
 		this.orderDetailList = orderDetailList;
 	}
-	public Integer getPayType() {
-		return payType;
+	public static long getSerialversionuid() {
+		return serialVersionUID;
 	}
-	public void setPayType(Integer payType) {
-		this.payType = payType;
-	}
+	
 }

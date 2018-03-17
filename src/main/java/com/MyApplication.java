@@ -41,8 +41,8 @@ public class MyApplication extends WebMvcConfigurerAdapter {
 		 return new Docket(DocumentationType.SWAGGER_2)
 				 .apiInfo(
 						 new ApiInfoBuilder()
-						 .title("老爷说应用接口文档")
-						 .description("老爷说应用接口文档1.0版本")
+						 .title("激活码商城应用接口文档")
+						 .description("激活码商城应用接口文档1.0版本")
 						 .version("1.0")
 						 .build())
 				 .select()

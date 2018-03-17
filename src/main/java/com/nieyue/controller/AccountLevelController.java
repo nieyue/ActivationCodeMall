@@ -7,7 +7,6 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -15,11 +14,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.nieyue.bean.AccountLevel;
-import com.nieyue.business.AccountLevelBusiness;
 import com.nieyue.exception.NotAnymoreException;
 import com.nieyue.exception.NotIsNotExistException;
 import com.nieyue.service.AccountLevelService;
-import com.nieyue.service.AccountParentService;
 import com.nieyue.util.ResultUtil;
 import com.nieyue.util.StateResult;
 import com.nieyue.util.StateResultList;
@@ -41,10 +38,6 @@ import io.swagger.annotations.ApiOperation;
 public class AccountLevelController {
 	@Resource
 	private AccountLevelService accountLevelService;
-	@Resource
-	private AccountParentService accountParentService;
-	@Resource
-	private AccountLevelBusiness accountLevelBusiness;
 	
 	/**
 	 * 等级分页浏览
@@ -55,44 +48,25 @@ public class AccountLevelController {
 	@ApiOperation(value = "等级列表", notes = "等级分页浏览")
 	@ApiImplicitParams({
 	  @ApiImplicitParam(name="level",value="等级名",dataType="int", paramType = "query"),
-	  @ApiImplicitParam(name="teamPurchasePrice",value="团购金额",dataType="double", paramType = "query"),
 	  @ApiImplicitParam(name="pageNum",value="页头数位",dataType="int", paramType = "query",defaultValue="1"),
 	  @ApiImplicitParam(name="pageSize",value="每页数目",dataType="int", paramType = "query",defaultValue="10"),
 	  @ApiImplicitParam(name="orderName",value="排序字段",dataType="string", paramType = "query",defaultValue="update_date"),
 	  @ApiImplicitParam(name="orderWay",value="排序方式",dataType="string", paramType = "query",defaultValue="desc")
 	  })
 	@RequestMapping(value = "/list", method = {RequestMethod.GET,RequestMethod.POST})
-	public @ResponseBody StateResultList browsePagingAccountLevel(
+	public @ResponseBody StateResultList<List<AccountLevel>> browsePagingAccountLevel(
 			@RequestParam(value="level",required=false)Integer level,
-			@RequestParam(value="teamPurchasePrice",required=false)Double teamPurchasePrice,
 			@RequestParam(value="pageNum",defaultValue="1",required=false)int pageNum,
 			@RequestParam(value="pageSize",defaultValue="10",required=false) int pageSize,
 			@RequestParam(value="orderName",required=false,defaultValue="update_date") String orderName,
 			@RequestParam(value="orderWay",required=false,defaultValue="desc") String orderWay)  {
 			List<AccountLevel> list = new ArrayList<AccountLevel>();
-			list= accountLevelService.browsePagingAccountLevel(level,teamPurchasePrice,pageNum, pageSize, orderName, orderWay);
+			list= accountLevelService.browsePagingAccountLevel(level,pageNum, pageSize, orderName, orderWay);
 			if(list.size()>0){
 				return ResultUtil.getSlefSRSuccessList(list);
 			}else{
 				throw new NotAnymoreException();//没有更多
 			}
-	}
-	/**
-	 * 返回当前人的可选团购等级
-	 * @return
-	 */
-	@ApiOperation(value = "返回当前人的可选团购等级", notes = "返回当前人的可选团购等级")
-	@RequestMapping(value = "/teamAccountLevelList", method = {RequestMethod.GET,RequestMethod.POST})
-	public @ResponseBody StateResultList getAccountLevel(
-			@RequestParam("accountId") Integer accountId,
-			HttpSession session)  {
-		List<AccountLevel> alist=new ArrayList<>();
-		alist=accountLevelBusiness.getTeamAccountLevelListByAccountId(accountId);
-		if(alist.size()>0){
-			
-			return ResultUtil.getSlefSRSuccessList(alist);
-		}
-		throw new NotAnymoreException();//没有更多
 	}
 	/**
 	 * 等级修改
@@ -132,12 +106,14 @@ public class AccountLevelController {
 	 * @return
 	 */
 	@ApiOperation(value = "等级数量", notes = "等级数量查询")
+	@ApiImplicitParams({
+		  @ApiImplicitParam(name="level",value="等级名",dataType="int", paramType = "query")
+		  })
 	@RequestMapping(value = "/count", method = {RequestMethod.GET,RequestMethod.POST})
 	public @ResponseBody int countAll(
 			@RequestParam(value="level",required=false)Integer level,
-			@RequestParam(value="teamPurchasePrice",required=false)Double teamPurchasePrice,
 			HttpSession session)  {
-		int count = accountLevelService.countAll(level,teamPurchasePrice);
+		int count = accountLevelService.countAll(level);
 		return count;
 	}
 	/**
@@ -146,10 +122,10 @@ public class AccountLevelController {
 	 */
 	@ApiOperation(value = "等级单个加载", notes = "等级单个加载")
 	@ApiImplicitParams({
-		  @ApiImplicitParam(name="accountLevelId",value="等级ID",dataType="int", paramType = "path",required=true)
+		  @ApiImplicitParam(name="accountLevelId",value="等级ID",dataType="int", paramType = "query",required=true)
 		  })
-	@RequestMapping(value = "/{accountLevelId}", method = {RequestMethod.GET,RequestMethod.POST})
-	public  StateResultList loadAccountLevel(@PathVariable("accountLevelId") Integer accountLevelId,HttpSession session)  {
+	@RequestMapping(value = "/load", method = {RequestMethod.GET,RequestMethod.POST})
+	public  StateResultList<List<AccountLevel>> loadAccountLevel(@RequestParam("accountLevelId") Integer accountLevelId,HttpSession session)  {
 		List<AccountLevel> list = new ArrayList<AccountLevel>();
 		AccountLevel accountLevel = accountLevelService.loadAccountLevel(accountLevelId);
 			if(accountLevel!=null &&!accountLevel.equals("")){

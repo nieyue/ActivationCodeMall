@@ -1,12 +1,12 @@
 package com.nieyue.controller;
 
-import java.io.IOException;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 import java.util.regex.Pattern;
 
 import javax.annotation.Resource;
@@ -15,20 +15,21 @@ import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.view.RedirectView;
 
+import com.aliyuncs.dysmsapi.model.v20170525.SendSmsResponse;
+import com.aliyuncs.exceptions.ClientException;
 import com.nieyue.bean.Account;
 import com.nieyue.bean.AccountLevel;
-import com.nieyue.bean.AccountParent;
 import com.nieyue.bean.Finance;
 import com.nieyue.bean.Integral;
 import com.nieyue.bean.Role;
-import com.nieyue.bean.Vip;
 import com.nieyue.exception.AccountAlreadyAuthException;
 import com.nieyue.exception.AccountAuthAuditException;
 import com.nieyue.exception.AccountIsExistException;
@@ -37,24 +38,21 @@ import com.nieyue.exception.AccountIsNotLoginException;
 import com.nieyue.exception.AccountLockException;
 import com.nieyue.exception.AccountLoginException;
 import com.nieyue.exception.AccountMessageException;
-import com.nieyue.exception.AccountNotMasterIdException;
 import com.nieyue.exception.AccountPhoneException;
 import com.nieyue.exception.AccountPhoneIsExistException;
+import com.nieyue.exception.CommonNotRollbackException;
 import com.nieyue.exception.MySessionException;
 import com.nieyue.exception.NotAnymoreException;
 import com.nieyue.exception.RequestLimitException;
 import com.nieyue.exception.VerifyCodeErrorException;
+import com.nieyue.mail.SendMailDemo;
 import com.nieyue.service.AccountLevelService;
-import com.nieyue.service.AccountParentService;
 import com.nieyue.service.AccountService;
 import com.nieyue.service.FinanceService;
 import com.nieyue.service.IntegralService;
 import com.nieyue.service.NoticeService;
 import com.nieyue.service.RoleService;
-import com.nieyue.service.VideoCacheService;
-import com.nieyue.service.VideoPlayRecordService;
-import com.nieyue.service.VideoSetCollectService;
-import com.nieyue.service.VipService;
+import com.nieyue.thirdparty.yun.AliyunSms;
 import com.nieyue.util.MyDESutil;
 import com.nieyue.util.MyValidator;
 import com.nieyue.util.ResultUtil;
@@ -83,23 +81,13 @@ public class AccountController {
 	@Resource
 	private FinanceService financeService;
 	@Resource
-	private AccountParentService accountParentService;
-	@Resource
 	private AccountLevelService accountLevelService;
-	@Resource
-	private VideoPlayRecordService videoPlayRecordService;
-	@Resource
-	private VideoCacheService videoCacheService;
-	@Resource
-	private VideoSetCollectService videoSetCollectService;
-	@Resource
-	private VipService vipService;
 	@Resource
 	private IntegralService integralService;
 	@Resource
 	private NoticeService noticeService;
-//	@Resource
-//	private YunSms yunSms;
+	@Resource
+	private  AliyunSms aliyunSms;
 	@Value("${myPugin.projectName}")
 	String projectName;
 
@@ -114,6 +102,7 @@ public class AccountController {
 	  @ApiImplicitParam(name="accountId",value="账户ID",dataType="int", paramType = "query"),
 	  @ApiImplicitParam(name="auth",value="认证，0没认证，1审核中，2已认证",dataType="int", paramType = "query"),
 	  @ApiImplicitParam(name="phone",value="手机号，模糊查询",dataType="string", paramType = "query"),
+	  @ApiImplicitParam(name="email",value="email，模糊查询",dataType="string", paramType = "query"),
 	  @ApiImplicitParam(name="realname",value="真实姓名，模糊查询",dataType="string", paramType = "query"),
 	  @ApiImplicitParam(name="roleId",value="角色ID",dataType="int", paramType = "query"),
 	  @ApiImplicitParam(name="status",value="状态，0正常，1锁定，2，异常",dataType="int", paramType = "query"),
@@ -129,6 +118,7 @@ public class AccountController {
 			@RequestParam(value="accountId",required=false)Integer  accountId,
 			@RequestParam(value="auth",required=false)Integer auth,
 			@RequestParam(value="phone",required=false)String phone,
+			@RequestParam(value="email",required=false)String email,
 			@RequestParam(value="realname",required=false)String realname,
 			@RequestParam(value="roleId",required=false)Integer roleId,
 			@RequestParam(value="status",required=false)Integer status,
@@ -139,7 +129,7 @@ public class AccountController {
 			@RequestParam(value="orderName",required=false,defaultValue="account_id") String orderName,
 			@RequestParam(value="orderWay",required=false,defaultValue="desc") String orderWay,HttpSession session)  {
 			List<Account> list = new ArrayList<Account>();
-			list= accountService.browsePagingAccount(accountId,auth,phone,realname,roleId,status,createDate,loginDate,pageNum, pageSize, orderName, orderWay);
+			list= accountService.browsePagingAccount(accountId,auth,phone,email,realname,roleId,status,createDate,loginDate,pageNum, pageSize, orderName, orderWay);
 			if(list.size()>0){
 				return ResultUtil.getSlefSRSuccessList(list);
 				
@@ -154,15 +144,15 @@ public class AccountController {
 	 */
 	@ApiOperation(value = "账户修改", notes = "账户修改")
 	@RequestMapping(value = "/update", method = {RequestMethod.GET,RequestMethod.POST})
-	public @ResponseBody StateResultList updateAccount(
+	public @ResponseBody StateResultList<List<Account>> updateAccount(
 		@ModelAttribute Account account,
 			HttpSession session)  {
 		List<Account> list=new ArrayList<>();
 		//账户已经存在
 		if(accountService.loginAccount(account.getPhone(), null,account.getAccountId())!=null
-				//||accountService.loginAccount(account.getEmail(), null,Account.getAccountId())!=null
+				||accountService.loginAccount(account.getEmail(), null,account.getAccountId())!=null
 				){
-			throw new AccountIsExistException();//
+			throw new AccountIsExistException();//账户已经存在
 		}
 		if(account.getPassword()!=null){
 			account.setPassword(MyDESutil.getMD5(account.getPassword()));
@@ -190,7 +180,7 @@ public class AccountController {
 		  @ApiImplicitParam(name="validCode",value="短信验证码",dataType="string", paramType = "query",required=true)
 		  })
 	@RequestMapping(value = "/updatePassword", method = {RequestMethod.GET,RequestMethod.POST})
-	public @ResponseBody StateResultList updateAccountPassword(
+	public @ResponseBody StateResultList<List<Account>> updateAccountPassword(
 			@RequestParam("adminName")String adminName,
 			@RequestParam("password")String password,
 			@RequestParam(value="validCode",required=false) String validCode,
@@ -223,31 +213,19 @@ public class AccountController {
 	@ApiImplicitParams({
 		@ApiImplicitParam(name="accountId",value="账户ID",dataType="int", paramType = "query",required=true),
 		@ApiImplicitParam(name="icon",value="头像",dataType="string", paramType = "query"),
-		@ApiImplicitParam(name="contactPhone",value="联系手机号",dataType="string", paramType = "query"),
 		@ApiImplicitParam(name="nickname",value="昵称",dataType="string", paramType = "query"),
 		@ApiImplicitParam(name="sex",value="性别,默认为0未知，为1男性，为2女性",dataType="int", paramType = "query"),
-		@ApiImplicitParam(name="age",value="年龄",dataType="int", paramType = "query"),
 		@ApiImplicitParam(name="country",value="国家",dataType="string", paramType = "query"),
-		@ApiImplicitParam(name="province",value="省",dataType="string", paramType = "query"),
-		@ApiImplicitParam(name="city",value="城市",dataType="string", paramType = "query"),
-		@ApiImplicitParam(name="sign",value="签名",dataType="string", paramType = "query"),
-		@ApiImplicitParam(name="wechat",value="微信号",dataType="string", paramType = "query"),
-		@ApiImplicitParam(name="alipay",value="支付宝账号",dataType="string", paramType = "query")
+		@ApiImplicitParam(name="cardSecretReceive",value="卡密接受方式",dataType="int", paramType = "query"),
 	})
 	@RequestMapping(value = "/updateInfo", method = {RequestMethod.GET,RequestMethod.POST})
-	public @ResponseBody StateResultList updateInfoAccount(
+	public @ResponseBody StateResultList<List<Account>> updateInfoAccount(
 			@RequestParam(value="accountId",required=false)Integer accountId,
 			@RequestParam(value="icon",required=false)String icon,
-			@RequestParam(value="contactPhone",required=false)String contactPhone,
 			@RequestParam(value="nickname",required=false)String nickname,
 			@RequestParam(value="sex",required=false)Integer sex,
-			@RequestParam(value="age",required=false)Integer age,
 			@RequestParam(value="country",required=false)String country,
-			@RequestParam(value="province",required=false)String province,
-			@RequestParam(value="city",required=false)String city,
-			@RequestParam(value="sign",required=false)String sign,
-			@RequestParam(value="wechat",required=false)String wechat,
-			@RequestParam(value="alipay",required=false)String alipay,
+			@RequestParam(value="cardSecretReceive",required=false)Integer cardSecretReceive,
 			HttpSession session)  {
 		List<Account> list=new ArrayList<>();
 		Account newa = accountService.loadAccount(accountId);
@@ -257,35 +235,17 @@ public class AccountController {
 		if(icon!=null){
 			newa.setIcon(icon);			
 		}
-		if(contactPhone!=null){
-			newa.setContactPhone(contactPhone);			
-		}
 		if(nickname!=null){
 			newa.setNickname(nickname);			
 		}
 		if(sex!=null){
 		newa.setSex(sex);
 		}
-		if(age!=null){
-		newa.setAge(age);
-		}
 		if(country!=null){
 		newa.setCountry(country);
 		}
-		if(province!=null){
-		newa.setProvince(province);
-		}
-		if(city!=null){
-		newa.setCity(city);
-		}
-		if(sign!=null){
-		newa.setSign(sign);
-		}
-		if(wechat!=null){
-		newa.setWechat(wechat);
-		}
-		if(alipay!=null){
-		newa.setAlipay(alipay);
+		if(cardSecretReceive!=null){
+		newa.setCardSecretReceive(cardSecretReceive);
 		}
 		boolean um = accountService.updateAccount(newa);
 		if(um){
@@ -304,14 +264,16 @@ public class AccountController {
 	  @ApiImplicitParam(name="accountId",value="账户ID",dataType="int", paramType = "query",required=true),
 	  @ApiImplicitParam(name="realname",value="真实姓名",dataType="string", paramType = "query",required=true),
 	  @ApiImplicitParam(name="identityCards",value="身份证",dataType="string", paramType = "query",required=true),
+	  @ApiImplicitParam(name="identityCardsHoldImg",value="手持身份证上半身照",dataType="string", paramType = "query",required=true),
 	  @ApiImplicitParam(name="identityCardsFrontImg",value="身份证正面",dataType="string", paramType = "query",required=true),
 	  @ApiImplicitParam(name="identityCardsBackImg",value="身份证反面",dataType="string", paramType = "query",required=true)
 	 	  })
 	@RequestMapping(value = "/auth", method = {RequestMethod.GET,RequestMethod.POST})
-	public @ResponseBody StateResultList authAccount(
+	public @ResponseBody StateResultList<List<Account>> authAccount(
 			@RequestParam("accountId") Integer accountId,
 			@RequestParam("realname") String realname,
 			@RequestParam("identityCards") String identityCards,
+			@RequestParam("identityCardsHoldImg") String identityCardsHoldImg,
 			@RequestParam("identityCardsFrontImg") String identityCardsFrontImg,
 			@RequestParam("identityCardsBackImg") String identityCardsBackImg,
 			HttpSession session)  {
@@ -322,18 +284,11 @@ public class AccountController {
 			account.setAuth(1);//审核中
 			account.setRealname(realname);
 			account.setIdentityCards(identityCards);
+			account.setIdentityCardsHoldImg(identityCardsHoldImg);
 			account.setIdentityCardsFrontImg(identityCardsFrontImg);
 			account.setIdentityCardsBackImg(identityCardsBackImg);
 			boolean b = accountService.updateAccount(account);
 			if(b){
-				List<AccountParent> apl = accountParentService.browsePagingAccountParent(null,null, accountId, null, null, null, null, 1, 1, "account_parent_id","asc");
-				if(apl.size()==1){
-				AccountParent accountParent=apl.get(0);
-				accountParent.setRealname(realname);
-				accountParent.setCreateDate(new Date());
-				accountParent.setUpdateDate(new Date());
-				accountParentService.updateAccountParent(accountParent);
-				}
 				list.add(account);
 				return ResultUtil.getSlefSRSuccessList(list);
 			}
@@ -355,11 +310,13 @@ public class AccountController {
 	
 	@ApiOperation(value = "账户增加", notes = "账户增加")
 	@RequestMapping(value = "/add", method = {RequestMethod.GET,RequestMethod.POST})
-	public  @ResponseBody StateResultList addAccount(@ModelAttribute Account account, HttpSession session) {
+	public  @ResponseBody StateResultList<List<Account>> addAccount(@ModelAttribute Account account, HttpSession session) {
 		List<Account> list=new ArrayList<>();
 		//账户已经存在
-		if(accountService.loginAccount(account.getPhone(), null,null)!=null ){
-			return ResultUtil.getSlefSRFailList(list);
+		if(accountService.loginAccount(account.getPhone(), null,null)!=null
+				||accountService.loginAccount(account.getEmail(), null,null)!=null
+				){
+			throw new AccountIsExistException();//账户已经存在
 		}
 		account.setPassword(MyDESutil.getMD5(account.getPassword()));
 		boolean am = accountService.addAccount(account);
@@ -393,6 +350,7 @@ public class AccountController {
 		  @ApiImplicitParam(name="accountId",value="账户ID",dataType="int", paramType = "query"),
 		  @ApiImplicitParam(name="auth",value="认证，0没认证，1审核中，2已认证",dataType="int", paramType = "query"),
 		  @ApiImplicitParam(name="phone",value="手机号，模糊查询",dataType="string", paramType = "query"),
+		  @ApiImplicitParam(name="email",value="email，模糊查询",dataType="string", paramType = "query"),
 		  @ApiImplicitParam(name="realname",value="真实姓名，模糊查询",dataType="string", paramType = "query"),
 		  @ApiImplicitParam(name="roleId",value="角色ID",dataType="int", paramType = "query"),
 		  @ApiImplicitParam(name="status",value="状态，0正常，1锁定，2，异常",dataType="int", paramType = "query"),
@@ -404,13 +362,14 @@ public class AccountController {
 			@RequestParam(value="accountId",required=false)Integer  accountId,
 			@RequestParam(value="auth",required=false)Integer auth,
 			@RequestParam(value="phone",required=false)String phone,
+			@RequestParam(value="email",required=false)String email,
 			@RequestParam(value="realname",required=false)String realname,
 			@RequestParam(value="roleId",required=false)Integer roleId,
 			@RequestParam(value="status",required=false)Integer status,
 			@RequestParam(value="createDate",required=false)Date createDate,
 			@RequestParam(value="loginDate",required=false)Date loginDate,
 			HttpSession session)  {
-		int count = accountService.countAll(accountId,auth,phone,realname,roleId,status,createDate,loginDate);
+		int count = accountService.countAll(accountId,auth,phone,email,realname,roleId,status,createDate,loginDate);
 		return count;
 	}
 	/**
@@ -419,10 +378,10 @@ public class AccountController {
 	 */
 	@ApiOperation(value = "账户单个加载", notes = "账户单个加载")
 	@ApiImplicitParams({
-	  @ApiImplicitParam(name="accountId",value="账户ID",dataType="int", paramType="path",required=true)
+	  @ApiImplicitParam(name="accountId",value="账户ID",dataType="int", paramType="query",required=true)
 	 	  })
-	@RequestMapping(value = "/{accountId}", method = {RequestMethod.GET,RequestMethod.POST})
-	public @ResponseBody StateResultList loadAccount(@PathVariable("accountId") Integer accountId,HttpSession session)  {
+	@RequestMapping(value = "/load", method = {RequestMethod.GET,RequestMethod.POST})
+	public @ResponseBody StateResultList<List<Account>> loadAccount(@RequestParam("accountId") Integer accountId,HttpSession session)  {
 		List<Account> list = new ArrayList<Account>();
 		Account account = accountService.loadAccount(accountId);
 		if(account!=null &&!account.equals("")){
@@ -444,7 +403,7 @@ public class AccountController {
 		  @ApiImplicitParam(name="random",value="验证码",dataType="string", paramType = "query",required=true)
 		  })
 	@RequestMapping(value = "/login", method = {RequestMethod.GET,RequestMethod.POST})
-	public @ResponseBody StateResultList loginAccount(
+	public @ResponseBody StateResultList<List<Account>> loginAccount(
 			@RequestParam(value="adminName") String adminName,
 			@RequestParam(value="password") String password,
 			@RequestParam(value="random",required=false) String random,
@@ -481,44 +440,44 @@ public class AccountController {
 	}
 	
 	/**
-	 * 手机验证码发送
+	 * 手机验证码发送/邮箱验证链接
 	 * 
 	 * @param adminName
-	 * @param templateCode 1注册，2修改密码，3修改交易密码
+	 * @param 模板码 1用户注册，2修改密码，3修改提现密码，4修改手机号，5身份验证
 	 * @return
 	 * @throws RequestLimitException 
 	 * @throws AccountIsExistException 
+	 * @throws CommonNotRollbackException 
 	 * @throws ParseException 
 	 */
-	@ApiOperation(value = "手机验证码发送", notes = "手机验证码发送")
+	@ApiOperation(value = "手机验证码发送/邮箱验证链接", notes = "手机验证码发送/邮箱验证链接")
 	@ApiImplicitParams({
-		  @ApiImplicitParam(name="adminName",value="手机号/电子邮箱",dataType="string", paramType = "query",required=true),
-		  @ApiImplicitParam(name="templateCode",value="模板 默认1注册，2修改密码,3修改交易密码",dataType="int", paramType = "query",required=true)
+		  @ApiImplicitParam(name="adminName",value="手机号/邮箱号码",dataType="string", paramType = "query",required=true),
+		  @ApiImplicitParam(name="templateCode",value="模板码 1用户注册，2修改密码，3修改提现密码，4修改手机号，5身份验证",dataType="int", paramType = "query",required=true)
 		  })
 	@RequestMapping(value = "/validCode", method = {RequestMethod.GET,RequestMethod.POST})
 	public @ResponseBody
-	StateResultList validCode(
+	StateResultList<List<String>> validCode(
 			HttpSession session,
 			@RequestParam("adminName")  String adminName,
 			@RequestParam(value="templateCode",required=false,defaultValue="1")  Integer templateCode//默认注册
-			) throws AccountIsExistException, RequestLimitException
+			) throws AccountIsExistException, RequestLimitException, CommonNotRollbackException
 					  {
 		List<String> l=new ArrayList<String>();
 		//注册，账户已经存在
 		if(accountService.loginAccount(adminName, null,null)!=null && templateCode==1){
 			throw new  AccountIsExistException();//账户已经存在异常
 		}
-		//修改密码
-		if(accountService.loginAccount(adminName, null,null)==null && templateCode==2){
+		//其他，账户不存在
+		if(accountService.loginAccount(adminName, null,null)==null && templateCode!=1){
 			throw new  AccountIsNotExistException();//账户不存在
 		}
-		//修改交易密码
-		if(accountService.loginAccount(adminName, null,null)==null && templateCode==3){
-			throw new  AccountIsNotExistException();//账户不存在
+		if(!Pattern.matches(MyValidator.REGEX_PHONE,adminName)
+				&&!Pattern.matches(MyValidator.REGEX_EMAIL,adminName)){
+			throw new CommonNotRollbackException("手机或者邮箱错误");
 		}
-		if(!Pattern.matches(MyValidator.REGEX_PHONE,adminName)){
-			throw new  AccountPhoneException();//账户手机号错误
-		}
+		//手机号发送验证码
+		if(Pattern.matches(MyValidator.REGEX_PHONE,adminName)){
 		Integer userValidCode=(int) (Math.random()*9000)+1000;
 		if(session.getAttribute("validCodeDate")==null){//验证时间
 			session.setAttribute("validCodeDate", new Date());
@@ -530,31 +489,84 @@ public class AccountController {
 			session.setAttribute("validCodeDate", new Date());
 		}
 		}
-		
 		session.setAttribute("validCode", userValidCode.toString());
-		 
-//			try {
-//				yunSms.sendMsg(adminName,templateCode,String.valueOf(userValidCode));
-//			} catch (IOException e) {
-//				throw new AccountMessageException();//短信发送异常
-//			}
+			try {
+				SendSmsResponse res = aliyunSms.sendSms(userValidCode.toString(),adminName, templateCode);
+					if(res.getCode().equals("OK")){
+						return ResultUtil.getSlefSRSuccessList(l);
+					}
+				} catch (ClientException e) {
+					throw new AccountMessageException();//短信发送异常
+				}
 		 //l.add(userValidCode.toString());			
-		
-		
-		 return ResultUtil.getSlefSRSuccessList(l);
+		}else if(Pattern.matches(MyValidator.REGEX_EMAIL,adminName)){
+			//模板码 1用户注册，2修改密码，3修改提现密码，4修改手机号，5身份验证
+			String content="";
+			if(templateCode==1){
+				content="用户注册";
+			}else if(templateCode==2){
+				content="修改密码";
+			}else if(templateCode==3){
+				content="修改提现密码";
+			}else if(templateCode==4){
+				content="修改手机号";
+			}else if(templateCode==5){
+				content="身份验证";
+			}
+			String uuid=UUID.randomUUID().toString();
+			String link="http://admin.laoyeshuo.cn"+"?validCodeEmail="+uuid;
+			//邮箱验证，发送链接到邮箱
+			boolean b = SendMailDemo.sendLinkMail(adminName, link, "激活码商城", content);
+			if(b){
+				if(session.getAttribute("validCodeEmailDate")==null){//验证时间
+					session.setAttribute("validCodeEmailDate", new Date());
+				}else{
+				Date validCodeDate= (Date) session.getAttribute("validCodeEmailDate");
+				if(validCodeDate.after(new Date(new Date().getTime()-1000*10))){
+					throw new RequestLimitException();//请求过快10s
+				}else{
+					session.setAttribute("validCodeEmailDate", new Date());
+				}
+				}
+				session.setAttribute("validCodeEmail", uuid);
+				session.setAttribute("validCodeEmailIsValid", "-1");//-1没有验证通过，1是验证通过了
+				l.add(link);	
+				return ResultUtil.getSlefSRSuccessList(l);
+			}
+		}
+			throw new CommonNotRollbackException("发送验证异常");
 	}
 	/**
-	 * app用户登录
+	 * 邮箱验证请求地址
 	 * @return
 	 */
-	@ApiOperation(value = "app用户登录", notes = "app用户登录")
+	@ApiOperation(value = "邮箱验证请求地址", notes = "邮箱验证请求地址")
+	@ApiImplicitParams({
+		  @ApiImplicitParam(name="validCodeEmail",value="验证码",dataType="string", paramType = "query",required=true),
+		  })
+	@RequestMapping(value = "/validCodeEmail", method = {RequestMethod.GET,RequestMethod.POST})
+	public  ModelAndView validCodeEmail(
+			@RequestParam("validCodeEmail") String validCodeEmail,
+			HttpSession session)  {
+		//验证成功
+		if(validCodeEmail.equals((String)session.getAttribute("validCodeEmail"))){
+			session.setAttribute("validCodeEmailIsValid", "1");//-1没有验证通过，1是验证通过了
+			return new ModelAndView(new RedirectView("http://www.baidu.com"));
+		}
+		return new ModelAndView(new RedirectView("http://www.baidu.com"));
+	}
+	/**
+	 * web用户登录
+	 * @return
+	 */
+	@ApiOperation(value = "web用户登录", notes = "web用户登录")
 	@ApiImplicitParams({
 		  @ApiImplicitParam(name="adminName",value="手机号/电子邮箱",dataType="string", paramType = "query",required=true),
 		  @ApiImplicitParam(name="password",value="密码",dataType="string", paramType = "query",required=true),
 		  @ApiImplicitParam(name="random",value="验证码",dataType="string", paramType = "query")
 		  })
 	@RequestMapping(value = "/weblogin", method = {RequestMethod.GET,RequestMethod.POST})
-	public @ResponseBody StateResultList webLoginAccount(
+	public @ResponseBody StateResultList<List<Map<String,Object>>> webLoginAccount(
 			@RequestParam("adminName") String adminName,
 			@RequestParam("password") String password,
 			@RequestParam(value="random",required=false) String random,
@@ -565,12 +577,12 @@ public class AccountController {
 //		if(!ran.equals(random)){
 //			return ResultUtil.getSlefSRFailList(list);
 //		}
-		List<Object> list = new ArrayList<Object>();
+		List<Map<String,Object>> list = new ArrayList<>();
 		Account account = accountService.loginAccount(adminName, MyDESutil.getMD5(password),null);
 		//自动登陆
-		if(account==null|| account.equals("")){
-			account=accountService.loginAccount(adminName, password, null);
-		}
+//		if(account==null|| account.equals("")){
+//			account=accountService.loginAccount(adminName, password, null);
+//		}
 		if(account==null||account.equals("")){
 			throw new AccountLoginException();//账户或密码错误
 		}
@@ -582,53 +594,28 @@ public class AccountController {
 			Integer roleId = account.getRoleId();
 			Role r = roleService.loadRole(roleId);
 			session.setAttribute("role", r);
-			//当前sessionId放入单例map
-//			if(r.getName().equals("用户")){
-//				HashMap<String,Object> smap=  SingletonHashMap.getInstance(); 
-//				smap.put("accountId"+account.getAccountId(), session.getId());		
-//			 }
 			
 			List<Finance> f = financeService.browsePagingFinance(null,account.getAccountId(), 1, 1, "finance_id", "asc");
 			session.setAttribute("finance", f.get(0));
-			Map<Object,Object> map=new HashMap<>();
+			Map<String,Object> map=new HashMap<>();
 			//账户
 			map.put("account", account);
 			//财务
 			map.put("finance",  f.get(0));
 			//账户等级
-			List<AccountLevel> all = accountLevelService.browsePagingAccountLevel(null, null, 1, Integer.MAX_VALUE, "account_level_id", "desc");
+			List<AccountLevel> all = accountLevelService.browsePagingAccountLevel(null,  1, Integer.MAX_VALUE, "account_level_id", "desc");
 			if(all.size()>0){
 				map.put("accountLevelList",  all);
 				}else{
 				map.put("accountLevelList",  new ArrayList<AccountLevel>());
 				}
-			//账户上级
-			List<AccountParent> accountParentl = accountParentService.browsePagingAccountParent(null,null, account.getAccountId(), null, null, null, null, 1, 1, "account_parent_id", "asc");
-			if(accountParentl.size()>0){
-				map.put("accountParent",  accountParentl.get(0));
-				}else{
-				map.put("accountParent",  new Object());
-				}
-			//vip
-			List<Vip> vipl = vipService.browsePagingVip(account.getAccountId(), null, null, 1, 1, "vip_id", "asc");
-			map.put("vip",  vipl.get(0));
 			//积分
 			List<Integral> integrall = integralService.browsePagingIntegral(account.getAccountId(), null, null, 1, 1, "integral_id", "asc");
 			map.put("integrall",  integrall.get(0));
-			//视频播放记录数
-			int videoPlayRecordCount = videoPlayRecordService.countAll(null,account.getAccountId());
-			map.put("videoPlayRecordCount", videoPlayRecordCount);
-			//视频缓存数
-			int videoCacheCount = videoCacheService.countAll(null,account.getAccountId());
-			map.put("videoCacheCount", videoCacheCount);
-			//视频集收藏数
-			int videoSetCollectCount = videoSetCollectService.countAll(null,account.getAccountId());
-			map.put("videoSetCollectCount", videoSetCollectCount);
 			//未读通知数
-			int noticeCount = noticeService.countAll(null, 0, account.getAccountId());
-			map.put("notice0", noticeCount);
+//			int noticeCount = noticeService.countAll(null, 0, account.getAccountId());
+//			map.put("notice0", noticeCount);
 			list.add(map);
-			//return ResultUtil.getSlefSRSuccessList(list);
 			return ResultUtil.getSlefSRSuccessList(list);
 			}
 		}else if(account.getStatus().equals(1)){
@@ -637,60 +624,82 @@ public class AccountController {
 		return ResultUtil.getSlefSRFailList(list);
 	}
 	/**
-	 * app用户注册
+	 * web用户注册
 	 * @return
 	 * @throws AccountIsExistException 
 	 * @throws VerifyCodeErrorException 
+	 * @throws CommonNotRollbackException 
 	 */
-	@ApiOperation(value = "app用户注册", notes = "app用户注册")
+	@ApiOperation(value = "web用户注册", notes = "web用户注册")
 	@ApiImplicitParams({
-		  @ApiImplicitParam(name="adminName",value="手机号",dataType="string", paramType = "query",required=true),
+		@ApiImplicitParam(name="roleType",value="角色类型，1商户，2推广户，3用户",dataType="string", paramType = "query",required=true),
+		  @ApiImplicitParam(name="nickname",value="用户名称",dataType="string", paramType = "query",required=true),
+		  @ApiImplicitParam(name="email",value="邮箱号",dataType="string", paramType = "query",required=true),
+		  @ApiImplicitParam(name="adminName",value="手机号",dataType="string", paramType = "query"),
 		  @ApiImplicitParam(name="password",value="密码",dataType="string", paramType = "query",required=true),
-		  @ApiImplicitParam(name="masterId",value="推荐码ID",dataType="int", paramType = "query"),
 		  @ApiImplicitParam(name="validCode",value="验证码",dataType="string", paramType = "query",required=true)
 		  })
 	@RequestMapping(value = "/webregister", method = {RequestMethod.GET,RequestMethod.POST})
-	public @ResponseBody StateResultList webRegisterAccount(
-			@RequestParam("adminName") String adminName,
+	public @ResponseBody StateResultList<List<Map<Object,Object>>> webRegisterAccount(
+			@RequestParam("roleType") Integer roleType,
+			@RequestParam("nickname") String nickname,
+			@RequestParam("email") String email,
+			@RequestParam(value="phone",required=false) String phone,
 			@RequestParam("password") String password,
-			HttpServletRequest request,
-			@RequestParam(value="masterId",required=false) Integer masterId,
 			@RequestParam(value="validCode",required=false) String validCode,
-			HttpSession session) throws AccountIsExistException, VerifyCodeErrorException  {
-		//手机验证码
-		String vc = (String) session.getAttribute("validCode");
+			HttpServletRequest request,
+			HttpSession session) throws AccountIsExistException, VerifyCodeErrorException, CommonNotRollbackException  {
 		List<Map<Object,Object>> list = new ArrayList<>();
+		if(roleType!=3 &&phone==null){//不是用户，必须有phone
+			throw new AccountPhoneException();//手机号异常
+		}
+		//手机验证码
+		if(phone!=null){
+		String vc = (String) session.getAttribute("validCode");
 		if(!vc.equals(validCode)){
 			throw new VerifyCodeErrorException();//验证码错误
 		}
+		}
+		//邮箱验证码
+		String vce = (String) session.getAttribute("validCodeEmailIsValid");
+		if(!vce.equals("1")){
+			throw new CommonNotRollbackException("email没有验证");
+		}
 		//判断是否存在
-		Account ac = accountService.loginAccount(adminName, null, null);
+		Account ac = accountService.loginAccount(email, null, null);
 		if(ac!=null&&ac.getAccountId()!=null){
+			throw new AccountIsExistException();//账户已经存在
+		}
+		//判断是否存在
+		Account acp = accountService.loginAccount(phone, null, null);
+		if(acp!=null&&acp.getAccountId()!=null){
 			throw new AccountIsExistException();//账户已经存在
 		}
 			//新用户注册登录
 				Account account=new Account();
-				if(masterId==null){
-					throw new AccountNotMasterIdException();//缺少邀请码;
+				if(phone!=null){
+					account.setPhone(phone);					
 				}
-				//获取masterId
-				if(masterId!=null&&!masterId.equals("")){
-					Account masterAcount = accountService.loadAccount(masterId);
-					if(masterAcount==null){
-						throw new AccountNotMasterIdException();//缺少邀请码;
-					}
-					account.setMasterId(masterId);
-				}
-					account.setPhone(adminName);
-					account.setContactPhone(adminName);
-					//Account.setNickname(adminName);
+					account.setEmail(email);
+					account.setNickname(nickname);
 					account.setPassword(MyDESutil.getMD5(password));
+					account.setCardSecretReceive(0);//默认卡密接收全部
+					account.setSafetyGrade(1);//默认安全低
 					account.setCreateDate(new Date());
 					List<Role> roleList = roleService.browsePagingRole(1, Integer.MAX_VALUE, "role_id","asc");
 					for (Role role : roleList) {
-							if(role!=null && role.getName().equals("用户") ){
-								account.setRoleId(role.getRoleId());
-								account.setRoleName(role.getName());
+							if(role!=null  ){
+								if( roleType.equals(1) && role.getName().equals("商户") ){
+									account.setRoleId(role.getRoleId());
+									account.setRoleName(role.getName());
+								}else if( roleType.equals(2) && role.getName().equals("推广户") ){
+									account.setRoleId(role.getRoleId());
+									account.setRoleName(role.getName());
+								}else if( roleType.equals(3) && role.getName().equals("用户") ){
+									account.setRoleId(role.getRoleId());
+									account.setRoleName(role.getName());
+								}
+								
 							}
 						}
 					account.setLoginDate(new Date());
@@ -715,33 +724,17 @@ public class AccountController {
 				//财务
 				map.put("finance",  f.get(0));
 				//账户等级
-				List<AccountLevel> all = accountLevelService.browsePagingAccountLevel(null, null, 1, Integer.MAX_VALUE, "account_level_id", "desc");
+				List<AccountLevel> all = accountLevelService.browsePagingAccountLevel(null, 1, Integer.MAX_VALUE, "account_level_id", "desc");
 				if(all.size()>0){
 					map.put("accountLevelList",  all);
 					}else{
 					map.put("accountLevelList",  new ArrayList<AccountLevel>());
 					}
-				//账户上级
-				List<AccountParent> accountParentl = accountParentService.browsePagingAccountParent(null,null, account.getAccountId(), null, null, null, null, 1, 1, "account_parent_id", "asc");
-				if(accountParentl.size()>0){
-				map.put("accountParent",  accountParentl.get(0));
-				}else{
-				map.put("accountParent",  new Object());
-				}
-				//vip
-				List<Vip> vipl = vipService.browsePagingVip(account.getAccountId(), null, null, 1, 1, "vip_id", "asc");
-				map.put("vip",  vipl.get(0));
 				//积分
 				List<Integral> integrall = integralService.browsePagingIntegral(account.getAccountId(), null, null, 1, 1, "integral_id", "asc");
 				map.put("integrall",  integrall.get(0));
-				//视频播放记录
-				map.put("videoPlayRecordeCount", 0);
-				//视频缓存
-				map.put("videoCacheCount", 0);
-				//视频集
-				map.put("videoSetCount", 0);
 				//未读
-				map.put("notice0", 0);
+//				map.put("notice0", 0);
 				list.add(map);
 				return ResultUtil.getSlefSRSuccessList(list);
 				}else{
@@ -759,7 +752,7 @@ public class AccountController {
 		  @ApiImplicitParam(name="phone",value="手机号",dataType="string", paramType = "query",required=true)
 		  })
 	@RequestMapping(value = "/phoneIsExist", method = {RequestMethod.GET,RequestMethod.POST})
-	public @ResponseBody StateResultList accountIsExist(
+	public @ResponseBody StateResultList<List<String>> accountIsExist(
 			@RequestParam("phone") String phone,
 			HttpSession session)  {
 		List<String> list = new ArrayList<>();
@@ -776,7 +769,7 @@ public class AccountController {
 	 */
 	@ApiOperation(value = "是否登录", notes = "是否登录")
 	@RequestMapping(value = "/islogin", method = {RequestMethod.GET,RequestMethod.POST})
-	public @ResponseBody StateResultList isLoginAccount(
+	public @ResponseBody StateResultList<List<Account>> isLoginAccount(
 			HttpSession session)  {
 		Account account = (Account) session.getAttribute("account");
 		List<Account> list = new ArrayList<Account>();
@@ -792,7 +785,7 @@ public class AccountController {
 	 */
 	@ApiOperation(value = "登出", notes = "登出")
 	@RequestMapping(value = "/loginout", method = {RequestMethod.GET,RequestMethod.POST})
-	public @ResponseBody StateResultList loginoutAccount(
+	public @ResponseBody StateResultList<List<Account>> loginoutAccount(
 			HttpSession session)  {
 		session.invalidate();
 		return ResultUtil.getSlefSRSuccessList(null);

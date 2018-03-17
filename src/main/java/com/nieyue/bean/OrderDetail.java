@@ -32,15 +32,25 @@ public class OrderDetail implements Serializable {
 	@ApiModelProperty(value="封面",example="封面")
 	private String imgAddress;
 	/**
+	 * 类型名名称
+	 */
+	@ApiModelProperty(value="类型名名称",example="类型名名称")
+	private String merCateName;
+	/**
+	 * 单价
+	 */
+	@ApiModelProperty(value="单价",example="单价")
+	private Double unitPrice;
+	/**
+	 * 数量
+	 */
+	@ApiModelProperty(value="数量",example="数量")
+	private Integer number;
+	/**
 	 * 总价
 	 */
 	@ApiModelProperty(value="总价",example="总价")
 	private Double totalPrice;
-	/**
-	 * 数量/集数
-	 */
-	@ApiModelProperty(value="数量/集数",example="数量/集数")
-	private Integer number;
 	/**
 	 * 创建时间
 	 */
@@ -52,14 +62,19 @@ public class OrderDetail implements Serializable {
 	@ApiModelProperty(value="更新时间",example="更新时间")
 	private Date updateDate;
 	/**
-	 * 业务id
+	 * 优惠劵id
 	 */
-	@ApiModelProperty(value="业务ID",example="业务ID")
-	private Integer businessId;
+	@ApiModelProperty(value="优惠劵id",example="优惠劵id")
+	private Integer couponId;
+	/**
+	 * 商品id
+	 */
+	@ApiModelProperty(value="商品id",example="商品id")
+	private Integer merId;
 	/**
 	 * 下单人
 	 */
-	@ApiModelProperty(value="订单ID",example="订单ID")
+	@ApiModelProperty(value="订单id",example="订单id")
 	private Integer orderId;
 	public Integer getOrderDetailId() {
 		return orderDetailId;
@@ -79,17 +94,29 @@ public class OrderDetail implements Serializable {
 	public void setImgAddress(String imgAddress) {
 		this.imgAddress = imgAddress;
 	}
-	public Double getTotalPrice() {
-		return totalPrice;
+	public String getMerCateName() {
+		return merCateName;
 	}
-	public void setTotalPrice(Double totalPrice) {
-		this.totalPrice = totalPrice;
+	public void setMerCateName(String merCateName) {
+		this.merCateName = merCateName;
+	}
+	public Double getUnitPrice() {
+		return unitPrice;
+	}
+	public void setUnitPrice(Double unitPrice) {
+		this.unitPrice = unitPrice;
 	}
 	public Integer getNumber() {
 		return number;
 	}
 	public void setNumber(Integer number) {
 		this.number = number;
+	}
+	public Double getTotalPrice() {
+		return totalPrice;
+	}
+	public void setTotalPrice(Double totalPrice) {
+		this.totalPrice = totalPrice;
 	}
 	public Date getCreateDate() {
 		return createDate;
@@ -103,7 +130,18 @@ public class OrderDetail implements Serializable {
 	public void setUpdateDate(Date updateDate) {
 		this.updateDate = updateDate;
 	}
-	
+	public Integer getCouponId() {
+		return couponId;
+	}
+	public void setCouponId(Integer couponId) {
+		this.couponId = couponId;
+	}
+	public Integer getMerId() {
+		return merId;
+	}
+	public void setMerId(Integer merId) {
+		this.merId = merId;
+	}
 	public Integer getOrderId() {
 		return orderId;
 	}
@@ -113,11 +151,6 @@ public class OrderDetail implements Serializable {
 	public static long getSerialversionuid() {
 		return serialVersionUID;
 	}
-	public Integer getBusinessId() {
-		return businessId;
-	}
-	public void setBusinessId(Integer businessId) {
-		this.businessId = businessId;
-	}
+	
 	
 }

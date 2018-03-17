@@ -4,7 +4,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Configuration;
 
 import com.aliyuncs.DefaultAcsClient;
 import com.aliyuncs.IAcsClient;
@@ -40,35 +39,39 @@ public class AliyunSms {
     static final String domain = "dysmsapi.aliyuncs.com";
 
     // TODO 此处需要替换成开发者自己的AK(在阿里云访问控制台寻找)
-	String appkey="LTAIC9ZQBJZr7Gpz";
-    String appsecret="hHSkf87dAg1aQzQnBPNbH42oKiDdef";
-    String signName="激活码商城";
-     String templateCodeAcountRegister="SMS_126363887";
-    String templateCodePasswordUpdate="SMS_126620523";
-     String templateCodePhoneUpdate="SMS_126640526";
-    String templateCodeAuthenticationBind="SMS_126570469";
-//    @Value("${myPugin.alibaba.sms.appkey}")
-//    String appkey;
-//    @Value("${myPugin.alibaba.sms.appsecret}")
-//    String appsecret;
-//    @Value("${myPugin.alibaba.sms.signName}")
-//    String signName;
-//    //用户注册
-//  	@Value("${myPugin.alibaba.sms.templateCodeAcountRegister}")
-//  	String templateCodeAcountRegister;
-//  	//修改提现密码
-//  	@Value("${myPugin.alibaba.sms.templateCodePasswordUpdate}")
-//  	String templateCodePasswordUpdate;
-//  	//修改手机号
-//  	@Value("${myPugin.alibaba.sms.templateCodePhoneUpdate}")
-//  	String templateCodePhoneUpdate;
-//  	//绑定银行卡
-//  	@Value("${myPugin.alibaba.sms.templateCodeAuthenticationBind}")
-//  	String templateCodeAuthenticationBind;
+//	String appkey="LTAIC9ZQBJZr7Gpz";
+//    String appsecret="hHSkf87dAg1aQzQnBPNbH42oKiDdef";
+//    String signName="激活码商城";
+//     String templateCodeAcountRegister="SMS_126363887";
+//    String templateCodePasswordUpdate="SMS_18805473";
+//    String templateCodeWithdrawalsPasswordUpdate="SMS_126620523";
+//     String templateCodePhoneUpdate="SMS_126640526";
+//    String templateCodeAuthenticationBind="SMS_126570469";
+    @Value("${myPugin.alibaba.sms.appkey}")
+    String appkey;
+    @Value("${myPugin.alibaba.sms.appsecret}")
+    String appsecret;
+    @Value("${myPugin.alibaba.sms.signName}")
+    String signName;
+    //用户注册
+  	@Value("${myPugin.alibaba.sms.templateCodeAcountRegister}")
+  	String templateCodeAcountRegister;
+  	//修改密码
+  	@Value("${myPugin.alibaba.sms.templateCodePasswordUpdate}")
+  	String templateCodePasswordUpdate;
+  	//修改提现密码
+  	@Value("${myPugin.alibaba.sms.templateCodeWithdrawalsPasswordUpdate}")
+  	String templateCodeWithdrawalsPasswordUpdate;
+  	//修改手机号
+  	@Value("${myPugin.alibaba.sms.templateCodePhoneUpdate}")
+  	String templateCodePhoneUpdate;
+  	//绑定银行卡
+  	@Value("${myPugin.alibaba.sms.templateCodeAuthenticationBind}")
+  	String templateCodeAuthenticationBind;
   	/**
   	 * @param extend 验证码
   	 * @param recNum 手机号
-  	 * @param stc  模板码 1用户注册，2修改提现密码，3修改手机号，4身份验证
+  	 * @param stc  模板码 1用户注册，2修改密码，3修改提现密码，4修改手机号，5身份验证
   	 * @return
   	 * @throws ClientException
   	 */
@@ -81,8 +84,10 @@ public class AliyunSms {
     	}else if(stc==2){
     		smsTemplatecode=templateCodePasswordUpdate;
     	}else if(stc==3){
-    		smsTemplatecode=templateCodePhoneUpdate;
+    		smsTemplatecode=templateCodeWithdrawalsPasswordUpdate;
     	}else if(stc==4){
+    		smsTemplatecode=templateCodePhoneUpdate;
+    	}else if(stc==5){
     		smsTemplatecode=templateCodeAuthenticationBind;
     	}
         //可自助调整超时时间
@@ -102,8 +107,8 @@ public class AliyunSms {
         request.setSignName(signName);
         //必填:短信模板-可在短信控制台中找到
         request.setTemplateCode(smsTemplatecode);
-        //可选:模板中的变量替换JSON串,如模板内容为"亲爱的${name},您的验证码为${code}"时,此处的值为
-        request.setTemplateParam("{\"name\":\""+recNum+"\",\"code\":\""+extend+"\"}");
+        //可选:模板中的变量替换JSON串,如模板内容为"亲爱的${product},您的验证码为${code}"时,此处的值为
+        request.setTemplateParam("{\"product\":\""+recNum+"\",\"code\":\""+extend+"\"}");
 
         //选填-上行短信扩展码(无特殊需求用户请忽略此字段)
         //request.setSmsUpExtendCode("90997");
@@ -152,7 +157,7 @@ public class AliyunSms {
     public static void main(String[] args) throws ClientException, InterruptedException {
 
         //发短信
-        SendSmsResponse response = new AliyunSms().sendSms(String.valueOf((int)Math.random()*9000+1000),"15111336587",4);
+        SendSmsResponse response = new AliyunSms().sendSms(String.valueOf((int)Math.random()*9000+1000),"15111336587",1);
         System.out.println("短信接口返回的数据----------------");
         System.out.println("Code=" + response.getCode());
         System.out.println("Message=" + response.getMessage());

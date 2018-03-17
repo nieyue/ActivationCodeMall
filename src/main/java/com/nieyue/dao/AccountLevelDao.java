@@ -23,7 +23,7 @@ public interface AccountLevelDao {
 	/** 装载等级 */	
 	public AccountLevel loadAccountLevel(Integer accountLevelId);	
 	/** 等级总共数目 */	
-	public int countAll(@Param("level")Integer level,@Param("teamPurchasePrice")Double teamPurchasePrice);	
+	public int countAll(@Param("level")Integer level);	
 	/** 分页等级信息 */
-	public List<AccountLevel> browsePagingAccountLevel(@Param("level")Integer level,@Param("teamPurchasePrice")Double teamPurchasePrice,@Param("pageNum")int pageNum,@Param("pageSize")int pageSize,@Param("orderName")String orderName,@Param("orderWay")String orderWay) ;		
+	public List<AccountLevel> browsePagingAccountLevel(@Param("level")Integer level,@Param("pageNum")int pageNum,@Param("pageSize")int pageSize,@Param("orderName")String orderName,@Param("orderWay")String orderWay) ;		
 }

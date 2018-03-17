@@ -30,10 +30,50 @@ public class ReceiptInfo implements Serializable{
 	@ApiModelProperty(value="收货信息姓名",example="收货信息姓名")
 	private String name;
 	/**
-	 * 收货地址手机号
+	 * 手机号
 	 */
-	@ApiModelProperty(value="收货地址手机号",example="收货地址手机号")
+	@ApiModelProperty(value="手机号",example="手机号")
 	private String phone;
+	/**
+	 * 电话区号
+	 */
+	@ApiModelProperty(value="电话区号",example="电话区号")
+	private String telephoneArea;
+	/**
+	 * 电话号
+	 */
+	@ApiModelProperty(value="电话号",example="电话号")
+	private String telephone;
+	/**
+	 * 电话分机
+	 */
+	@ApiModelProperty(value="电话分机",example="电话分机")
+	private String telephoneExtension;
+	/**
+	 * 邮政编码
+	 */
+	@ApiModelProperty(value="邮政编码",example="邮政编码")
+	private String postcode;
+	/**
+	 * 国家
+	 */
+	@ApiModelProperty(value="国家",example="国家")
+	private String country;
+	/**
+	 * 省
+	 */
+	@ApiModelProperty(value="省",example="省")
+	private String province;
+	/**
+	 * 市
+	 */
+	@ApiModelProperty(value="市",example="市")
+	private String city;
+	/**
+	 * 区
+	 */
+	@ApiModelProperty(value="区",example="区")
+	private String area;
 	/**
 	 * 收货地址
 	 */
@@ -77,6 +117,54 @@ public class ReceiptInfo implements Serializable{
 	public void setPhone(String phone) {
 		this.phone = phone;
 	}
+	public String getTelephoneArea() {
+		return telephoneArea;
+	}
+	public void setTelephoneArea(String telephoneArea) {
+		this.telephoneArea = telephoneArea;
+	}
+	public String getTelephone() {
+		return telephone;
+	}
+	public void setTelephone(String telephone) {
+		this.telephone = telephone;
+	}
+	public String getTelephoneExtension() {
+		return telephoneExtension;
+	}
+	public void setTelephoneExtension(String telephoneExtension) {
+		this.telephoneExtension = telephoneExtension;
+	}
+	public String getPostcode() {
+		return postcode;
+	}
+	public void setPostcode(String postcode) {
+		this.postcode = postcode;
+	}
+	public String getCountry() {
+		return country;
+	}
+	public void setCountry(String country) {
+		this.country = country;
+	}
+	public String getProvince() {
+		return province;
+	}
+	public void setProvince(String province) {
+		this.province = province;
+	}
+	public String getCity() {
+		return city;
+	}
+	public void setCity(String city) {
+		this.city = city;
+	}
+	public String getArea() {
+		return area;
+	}
+	public void setArea(String area) {
+		this.area = area;
+	}
 	public String getAddress() {
 		return address;
 	}
@@ -110,22 +198,6 @@ public class ReceiptInfo implements Serializable{
 	public static long getSerialversionuid() {
 		return serialVersionUID;
 	}
-	public ReceiptInfo(Integer receiptInfoId, String name, String phone, String address, Integer isDefault,
-			Date createDate, Date updateDate, Integer accountId) {
-		super();
-		this.receiptInfoId = receiptInfoId;
-		this.name = name;
-		this.phone = phone;
-		this.address = address;
-		this.isDefault = isDefault;
-		this.createDate = createDate;
-		this.updateDate = updateDate;
-		this.accountId = accountId;
-	}
-	public ReceiptInfo() {
-		super();
-	}
-
 	
 	
 }

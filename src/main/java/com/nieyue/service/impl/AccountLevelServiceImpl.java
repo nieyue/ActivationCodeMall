@@ -44,13 +44,13 @@ public class AccountLevelServiceImpl implements AccountLevelService{
 	}
 
 	@Override
-	public int countAll(Integer level,Double teamPurchasePrice) {
-		int c = accountLevelDao.countAll( level, teamPurchasePrice);
+	public int countAll(Integer level) {
+		int c = accountLevelDao.countAll( level);
 		return c;
 	}
 
 	@Override
-	public List<AccountLevel> browsePagingAccountLevel(Integer level,Double teamPurchasePrice,int pageNum, int pageSize,
+	public List<AccountLevel> browsePagingAccountLevel(Integer level ,int pageNum, int pageSize,
 			String orderName, String orderWay) {
 		if(pageNum<1){
 			pageNum=1;
@@ -58,7 +58,7 @@ public class AccountLevelServiceImpl implements AccountLevelService{
 		if(pageSize<1){
 			pageSize=0;//没有数据
 		}
-		List<AccountLevel> l = accountLevelDao.browsePagingAccountLevel( level, teamPurchasePrice,pageNum-1, pageSize, orderName, orderWay);
+		List<AccountLevel> l = accountLevelDao.browsePagingAccountLevel( level, pageNum-1, pageSize, orderName, orderWay);
 		return l;
 	}
 

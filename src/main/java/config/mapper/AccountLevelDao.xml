@@ -11,14 +11,8 @@
    		 name,
    		 level,
    		 img_address,
-   		 team_purchase_price,
-   		 recommend_commission,
-   		 split_reward,
-   		 split_parent_reward,
-   		 split_platform_reward,
-   		 number,
-   		 discount_price,
-   		 total_price,
+   		 seller_upgrade_integral,
+   		 user_upgrade_integral,
    		 mark,
    		 update_date
    		 )
@@ -27,14 +21,8 @@
     	 #{name},
     	 #{level},
     	 #{imgAddress},
-    	 #{teamPurchasePrice},
-    	 #{recommendCommission},
-    	 #{splitReward},
-    	 #{splitParentReward},
-    	 #{splitPlatformReward},
-    	 #{number},
-    	 #{discountPrice},
-    	 #{totalPrice},
+    	 #{sellerUpgradeIntegral},
+    	 #{userUpgradeIntegral},
     	 #{mark},
     	 #{updateDate}
     	 )  
@@ -53,29 +41,11 @@
     	<if test="imgAddress!=null">
     	img_address=#{imgAddress},
     	</if>
-    	<if test="teamPurchasePrice!=null">
-    	team_purchase_price=#{teamPurchasePrice},
+    	<if test="sellerUpgradeIntegral!=null">
+    	seller_upgrade_integral=#{sellerUpgradeIntegral},
     	</if>
-    	<if test="recommendCommission!=null">
-    	recommend_commission=#{recommendCommission},
-    	</if>
-    	<if test="splitReward!=null">
-    	split_reward=#{splitReward},
-    	</if>
-    	<if test="splitParentReward!=null">
-    	split_parent_reward=#{splitParentReward},
-    	</if>
-    	<if test="splitPlatformReward!=null">
-    	split_platform_reward=#{splitPlatformReward},
-    	</if>
-    	<if test="number!=null">
-    	number=#{number},
-    	</if>
-    	<if test="discountPrice!=null">
-    	discount_price=#{discountPrice},
-    	</if>
-    	<if test="totalPrice!=null">
-    	total_price=#{totalPrice},
+    	<if test="userUpgradeIntegral!=null">
+    	user_upgrade_integral=#{userUpgradeIntegral},
     	</if>
     	<if test="mark!=null">
     	mark=#{mark},
@@ -100,14 +70,8 @@ SELECT
 	 	 name,
    		 level,
    		 img_address,
-   		 team_purchase_price,
-   		 recommend_commission,
-   		 split_reward,
-   		 split_parent_reward,
-   		 split_platform_reward,
-   		 number,
-   		 discount_price,
-   		 total_price,
+   		 seller_upgrade_integral,
+   		 user_upgrade_integral,
    		 mark,
    		 update_date
 FROM account_level_tb 
@@ -121,23 +85,14 @@ WHERE account_level_id=#{accountLevelId}
 	 	 name,
    		 level,
    		 img_address,
-   		 team_purchase_price,
-   		 recommend_commission,
-   		 split_reward,
-   		 split_parent_reward,
-   		 split_platform_reward,
-   		 number,
-   		 discount_price,
-   		 total_price,
+   		 seller_upgrade_integral,
+   		 user_upgrade_integral,
    		 mark,
    		 update_date
 	FROM account_level_tb
 	<where>
 	 	<if test="level!=null">
 	 	level=#{level}
-		</if>
-	 	<if test="teamPurchasePrice!=null">
-	 	team_purchase_price=#{teamPurchasePrice}
 		</if>
 	 AND ${orderName} 
 	<if test="orderWay=='asc'">
@@ -150,9 +105,6 @@ WHERE account_level_id=#{accountLevelId}
 	<where>
 	 	<if test="level!=null">
 	 	level=#{level}
-		</if>
-	 	<if test="teamPurchasePrice!=null">
-	 	team_purchase_price=#{teamPurchasePrice}
 		</if>
 	</where>
 		ORDER BY 
@@ -174,9 +126,6 @@ WHERE account_level_id=#{accountLevelId}
 	<where>
 	 	<if test="level!=null">
 	 	level=#{level}
-		</if>
-	 	<if test="teamPurchasePrice!=null">
-	 	team_purchase_price=#{teamPurchasePrice}
 		</if>
 	</where>
 </select>   

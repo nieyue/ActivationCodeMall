@@ -8,56 +8,46 @@
    INSERT IGNORE INTO
    		  account_tb 
    		 (
-   		 sign,
    		 phone,
    		 password,
-   		 contact_phone,
    		 nickname,
    		 icon,
    		 sex,
-   		 age,
    		 country,
-   		 province,
-   		 city,
    		 realname,
    		 email,
+   		 safety_grade,
    		 auth,
+   		 card_secret_receive,
    		 identity_cards,
+   		 identity_cards_hold_img,
    		 identity_cards_front_img,
    		 identity_cards_back_img,
-   		 wechat,
-   		 alipay,
    		 create_date,
    		 login_date,
    		 status,
-   		 master_id,
    		 role_id,
    		 role_name)
    VALUES
     	 (
-    	 #{sign},
     	 #{phone},
     	 #{password},
-    	 #{contactPhone},
     	 #{nickname},
     	 #{icon},
     	 #{sex},
-    	 #{age},
     	 #{country},
-    	 #{province},
-    	 #{city},
     	 #{realname},
     	 #{email},
+    	 #{safetyGrade},
     	 #{auth},
+    	 #{cardSecretReceive},
     	 #{identityCards},
+    	 #{identityCardsHoldImg},
     	 #{identityCardsFrontImg},
     	 #{identityCardsBackImg},
-    	 #{wechat},
-    	 #{alipay},
     	 #{createDate},
     	 #{loginDate},
     	 #{status},
-    	 #{masterId},
     	 #{roleId},
     	 #{roleName}
     	 )  
@@ -67,17 +57,11 @@
     UPDATE 
     	account_tb 
     <set>
-    <if test="sign!=null">
-    	sign=#{sign},
-    	</if>
     <if test="phone!=null">
     	phone=#{phone},
     	</if>
     <if test="password!=null">
     	password=#{password},
-    </if>
-    <if test="contactPhone!=null">
-    	contact_phone=#{contactPhone},
     </if>
     <if test="nickname!=null">
     	nickname=#{nickname},
@@ -88,17 +72,8 @@
     <if test="sex!=null">
     	sex=#{sex},
     	</if>
-    <if test="age!=null">
-    	age=#{age},
-    	</if>
     <if test="country!=null">
     	country=#{country},
-    	</if>
-    <if test="province!=null">
-    	province=#{province},
-    	</if>
-    <if test="city!=null">
-    	city=#{city},
     	</if>
     <if test="realname!=null">
     	realname=#{realname},
@@ -106,23 +81,26 @@
     <if test="email!=null">
     	email=#{email},
     	</if>
+    <if test="safetyGrade!=null">
+    	safety_grade=#{safetyGrade},
+    	</if>
     <if test="auth!=null">
     	auth=#{auth},
     	</if>
+    <if test="cardSecretReceive!=null">
+    	card_secret_receive=#{cardSecretReceive},
+    	</if>
     <if test="identityCards!=null">
     	identity_cards=#{identityCards},
+    	</if>
+    <if test="identityCardsHoldImg!=null">
+    	identity_cards_hold_img=#{identityCardsHoldImg},
     	</if>
     <if test="identityCardsFrontImg!=null">
     	identity_cards_front_img=#{identityCardsFrontImg},
     	</if>
     <if test="identityCardsBackImg!=null">
     	identity_cards_back_img=#{identityCardsBackImg},
-    	</if>
-    <if test="wechat!=null">
-    	wechat=#{wechat},
-    	</if>
-    <if test="alipay!=null">
-    	alipay=#{alipay},
     	</if>
     <if test="createDate!=null">
     	create_date=#{createDate},
@@ -132,9 +110,6 @@
     	</if>
     <if test="status!=null">
     	status=#{status},
-    	</if>
-    <if test="masterId!=null">
-    	master_id=#{masterId},
     	</if>
     <if test="roleId!=null">
     	role_id=#{roleId},
@@ -156,29 +131,24 @@
 <select id="loadAccount" parameterType="Integer" resultType="Account" >
 SELECT 
 		 account_id,
-		 sign,
-	 	 phone,
+		 phone,
    		 password,
-   		 contact_phone,
    		 nickname,
    		 icon,
    		 sex,
-   		 age,
    		 country,
-   		 province,
-   		 city,
    		 realname,
    		 email,
+   		 safety_grade,
    		 auth,
+   		 card_secret_receive,
    		 identity_cards,
+   		 identity_cards_hold_img,
    		 identity_cards_front_img,
    		 identity_cards_back_img,
-   		 wechat,
-   		 alipay,
    		 create_date,
    		 login_date,
    		 status,
-   		 master_id,
    		 role_id,
    		 role_name
 FROM account_tb 
@@ -189,29 +159,24 @@ WHERE account_id=#{accountId}
 <select id="browsePagingAccount" resultType="Account">  
     SELECT
 	     account_id,
-	     sign,
 	     phone,
    		 password,
-   		 contact_phone,
    		 nickname,
    		 icon,
    		 sex,
-   		 age,
    		 country,
-   		 province,
-   		 city,
    		 realname,
    		 email,
+   		 safety_grade,
    		 auth,
+   		 card_secret_receive,
    		 identity_cards,
+   		 identity_cards_hold_img,
    		 identity_cards_front_img,
    		 identity_cards_back_img,
-   		 wechat,
-   		 alipay,
    		 create_date,
    		 login_date,
    		 status,
-   		 master_id,
    		 role_id,
    		 role_name
 	FROM account_tb
@@ -224,6 +189,9 @@ WHERE account_id=#{accountId}
 		</if>
 	    <if test="phone!=null">
 		AND  phone like CONCAT('%','${phone}','%' )
+		</if>
+	    <if test=" email!=null">
+		AND  email like CONCAT('%','${ email}','%' )
 		</if>
 	    <if test="realname!=null">
 		AND  realname like CONCAT('%','${realname}','%' )
@@ -257,6 +225,9 @@ WHERE account_id=#{accountId}
 		</if>
 	    <if test="phone!=null">
 		AND  phone like CONCAT('%','${phone}','%' )
+		</if>
+		 <if test=" email!=null">
+		AND  email like CONCAT('%','${ email}','%' )
 		</if>
 	    <if test="realname!=null">
 		AND  realname like CONCAT('%','${realname}','%' )
@@ -300,6 +271,9 @@ WHERE account_id=#{accountId}
 	    <if test="phone!=null">
 		AND  phone like CONCAT('%','${phone}','%' )
 		</if>
+		 <if test=" email!=null">
+		AND  email like CONCAT('%','${ email}','%' )
+		</if>
 	    <if test="realname!=null">
 		AND  realname like CONCAT('%','${realname}','%' )
 		</if>
@@ -321,34 +295,29 @@ WHERE account_id=#{accountId}
 <select id="loginAccount" parameterType="String" resultType="Account" >
 SELECT 
 		 account_id,
-		 sign,
-		 phone,
+	     phone,
    		 password,
-   		 contact_phone,
    		 nickname,
    		 icon,
    		 sex,
-   		 age,
    		 country,
-   		 province,
-   		 city,
    		 realname,
    		 email,
+   		 safety_grade,
    		 auth,
+   		 card_secret_receive,
    		 identity_cards,
+   		 identity_cards_hold_img,
    		 identity_cards_front_img,
    		 identity_cards_back_img,
-   		 wechat,
-   		 alipay,
    		 create_date,
    		 login_date,
    		 status,
-   		 master_id,
    		 role_id,
    		 role_name
 FROM account_tb 
 WHERE 
-phone=#{adminName}
+(phone=#{adminName} OR email=#{adminName})
 <if test="password!=null">
 AND password=#{password}
 </if>
