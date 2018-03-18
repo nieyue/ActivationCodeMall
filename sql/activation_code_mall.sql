@@ -93,9 +93,8 @@ account_id int(11) COMMENT '账户id外键',
 create_date datetime COMMENT '创建时间',
 update_date datetime COMMENT '更新时间',
 PRIMARY KEY (finance_id),
-INDEX INDEX_ACCOUNTID (account_id) USING BTREE,
-INDEX INDEX_CREATEDATE (create_date) USING BTREE,
-INDEX INDEX_UPDATEDATE (update_date) USING BTREE
+INDEX INDEX_MONEY (money) USING BTREE,
+INDEX INDEX_ACCOUNTID (account_id) USING BTREE
 )ENGINE = InnoDB AUTO_INCREMENT=1000 DEFAULT CHARSET=utf8 COMMENT='财务表';
 
 #创建财务记录表 
@@ -228,6 +227,7 @@ create_date datetime  COMMENT '创建时间',
 update_date datetime  COMMENT '更新时间',
 PRIMARY KEY (mer_id),
 INDEX INDEX_REGION (region) USING BTREE,
+INDEX INDEX_TYPE (type) USING BTREE,
 INDEX INDEX_NAME (name) USING BTREE,
 INDEX INDEX_RECOMMEND (recommend) USING BTREE,
 INDEX INDEX_UNITPRICE (unit_price) USING BTREE,

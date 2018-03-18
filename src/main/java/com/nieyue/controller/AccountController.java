@@ -90,6 +90,10 @@ public class AccountController {
 	private  AliyunSms aliyunSms;
 	@Value("${myPugin.projectName}")
 	String projectName;
+	@Value("${myPugin.activationCodeMallProjectDomainUrl}")
+	String activationCodeMallProjectDomainUrl;
+	@Value("${myPugin.activationCodeMallClientDomainUrl}")
+	String activationCodeMallClientDomainUrl;
 
 	/**
 	 * 账户分页浏览
@@ -514,7 +518,7 @@ public class AccountController {
 				content="身份验证";
 			}
 			String uuid=UUID.randomUUID().toString();
-			String link="http://admin.laoyeshuo.cn"+"?validCodeEmail="+uuid;
+			String link=activationCodeMallProjectDomainUrl+"?validCodeEmail="+uuid;
 			//邮箱验证，发送链接到邮箱
 			boolean b = SendMailDemo.sendLinkMail(adminName, link, "激活码商城", content);
 			if(b){
@@ -551,9 +555,9 @@ public class AccountController {
 		//验证成功
 		if(validCodeEmail.equals((String)session.getAttribute("validCodeEmail"))){
 			session.setAttribute("validCodeEmailIsValid", "1");//-1没有验证通过，1是验证通过了
-			return new ModelAndView(new RedirectView("http://www.baidu.com"));
+			return new ModelAndView(new RedirectView(activationCodeMallClientDomainUrl));
 		}
-		return new ModelAndView(new RedirectView("http://www.baidu.com"));
+		return new ModelAndView(new RedirectView(activationCodeMallClientDomainUrl));
 	}
 	/**
 	 * web用户登录

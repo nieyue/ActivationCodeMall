@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+		PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"   
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">  
+<mapper namespace="com.nieyue.dao.MerCateDao">
+<!-- 添加商品类型 -->
+<insert id="addMerCate" parameterType="MerCate" keyProperty="merCateId" flushCache="true"  >  
+   INSERT IGNORE INTO
+   		  mer_cate_tb 
+   		 (
+   		 name,
+   		 summary,
+   		 update_date)
+   VALUES
+    	 (#{name},#{summary},#{updateDate})  
+</insert>  
+<!-- 更新商品类型 -->
+<update id="updateMerCate" parameterType="MerCate" >  
+    UPDATE 
+    	mer_cate_tb 
+    <set>
+    <if test="name!=null">
+    	name=#{name},
+    </if>
+    <if test="summary!=null">
+    	summary=#{summary},
+    </if>
+    <if test="updateDate!=null">
+    	update_date=#{updateDate},
+    </if>
+    </set> 
+    WHERE
+    	 mer_cate_id=#{merCateId} 
+</update> 
+<!-- 删除商品类型-->
+<delete id="delMerCate"  parameterType="Integer" >  
+    DELETE FROM
+    	 mer_cate_tb 
+    	 WHERE mer_cate_id=#{merCateId}
+</delete>  
+<!-- 加载商品类型-->
+<select id="loadMerCate" parameterType="Integer" resultType="MerCate" >
+SELECT 
+		 mer_cate_id,
+	 	 name,
+   		 summary,
+   		 update_date
+FROM mer_cate_tb 
+WHERE mer_cate_id=#{merCateId}
+</select>
+
+<!-- 分页查询商品类型-->
+<select id="browsePagingMerCate" resultType="MerCate">  
+        SELECT
+	     mer_cate_id,
+	 	 name,
+   		 summary,
+   		 update_date
+	FROM mer_cate_tb
+	WHERE ${orderName} 
+	<if test="orderWay=='asc'">
+	<![CDATA[>=]]> 
+	</if>
+	<if test="orderWay=='desc'">
+	  <![CDATA[<= ]]>
+	</if>
+	(SELECT ${orderName} FROM mer_cate_tb 
+		ORDER BY 
+			${orderName}  ${orderWay}
+		LIMIT #{pageNum}, 1
+		) 
+	ORDER BY
+		${orderName}  ${orderWay}
+	LIMIT
+		#{pageSize}
+</select> 
+
+<!-- 统计记录条数 -->
+<select id="countAll"  resultType="int">  
+	SELECT
+	 	count(mer_cate_id)
+	FROM mer_cate_tb
+</select>   
+   
+ 
+</mapper>

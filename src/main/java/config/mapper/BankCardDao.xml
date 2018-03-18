@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+		PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"   
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">  
+<mapper namespace="com.nieyue.dao.BankCardDao">
+<!-- 添加银行卡 -->
+<insert id="addBankCard" parameterType="BankCard" keyProperty="bankCardId" flushCache="true"  >  
+   INSERT IGNORE INTO
+   		  bank_card_tb 
+   		 (realname,
+   		 identity,
+   		 bank_name,
+   		 number,
+   		 phone,
+   		 create_date,
+   		 update_date,
+   		 account_id)
+   VALUES
+    	 (
+    	 #{realname},
+    	 #{identity},
+    	 #{bankName},
+    	 #{number},
+    	 #{phone},
+    	 #{createDate},
+    	 #{updateDate},
+    	 #{accountId}
+    	 )  
+</insert>  
+<!-- 更新银行卡 -->
+<update id="updateBankCard" parameterType="BankCard" >  
+    UPDATE 
+    	bank_card_tb 
+    <set>
+    <if test="realname!=null">
+    	realname=#{realname},
+    </if>
+    <if test="identity!=null">
+    	identity=#{identity},
+    </if>
+    <if test="bankName!=null">
+    	bank_name=#{bankName},
+    </if>
+    <if test="number!=null">
+    	number=#{number},
+    </if>
+    <if test="phone!=null">
+    	phone=#{phone},
+    </if>
+    <if test="createDate!=null">
+    	create_date=#{createDate},
+    </if>
+    <if test="updateDate!=null">
+    	update_date=#{updateDate},
+    </if>
+    <if test="accountId!=null">
+    	account_id=#{accountId},
+    </if>
+    </set> 
+    WHERE
+    	 bank_card_id=#{bankCardId} 
+</update> 
+<!-- 删除银行卡-->
+<delete id="delBankCard"  parameterType="Integer" >  
+    DELETE FROM
+    	 bank_card_tb 
+    	 WHERE bank_card_id=#{bankCardId}
+</delete>  
+<!-- 加载银行卡-->
+<select id="loadBankCard" parameterType="Integer" resultType="BankCard" >
+SELECT 
+		 bank_card_id,
+	 	 realname,
+   		 identity,
+   		 bank_name,
+   		 number,
+   		 phone,
+   		 create_date,
+   		 update_date,
+   		 account_id
+FROM bank_card_tb 
+WHERE bank_card_id=#{bankCardId}
+</select>
+
+<!-- 分页查询银行卡-->
+<select id="browsePagingBankCard" resultType="BankCard">  
+        SELECT
+	     bank_card_id,
+	 	 realname,
+   		 identity,
+   		 bank_name,
+   		 number,
+   		 phone,
+   		 create_date,
+   		 update_date,
+   		 account_id
+	FROM bank_card_tb
+	<where>
+	<if test="accountId!=null">
+		AND  account_id=#{accountId}
+		</if>
+	AND ${orderName} 
+	<if test="orderWay=='asc'">
+	<![CDATA[>=]]> 
+	</if>
+	<if test="orderWay=='desc'">
+	  <![CDATA[<= ]]>
+	</if>
+	(SELECT ${orderName} FROM bank_card_tb
+	<where>
+	<if test="accountId!=null">
+		AND  account_id=#{accountId}
+		</if>
+	</where> 
+		ORDER BY 
+			${orderName}  ${orderWay}
+		LIMIT #{pageNum}, 1
+		) 
+	</where>
+	ORDER BY
+		${orderName}  ${orderWay}
+	LIMIT
+		#{pageSize}
+</select> 
+
+<!-- 统计记录条数 -->
+<select id="countAll"  resultType="int">  
+	SELECT
+	 	count(bank_card_id)
+	FROM bank_card_tb
+	<where>
+	<if test="accountId!=null">
+		AND  account_id=#{accountId}
+		</if>
+	</where> 
+</select>   
+   
+ 
+</mapper>

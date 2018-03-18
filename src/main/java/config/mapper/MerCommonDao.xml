@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+		PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"   
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">  
+<mapper namespace="com.nieyue.dao.MerCommonDao">
+<!-- 添加商品公用 -->
+<insert id="addMerCommon" parameterType="MerCommon" keyProperty="merCommonId" flushCache="true"  >  
+   INSERT IGNORE INTO
+   		  mer_common_tb 
+   		 (
+   		 guide,
+   		 guarantee,
+   		 update_date)
+   VALUES
+    	 (#{guide},#{guarantee},#{updateDate})  
+</insert>  
+<!-- 更新商品公用 -->
+<update id="updateMerCommon" parameterType="MerCommon" >  
+    UPDATE 
+    	mer_common_tb 
+    <set>
+    <if test="guide!=null">
+    	guide=#{guide},
+    </if>
+    <if test="guarantee!=null">
+    	guarantee=#{guarantee},
+    </if>
+    <if test="updateDate!=null">
+    	update_date=#{updateDate},
+    </if>
+    </set> 
+    WHERE
+    	 mer_common_id=#{merCommonId} 
+</update> 
+<!-- 删除商品公用-->
+<delete id="delMerCommon"  parameterType="Integer" >  
+    DELETE FROM
+    	 mer_common_tb 
+    	 WHERE mer_common_id=#{merCommonId}
+</delete>  
+<!-- 加载商品公用-->
+<select id="loadMerCommon" parameterType="Integer" resultType="MerCommon" >
+SELECT 
+		 mer_common_id,
+	 	 guide,
+   		 guarantee,
+   		 update_date
+FROM mer_common_tb 
+WHERE mer_common_id=#{merCommonId}
+</select>
+
+<!-- 分页查询商品公用-->
+<select id="browsePagingMerCommon" resultType="MerCommon">  
+        SELECT
+	     mer_common_id,
+	 	 guide,
+   		 guarantee,
+   		 update_date
+	FROM mer_common_tb
+	WHERE ${orderName} 
+	<if test="orderWay=='asc'">
+	<![CDATA[>=]]> 
+	</if>
+	<if test="orderWay=='desc'">
+	  <![CDATA[<= ]]>
+	</if>
+	(SELECT ${orderName} FROM mer_common_tb 
+		ORDER BY 
+			${orderName}  ${orderWay}
+		LIMIT #{pageNum}, 1
+		) 
+	ORDER BY
+		${orderName}  ${orderWay}
+	LIMIT
+		#{pageSize}
+</select> 
+
+<!-- 统计记录条数 -->
+<select id="countAll"  resultType="int">  
+	SELECT
+	 	count(mer_common_id)
+	FROM mer_common_tb
+</select>   
+   
+ 
+</mapper>

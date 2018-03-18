@@ -24,7 +24,8 @@ myPugin:
   projectName: ActivationCodeMall
   requestAuth: requestAuthProd
   activationCodeMallProjectDomainUrl: http://app.jiehao9.com
-  paypal:
+  activationCodeMallClientDomainUrl: http://app.jiehao9.com 
+  paypal: 
     payCancelUrl: http://app.jiehao9.com/payCancel.html
     paySuccessUrl: http://app.jiehao9.com/paySuccess.html
     mode: live

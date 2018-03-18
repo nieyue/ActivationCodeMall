@@ -13,11 +13,9 @@
    		 recharge,
    		 consume,
    		 withdrawals,
-   		 recruiting_commission,
+   		 refund,
+   		 frozen,
    		 recommend_commission,
-   		 team_purchase_price,
-   		 split_reward,
-   		 split_parent_reward,
    		 base_profit,
    		 create_date,
    		 update_date,
@@ -30,11 +28,9 @@
     	 #{recharge},
     	 #{consume},
     	 #{withdrawals},
-    	 #{recruitingCommission},
+    	 #{refund},
+    	 #{frozen},
     	 #{recommendCommission},
-    	 #{teamPurchasePrice},
-    	 #{splitReward},
-    	 #{splitParentReward},
     	 #{baseProfit},
     	 #{createDate},
     	 #{updateDate},
@@ -61,20 +57,14 @@
     <if test="withdrawals!=null">
     	withdrawals=#{withdrawals},
     </if>
-    <if test="recruitingCommission!=null">
-    	recruiting_commission=#{recruitingCommission},
+    <if test="refund!=null">
+    	refund=#{refund},
+    </if>
+    <if test="frozen!=null">
+    	frozen=#{frozen},
     </if>
     <if test="recommendCommission!=null">
     	recommend_commission=#{recommendCommission},
-    </if>
-    <if test="teamPurchasePrice!=null">
-    	team_purchase_price=#{teamPurchasePrice},
-    </if>
-    <if test="splitReward!=null">
-    	split_reward=#{splitReward},
-    </if>
-    <if test="splitParentReward!=null">
-    	split_parent_reward=#{splitParentReward},
     </if>
     <if test="baseProfit!=null">
     	base_profit=#{baseProfit},
@@ -101,17 +91,15 @@
 <!-- 加载财务-->
 <select id="loadFinance" parameterType="Integer" resultType="Finance" >
 SELECT 
-		finance_id,
+		 finance_id,
 	 	 password,
    		 money,
    		 recharge,
    		 consume,
    		 withdrawals,
-   		 recruiting_commission,
+   		 refund,
+   		 frozen,
    		 recommend_commission,
-   		 team_purchase_price,
-   		 split_reward,
-   		 split_parent_reward,
    		 base_profit,
    		 create_date,
    		 update_date,
@@ -123,17 +111,15 @@ WHERE finance_id=#{financeId}
 <!-- 分页查询财务-->
 <select id="browsePagingFinance" resultType="Finance">  
     SELECT
-	    finance_id,
-	 	password,
+	     finance_id,
+	 	 password,
    		 money,
    		 recharge,
    		 consume,
    		 withdrawals,
-   		 recruiting_commission,
+   		 refund,
+   		 frozen,
    		 recommend_commission,
-   		 team_purchase_price,
-   		 split_reward,
-   		 split_parent_reward,
    		 base_profit,
    		 create_date,
    		 update_date,

@@ -8,7 +8,6 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -69,7 +68,7 @@ public class FinanceRecordController {
 	  @ApiImplicitParam(name="orderWay",value="排序方式",dataType="string", paramType = "query",defaultValue="desc")
 	  })
 	@RequestMapping(value = "/list", method = {RequestMethod.GET,RequestMethod.POST})
-	public @ResponseBody StateResultList browsePagingFinanceRecord(
+	public @ResponseBody StateResultList<List<FinanceRecord>> browsePagingFinanceRecord(
 			@RequestParam(value="accountId",required=false)Integer accountId,
 			@RequestParam(value="status",required=false)Integer status,
 			@RequestParam(value="method",required=false)Integer method,
@@ -157,8 +156,8 @@ public class FinanceRecordController {
 	@ApiImplicitParams({
 		  @ApiImplicitParam(name="financeRecordId",value="财务记录ID",dataType="int", paramType = "path",required=true)
 		  })
-	@RequestMapping(value = "/{financeRecordId}", method = {RequestMethod.GET,RequestMethod.POST})
-	public  StateResultList loadFinanceRecord(@PathVariable("financeRecordId") Integer financeRecordId,HttpSession session)  {
+	@RequestMapping(value = "/load", method = {RequestMethod.GET,RequestMethod.POST})
+	public  StateResultList<List<FinanceRecord>> loadFinanceRecord(@RequestParam("financeRecordId") Integer financeRecordId,HttpSession session)  {
 		List<FinanceRecord> list = new ArrayList<FinanceRecord>();
 		FinanceRecord financeRecord = financeRecordService.loadFinanceRecord(financeRecordId);
 			if(financeRecord!=null &&!financeRecord.equals("")){
@@ -177,7 +176,7 @@ public class FinanceRecordController {
 		@ApiImplicitParam(name="financeRecordId",value="财务记录ID",dataType="int", paramType = "query",required=true)
 	})
 	@RequestMapping(value = "/withdrawals", method = {RequestMethod.GET,RequestMethod.POST})
-	public  StateResultList withdrawalsFinanceRecord(
+	public  StateResultList<List<FinanceRecord>> withdrawalsFinanceRecord(
 			@RequestParam("financeRecordId") Integer financeRecordId,
 			HttpSession session)  {
 		List<FinanceRecord> list = new ArrayList<FinanceRecord>();

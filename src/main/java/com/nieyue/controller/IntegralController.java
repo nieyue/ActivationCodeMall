@@ -8,7 +8,6 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -58,7 +57,7 @@ public class IntegralController {
 	  @ApiImplicitParam(name="orderWay",value="排序方式",dataType="string", paramType = "query",defaultValue="desc")
 	  })
 	@RequestMapping(value = "/list", method = {RequestMethod.GET,RequestMethod.POST})
-	public @ResponseBody StateResultList browsePagingIntegral(
+	public @ResponseBody StateResultList<List<Integral>> browsePagingIntegral(
 			@RequestParam(value="accountId",required=false)Integer accountId,
 			@RequestParam(value="createDate",required=false)Date createDate,
 			@RequestParam(value="updateDate",required=false)Date updateDate,
@@ -134,8 +133,8 @@ public class IntegralController {
 	@ApiImplicitParams({
 		  @ApiImplicitParam(name="integralId",value="积分ID",dataType="int", paramType = "path",required=true)
 		  })
-	@RequestMapping(value = "/{integralId}", method = {RequestMethod.GET,RequestMethod.POST})
-	public  StateResultList loadIntegral(@PathVariable("integralId") Integer integralId,HttpSession session)  {
+	@RequestMapping(value = "/load", method = {RequestMethod.GET,RequestMethod.POST})
+	public  StateResultList<List<Integral>> loadIntegral(@RequestParam("integralId") Integer integralId,HttpSession session)  {
 		List<Integral> list = new ArrayList<Integral>();
 		Integral integral = integralService.loadIntegral(integralId);
 			if(integral!=null &&!integral.equals("")){

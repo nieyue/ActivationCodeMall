@@ -14,10 +14,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.nieyue.bean.IntegralDetail;
+import com.nieyue.bean.Sincerity;
 import com.nieyue.exception.NotAnymoreException;
 import com.nieyue.exception.NotIsNotExistException;
-import com.nieyue.service.IntegralDetailService;
+import com.nieyue.service.SincerityService;
 import com.nieyue.util.ResultUtil;
 import com.nieyue.util.StateResult;
 import com.nieyue.util.StateResultList;
@@ -29,26 +29,25 @@ import io.swagger.annotations.ApiOperation;
 
 
 /**
- * 积分详情控制类
+ * 诚信控制类
  * @author yy
  *
  */
-@Api(tags={"integralDetail"},value="积分详情",description="积分详情管理")
+@Api(tags={"sincerity"},value="诚信",description="诚信管理")
 @RestController
-@RequestMapping("/integralDetail")
-public class IntegralDetailController {
+@RequestMapping("/sincerity")
+public class SincerityController {
 	@Resource
-	private IntegralDetailService integralDetailService;
+	private SincerityService sincerityService;
 	
 	/**
-	 * 积分详情分页浏览
+	 * 诚信分页浏览
 	 * @param orderName 商品排序数据库字段
 	 * @param orderWay 商品排序方法 asc升序 desc降序
 	 * @return
 	 */
-	@ApiOperation(value = "积分详情列表", notes = "积分详情分页浏览")
+	@ApiOperation(value = "诚信列表", notes = "诚信分页浏览")
 	@ApiImplicitParams({
-	  @ApiImplicitParam(name="type",value="类型,1增长积分",dataType="int", paramType = "query"),
 	  @ApiImplicitParam(name="accountId",value="账户Id",dataType="int", paramType = "query"),
 	  @ApiImplicitParam(name="createDate",value="创建时间",dataType="date-time", paramType = "query"),
 	  @ApiImplicitParam(name="updateDate",value="更新时间",dataType="date-time", paramType = "query"),
@@ -58,8 +57,7 @@ public class IntegralDetailController {
 	  @ApiImplicitParam(name="orderWay",value="排序方式",dataType="string", paramType = "query",defaultValue="desc")
 	  })
 	@RequestMapping(value = "/list", method = {RequestMethod.GET,RequestMethod.POST})
-	public @ResponseBody StateResultList<List<IntegralDetail>> browsePagingIntegralDetail(
-			@RequestParam(value="type",required=false)Integer type,
+	public @ResponseBody StateResultList<List<Sincerity>> browsePagingSincerity(
 			@RequestParam(value="accountId",required=false)Integer accountId,
 			@RequestParam(value="createDate",required=false)Date createDate,
 			@RequestParam(value="updateDate",required=false)Date updateDate,
@@ -67,8 +65,8 @@ public class IntegralDetailController {
 			@RequestParam(value="pageSize",defaultValue="10",required=false) int pageSize,
 			@RequestParam(value="orderName",required=false,defaultValue="update_date") String orderName,
 			@RequestParam(value="orderWay",required=false,defaultValue="desc") String orderWay)  {
-			List<IntegralDetail> list = new ArrayList<IntegralDetail>();
-			list= integralDetailService.browsePagingIntegralDetail(type,accountId,createDate,updateDate,pageNum, pageSize, orderName, orderWay);
+			List<Sincerity> list = new ArrayList<Sincerity>();
+			list= sincerityService.browsePagingSincerity(accountId,createDate,updateDate,pageNum, pageSize, orderName, orderWay);
 			if(list.size()>0){
 				return ResultUtil.getSlefSRSuccessList(list);
 			}else{
@@ -76,76 +74,74 @@ public class IntegralDetailController {
 			}
 	}
 	/**
-	 * 积分详情修改
+	 * 诚信修改
 	 * @return
 	 */
-	@ApiOperation(value = "积分详情修改", notes = "积分详情修改")
+	@ApiOperation(value = "诚信修改", notes = "诚信修改")
 	@RequestMapping(value = "/update", method = {RequestMethod.GET,RequestMethod.POST})
-	public @ResponseBody StateResult updateIntegralDetail(@ModelAttribute IntegralDetail integralDetail,HttpSession session)  {
-		boolean um = integralDetailService.updateIntegralDetail(integralDetail);
+	public @ResponseBody StateResult updateSincerity(@ModelAttribute Sincerity sincerity,HttpSession session)  {
+		boolean um = sincerityService.updateSincerity(sincerity);
 		return ResultUtil.getSR(um);
 	}
 	/**
-	 * 积分详情增加
+	 * 诚信增加
 	 * @return 
 	 */
-	@ApiOperation(value = "积分详情增加", notes = "积分详情增加")
+	@ApiOperation(value = "诚信增加", notes = "诚信增加")
 	@RequestMapping(value = "/add", method = {RequestMethod.GET,RequestMethod.POST})
-	public @ResponseBody StateResult addIntegralDetail(@ModelAttribute IntegralDetail integralDetail, HttpSession session) {
-		boolean am = integralDetailService.addIntegralDetail(integralDetail);
+	public @ResponseBody StateResult addSincerity(@ModelAttribute Sincerity sincerity, HttpSession session) {
+		boolean am = sincerityService.addSincerity(sincerity);
 		return ResultUtil.getSR(am);
 	}
 	/**
-	 * 积分详情删除
+	 * 诚信删除
 	 * @return
 	 */
-	@ApiOperation(value = "积分详情删除", notes = "积分详情删除")
+	@ApiOperation(value = "诚信删除", notes = "诚信删除")
 	@ApiImplicitParams({
-		  @ApiImplicitParam(name="integralDetailId",value="积分详情ID",dataType="int", paramType = "query",required=true)
+		  @ApiImplicitParam(name="sincerityId",value="诚信ID",dataType="int", paramType = "query",required=true)
 		  })
 	@RequestMapping(value = "/delete", method = {RequestMethod.GET,RequestMethod.POST})
-	public @ResponseBody StateResult delIntegralDetail(@RequestParam("integralDetailId") Integer integralDetailId,HttpSession session)  {
-		boolean dm = integralDetailService.delIntegralDetail(integralDetailId);
+	public @ResponseBody StateResult delSincerity(@RequestParam("sincerityId") Integer sincerityId,HttpSession session)  {
+		boolean dm = sincerityService.delSincerity(sincerityId);
 		return ResultUtil.getSR(dm);
 	}
 	/**
-	 * 积分详情浏览数量
+	 * 诚信浏览数量
 	 * @return
 	 */
-	@ApiOperation(value = "积分详情数量", notes = "积分详情数量查询")
+	@ApiOperation(value = "诚信数量", notes = "诚信数量查询")
 	@ApiImplicitParams({
-		  @ApiImplicitParam(name="type",value="类型,1增长积分",dataType="int", paramType = "query"),
 		  @ApiImplicitParam(name="accountId",value="账户Id",dataType="int", paramType = "query"),
 		  @ApiImplicitParam(name="createDate",value="创建时间",dataType="date-time", paramType = "query"),
 		  @ApiImplicitParam(name="updateDate",value="更新时间",dataType="date-time", paramType = "query")
 		  })
 	@RequestMapping(value = "/count", method = {RequestMethod.GET,RequestMethod.POST})
 	public @ResponseBody int countAll(
-			@RequestParam(value="type",required=false)Integer type,
 			@RequestParam(value="accountId",required=false)Integer accountId,
 			@RequestParam(value="createDate",required=false)Date createDate,
 			@RequestParam(value="updateDate",required=false)Date updateDate,
 			HttpSession session)  {
-		int count = integralDetailService.countAll(type,accountId,createDate,updateDate);
+		int count = sincerityService.countAll(accountId,createDate,updateDate);
 		return count;
 	}
 	/**
-	 * 积分详情单个加载
+	 * 诚信单个加载
 	 * @return
 	 */
-	@ApiOperation(value = "积分详情单个加载", notes = "积分详情单个加载")
+	@ApiOperation(value = "诚信单个加载", notes = "诚信单个加载")
 	@ApiImplicitParams({
-		  @ApiImplicitParam(name="integralDetailId",value="积分详情ID",dataType="int", paramType = "path",required=true)
+		  @ApiImplicitParam(name="sincerityId",value="诚信ID",dataType="int", paramType = "path",required=true)
 		  })
 	@RequestMapping(value = "/load", method = {RequestMethod.GET,RequestMethod.POST})
-	public  StateResultList<List<IntegralDetail>> loadIntegralDetail(@RequestParam("integralDetailId") Integer integralDetailId,HttpSession session)  {
-		List<IntegralDetail> list = new ArrayList<IntegralDetail>();
-		IntegralDetail integralDetail = integralDetailService.loadIntegralDetail(integralDetailId);
-			if(integralDetail!=null &&!integralDetail.equals("")){
-				list.add(integralDetail);
+	public  StateResultList<List<Sincerity>> loadSincerity(@RequestParam("sincerityId") Integer sincerityId,HttpSession session)  {
+		List<Sincerity> list = new ArrayList<Sincerity>();
+		Sincerity sincerity = sincerityService.loadSincerity(sincerityId);
+			if(sincerity!=null &&!sincerity.equals("")){
+				list.add(sincerity);
 				return ResultUtil.getSlefSRSuccessList(list);
 			}else{
-				throw new NotIsNotExistException("积分详情");//不存在
+				throw new NotIsNotExistException("诚信");//不存在
 			}
 	}
 	

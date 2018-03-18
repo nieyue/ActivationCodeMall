@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+		PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"   
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">  
+<mapper namespace="com.nieyue.dao.MerSearchDao">
+<!-- 添加商品搜索 -->
+<insert id="addMerSearch" parameterType="MerSearch" keyProperty="merSearchId" flushCache="true"  >  
+   INSERT IGNORE INTO
+   		  mer_search_tb 
+   		 (
+   		 name,
+   		 number,
+   		 update_date)
+   VALUES
+    	 (#{name},#{number},#{updateDate})  
+</insert>  
+<!-- 更新商品搜索 -->
+<update id="updateMerSearch" parameterType="MerSearch" >  
+    UPDATE 
+    	mer_search_tb 
+    <set>
+    <if test="name!=null">
+    	name=#{name},
+    </if>
+    <if test="number!=null">
+    	number=#{number},
+    </if>
+    <if test="updateDate!=null">
+    	update_date=#{updateDate},
+    </if>
+    </set> 
+    WHERE
+    	 mer_search_id=#{merSearchId} 
+</update> 
+<!-- 删除商品搜索-->
+<delete id="delMerSearch"  parameterType="Integer" >  
+    DELETE FROM
+    	 mer_search_tb 
+    	 WHERE mer_search_id=#{merSearchId}
+</delete>  
+<!-- 加载商品搜索-->
+<select id="loadMerSearch" parameterType="Integer" resultType="MerSearch" >
+SELECT 
+		 mer_search_id,
+	 	 name,
+   		 number,
+   		 update_date
+FROM mer_search_tb 
+WHERE mer_search_id=#{merSearchId}
+</select>
+
+<!-- 分页查询商品搜索-->
+<select id="browsePagingMerSearch" resultType="MerSearch">  
+        SELECT
+	     mer_search_id,
+	 	 name,
+   		 number,
+   		 update_date
+	FROM mer_search_tb
+	WHERE ${orderName} 
+	<if test="orderWay=='asc'">
+	<![CDATA[>=]]> 
+	</if>
+	<if test="orderWay=='desc'">
+	  <![CDATA[<= ]]>
+	</if>
+	(SELECT ${orderName} FROM mer_search_tb 
+		ORDER BY 
+			${orderName}  ${orderWay}
+		LIMIT #{pageNum}, 1
+		) 
+	ORDER BY
+		${orderName}  ${orderWay}
+	LIMIT
+		#{pageSize}
+</select> 
+
+<!-- 统计记录条数 -->
+<select id="countAll"  resultType="int">  
+	SELECT
+	 	count(mer_search_id)
+	FROM mer_search_tb
+</select>   
+   
+ 
+</mapper>

@@ -1,0 +1,352 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+		PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"   
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">  
+<mapper namespace="com.nieyue.dao.MerDao">
+<!-- 添加商品 -->
+<insert id="addMer" parameterType="Mer" keyProperty="merId" flushCache="true"  >  
+   INSERT IGNORE INTO
+   		  mer_tb 
+   		 (
+   		 region,
+   		 platform_proportion,
+   		 type,
+   		 deliver_end_date,
+   		 name,
+   		 summary,
+   		 img_address,
+   		 platform,
+   		 recommend,
+   		 old_unit_price,
+   		 unit_price,
+   		 discount,
+   		 sale_number,
+   		 stock_number,
+   		 mer_score,
+   		 mer_comment_number,
+   		 details,
+   		 configuration,
+   		 install_activation,
+   		 status,
+   		 mer_cate_id,
+   		 seller_account_id,
+   		 create_date,
+   		 update_date
+   		 )
+   VALUES
+    	 (
+    	 #{region},
+    	 #{platformProportion},
+    	 #{type},
+    	 #{deliverEndDate},
+    	 #{name},
+    	 #{summary},
+    	 #{imgAddress},
+    	 #{platform},
+    	 #{recommend},
+    	 #{oldUnitPrice},
+    	 #{unitPrice},
+    	 #{discount},
+    	 #{saleNumber},
+    	 #{stockNumber},
+    	 #{merScore},
+    	 #{merCommentNumber},
+    	 #{details},
+    	 #{configuration},
+    	 #{installActivation},
+    	 #{status},
+    	 #{merCateId},
+    	 #{sellerAccountId},
+    	 #{createDate},
+    	 #{updateDate}
+    	 )  
+</insert>  
+<!-- 更新商品 -->
+<update id="updateMer" parameterType="Mer" >  
+    UPDATE 
+    	mer_tb 
+    <set>
+    	<if test="region!=null">
+    	region=#{region},
+    	</if>
+    	<if test="platformProportion!=null">
+    	platform_proportion=#{platformProportion},
+    	</if>
+    	<if test="type!=null">
+    	type=#{type},
+    	</if>
+    	<if test="deliverEndDate!=null">
+    	deliver_end_date=#{deliverEndDate},
+    	</if>
+    	<if test="name!=null">
+    	name=#{name},
+    	</if>
+    	<if test="summary!=null">
+    	summary=#{summary},
+    	</if>
+    	<if test="imgAddress!=null">
+    	img_address=#{imgAddress},
+    	</if>
+    	<if test="platform!=null">
+    	platform=#{platform},
+    	</if>
+    	<if test="recommend!=null">
+    	recommend=#{recommend},
+    	</if>
+    	<if test="oldUnitPrice!=null">
+    	old_unit_price=#{oldUnitPrice},
+    	</if>
+    	<if test="unitPrice!=null">
+    	unit_price=#{unitPrice},
+    	</if>
+    	<if test="discount!=null">
+    	discount=#{discount},
+    	</if>
+    	<if test="saleNumber!=null">
+    	sale_number=#{saleNumber},
+    	</if>
+    	<if test="stockNumber!=null">
+    	stock_number=#{stockNumber},
+    	</if>
+    	<if test="merScore!=null">
+    	mer_score=#{merScore},
+    	</if>
+    	<if test="merCommentNumber!=null">
+    	mer_comment_number=#{merCommentNumber},
+    	</if>
+    	<if test="details!=null">
+    	details=#{details},
+    	</if>
+    	<if test="configuration!=null">
+    	configuration=#{configuration},
+    	</if>
+    	<if test="installActivation!=null">
+    	install_activation=#{installActivation},
+    	</if>
+    	<if test="status!=null">
+    	status=#{status},
+    	</if>
+    	<if test="merCateId!=null">
+    	mer_cate_id=#{merCateId},
+    	</if>
+    	<if test="sellerAccountId!=null">
+    	seller_account_id=#{sellerAccountId},
+    	</if>
+    	<if test="createDate!=null">
+    	create_date=#{createDate},
+    	</if>
+    	<if test="updateDate!=null">
+    	update_date=#{updateDate},
+    	</if>
+    </set> 
+    WHERE
+    	 mer_id=#{merId} 
+</update> 
+<!-- 删除商品-->
+<delete id="delMer"  parameterType="Integer" >  
+    DELETE FROM
+    	 mer_tb 
+    	 WHERE mer_id=#{merId}
+</delete>  
+<!-- 加载商品-->
+<select id="loadMer" parameterType="Integer" resultType="Mer" >
+SELECT 
+		 mer_id,
+	 	 region,
+   		 platform_proportion,
+   		 type,
+   		 deliver_end_date,
+   		 name,
+   		 summary,
+   		 img_address,
+   		 platform,
+   		 recommend,
+   		 old_unit_price,
+   		 unit_price,
+   		 discount,
+   		 sale_number,
+   		 stock_number,
+   		 mer_score,
+   		 mer_comment_number,
+   		 details,
+   		 configuration,
+   		 install_activation,
+   		 status,
+   		 mer_cate_id,
+   		 seller_account_id,
+   		 create_date,
+   		 update_date
+FROM mer_tb 
+WHERE mer_id=#{merId}
+</select>
+
+<!-- 分页查询商品-->
+<select id="browsePagingMer" resultType="Mer">  
+        SELECT
+	     mer_id,
+	 	 region,
+   		 platform_proportion,
+   		 type,
+   		 deliver_end_date,
+   		 name,
+   		 summary,
+   		 img_address,
+   		 platform,
+   		 recommend,
+   		 old_unit_price,
+   		 unit_price,
+   		 discount,
+   		 sale_number,
+   		 stock_number,
+   		 mer_score,
+   		 mer_comment_number,
+   		<!--  details,
+   		 configuration,
+   		 install_activation, -->
+   		 status,
+   		 mer_cate_id,
+   		 seller_account_id,
+   		 create_date,
+   		 update_date
+	FROM mer_tb
+	<where>
+	<if test="region!=null">
+		AND  region=#{region}
+		</if>
+	<if test="type!=null">
+		AND  type=#{type}
+		</if>
+	 <if test="name!=null">
+		AND  name like CONCAT('%','${name}','%' )
+		</if>
+	<if test="recommend!=null">
+		AND  recommend=#{recommend}
+		</if>
+	<if test="unitPrice!=null">
+		AND  unit_price=#{unitPrice}
+		</if>
+	<if test="saleNumber!=null">
+		AND  sale_number=#{saleNumber}
+		</if>
+	<if test="merScore!=null">
+		AND  mer_score=#{merScore}
+		</if>
+	<if test="merCateId!=null">
+		AND  mer_cate_id=#{merCateId}
+		</if>
+	<if test="sellerAccountId!=null">
+		AND  seller_account_id=#{sellerAccountId}
+		</if>
+	<if test="createDate!=null">
+		AND  DATE(create_date)=DATE(#{createDate})
+		</if>
+	<if test="updateDate!=null">
+		AND  DATE(update_date)=DATE(#{updateDate})
+		</if>
+	<if test="status!=null">
+		AND  status=#{status}
+		</if>
+	AND ${orderName} 
+	<if test="orderWay=='asc'">
+	<![CDATA[>=]]> 
+	</if>
+	<if test="orderWay=='desc'">
+	  <![CDATA[<= ]]>
+	</if>
+	(SELECT ${orderName} FROM mer_tb 
+		<where>
+		<if test="region!=null">
+		AND  region=#{region}
+		</if>
+	<if test="type!=null">
+		AND  type=#{type}
+		</if>
+	 <if test="name!=null">
+		AND  name like CONCAT('%','${name}','%' )
+		</if>
+	<if test="recommend!=null">
+		AND  recommend=#{recommend}
+		</if>
+	<if test="unitPrice!=null">
+		AND  unit_price=#{unitPrice}
+		</if>
+	<if test="saleNumber!=null">
+		AND  sale_number=#{saleNumber}
+		</if>
+	<if test="merScore!=null">
+		AND  mer_score=#{merScore}
+		</if>
+	<if test="merCateId!=null">
+		AND  mer_cate_id=#{merCateId}
+		</if>
+	<if test="sellerAccountId!=null">
+		AND  seller_account_id=#{sellerAccountId}
+		</if>
+	<if test="createDate!=null">
+		AND  DATE(create_date)=DATE(#{createDate})
+		</if>
+	<if test="updateDate!=null">
+		AND  DATE(update_date)=DATE(#{updateDate})
+		</if>
+	<if test="status!=null">
+		AND  status=#{status}
+		</if>
+		</where>
+		ORDER BY 
+			${orderName}  ${orderWay}
+		LIMIT #{pageNum}, 1
+		) 
+	</where>
+	ORDER BY
+		${orderName}  ${orderWay}
+	LIMIT
+		#{pageSize}
+</select> 
+
+<!-- 统计记录条数 -->
+<select id="countAll"  resultType="int">  
+	SELECT
+	 	count(mer_id)
+	FROM mer_tb
+	<where>
+	<if test="region!=null">
+		AND  region=#{region}
+		</if>
+	<if test="type!=null">
+		AND  type=#{type}
+		</if>
+	 <if test="name!=null">
+		AND  name like CONCAT('%','${name}','%' )
+		</if>
+	<if test="recommend!=null">
+		AND  recommend=#{recommend}
+		</if>
+	<if test="unitPrice!=null">
+		AND  unit_price=#{unitPrice}
+		</if>
+	<if test="saleNumber!=null">
+		AND  sale_number=#{saleNumber}
+		</if>
+	<if test="merScore!=null">
+		AND  mer_score=#{merScore}
+		</if>
+	<if test="merCateId!=null">
+		AND  mer_cate_id=#{merCateId}
+		</if>
+	<if test="sellerAccountId!=null">
+		AND  seller_account_id=#{sellerAccountId}
+		</if>
+	<if test="createDate!=null">
+		AND  DATE(create_date)=DATE(#{createDate})
+		</if>
+	<if test="updateDate!=null">
+		AND  DATE(update_date)=DATE(#{updateDate})
+		</if>
+	<if test="status!=null">
+		AND  status=#{status}
+		</if>
+		</where>
+</select>   
+   
+ 
+</mapper>

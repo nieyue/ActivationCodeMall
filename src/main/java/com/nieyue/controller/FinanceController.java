@@ -11,7 +11,6 @@ import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -67,8 +66,8 @@ public class FinanceController {
 	private OrderBusiness orderBusiness;
 	@Resource
 	private AlipayUtil alipayUtil;
-	@Value("${myPugin.lordSayProjectDomainUrl}")
-	private String lordSayProjectDomainUrl;
+	@Value("${myPugin.activationCodeMallProjectDomainUrl}")
+	private String activationCodeMallProjectDomainUrl;
 	
 	/**
 	 * 财务分页浏览
@@ -78,7 +77,7 @@ public class FinanceController {
 	 */
 	@ApiOperation(value = "财务列表", notes = "财务分页浏览")
 	@ApiImplicitParams({
-	  @ApiImplicitParam(name="money",value="余额",dataType="double", paramType = "query"),
+	  @ApiImplicitParam(name="money",value="大与此余额",dataType="double", paramType = "query"),
 	  @ApiImplicitParam(name="accountId",value="账户ID",dataType="int", paramType = "query"),
 	  @ApiImplicitParam(name="pageNum",value="页头数位",dataType="int", paramType = "query",defaultValue="1"),
 	  @ApiImplicitParam(name="pageSize",value="每页数目",dataType="int", paramType = "query",defaultValue="10"),
@@ -86,7 +85,7 @@ public class FinanceController {
 	  @ApiImplicitParam(name="orderWay",value="排序方式",dataType="string", paramType = "query",defaultValue="desc")
 	  })
 	@RequestMapping(value = "/list", method = {RequestMethod.GET,RequestMethod.POST})
-	public @ResponseBody StateResultList browsePagingFinance(
+	public @ResponseBody StateResultList<List<Finance>> browsePagingFinance(
 			@RequestParam(value="money",required=false)Double money,
 			@RequestParam(value="accountId",required=false)Integer accountId,
 			@RequestParam(value="pageNum",defaultValue="1",required=false)int pageNum,
@@ -113,13 +112,13 @@ public class FinanceController {
 		return ResultUtil.getSR(um);
 	}
 	/**
-	 * 管理员修改或增加交易密码
+	 * 管理员修改或增加提现密码
 	 * @return
 	 */
-	@ApiOperation(value = "管理员修改或增加交易密码", notes = "管理员修改或增加交易密码")
+	@ApiOperation(value = "管理员修改或增加交易密码", notes = "管理员修改或增加提现密码")
 	@ApiImplicitParams({
 		  @ApiImplicitParam(name="financeId",value="财务ID",dataType="int", paramType = "query",required=true),
-		  @ApiImplicitParam(name="password",value="交易密码",dataType="string", paramType = "query",required=true)
+		  @ApiImplicitParam(name="password",value="提现密码",dataType="string", paramType = "query",required=true)
 		  })
 	@RequestMapping(value = "/updatePasswordByFinanceId", method = {RequestMethod.GET,RequestMethod.POST})
 	public @ResponseBody StateResult adminUpdatePassword(
@@ -132,17 +131,17 @@ public class FinanceController {
 		return ResultUtil.getSR(um);
 	}
 	/**
-	 * 修改或增加交易密码
+	 * 修改或增加提现密码
 	 * @return
 	 */
-	@ApiOperation(value = "修改或增加交易密码", notes = "修改或增加交易密码")
+	@ApiOperation(value = "修改或增加提现密码", notes = "修改或增加提现密码")
 	@ApiImplicitParams({
 		  @ApiImplicitParam(name="accountId",value="账户ID",dataType="int", paramType = "query",required=true),
-		  @ApiImplicitParam(name="password",value="交易密码",dataType="string", paramType = "query",required=true),
+		  @ApiImplicitParam(name="password",value="提现密码",dataType="string", paramType = "query",required=true),
 		  @ApiImplicitParam(name="validCode",value="短信验证码",dataType="string", paramType = "query",required=true)
 		  })
 	@RequestMapping(value = "/updatePassword", method = {RequestMethod.GET,RequestMethod.POST})
-	public @ResponseBody StateResultList updatePassword(
+	public @ResponseBody StateResultList<List<Finance>> updatePassword(
 			@RequestParam(value="accountId")Integer accountId,
 			@RequestParam(value="password")String password,
 			@RequestParam(value="validCode") String validCode,
@@ -166,12 +165,12 @@ public class FinanceController {
 		return ResultUtil.getSlefSRFailList(list);
 	}
 	/**
-	 *  交易密码验证
+	 *  提现密码验证
 	 * @return
 	 */
-	@ApiOperation(value = "交易密码验证", notes = "交易密码验证")
+	@ApiOperation(value = "提现密码验证", notes = "提现密码验证")
 	@RequestMapping(value = "/passwordValid", method = {RequestMethod.GET,RequestMethod.POST})
-	public @ResponseBody StateResultList passwordValid(
+	public @ResponseBody StateResultList<List<Finance>> passwordValid(
 			@RequestParam(value="accountId")Integer accountId,
 			@RequestParam(value="password")String password,
 			HttpSession session)  {
@@ -204,17 +203,17 @@ public class FinanceController {
 	@ApiOperation(value = "充值", notes = "充值")
 	@ApiImplicitParams({
 		  @ApiImplicitParam(name="accountId",value="账户ID",dataType="int", paramType = "query"),
-		  @ApiImplicitParam(name="method",value="方式，1支付宝，2微信,3ios内购",dataType="int", paramType = "query"),
+		  @ApiImplicitParam(name="method",value="方式，1支付宝，2微信,3百度钱包,4Paypal,5网银",dataType="int", paramType = "query"),
 		  @ApiImplicitParam(name="money",value="金额",dataType="double", paramType = "query")
 		  })
 	@RequestMapping(value = "/recharge", method = {RequestMethod.GET,RequestMethod.POST})
-	public @ResponseBody StateResultList rechargeFinance(
+	public @ResponseBody StateResultList<List<String>> rechargeFinance(
 			@RequestParam(value="accountId")Integer accountId,
 			@RequestParam(value="method")Integer method,
 			@RequestParam(value="money")Double money,
 			HttpSession session) {
 		Account a = accountService.loadAccount(accountId);
-		List<Object> list=new ArrayList<Object>();
+		List<String> list=new ArrayList<>();
 		if(a==null){
 			throw new AccountIsNotExistException();	//账户不存在
 		}
@@ -239,7 +238,7 @@ public class FinanceController {
 		payment.setBody("充值");
 		
 		if(method==1){//支付宝
-			payment.setNotifyUrl(lordSayProjectDomainUrl+"/finance/alipayRechargeNotifyUrl");
+			payment.setNotifyUrl(activationCodeMallProjectDomainUrl+"/finance/alipayRechargeNotifyUrl");
 			//真实环境
 			try {
 				result=alipayUtil.getAppPayment(payment);
@@ -284,11 +283,11 @@ public class FinanceController {
 	@ApiOperation(value = "提现", notes = "提现")
 	@ApiImplicitParams({
 		  @ApiImplicitParam(name="accountId",value="账户ID",dataType="int", paramType = "query"),
-		  @ApiImplicitParam(name="method",value="方式，1支付宝，2微信,3ios内购",dataType="int", paramType = "query"),
+		  @ApiImplicitParam(name="method",value="方式，1支付宝，2微信,3百度钱包,4Paypal,5网银",dataType="int", paramType = "query"),
 		  @ApiImplicitParam(name="money",value="金额",dataType="double", paramType = "query")
 		  })
 	@RequestMapping(value = "/withdrawals", method = {RequestMethod.GET,RequestMethod.POST})
-	public @ResponseBody StateResultList withdrawalsFinance(
+	public @ResponseBody StateResultList<List<Finance>> withdrawalsFinance(
 			@RequestParam(value="accountId")Integer accountId,
 			@RequestParam(value="method")Integer method,
 			@RequestParam(value="money")Double money,
@@ -364,7 +363,7 @@ public class FinanceController {
 	@ApiOperation(value = "财务数量", notes = "财务数量查询")
 	@ApiImplicitParams({
 		  @ApiImplicitParam(name="money",value="余额",dataType="double", paramType = "query"),
-		  @ApiImplicitParam(name="accountId",value="通知人id",dataType="int", paramType = "query")
+		  @ApiImplicitParam(name="accountId",value="账户id",dataType="int", paramType = "query")
 		  })
 	@RequestMapping(value = "/count", method = {RequestMethod.GET,RequestMethod.POST})
 	public @ResponseBody int countAll(
@@ -381,8 +380,8 @@ public class FinanceController {
 	@ApiImplicitParams({
 		  @ApiImplicitParam(name="financeId",value="财务ID",dataType="int", paramType = "path",required=true)
 		  })
-	@RequestMapping(value = "/{financeId}", method = {RequestMethod.GET,RequestMethod.POST})
-	public @ResponseBody StateResultList loadFinance(@PathVariable("financeId") Integer financeId,HttpSession session)  {
+	@RequestMapping(value = "/load", method = {RequestMethod.GET,RequestMethod.POST})
+	public @ResponseBody StateResultList<List<Finance>> loadFinance(@RequestParam("financeId") Integer financeId,HttpSession session)  {
 		List<Finance> list = new ArrayList<Finance>();
 		Finance finance = financeService.loadFinance(financeId);
 			if(finance!=null &&!finance.equals("")){

@@ -2,57 +2,42 @@
 <!DOCTYPE mapper
 		PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"   
 		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">  
-<mapper namespace="com.nieyue.dao.IntegralDao">
-<!-- 添加积分-->
-<insert id="addIntegral" parameterType="Integral" keyProperty="integralId" flushCache="true"  >  
+<mapper namespace="com.nieyue.dao.SincerityDao">
+<!-- 添加诚信 -->
+<insert id="addSincerity" parameterType="Sincerity" keyProperty="sincerityId" flushCache="true"  >  
    INSERT IGNORE INTO
-   		  integral_tb 
+   		  sincerity_tb 
    		 (
-   		 name,
    		 level,
-   		 integral,
-   		 upgrade_integral,
-   		 consume,
-   		 base_profit,
+   		 money,
+   		 upgrade_money,
    		 create_date,
    		 update_date,
    		 account_id
    		 )
    VALUES
     	 (
-    	 #{name},
     	 #{level},
-    	 #{integral},
-    	 #{upgradeIntegral},
-    	 #{consume},
-    	 #{baseProfit},
+    	 #{money},
+    	 #{upgradeMoney},
     	 #{createDate},
     	 #{updateDate},
     	 #{accountId}
     	 )  
 </insert>  
-<!-- 更新积分-->
-<update id="updateIntegral" parameterType="Integral" >  
+<!-- 更新诚信 -->
+<update id="updateSincerity" parameterType="Sincerity" >  
     UPDATE 
-    	integral_tb 
+    	sincerity_tb 
     <set>
-    	<if test="name!=null">
-    	name=#{name},
-    	</if>
     	<if test="level!=null">
     	level=#{level},
     	</if>
-    	<if test="integral!=null">
-    	integral=#{integral},
+    	<if test="money!=null">
+    	money=#{money},
     	</if>
-    	<if test="upgradeIntegral!=null">
-    	upgrade_integral=#{upgradeIntegral},
-    	</if>
-    	<if test="consume!=null">
-    	consume=#{consume},
-    	</if>
-    	<if test="baseProfit!=null">
-    	base_profit=#{baseProfit},
+    	<if test="upgradeMoney!=null">
+    	upgrade_money=#{upgradeMoney},
     	</if>
     	<if test="createDate!=null">
     	create_date=#{createDate},
@@ -65,45 +50,39 @@
     	</if>
     </set> 
     WHERE
-    	 integral_id=#{integralId} 
+    	 sincerity_id=#{sincerityId} 
 </update> 
-<!-- 删除财务记录-->
-<delete id="delIntegral"  parameterType="Integer" >  
+<!-- 删除诚信-->
+<delete id="delSincerity"  parameterType="Integer" >  
     DELETE FROM
-    	 integral_tb 
-    	 WHERE integral_id=#{integralId}
+    	 sincerity_tb 
+    	 WHERE sincerity_id=#{sincerityId}
 </delete>  
-<!-- 加载财务记录-->
-<select id="loadIntegral" parameterType="Integer" resultType="Integral" >
+<!-- 加载诚信-->
+<select id="loadSincerity" parameterType="Integer" resultType="Sincerity" >
 SELECT 
-		 integral_id,
-	 	 name,
+		 sincerity_id,
 	 	 level,
-	 	 integral,
-   		 upgrade_integral,
-   		 consume,
-   		 base_profit,
+   		 money,
+   		 upgrade_money,
    		 create_date,
    		 update_date,
    		 account_id
-FROM integral_tb 
-WHERE integral_id=#{integralId}
+FROM sincerity_tb 
+WHERE sincerity_id=#{sincerityId}
 </select>
 
-<!-- 分页查询财务记录-->
-<select id="browsePagingIntegral" resultType="Integral">  
+<!-- 分页查询诚信-->
+<select id="browsePagingSincerity" resultType="Sincerity">  
         SELECT
-	     integral_id,
-	     name,
+	     sincerity_id,
 	 	 level,
-	 	 integral,
-   		 upgrade_integral,
-   		 consume,
-   		 base_profit,
+   		 money,
+   		 upgrade_money,
    		 create_date,
    		 update_date,
    		 account_id
-	FROM integral_tb
+	FROM sincerity_tb
 	<where>
 	<if test="accountId!=null">
 		AND  account_id=#{accountId}
@@ -121,7 +100,7 @@ WHERE integral_id=#{integralId}
 	<if test="orderWay=='desc'">
 	  <![CDATA[<= ]]>
 	</if>
-	(SELECT ${orderName} FROM integral_tb 
+	(SELECT ${orderName} FROM sincerity_tb 
 		<where>
 	<if test="accountId!=null">
 		AND  account_id=#{accountId}
@@ -147,8 +126,8 @@ WHERE integral_id=#{integralId}
 <!-- 统计记录条数 -->
 <select id="countAll"  resultType="int">  
 	SELECT
-	 	count(integral_id)
-	FROM integral_tb
+	 	count(sincerity_id)
+	FROM sincerity_tb
 	<where>
 	<if test="accountId!=null">
 		AND  account_id=#{accountId}

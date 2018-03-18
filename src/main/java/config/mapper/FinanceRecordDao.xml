@@ -11,7 +11,9 @@
    		 method,
    		 type,
    		 transaction_number,
+   		 brokerage,
    		 money,
+   		 real_money,
    		 status,
    		 create_date,
    		 update_date,
@@ -22,7 +24,9 @@
     	 #{method},
     	 #{type},
     	 #{transactionNumber},
+    	 #{brokerage},
     	 #{money},
+    	 #{realMoney},
     	 #{status},
     	 #{createDate},
     	 #{updateDate},
@@ -43,8 +47,14 @@
     	<if test="transactionNumber!=null">
     	transaction_number=#{transactionNumber},
     	</if>
+    	<if test="brokerage!=null">
+    	brokerage=#{brokerage},
+    	</if>
     	<if test="money!=null">
     	money=#{money},
+    	</if>
+    	<if test="realMoney!=null">
+    	real_money=#{realMoney},
     	</if>
     	<if test="status!=null">
     	status=#{status},
@@ -75,7 +85,9 @@ SELECT
 	 	 method,
    		 type,
    		 transaction_number,
+	 	 brokerage,
    		 money,
+   		 real_money,
    		 status,
    		 create_date,
    		 update_date,
@@ -91,7 +103,9 @@ WHERE finance_record_id=#{financeRecordId}
 	 	 method,
    		 type,
    		 transaction_number,
+   		 brokerage,
    		 money,
+   		 real_money,
    		 status,
    		 create_date,
    		 update_date,
