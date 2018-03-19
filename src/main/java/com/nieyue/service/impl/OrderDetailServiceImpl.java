@@ -45,17 +45,22 @@ public class OrderDetailServiceImpl implements OrderDetailService{
 
 	@Override
 	public int countAll(
+			Integer couponId,
+			Integer merId,
 			Integer orderId,
 			Date createDate,
 			Date updateDate
 			) {
 		int c = orderDetailDao.countAll(
+				couponId,merId,
 				orderId,createDate,updateDate);
 		return c;
 	}
 
 	@Override
 	public List<OrderDetail> browsePagingOrderDetail(
+			Integer couponId,
+			Integer merId,
 			Integer orderId,
 			Date createDate,
 			Date updateDate,
@@ -68,6 +73,8 @@ public class OrderDetailServiceImpl implements OrderDetailService{
 			pageSize=0;//没有数据
 		}
 		List<OrderDetail> l = orderDetailDao.browsePagingOrderDetail(
+				couponId,
+				merId,
 				orderId,
 				createDate,
 				updateDate,

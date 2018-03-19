@@ -25,12 +25,16 @@ public interface OrderDetailDao {
 	public OrderDetail loadOrderDetail(Integer orderDetailId);	
 	/** 订单详情总共数目 */	
 	public int countAll(
+			@Param("couponId")Integer couponId,
+			@Param("merId")Integer merId,
 			@Param("orderId")Integer orderId,
 			@Param("createDate")Date createDate,
 			@Param("updateDate")Date updateDate
 			);	
 	/** 分页订单详情信息 */
 	public List<OrderDetail> browsePagingOrderDetail(
+			@Param("couponId")Integer couponId,
+			@Param("merId")Integer merId,
 			@Param("orderId")Integer orderId,
 			@Param("createDate")Date createDate,
 			@Param("updateDate")Date updateDate,

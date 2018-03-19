@@ -26,7 +26,7 @@ myPugin:
   projectName: ActivationCodeMall
   requestAuth: requestAuthDev
   activationCodeMallProjectDomainUrl: http://192.168.7.111:9000
-  activationCodeMallClientDomainUrl: http://localhost
+  activationCodeMallClientDomainUrl: http://192.168.7.111:9000
   paypal:
     payCancelUrl: http://192.168.7.111:9000/payCancel.html
     paySuccessUrl: http://192.168.7.111:9000/paySuccess.html

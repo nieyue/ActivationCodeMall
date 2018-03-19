@@ -250,7 +250,7 @@
 	    </resources> -->
 	 <resources>
 		  <resource>  
-            <directory>src/lib</directory>  
+            <directory>src/main/lib</directory>  
             <targetPath>BOOT-INF/lib/</targetPath>  
             <includes>  
                 <include>**/*.jar</include>  

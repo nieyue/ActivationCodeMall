@@ -20,15 +20,16 @@ spring:
      password: liliu
 myPugin: 
   session: 
-    myDomainName: laoyeshuo.cn
+    myDomainName: jiehao9.cn
   projectName: ActivationCodeMall
   requestAuth: requestAuthProd
   activationCodeMallProjectDomainUrl: http://app.jiehao9.com
-  activationCodeMallClientDomainUrl: http://app.jiehao9.com 
+  activationCodeMallClientDomainUrl: http://mall.jiehao9.com 
   paypal: 
-    payCancelUrl: http://app.jiehao9.com/payCancel.html
-    paySuccessUrl: http://app.jiehao9.com/paySuccess.html
-    mode: live
+    payCancelUrl: http://mall.jiehao9.com/payCancel.html
+    paySuccessUrl: http://mall.jiehao9.com/paySuccess.html
+    #mode: live
+    mode: sandbox
     client: 
       app: AW_Y_UZgVqf_LI8qTc8FqkuNFkCC4BSZqKegRdJF5oKORhYCKUsLnQNR7bpFWh_0EJzGHHcQU6K20HLe
       secret: EMyCJzjq4IOyOZg3QsNduppaF-YcydW1vp-sl5z6TSSEeTK-SGiDXEar9mkzxqVCtIKXd3mpOyTgaGA0

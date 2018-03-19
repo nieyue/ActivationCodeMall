@@ -22,7 +22,7 @@ public interface ArticleService {
 	/** 文章总共数目 */	
 	public int countAll(
 			Integer articleCateId,
-			Integer  commentNumber,
+			Long readingNumber,
 			Date createDate,
 			Date updateDate,
 			Integer status
@@ -30,7 +30,7 @@ public interface ArticleService {
 	/** 分页文章信息 */
 	public List<Article> browsePagingArticle(
 			Integer articleCateId,
-			Integer  commentNumber,
+			Long readingNumber,
 			Date createDate,
 			Date updateDate,
 			Integer status,

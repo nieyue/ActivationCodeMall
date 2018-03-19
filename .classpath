@@ -38,11 +38,11 @@
 			<attribute name="maven.pomderived" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="src/lib/alipay-sdk-java20170829142630-source.jar"/>
-	<classpathentry kind="lib" path="src/lib/alipay-sdk-java20170829142630.jar"/>
-	<classpathentry kind="lib" path="src/lib/commons-logging-1.1.1-sources.jar"/>
-	<classpathentry kind="lib" path="src/lib/commons-logging-1.1.1.jar"/>
+	<classpathentry kind="lib" path="src/main/lib/alipay-sdk-java20170829142630-source.jar"/>
+	<classpathentry kind="lib" path="src/main/lib/alipay-sdk-java20170829142630.jar"/>
 	<classpathentry kind="lib" path="src/main/lib/aliyun-java-sdk-core-3.2.2.jar"/>
 	<classpathentry kind="lib" path="src/main/lib/aliyun-java-sdk-dysmsapi-1.0.0.jar"/>
+	<classpathentry kind="lib" path="src/main/lib/commons-logging-1.1.1-sources.jar"/>
+	<classpathentry kind="lib" path="src/main/lib/commons-logging-1.1.1.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

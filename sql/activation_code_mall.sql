@@ -315,6 +315,7 @@ account_id int(11) COMMENT '下单人',
 status tinyint(4) COMMENT '订单状态，1冻结单，2待支付，3已支付,4预购商品，5问题单，6已取消，7已删除',
 substatus tinyint(4) COMMENT '子状态，1(1冻结单)，2（1待支付），3（1已支付），4（1等待发货），5（1待解决（买家提问后），2解决中（卖家回复后），3申请退款，4已退款，5已解决），6（1已取消），7（1已删除）',
 PRIMARY KEY (order_id),
+INDEX INDEX_TYPE (type) USING BTREE,
 INDEX INDEX_PAYTYPE (pay_type) USING BTREE,
 INDEX INDEX_ACCOUNTID (account_id) USING BTREE,
 INDEX INDEX_STATUS (status) USING BTREE,
@@ -413,7 +414,7 @@ article_id int(11) NOT NULL AUTO_INCREMENT COMMENT '文章id',
 title varchar(255) COMMENT '标题',
 subtitle varchar(255) COMMENT '子标题',
 resource varchar(255) COMMENT '来源',
-imgAddress varchar(255) COMMENT '封面',
+img_address varchar(255) COMMENT '封面',
 redirect_url varchar(255)  COMMENT '跳转url',
 content longtext  COMMENT '内容',
 reading_number bigint(20) DEFAULT 0 COMMENT '阅读数',
@@ -447,8 +448,8 @@ PRIMARY KEY (notice_id),
 INDEX INDEX_REGION (region) USING BTREE,
 INDEX INDEX_TYPE (type) USING BTREE,
 INDEX INDEX_STATUS (status) USING BTREE,
-INDEX INDEX_RECEIVEACCOUNTID (receive_account_id) USING BTREE,
 INDEX INDEX_ACCOUNTID (account_id) USING BTREE,
+INDEX INDEX_RECEIVEACCOUNTID (receive_account_id) USING BTREE,
 INDEX INDEX_BUSINESSID (business_id) USING BTREE
 )ENGINE = InnoDB AUTO_INCREMENT=1000 DEFAULT CHARSET=utf8 COMMENT='通知表';
 
@@ -513,7 +514,8 @@ INDEX INDEX_ACCOUNTID (account_id) USING BTREE,
 INDEX INDEX_STARTDATE (start_date) USING BTREE,
 INDEX INDEX_ENDDATE (end_date) USING BTREE,
 INDEX INDEX_CREATEDATE (create_date) USING BTREE,
-INDEX INDEX_UPDATEDATE (update_date) USING BTREE
+INDEX INDEX_UPDATEDATE (update_date) USING BTREE,
+INDEX INDEX_STATUS(status) USING BTREE
 )ENGINE = InnoDB AUTO_INCREMENT=1000 DEFAULT CHARSET=utf8 COMMENT='优惠劵表';
 
 #创建配置表 

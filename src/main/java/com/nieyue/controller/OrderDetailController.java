@@ -8,7 +8,6 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -49,6 +48,8 @@ public class OrderDetailController {
 	 */
 	@ApiOperation(value = "订单详情列表", notes = "订单详情分页浏览")
 	@ApiImplicitParams({
+	  @ApiImplicitParam(name="couponId",value="优惠劵id",dataType="int", paramType = "query"),
+	  @ApiImplicitParam(name="merId",value="商品id",dataType="int", paramType = "query"),
 	  @ApiImplicitParam(name="orderId",value="订单Id",dataType="int", paramType = "query"),
 	  @ApiImplicitParam(name="createDate",value="创建时间",dataType="date-time", paramType = "query"),
 	  @ApiImplicitParam(name="updateDate",value="更新时间",dataType="date-time", paramType = "query"),
@@ -58,7 +59,9 @@ public class OrderDetailController {
 	  @ApiImplicitParam(name="OrderDetailWay",value="排序方式",dataType="string", paramType = "query",defaultValue="desc")
 	  })
 	@RequestMapping(value = "/list", method = {RequestMethod.GET,RequestMethod.POST})
-	public @ResponseBody StateResultList browsePagingOrderDetail(
+	public @ResponseBody StateResultList<List<OrderDetail>> browsePagingOrderDetail(
+			@RequestParam(value="couponId",required=false)Integer couponId,
+			@RequestParam(value="merId",required=false)Integer merId,
 			@RequestParam(value="orderId",required=false)Integer orderId,
 			@RequestParam(value="createDate",required=false)Date createDate,
 			@RequestParam(value="updateDate",required=false)Date updateDate,
@@ -67,7 +70,7 @@ public class OrderDetailController {
 			@RequestParam(value="OrderDetailName",required=false,defaultValue="create_date") String OrderDetailName,
 			@RequestParam(value="OrderDetailWay",required=false,defaultValue="desc") String OrderDetailWay)  {
 			List<OrderDetail> list = new ArrayList<OrderDetail>();
-			list= orderDetailService.browsePagingOrderDetail(orderId,createDate,updateDate,pageNum, pageSize, OrderDetailName, OrderDetailWay);
+			list= orderDetailService.browsePagingOrderDetail(couponId,merId,orderId,createDate,updateDate,pageNum, pageSize, OrderDetailName, OrderDetailWay);
 			if(list.size()>0){
 				return ResultUtil.getSlefSRSuccessList(list);
 			}else{
@@ -113,17 +116,21 @@ public class OrderDetailController {
 	 */
 	@ApiOperation(value = "订单详情数量", notes = "订单详情数量查询")
 	@ApiImplicitParams({
+		  @ApiImplicitParam(name="couponId",value="优惠劵id",dataType="int", paramType = "query"),
+		  @ApiImplicitParam(name="merId",value="商品id",dataType="int", paramType = "query"),
 		@ApiImplicitParam(name="orderId",value="订单Id",dataType="int", paramType = "query"),
 		  @ApiImplicitParam(name="createDate",value="创建时间",dataType="date-time", paramType = "query"),
 		  @ApiImplicitParam(name="updateDate",value="更新时间",dataType="date-time", paramType = "query")
 		  })
 	@RequestMapping(value = "/count", method = {RequestMethod.GET,RequestMethod.POST})
 	public @ResponseBody int countAll(
+			@RequestParam(value="couponId",required=false)Integer couponId,
+			@RequestParam(value="merId",required=false)Integer merId,
 			@RequestParam(value="orderId",required=false)Integer orderId,
 			@RequestParam(value="createDate",required=false)Date createDate,
 			@RequestParam(value="updateDate",required=false)Date updateDate,
 			HttpSession session)  {
-		int count = orderDetailService.countAll(orderId,createDate,updateDate);
+		int count = orderDetailService.countAll(couponId,merId,orderId,createDate,updateDate);
 		return count;
 	}
 	/**
@@ -132,10 +139,10 @@ public class OrderDetailController {
 	 */
 	@ApiOperation(value = "订单详情单个加载", notes = "订单详情单个加载")
 	@ApiImplicitParams({
-		  @ApiImplicitParam(name="orderDetailId",value="订单详情ID",dataType="int", paramType = "path",required=true)
+		  @ApiImplicitParam(name="orderDetailId",value="订单详情ID",dataType="int", paramType = "query",required=true)
 		  })
-	@RequestMapping(value = "/{orderDetailId}", method = {RequestMethod.GET,RequestMethod.POST})
-	public  StateResultList loadOrderDetail(@PathVariable("orderDetailId") Integer orderDetailId,HttpSession session)  {
+	@RequestMapping(value = "/load", method = {RequestMethod.GET,RequestMethod.POST})
+	public  StateResultList<List<OrderDetail>> loadOrderDetail(@RequestParam("orderDetailId") Integer orderDetailId,HttpSession session)  {
 		List<OrderDetail> list = new ArrayList<OrderDetail>();
 		OrderDetail orderDetail = orderDetailService.loadOrderDetail(orderDetailId);
 			if(orderDetail!=null &&!orderDetail.equals("")){

@@ -45,13 +45,32 @@ public class NoticeServiceImpl implements NoticeService{
 	}
 
 	@Override
-	public int countAll(String title,Integer status,Integer accountId) {
-		int c = noticeDao.countAll( title, status,accountId);
+	public int countAll(
+			Integer region,
+			Integer type,
+			Integer status,
+			Integer accountId,
+			Integer receiveAccountId,
+			Integer businessId) {
+		int c = noticeDao.countAll(
+				region, 
+				type,
+				status,
+				accountId,
+				receiveAccountId,
+				businessId);
 		return c;
 	}
 
 	@Override
-	public List<Notice> browsePagingNotice(String title,Integer status,Integer accountId,int pageNum, int pageSize,
+	public List<Notice> browsePagingNotice(
+			Integer region,
+			Integer type,
+			Integer status,
+			Integer accountId,
+			Integer receiveAccountId,
+			Integer businessId,
+			int pageNum, int pageSize,
 			String orderName, String orderWay) {
 		if(pageNum<1){
 			pageNum=1;
@@ -59,7 +78,14 @@ public class NoticeServiceImpl implements NoticeService{
 		if(pageSize<1){
 			pageSize=0;//没有数据
 		}
-		List<Notice> l = noticeDao.browsePagingNotice( title, status,accountId,pageNum-1, pageSize, orderName, orderWay);
+		List<Notice> l = noticeDao.browsePagingNotice(
+				region, 
+				type,
+				status,
+				accountId,
+				receiveAccountId,
+				businessId,
+				pageNum-1, pageSize, orderName, orderWay);
 		return l;
 	}
 

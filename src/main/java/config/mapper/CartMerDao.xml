@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+		PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"   
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">  
+<mapper namespace="com.nieyue.dao.CartMerDao">
+<!-- 添加购物车商品 -->
+<insert id="addCartMer" parameterType="CartMer" keyProperty="cartMerId" flushCache="true"  >  
+   INSERT IGNORE INTO
+   		  cart_mer_tb 
+   		 (
+   		 number,
+   		 total_price,
+   		 create_date,
+   		 update_date,
+   		 mer_id,
+   		 account_id
+   		 )
+   VALUES
+    	 (
+    	 #{number},
+    	 #{totalPrice},
+    	 #{createDate},
+    	 #{updateDate},
+    	 #{merId},
+    	 #{accountId}
+    	 )  
+</insert>  
+<!-- 更新购物车商品 -->
+<update id="updateCartMer" parameterType="CartMer" >  
+    UPDATE 
+    	cart_mer_tb 
+    <set>
+    	<if test="number!=null">
+    	number=#{number},
+    	</if>
+    	<if test="totalPrice!=null">
+    	total_price=#{totalPrice},
+    	</if>
+    	<if test="createDate!=null">
+    	create_date=#{createDate},
+    	</if>
+    	<if test="updateDate!=null">
+    	update_date=#{updateDate},
+    	</if>
+    	<if test="merId!=null">
+    	mer_id=#{merId},
+    	</if>
+    	<if test="accountId!=null">
+    	account_id=#{accountId},
+    	</if>
+    </set> 
+    WHERE
+    	 cart_mer_id=#{cartMerId} 
+</update> 
+<!-- 删除购物车商品-->
+<delete id="delCartMer"  parameterType="Integer" >  
+    DELETE FROM
+    	 cart_mer_tb 
+    	 WHERE cart_mer_id=#{cartMerId}
+</delete>  
+<!-- 加载购物车商品-->
+<select id="loadCartMer" parameterType="Integer" resultType="CartMer" >
+SELECT 
+		 cart_mer_id,
+	 	 number,
+   		 total_price,
+   		 create_date,
+   		 update_date,
+   		 mer_id,
+   		 account_id
+FROM cart_mer_tb 
+WHERE cart_mer_id=#{cartMerId}
+</select>
+
+<!-- 分页查询购物车商品-->
+<select id="browsePagingCartMer" resultType="CartMer">  
+        SELECT
+	     cart_mer_id,
+	 	 number,
+   		 total_price,
+   		 create_date,
+   		 update_date,
+   		 mer_id,
+   		 account_id
+	FROM cart_mer_tb
+	<where>
+	<if test="number!=null">
+		AND  number=#{number}
+		</if>
+	<if test="merId!=null">
+		AND  mer_id=#{merId}
+		</if>
+	<if test="accountId!=null">
+		AND  account_id=#{accountId}
+		</if>
+	AND ${orderName} 
+	<if test="orderWay=='asc'">
+	<![CDATA[>=]]> 
+	</if>
+	<if test="orderWay=='desc'">
+	  <![CDATA[<= ]]>
+	</if>
+	(SELECT ${orderName} FROM cart_mer_tb 
+		<where>
+		<if test="number!=null">
+		AND  number=#{number}
+		</if>
+	<if test="merId!=null">
+		AND  mer_id=#{merId}
+		</if>
+	<if test="accountId!=null">
+		AND  account_id=#{accountId}
+		</if>
+		</where>
+		ORDER BY 
+			${orderName}  ${orderWay}
+		LIMIT #{pageNum}, 1
+		) 
+	</where>
+	ORDER BY
+		${orderName}  ${orderWay}
+	LIMIT
+		#{pageSize}
+</select> 
+
+<!-- 统计记录条数 -->
+<select id="countAll"  resultType="int">  
+	SELECT
+	 	count(cart_mer_id)
+	FROM cart_mer_tb
+	<where>
+		<if test="number!=null">
+		AND  number=#{number}
+		</if>
+	<if test="merId!=null">
+		AND  mer_id=#{merId}
+		</if>
+	<if test="accountId!=null">
+		AND  account_id=#{accountId}
+		</if>
+		</where>
+</select>   
+   
+ 
+</mapper>

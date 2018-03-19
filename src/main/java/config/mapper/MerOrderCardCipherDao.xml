@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+		PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"   
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">  
+<mapper namespace="com.nieyue.dao.MerOrderCardCipherDao">
+<!-- 添加商品订单卡密 -->
+<insert id="addMerOrderCardCipher" parameterType="MerOrderCardCipher" keyProperty="merOrderCardCipherId" flushCache="true"  >  
+   INSERT IGNORE INTO
+   		  mer_order_card_cipher_tb 
+   		 (
+   		 code,
+   		 img_address,
+   		 create_date,
+   		 order_id
+   		 )
+   VALUES
+    	 (
+    	 #{code},
+    	 #{imgAddress},
+    	 #{createDate},
+    	 #{orderId}
+    	 )  
+</insert>  
+<!-- 更新商品订单卡密 -->
+<update id="updateMerOrderCardCipher" parameterType="MerOrderCardCipher" >  
+    UPDATE 
+    	mer_order_card_cipher_tb 
+    <set>
+    	<if test="code!=null">
+    	code=#{code},
+    	</if>
+    	<if test="imgAddress!=null">
+    	img_address=#{imgAddress},
+    	</if>
+    	<if test="createDate!=null">
+    	create_date=#{createDate},
+    	</if>
+    	<if test="orderId!=null">
+    	order_id=#{orderId},
+    	</if>
+    </set> 
+    WHERE
+    	 mer_order_card_cipher_id=#{merOrderCardCipherId} 
+</update> 
+<!-- 删除商品订单卡密-->
+<delete id="delMerOrderCardCipher"  parameterType="Integer" >  
+    DELETE FROM
+    	 mer_order_card_cipher_tb 
+    	 WHERE mer_order_card_cipher_id=#{merOrderCardCipherId}
+</delete>  
+<!-- 加载商品订单卡密-->
+<select id="loadMerOrderCardCipher" parameterType="Integer" resultType="MerOrderCardCipher" >
+SELECT 
+		 mer_order_card_cipher_id,
+	 	 code,
+   		 img_address,
+   		 create_date,
+   		 order_id
+FROM mer_order_card_cipher_tb 
+WHERE mer_order_card_cipher_id=#{merOrderCardCipherId}
+</select>
+
+<!-- 分页查询商品订单卡密-->
+<select id="browsePagingMerOrderCardCipher" resultType="MerOrderCardCipher">  
+        SELECT
+	     mer_order_card_cipher_id,
+	 	 code,
+   		 img_address,
+   		 create_date,
+   		 order_id
+	FROM mer_order_card_cipher_tb
+	<where>
+	<if test="orderId!=null">
+		AND  order_id=#{orderId}
+		</if>
+	AND ${orderName} 
+	<if test="orderWay=='asc'">
+	<![CDATA[>=]]> 
+	</if>
+	<if test="orderWay=='desc'">
+	  <![CDATA[<= ]]>
+	</if>
+	(SELECT ${orderName} FROM mer_order_card_cipher_tb 
+		<where>
+	<if test="orderId!=null">
+		AND  order_id=#{orderId}
+		</if>
+		</where>
+		ORDER BY 
+			${orderName}  ${orderWay}
+		LIMIT #{pageNum}, 1
+		) 
+	</where>
+	ORDER BY
+		${orderName}  ${orderWay}
+	LIMIT
+		#{pageSize}
+</select> 
+
+<!-- 统计记录条数 -->
+<select id="countAll"  resultType="int">  
+	SELECT
+	 	count(mer_order_card_cipher_id)
+	FROM mer_order_card_cipher_tb
+	<where>
+	<if test="orderId!=null">
+		AND  order_id=#{orderId}
+		</if>
+		</where>
+</select>   
+   
+ 
+</mapper>

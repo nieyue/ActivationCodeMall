@@ -10,6 +10,14 @@
    		 (
    		 name,
    		 phone,
+   		 telephone_area,
+   		 telephone,
+   		 telephone_extension,
+   		 postcode,
+   		 country,
+   		 province,
+   		 city,
+   		 area,
    		 address,
    		 is_default,
    		 create_date,
@@ -19,6 +27,14 @@
     	 (
     	 #{name},
     	 #{phone},
+    	 #{telephoneArea},
+    	 #{telephone},
+    	 #{telephoneExtension},
+    	 #{postcode},
+    	 #{country},
+    	 #{province},
+    	 #{city},
+    	 #{area},
     	 #{address},
     	 #{isDefault},
     	 #{createDate},
@@ -36,20 +52,44 @@
     	<if test="phone!=null">
     	phone=#{phone},
     	</if>
+    	<if test="telephoneArea!=null">
+    	telephone_area=#{telephoneArea},
+    	</if>
+    	<if test="telephone!=null">
+    	telephone=#{telephone},
+    	</if>
+    	<if test="telephoneExtension!=null">
+    	telephone_extension=#{telephoneExtension},
+    	</if>
+    	<if test="postcode!=null">
+    	postcode=#{postcode},
+    	</if>
+    	<if test="country!=null">
+    	country=#{country},
+    	</if>
+    	<if test="province!=null">
+    	province=#{province},
+    	</if>
+    	<if test="city!=null">
+    	city=#{city},
+    	</if>
+    	<if test="area!=null">
+    	area=#{area},
+    	</if>
     	<if test="address!=null">
     	address=#{address},
     	</if>
     	<if test="isDefault!=null">
     	is_default=#{isDefault},
     	</if>
-    	<if test="accountId!=null">
-    	account_id=#{accountId},
-    	</if>
     	<if test="createDate!=null">
     	create_date=#{createDate},
     	</if>
     	<if test="updateDate!=null">
     	update_date=#{updateDate},
+    	</if>
+    	<if test="accountId!=null">
+    	account_id=#{accountId},
     	</if>
     </set>
     WHERE
@@ -67,6 +107,14 @@ SELECT
 		 receipt_info_id,
 	 	 name,
    		 phone,
+   		 telephone_area,
+   		 telephone,
+   		 telephone_extension,
+   		 postcode,
+   		 country,
+   		 province,
+   		 city,
+   		 area,
    		 address,
    		 is_default,
    		 create_date,
@@ -82,6 +130,14 @@ WHERE receipt_info_id=#{receiptInfoId}
 	     receipt_info_id,
 	 	 name,
    		 phone,
+   		 telephone_area,
+   		 telephone,
+   		 telephone_extension,
+   		 postcode,
+   		 country,
+   		 province,
+   		 city,
+   		 area,
    		 address,
    		 is_default,
    		 create_date,

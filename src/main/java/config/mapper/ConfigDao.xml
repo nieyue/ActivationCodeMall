@@ -9,12 +9,32 @@
    		  config_tb 
    		 (
    		 customer_service_phone,
+   		 order_mer_max_number,
+   		 seller_integral_per,
+   		 user_integral_per,
+   		 seller_sincerity_upgrade_money,
+   		 freeze_day_number,
+   		 platform_proportion,
+   		 spread_proportion,
+   		 min_withdrawals,
+   		 withdrawals_proportion,
+   		 withdrawals_min_brokerage,
    		 create_date,
    		 update_date
    		 )
    VALUES
     	 (
     	 #{customerServicePhone},
+    	 #{orderMerMaxNumber},
+    	 #{sellerIntegralPer},
+    	 #{userIntegralPer},
+    	 #{sellerSincerityUpgradeMoney},
+    	 #{freezeDayNumber},
+    	 #{platformProportion},
+    	 #{spreadProportion},
+    	 #{minWithdrawals},
+    	 #{withdrawalsProportion},
+    	 #{withdrawalsMinBrokerage},
     	 #{createDate},
     	 #{updateDate}
     	 )  
@@ -23,10 +43,47 @@
 <update id="updateConfig" parameterType="Config" >  
     UPDATE 
     	config_tb 
-    SET 
-    	customer_service_phone=#{customerServicePhone},
+    <set>
+	    <if test="customerServicePhone!=null">
+	    	customer_service_phone=#{customerServicePhone},
+	    </if>
+	    <if test="orderMerMaxNumber!=null">
+    	order_mer_max_number=#{orderMerMaxNumber},
+    	</if>
+	    <if test="sellerIntegralPer!=null">
+    	seller_integral_per=#{sellerIntegralPer},
+    	</if>
+	    <if test="userIntegralPer!=null">
+    	user_integral_per=#{userIntegralPer},
+    	</if>
+	    <if test="sellerSincerityUpgradeMoney!=null">
+    	seller_sincerity_upgrade_money=#{sellerSincerityUpgradeMoney},
+    	</if>
+	    <if test="freezeDayNumber!=null">
+    	freeze_day_number=#{freezeDayNumber},
+    	</if>
+	    <if test="platformProportion!=null">
+    	platform_proportion=#{platformProportion},
+    	</if>
+	    <if test="spreadProportion!=null">
+    	spread_proportion=#{spreadProportion},
+    	</if>
+	    <if test="minWithdrawals!=null">
+    	min_withdrawals=#{minWithdrawals},
+    	</if>
+	    <if test="withdrawalsProportion!=null">
+    	withdrawals_proportion=#{withdrawalsProportion},
+    	</if>
+	    <if test="cwithdrawalsMinBrokerage!=null">
+    	withdrawals_min_brokerage=#{withdrawalsMinBrokerage},
+    	</if>
+	    <if test="createDate!=null">
     	create_date=#{createDate},
+    	</if>
+	    <if test="updateDate!=null">
     	update_date=#{updateDate}
+    	</if>
+    </set>
     WHERE
     	 config_id=#{configId} 
 </update> 
@@ -41,6 +98,16 @@
 SELECT 
 		 config_id,
 	 	 customer_service_phone,
+   		 order_mer_max_number,
+   		 seller_integral_per,
+   		 user_integral_per,
+   		 seller_sincerity_upgrade_money,
+   		 freeze_day_number,
+   		 platform_proportion,
+   		 spread_proportion,
+   		 min_withdrawals,
+   		 withdrawals_proportion,
+   		 withdrawals_min_brokerage,
    		 create_date,
    		 update_date
 FROM config_tb 
@@ -52,6 +119,16 @@ WHERE config_id=#{configId}
         SELECT
 	     config_id,
 	 	 customer_service_phone,
+   		 order_mer_max_number,
+   		 seller_integral_per,
+   		 user_integral_per,
+   		 seller_sincerity_upgrade_money,
+   		 freeze_day_number,
+   		 platform_proportion,
+   		 spread_proportion,
+   		 min_withdrawals,
+   		 withdrawals_proportion,
+   		 withdrawals_min_brokerage,
    		 create_date,
    		 update_date
 	FROM config_tb

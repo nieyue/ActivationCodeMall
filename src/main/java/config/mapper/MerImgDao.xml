@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+		PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"   
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">  
+<mapper namespace="com.nieyue.dao.MerImgDao">
+<!-- 添加商品图片 -->
+<insert id="addMerImg" parameterType="MerImg" keyProperty="merImgId" flushCache="true"  >  
+   INSERT IGNORE INTO
+   		  mer_img_tb 
+   		 (
+   		 img_address,
+   		 number,
+   		 create_date,
+   		 update_date,
+   		 mer_id
+   		 )
+   VALUES
+    	 (
+    	 #{imgAddress},
+    	 #{number},
+    	 #{createDate},
+    	 #{updateDate},
+    	 #{merId}
+    	 )  
+</insert>  
+<!-- 更新商品图片 -->
+<update id="updateMerImg" parameterType="MerImg" >  
+    UPDATE 
+    	mer_img_tb 
+    <set>
+    	<if test="imgAddress!=null">
+    	img_address=#{imgAddress},
+    	</if>
+    	<if test="number!=null">
+    	number=#{number},
+    	</if>
+    	<if test="createDate!=null">
+    	create_date=#{createDate},
+    	</if>
+    	<if test="updateDate!=null">
+    	update_date=#{updateDate},
+    	</if>
+    	<if test="merId!=null">
+    	mer_id=#{merId},
+    	</if>
+    </set> 
+    WHERE
+    	 mer_img_id=#{merImgId} 
+</update> 
+<!-- 删除商品图片-->
+<delete id="delMerImg"  parameterType="Integer" >  
+    DELETE FROM
+    	 mer_img_tb 
+    	 WHERE mer_img_id=#{merImgId}
+</delete>  
+<!-- 加载商品图片-->
+<select id="loadMerImg" parameterType="Integer" resultType="MerImg" >
+SELECT 
+		 mer_img_id,
+	 	 img_address,
+   		 number,
+   		 create_date,
+   		 update_date,
+   		 mer_id
+FROM mer_img_tb 
+WHERE mer_img_id=#{merImgId}
+</select>
+
+<!-- 分页查询商品图片-->
+<select id="browsePagingMerImg" resultType="MerImg">  
+        SELECT
+	     mer_img_id,
+	 	 img_address,
+   		 number,
+   		 create_date,
+   		 update_date,
+   		 mer_id
+	FROM mer_img_tb
+	<where>
+	<if test="merId!=null">
+		AND  mer_id=#{merId}
+		</if>
+	AND ${orderName} 
+	<if test="orderWay=='asc'">
+	<![CDATA[>=]]> 
+	</if>
+	<if test="orderWay=='desc'">
+	  <![CDATA[<= ]]>
+	</if>
+	(SELECT ${orderName} FROM mer_img_tb 
+		<where>
+	<if test="merId!=null">
+		AND  mer_id=#{merId}
+		</if>
+		</where>
+		ORDER BY 
+			${orderName}  ${orderWay}
+		LIMIT #{pageNum}, 1
+		) 
+	</where>
+	ORDER BY
+		${orderName}  ${orderWay}
+	LIMIT
+		#{pageSize}
+</select> 
+
+<!-- 统计记录条数 -->
+<select id="countAll"  resultType="int">  
+	SELECT
+	 	count(mer_img_id)
+	FROM mer_img_tb
+	<where>
+	<if test="merId!=null">
+		AND  mer_id=#{merId}
+		</if>
+		</where>
+</select>   
+   
+ 
+</mapper>

@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+		PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"   
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">  
+<mapper namespace="com.nieyue.dao.OrderProblemDao">
+<!-- 添加商品订单问题 -->
+<insert id="addOrderProblem" parameterType="OrderProblem" keyProperty="orderProblemId" flushCache="true"  >  
+   INSERT IGNORE INTO
+   		  order_problem_tb 
+   		 (
+   		 reason,
+   		 number,
+   		 content,
+   		 create_date,
+   		 mer_id,
+   		 order_id,
+   		 account_id
+   		 )
+   VALUES
+    	 (
+    	 #{reason},
+    	 #{number},
+    	 #{content},
+    	 #{createDate},
+    	 #{merId},
+    	 #{orderId},
+    	 #{accountId}
+    	 )  
+</insert>  
+<!-- 更新商品订单问题 -->
+<update id="updateOrderProblem" parameterType="OrderProblem" >  
+    UPDATE 
+    	order_problem_tb 
+    <set>
+    	<if test="reason!=null">
+    	reason=#{reason},
+    	</if>
+    	<if test="number!=null">
+    	number=#{number},
+    	</if>
+    	<if test="content!=null">
+    	content=#{content},
+    	</if>
+    	<if test="createDate!=null">
+    	create_date=#{createDate},
+    	</if>
+    	<if test="merId!=null">
+    	mer_id=#{merId},
+    	</if>
+    	<if test="orderId!=null">
+    	order_id=#{orderId},
+    	</if>
+    	<if test="accountId!=null">
+    	account_id=#{accountId},
+    	</if>
+    </set> 
+    WHERE
+    	 order_problem_id=#{orderProblemId} 
+</update> 
+<!-- 删除商品订单问题-->
+<delete id="delOrderProblem"  parameterType="Integer" >  
+    DELETE FROM
+    	 order_problem_tb 
+    	 WHERE order_problem_id=#{orderProblemId}
+</delete>  
+<!-- 加载商品订单问题-->
+<select id="loadOrderProblem" parameterType="Integer" resultType="OrderProblem" >
+SELECT 
+		 order_problem_id,
+	 	 reason,
+	 	 number,
+   		 content,
+   		 create_date,
+   		 mer_id,
+   		 order_id,
+   		 account_id
+FROM order_problem_tb 
+WHERE order_problem_id=#{orderProblemId}
+</select>
+
+<!-- 分页查询商品订单问题-->
+<select id="browsePagingOrderProblem" resultType="OrderProblem">  
+        SELECT
+	      order_problem_id,
+	 	  reason,
+	 	 number,
+   		 content,
+   		 create_date,
+   		 mer_id,
+   		 order_id,
+   		 account_id
+	FROM order_problem_tb
+	<where>
+	<if test="number!=null">
+		AND  number=#{number}
+		</if>
+	<if test="merId!=null">
+		AND  mer_id=#{merId}
+		</if>
+	<if test="orderId!=null">
+		AND  order_id=#{orderId}
+		</if>
+	<if test="accountId!=null">
+		AND  account_id=#{accountId}
+		</if>
+	AND ${orderName} 
+	<if test="orderWay=='asc'">
+	<![CDATA[>=]]> 
+	</if>
+	<if test="orderWay=='desc'">
+	  <![CDATA[<= ]]>
+	</if>
+	(SELECT ${orderName} FROM order_problem_tb 
+		<where>
+		<if test="number!=null">
+		AND  number=#{number}
+		</if>
+	<if test="merId!=null">
+		AND  mer_id=#{merId}
+		</if>
+	<if test="orderId!=null">
+		AND  order_id=#{orderId}
+		</if>
+	<if test="accountId!=null">
+		AND  account_id=#{accountId}
+		</if>
+		</where>
+		ORDER BY 
+			${orderName}  ${orderWay}
+		LIMIT #{pageNum}, 1
+		) 
+	</where>
+	ORDER BY
+		${orderName}  ${orderWay}
+	LIMIT
+		#{pageSize}
+</select> 
+
+<!-- 统计记录条数 -->
+<select id="countAll"  resultType="int">  
+	SELECT
+	 	count(order_problem_id)
+	FROM order_problem_tb
+	<where>
+	<if test="number!=null">
+		AND  number=#{number}
+		</if>
+	<if test="merId!=null">
+		AND  mer_id=#{merId}
+		</if>
+	<if test="orderId!=null">
+		AND  order_id=#{orderId}
+		</if>
+	<if test="accountId!=null">
+		AND  account_id=#{accountId}
+		</if>
+		</where>
+</select>   
+   
+ 
+</mapper>

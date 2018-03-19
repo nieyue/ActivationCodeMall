@@ -29,6 +29,7 @@ public interface OrderDao {
 			@Param("payType")Integer payType,
 			@Param("accountId")Integer accountId,
 			@Param("status")Integer status,
+			@Param("substatus")Integer substatus,
 			@Param("createDate")Date createDate,
 			@Param("updateDate")Date updateDate
 			);	
@@ -38,6 +39,7 @@ public interface OrderDao {
 			@Param("payType")Integer payType,
 			@Param("accountId")Integer accountId,
 			@Param("status")Integer status,
+			@Param("substatus")Integer substatus,
 			@Param("createDate")Date createDate,
 			@Param("updateDate")Date updateDate,
 			@Param("pageNum")int pageNum,

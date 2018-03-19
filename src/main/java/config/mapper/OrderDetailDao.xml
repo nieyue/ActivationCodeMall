@@ -10,22 +10,28 @@
    		 (
    		 name,
    		 img_address,
-   		 total_price,
+   		 mer_cate_name,
+   		 unit_price,
    		 number,
+   		 total_price,
    		 create_date,
    		 update_date,
-   		 business_id,
+   		 coupon_id,
+   		 mer_id,
    		 order_id
    		 )
    VALUES
     	 (
     	 #{name},
     	 #{imgAddress},
-    	 #{totalPrice},
+    	 #{merCateName},
+    	 #{unitPrice},
     	 #{number},
+    	 #{totalPrice},
     	 #{createDate},
     	 #{updateDate},
-    	 #{businessId},
+    	 #{couponId},
+    	 #{merId},
     	 #{orderId}
     	 )  
 </insert>  
@@ -40,11 +46,17 @@
     	<if test="imgAddress!=null">
     	img_address=#{imgAddress},
     	</if>
-    	<if test="totalPrice!=null">
-    	total_price=#{totalPrice},
+    	<if test="merCateName!=null">
+    	mer_cate_name=#{merCateName},
+    	</if>
+    	<if test="unitPrice!=null">
+    	unit_price=#{unitPrice},
     	</if>
     	<if test="number!=null">
     	number=#{number},
+    	</if>
+    	<if test="totalPrice!=null">
+    	total_price=#{totalPrice},
     	</if>
     	<if test="createDate!=null">
     	create_date=#{createDate},
@@ -52,8 +64,11 @@
     	<if test="updateDate!=null">
     	update_date=#{updateDate},
     	</if>
-    	<if test="businessId!=null">
-    	business_id=#{businessId},
+    	<if test="couponId!=null">
+    	coupon_id=#{couponId},
+    	</if>
+    	<if test="merId!=null">
+    	mer_id=#{merId},
     	</if>
     	<if test="orderId!=null">
     	order_id=#{orderId},
@@ -74,11 +89,14 @@ SELECT
 		 order_detail_id,
 	 	 name,
    		 img_address,
-   		 total_price,
+   		 mer_cate_name,
+   		 unit_price,
    		 number,
+   		 total_price,
    		 create_date,
    		 update_date,
-   		 business_id,
+   		 coupon_id,
+   		 mer_id,
    		 order_id
 FROM order_detail_tb 
 WHERE order_detail_id=#{orderDetailId}
@@ -87,17 +105,26 @@ WHERE order_detail_id=#{orderDetailId}
 <!-- 分页查询订单详情-->
 <select id="browsePagingOrderDetail" resultType="OrderDetail">  
         SELECT
-	     order_detail_id,
+	      order_detail_id,
 	 	 name,
    		 img_address,
-   		 total_price,
+   		 mer_cate_name,
+   		 unit_price,
    		 number,
+   		 total_price,
    		 create_date,
    		 update_date,
-   		 business_id,
+   		 coupon_id,
+   		 mer_id,
    		 order_id
 	FROM order_detail_tb
 	<where>
+	<if test="couponId!=null">
+		AND  coupon_id=#{couponId}
+		</if>
+	<if test="merId!=null">
+		AND  mer_id=#{merId}
+		</if>
 	<if test="orderId!=null">
 		AND  order_id=#{orderId}
 		</if>
@@ -116,6 +143,12 @@ WHERE order_detail_id=#{orderDetailId}
 	</if>
 	(SELECT ${orderName} FROM order_detail_tb 
 		<where>
+		<if test="couponId!=null">
+		AND  coupon_id=#{couponId}
+		</if>
+	<if test="merId!=null">
+		AND  mer_id=#{merId}
+		</if>
 		<if test="orderId!=null">
 		AND  order_id=#{orderId}
 		</if>
@@ -143,6 +176,12 @@ WHERE order_detail_id=#{orderDetailId}
 	 	count(order_detail_id)
 	FROM order_detail_tb
 	<where>
+	<if test="couponId!=null">
+		AND  coupon_id=#{couponId}
+		</if>
+	<if test="merId!=null">
+		AND  mer_id=#{merId}
+		</if>
 	<if test="orderId!=null">
 		AND  order_id=#{orderId}
 		</if>

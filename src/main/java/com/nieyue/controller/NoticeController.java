@@ -7,7 +7,6 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -48,25 +47,31 @@ public class NoticeController {
 	 */
 	@ApiOperation(value = "通知列表", notes = "通知分页浏览")
 	@ApiImplicitParams({
-	  @ApiImplicitParam(name="title",value="标题",dataType="string", paramType = "query"),
-	  @ApiImplicitParam(name="status",value="状态，默认0未读，1已读",dataType="int", paramType = "query"),
-	  @ApiImplicitParam(name="accountId",value="账户ID",dataType="int", paramType = "query"),
+	  @ApiImplicitParam(name="region",value="范围，1全局，2个人",dataType="int", paramType = "query"),
+	  @ApiImplicitParam(name="type",value="类型，1系统消息，2商品动态，3问题单反馈，4商品申请自营，5提现申请，6新增商品类型",dataType="int", paramType = "query"),
+	  @ApiImplicitParam(name="status",value="状态，默认为1审核中，2申请成功，3申请失败",dataType="int", paramType = "query"),
+	  @ApiImplicitParam(name="accountId",value="申请人id",dataType="int", paramType = "query"),
+	  @ApiImplicitParam(name="receiveAccountId",value="接收人id",dataType="int", paramType = "query"),
+	  @ApiImplicitParam(name="businessId",value="业务id",dataType="int", paramType = "query"),
 	  @ApiImplicitParam(name="pageNum",value="页头数位",dataType="int", paramType = "query",defaultValue="1"),
 	  @ApiImplicitParam(name="pageSize",value="每页数目",dataType="int", paramType = "query",defaultValue="10"),
 	  @ApiImplicitParam(name="orderName",value="排序字段",dataType="string", paramType = "query",defaultValue="notice_id"),
 	  @ApiImplicitParam(name="orderWay",value="排序方式",dataType="string", paramType = "query",defaultValue="desc")
 	  })
 	@RequestMapping(value = "/list", method = {RequestMethod.GET,RequestMethod.POST})
-	public @ResponseBody StateResultList browsePagingNotice(
-			@RequestParam(value="title",required=false)String title,
-			@RequestParam(value="accountId",required=false)Integer accountId,
+	public @ResponseBody StateResultList<List<Notice>> browsePagingNotice(
+			@RequestParam(value="region",required=false)Integer region,
+			@RequestParam(value="type",required=false)Integer type,
 			@RequestParam(value="status",required=false)Integer status,
+			@RequestParam(value="accountId",required=false)Integer accountId,
+			@RequestParam(value="receiveAccountId",required=false)Integer receiveAccountId,
+			@RequestParam(value="businessId",required=false)Integer businessId,
 			@RequestParam(value="pageNum",defaultValue="1",required=false)int pageNum,
 			@RequestParam(value="pageSize",defaultValue="10",required=false) int pageSize,
 			@RequestParam(value="orderName",required=false,defaultValue="notice_id") String orderName,
 			@RequestParam(value="orderWay",required=false,defaultValue="desc") String orderWay)  {
 			List<Notice> list = new ArrayList<Notice>();
-			list= noticeService.browsePagingNotice(title,status,accountId,pageNum, pageSize, orderName, orderWay);
+			list= noticeService.browsePagingNotice(region,type,status,accountId,receiveAccountId,businessId,pageNum, pageSize, orderName, orderWay);
 			if(list.size()>0){
 				return ResultUtil.getSlefSRSuccessList(list);
 				
@@ -113,17 +118,23 @@ public class NoticeController {
 	 */
 	@ApiOperation(value = "通知数量", notes = "通知数量查询")
 	@ApiImplicitParams({
-		  @ApiImplicitParam(name="title",value="标题",dataType="string", paramType = "query"),
-		  @ApiImplicitParam(name="status",value="状态，默认0未读，1已读",dataType="int", paramType = "query"),
-		  @ApiImplicitParam(name="accountId",value="通知人id",dataType="int", paramType = "query")
+		@ApiImplicitParam(name="region",value="范围，1全局，2个人",dataType="int", paramType = "query"),
+		  @ApiImplicitParam(name="type",value="类型，1系统消息，2商品动态，3问题单反馈，4商品申请自营，5提现申请，6新增商品类型",dataType="int", paramType = "query"),
+		  @ApiImplicitParam(name="status",value="状态，默认为1审核中，2申请成功，3申请失败",dataType="int", paramType = "query"),
+		  @ApiImplicitParam(name="accountId",value="申请人id",dataType="int", paramType = "query"),
+		  @ApiImplicitParam(name="receiveAccountId",value="接收人id",dataType="int", paramType = "query"),
+		  @ApiImplicitParam(name="businessId",value="业务id",dataType="int", paramType = "query")
 		  })
 	@RequestMapping(value = "/count", method = {RequestMethod.GET,RequestMethod.POST})
 	public @ResponseBody int countAll(
-			@RequestParam(value="title",required=false)String title,
+			@RequestParam(value="region",required=false)Integer region,
+			@RequestParam(value="type",required=false)Integer type,
 			@RequestParam(value="status",required=false)Integer status,
 			@RequestParam(value="accountId",required=false)Integer accountId,
+			@RequestParam(value="receiveAccountId",required=false)Integer receiveAccountId,
+			@RequestParam(value="businessId",required=false)Integer businessId,
 			HttpSession session)  {
-		int count = noticeService.countAll(title,status,accountId);
+		int count = noticeService.countAll(region,type,status,accountId,receiveAccountId,businessId);
 		return count;
 	}
 	/**
@@ -132,10 +143,10 @@ public class NoticeController {
 	 */
 	@ApiOperation(value = "通知单个加载", notes = "通知单个加载")
 	@ApiImplicitParams({
-		  @ApiImplicitParam(name="noticeId",value="通知ID",dataType="int", paramType = "path",required=true)
+		  @ApiImplicitParam(name="noticeId",value="通知ID",dataType="int", paramType = "query",required=true)
 		  })
-	@RequestMapping(value = "/{noticeId}", method = {RequestMethod.GET,RequestMethod.POST})
-	public  StateResultList loadNotice(@PathVariable("noticeId") Integer noticeId,HttpSession session)  {
+	@RequestMapping(value = "/load", method = {RequestMethod.GET,RequestMethod.POST})
+	public  StateResultList<List<Notice>> loadNotice(@RequestParam("noticeId") Integer noticeId,HttpSession session)  {
 		List<Notice> list = new ArrayList<Notice>();
 		Notice	notice = noticeService.loadNotice(noticeId);
 			if(notice!=null &&!notice.equals("")){

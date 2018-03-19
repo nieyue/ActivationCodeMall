@@ -7,7 +7,6 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -54,7 +53,7 @@ public class ArticleCateController {
 	  @ApiImplicitParam(name="orderWay",value="排序方式",dataType="string", paramType = "query",defaultValue="desc")
 	  })
 	@RequestMapping(value = "/list", method = {RequestMethod.GET,RequestMethod.POST})
-	public @ResponseBody StateResultList browsePagingArticleCate(
+	public @ResponseBody StateResultList<List<ArticleCate>> browsePagingArticleCate(
 			@RequestParam(value="pageNum",defaultValue="1",required=false)int pageNum,
 			@RequestParam(value="pageSize",defaultValue="10",required=false) int pageSize,
 			@RequestParam(value="orderName",required=false,defaultValue="update_date") String orderName,
@@ -116,10 +115,10 @@ public class ArticleCateController {
 	 */
 	@ApiOperation(value = "文章类型单个加载", notes = "文章类型单个加载")
 	@ApiImplicitParams({
-		  @ApiImplicitParam(name="articleCateId",value="文章类型ID",dataType="int", paramType = "path",required=true)
+		  @ApiImplicitParam(name="articleCateId",value="文章类型ID",dataType="int", paramType = "query",required=true)
 		  })
-	@RequestMapping(value = "/{articleCateId}", method = {RequestMethod.GET,RequestMethod.POST})
-	public  StateResultList loadArticleCate(@PathVariable("articleCateId") Integer articleCateId,HttpSession session)  {
+	@RequestMapping(value = "/load", method = {RequestMethod.GET,RequestMethod.POST})
+	public  StateResultList<List<ArticleCate>> loadArticleCate(@RequestParam("articleCateId") Integer articleCateId,HttpSession session)  {
 		List<ArticleCate> list = new ArrayList<ArticleCate>();
 		ArticleCate articleCate = articleCateService.loadArticleCate(articleCateId);
 			if(articleCate!=null &&!articleCate.equals("")){

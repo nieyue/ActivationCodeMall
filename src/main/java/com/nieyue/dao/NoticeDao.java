@@ -23,7 +23,21 @@ public interface NoticeDao {
 	/** 装载通知 */	
 	public Notice loadNotice(Integer noticeId);	
 	/** 通知总共数目 */	
-	public int countAll(@Param("title")String title,@Param("status")Integer status,@Param("accountId")Integer accountId);	
+	public int countAll(
+			@Param("region")Integer region,
+			@Param("type")Integer type,
+			@Param("status")Integer status,
+			@Param("accountId")Integer accountId,
+			@Param("receiveAccountId")Integer receiveAccountId,
+			@Param("businessId")Integer businessId
+			);	
 	/** 分页通知信息 */
-	public List<Notice> browsePagingNotice(@Param("title")String title,@Param("status")Integer status,@Param("accountId")Integer accountId,@Param("pageNum")int pageNum,@Param("pageSize")int pageSize,@Param("orderName")String orderName,@Param("orderWay")String orderWay) ;		
+	public List<Notice> browsePagingNotice(
+			@Param("region")Integer region,
+			@Param("type")Integer type,
+			@Param("status")Integer status,
+			@Param("accountId")Integer accountId,
+			@Param("receiveAccountId")Integer receiveAccountId,
+			@Param("businessId")Integer businessId,
+			@Param("pageNum")int pageNum,@Param("pageSize")int pageSize,@Param("orderName")String orderName,@Param("orderWay")String orderWay) ;		
 }

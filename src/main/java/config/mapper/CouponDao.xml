@@ -1,0 +1,248 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+		PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"   
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">  
+<mapper namespace="com.nieyue.dao.CouponDao">
+<!-- 添加优惠劵 -->
+<insert id="addCoupon" parameterType="Coupon" keyProperty="couponId" flushCache="true"  >  
+   INSERT IGNORE INTO
+   		  coupon_tb 
+   		 (
+   		 code,
+   		 name,
+   		 img_address,
+   		 discount,
+   		 content,
+   		 create_date,
+   		 update_date,
+   		 start_date,
+   		 end_date,
+   		 status,
+   		 mer_cate_id,
+   		 account_id,
+   		 coupon_term_id
+   		 )
+   VALUES
+    	 (
+    	 #{code},
+    	 #{name},
+    	 #{imgAddress},
+    	 #{discount},
+    	 #{content},
+    	 #{createDate},
+    	 #{updateDate},
+    	 #{startDate},
+    	 #{endDate},
+    	 #{status},
+    	 #{merCateId},
+    	 #{accountId},
+    	 #{couponTermId}
+    	 )  
+</insert>  
+<!-- 更新优惠劵 -->
+<update id="updateCoupon" parameterType="Coupon" >  
+    UPDATE 
+    	coupon_tb 
+    <set>
+		<if test="code!=null">
+    	code=#{code},
+		</if>
+		<if test="name!=null">
+    	name=#{name},
+		</if>
+		<if test="imgAddress!=null">
+    	img_address=#{imgAddress},
+		</if>
+		<if test="discount!=null">
+    	discount=#{discount},
+		</if>
+		<if test="content!=null">
+    	content=#{content},
+		</if>
+		<if test="createDate!=null">
+    	create_date=#{createDate},
+		</if>
+		<if test="updateDate!=null">
+    	update_date=#{updateDate},
+		</if>
+		<if test="startDate!=null">
+    	start_date=#{startDate},
+		</if>
+		<if test="endDate!=null">
+    	end_date=#{endDate},
+		</if>
+		<if test="status!=null">
+    	status=#{status},
+		</if>
+		<if test="merCateId!=null">
+    	mer_cate_id=#{merCateId},
+		</if>
+		<if test="accountId!=null">
+    	account_id=#{accountId},
+		</if>
+		<if test="couponTermId!=null">
+    	coupon_term_id=#{couponTermId},
+		</if>
+    </set> 
+    WHERE
+    	 coupon_id=#{couponId} 
+</update> 
+<!-- 删除优惠劵-->
+<delete id="delCoupon"  parameterType="Integer" >  
+    DELETE FROM
+    	 coupon_tb 
+    	 WHERE coupon_id=#{couponId}
+</delete>  
+<!-- 加载优惠劵-->
+<select id="loadCoupon" parameterType="Integer" resultType="Coupon" >
+SELECT 
+		coupon_id,
+	 	code,
+   		 name,
+   		 img_address,
+   		 discount,
+   		 content,
+   		 create_date,
+   		 update_date,
+   		 start_date,
+   		 end_date,
+   		 status,
+   		 mer_cate_id,
+   		 account_id,
+   		 coupon_term_id
+FROM coupon_tb 
+WHERE coupon_id=#{couponId}
+</select>
+
+<!-- 分页查询优惠劵-->
+<select id="browsePagingCoupon" resultType="Coupon">  
+        SELECT
+	    coupon_id,
+	 	code,
+   		 name,
+   		 img_address,
+   		 discount,
+   		 content,
+   		 create_date,
+   		 update_date,
+   		 start_date,
+   		 end_date,
+   		 status,
+   		 mer_cate_id,
+   		 account_id,
+   		 coupon_term_id
+	FROM coupon_tb
+	<where>
+	<if test="code!=null">
+		AND  code=#{code}
+		</if>
+	<if test="merCateId!=null">
+		AND  mer_cate_id=#{merCateId}
+		</if>
+	<if test="couponTermId!=null">
+		AND  coupon_term_id=#{couponTermId}
+		</if>
+	<if test="accountId!=null">
+		AND  account_id=#{accountId}
+		</if>
+	<if test="startDate!=null">
+		AND  DATE(start_date)=DATE(#{startDate})
+		</if>
+	<if test="endDate!=null">
+		AND  DATE(end_date)=DATE(#{endDate})
+		</if>
+	<if test="createDate!=null">
+		AND  DATE(create_date)=DATE(#{createDate})
+		</if>
+	<if test="updateDate!=null">
+		AND  DATE(update_date)=DATE(#{updateDate})
+		</if>
+		<if test="status!=null">
+		AND  status=#{status}
+		</if>
+	AND ${orderName} 
+	<if test="orderWay=='asc'">
+	<![CDATA[>=]]> 
+	</if>
+	<if test="orderWay=='desc'">
+	  <![CDATA[<= ]]>
+	</if>
+	(SELECT ${orderName} FROM coupon_tb 
+	<where>
+		<if test="code!=null">
+		AND  code=#{code}
+		</if>
+	<if test="merCateId!=null">
+		AND  mer_cate_id=#{merCateId}
+		</if>
+	<if test="couponTermId!=null">
+		AND  coupon_term_id=#{couponTermId}
+		</if>
+	<if test="accountId!=null">
+		AND  account_id=#{accountId}
+		</if>
+	<if test="startDate!=null">
+		AND  DATE(start_date)=DATE(#{startDate})
+		</if>
+	<if test="endDate!=null">
+		AND  DATE(end_date)=DATE(#{endDate})
+		</if>
+	<if test="createDate!=null">
+		AND  DATE(create_date)=DATE(#{createDate})
+		</if>
+	<if test="updateDate!=null">
+		AND  DATE(update_date)=DATE(#{updateDate})
+		</if>
+		<if test="status!=null">
+		AND  status=#{status}
+		</if>
+	</where>
+		ORDER BY 
+			${orderName}  ${orderWay}
+		LIMIT #{pageNum}, 1
+		) 
+	</where>
+	ORDER BY
+		${orderName}  ${orderWay}
+	LIMIT
+		#{pageSize}
+</select> 
+
+<!-- 统计记录条数 -->
+<select id="countAll"  resultType="int">  
+	SELECT
+	 	count(coupon_id)
+	FROM coupon_tb
+	<where>
+		<if test="code!=null">
+		AND  code=#{code}
+		</if>
+	<if test="merCateId!=null">
+		AND  mer_cate_id=#{merCateId}
+		</if>
+	<if test="couponTermId!=null">
+		AND  coupon_term_id=#{couponTermId}
+		</if>
+	<if test="accountId!=null">
+		AND  account_id=#{accountId}
+		</if>
+	<if test="startDate!=null">
+		AND  DATE(start_date)=DATE(#{startDate})
+		</if>
+	<if test="endDate!=null">
+		AND  DATE(end_date)=DATE(#{endDate})
+		</if>
+	<if test="createDate!=null">
+		AND  DATE(create_date)=DATE(#{createDate})
+		</if>
+	<if test="updateDate!=null">
+		AND  DATE(update_date)=DATE(#{updateDate})
+		</if>
+		<if test="status!=null">
+		AND  status=#{status}
+		</if>
+	</where>
+</select>   
+   
+ 
+</mapper>

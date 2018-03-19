@@ -21,7 +21,6 @@ import com.alipay.api.request.AlipayTradeQueryRequest;
 import com.alipay.api.response.AlipayTradeAppPayResponse;
 import com.alipay.api.response.AlipayTradeQueryResponse;
 import com.nieyue.bean.Payment;
-import com.nieyue.business.FinanceBusiness;
 import com.nieyue.service.PaymentService;
 
 import net.sf.json.JSONObject;
@@ -43,8 +42,6 @@ public class AlipayUtil {
 	 String ALIPAY_PUBLIC_KEY;
 	 @Resource
 	 PaymentService paymentService;
-	 @Resource
-	 FinanceBusiness financeBusiness;
 	 /**
 	  * 支付宝app支付
 	  * @param payment
@@ -215,7 +212,8 @@ public class AlipayUtil {
 						phone=jsono.getString("phone");
 						contactPhone=jsono.getString("contactPhone");
 					}
-					int fbi=financeBusiness.financeExcute(payment.getBusinessType(), payment.getType(), payment.getAccountId(), payment.getBusinessId(), payment.getOrderNumber(), nickname, phone, contactPhone);
+					int fbi=3;
+					//int fbi=financeBusiness.financeExcute(payment.getBusinessType(), payment.getType(), payment.getAccountId(), payment.getBusinessId(), payment.getOrderNumber(), nickname, phone, contactPhone);
 					if(fbi==1){
 						 //支付成功
 						 payment.setStatus(2);//成功
@@ -279,7 +277,8 @@ public class AlipayUtil {
 			 if(signVerified &&payment!=null){
 				 // TODO 验签成功后
 				 //按照支付结果异步通知中的描述，对支付结果中的业务内容进行1\2\3\4二次校验，校验成功后在response中返回success，校验失败返回failure
-				 boolean b = financeBusiness.rechargeFinance(payment);
+				// boolean b = financeBusiness.rechargeFinance(payment);
+				boolean b=false;
 				 if(b){
 					 //支付成功
 					 payment.setStatus(2);//成功

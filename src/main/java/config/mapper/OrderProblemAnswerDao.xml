@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+		PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"   
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">  
+<mapper namespace="com.nieyue.dao.OrderProblemAnswerDao">
+<!-- 添加商品订单问题反馈 -->
+<insert id="addOrderProblemAnswer" parameterType="OrderProblemAnswer" keyProperty="orderProblemAnswerId" flushCache="true"  >  
+   INSERT IGNORE INTO
+   		  order_problem_answer_tb 
+   		 (
+   		 content,
+   		 create_date,
+   		 order_problem_id,
+   		 account_id
+   		 )
+   VALUES
+    	 (
+    	 #{content},
+    	 #{createDate},
+    	 #{orderProblemId},
+    	 #{accountId}
+    	 )  
+</insert>  
+<!-- 更新商品订单问题反馈 -->
+<update id="updateOrderProblemAnswer" parameterType="OrderProblemAnswer" >  
+    UPDATE 
+    	order_problem_answer_tb 
+    <set>
+    	<if test="content!=null">
+    	content=#{content},
+    	</if>
+    	<if test="createDate!=null">
+    	create_date=#{createDate},
+    	</if>
+    	<if test="orderProblemId!=null">
+    	order_problem_id=#{orderProblemId},
+    	</if>
+    	<if test="accountId!=null">
+    	account_id=#{accountId},
+    	</if>
+    </set> 
+    WHERE
+    	 order_problem_answer_id=#{orderProblemAnswerId} 
+</update> 
+<!-- 删除商品订单问题反馈-->
+<delete id="delOrderProblemAnswer"  parameterType="Integer" >  
+    DELETE FROM
+    	 order_problem_answer_tb 
+    	 WHERE order_problem_answer_id=#{orderProblemAnswerId}
+</delete>  
+<!-- 加载商品订单问题反馈-->
+<select id="loadOrderProblemAnswer" parameterType="Integer" resultType="orderProblemAnswer" >
+SELECT 
+		 order_problem_answer_id,
+	 	 content,
+   		 create_date,
+   		 order_problem_id,
+   		 account_id
+FROM order_problem_answer_tb 
+WHERE order_problem_answer_id=#{orderProblemAnswerId}
+</select>
+
+<!-- 分页查询商品订单问题反馈-->
+<select id="browsePagingOrderProblemAnswer" resultType="OrderProblemAnswer">  
+        SELECT
+	      order_problem_answer_id,
+	 	  content,
+   		 create_date,
+   		 order_problem_id,
+   		 account_id
+	FROM order_problem_answer_tb
+	<where>
+	AND ${orderName} 
+	<if test="orderWay=='asc'">
+	<![CDATA[>=]]> 
+	</if>
+	<if test="orderWay=='desc'">
+	  <![CDATA[<= ]]>
+	</if>
+	(SELECT ${orderName} FROM order_problem_answer_tb 
+		ORDER BY 
+			${orderName}  ${orderWay}
+		LIMIT #{pageNum}, 1
+		) 
+	</where>
+	ORDER BY
+		${orderName}  ${orderWay}
+	LIMIT
+		#{pageSize}
+</select> 
+
+<!-- 统计记录条数 -->
+<select id="countAll"  resultType="int">  
+	SELECT
+	 	count(order_problem_answer_id)
+	FROM order_problem_answer_tb
+</select>   
+   
+ 
+</mapper>

@@ -21,12 +21,16 @@ public interface OrderDetailService {
 	public OrderDetail loadOrderDetail(Integer orderDetailId);	
 	/** 订单详情总共数目 */	
 	public int countAll(
+			Integer couponId,
+			Integer merId,
 			Integer orderId,
 			Date createDate,
 			Date updateDate
 			);
 	/** 分页订单详情信息 */
 	public List<OrderDetail> browsePagingOrderDetail(
+			Integer couponId,
+			Integer merId,
 			Integer orderId,
 			Date createDate,
 			Date updateDate,

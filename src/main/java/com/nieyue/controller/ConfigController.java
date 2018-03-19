@@ -7,7 +7,6 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -54,7 +53,7 @@ public class ConfigController {
 	  @ApiImplicitParam(name="orderWay",value="排序方式",dataType="string", paramType = "query",defaultValue="desc")
 	  })
 	@RequestMapping(value = "/list", method = {RequestMethod.GET,RequestMethod.POST})
-	public @ResponseBody StateResultList browsePagingConfig(
+	public @ResponseBody StateResultList<List<Config>> browsePagingConfig(
 			@RequestParam(value="pageNum",defaultValue="1",required=false)int pageNum,
 			@RequestParam(value="pageSize",defaultValue="10",required=false) int pageSize,
 			@RequestParam(value="orderName",required=false,defaultValue="create_date") String orderName,
@@ -116,10 +115,10 @@ public class ConfigController {
 	 */
 	@ApiOperation(value = "配置单个加载", notes = "配置单个加载")
 	@ApiImplicitParams({
-		  @ApiImplicitParam(name="configId",value="配置ID",dataType="int", paramType = "path",required=true)
+		  @ApiImplicitParam(name="configId",value="配置ID",dataType="int", paramType = "query",required=true)
 		  })
-	@RequestMapping(value = "/{configId}", method = {RequestMethod.GET,RequestMethod.POST})
-	public  StateResultList loadConfig(@PathVariable("configId") Integer configId,HttpSession session)  {
+	@RequestMapping(value = "/load", method = {RequestMethod.GET,RequestMethod.POST})
+	public  StateResultList<List<Config>> loadConfig(@RequestParam("configId") Integer configId,HttpSession session)  {
 		List<Config> list = new ArrayList<Config>();
 		Config config = configService.loadConfig(configId);
 			if(config!=null &&!config.equals("")){

@@ -8,7 +8,6 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -27,7 +26,6 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
-import net.sf.json.JSONObject;
 
 
 /**
@@ -60,7 +58,7 @@ public class ReceiptInfoController {
 	  @ApiImplicitParam(name="orderWay",value="排序方式",dataType="string", paramType = "query",defaultValue="desc")
 	  })
 	@RequestMapping(value = "/list", method = {RequestMethod.GET,RequestMethod.POST})
-	public @ResponseBody StateResultList browsePagingReceiptInfo(
+	public @ResponseBody StateResultList<List<ReceiptInfo>> browsePagingReceiptInfo(
 			@RequestParam(value="accountId",required=false)Integer accountId,
 			@RequestParam(value="isDefault",required=false)Integer isDefault,
 			@RequestParam(value="createDate",required=false)Date createDate,
@@ -84,7 +82,6 @@ public class ReceiptInfoController {
 	@ApiOperation(value = "收货信息修改", notes = "收货信息修改")
 	@RequestMapping(value = "/update", method = {RequestMethod.GET,RequestMethod.POST})
 	public @ResponseBody StateResult updateReceiptInfo(@ModelAttribute ReceiptInfo receiptInfo,HttpSession session)  {
-		System.out.println(JSONObject.fromObject(receiptInfo).toString());
 		boolean um =receiptInfoService.updateReceiptInfo(receiptInfo);
 		return ResultUtil.getSR(um); 
 	}
@@ -138,10 +135,10 @@ public class ReceiptInfoController {
 	 */
 	@ApiOperation(value = "收货信息单个加载", notes = "收货信息单个加载")
 	@ApiImplicitParams({
-		  @ApiImplicitParam(name="receiptInfoId",value="收货信息ID",dataType="int", paramType = "path",required=true)
+		  @ApiImplicitParam(name="receiptInfoId",value="收货信息ID",dataType="int", paramType = "query",required=true)
 		  })
-	@RequestMapping(value = "/{receiptInfoId}", method = {RequestMethod.GET,RequestMethod.POST})
-	public  StateResultList loadReceiptInfo(@PathVariable("receiptInfoId") Integer receiptInfoId,HttpSession session)  {
+	@RequestMapping(value = "/load", method = {RequestMethod.GET,RequestMethod.POST})
+	public  StateResultList<List<ReceiptInfo>> loadReceiptInfo(@RequestParam("receiptInfoId") Integer receiptInfoId,HttpSession session)  {
 		List<ReceiptInfo> list = new ArrayList<ReceiptInfo>();
 		ReceiptInfo receiptInfo = receiptInfoService.loadReceiptInfo(receiptInfoId);
 			if(receiptInfo!=null &&!receiptInfo.equals("")){

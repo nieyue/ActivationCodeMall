@@ -10,10 +10,11 @@
    		 (
    		 title,
    		 subtitle,
+   		 resource,
    		 img_address,
    		 redirect_url,
    		 content,
-   		 comment_number,
+   		 reading_number,
    		 status,
    		 create_date,
    		 update_date,
@@ -23,10 +24,11 @@
     	 (
     	 #{title},
     	 #{subtitle},
+    	 #{resource},
     	 #{imgAddress},
     	 #{redirectUrl},
     	 #{content},
-    	 #{commentNumber},
+    	 #{readingNumber},
     	 #{status},
     	 #{createDate},
     	 #{updateDate},
@@ -44,6 +46,9 @@
     	<if test="subtitle!=null">
     	subtitle=#{subtitle},
     	</if>
+    	<if test="resource!=null">
+    	resource=#{resource},
+    	</if>
     	<if test="imgAddress!=null">
     	img_address=#{imgAddress},
     	</if>
@@ -53,8 +58,8 @@
     	<if test="content!=null">
     	content=#{content},
     	</if>
-    	<if test="commentNumber!=null">
-    	comment_number=#{commentNumber},
+    	<if test="readingNumber!=null">
+    	reading_number=#{readingNumber},
     	</if>
     	<if test="status!=null">
     	status=#{status},
@@ -84,10 +89,11 @@ SELECT
 		 article_id,
 	 	 title,
 	 	 subtitle,
+	 	 resource,
 	 	 img_address,
    		 redirect_url,
    		 content,
-   		 comment_number,
+   		 reading_number,
    		 status,
    		 create_date,
    		 update_date,
@@ -102,10 +108,11 @@ WHERE article_id=#{articleId}
 	     article_id,
 	 	 title,
 	 	 subtitle,
+	 	 resource,
 	 	 img_address,
    		 redirect_url,
    		 <!-- content, -->
-   		 comment_number,
+   		 reading_number,
    		 status,
    		 create_date,
    		 update_date,
@@ -115,8 +122,8 @@ WHERE article_id=#{articleId}
 	<if test="articleCateId!=null">
 		AND  article_cate_id=#{articleCateId}
 		</if>
-	<if test="commentNumber!=null">
-		AND  comment_number=#{commentNumber}
+	<if test="readingNumber!=null">
+		AND  reading_number=#{readingNumber}
 		</if>
 	<if test="createDate!=null">
 		AND  DATE(create_date)=DATE(#{createDate})
@@ -139,8 +146,8 @@ WHERE article_id=#{articleId}
 		<if test="articleCateId!=null">
 		AND  article_cate_id=#{articleCateId}
 		</if>
-		<if test="commentNumber!=null">
-		AND  comment_number=#{commentNumber}
+		<if test="readingNumber!=null">
+		AND  reading_number=#{readingNumber}
 		</if>
 	<if test="createDate!=null">
 		AND  DATE(create_date)=DATE(#{createDate})
@@ -172,8 +179,8 @@ WHERE article_id=#{articleId}
 	<if test="articleCateId!=null">
 		AND  article_cate_id=#{articleCateId}
 		</if>
-		<if test="commentNumber!=null">
-		AND  comment_number=#{commentNumber}
+		<if test="readingNumber!=null">
+		AND  reading_number=#{readingNumber}
 		</if>
 	<if test="createDate!=null">
 		AND  DATE(create_date)=DATE(#{createDate})

@@ -10,7 +10,6 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -18,7 +17,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.nieyue.bean.Order;
-import com.nieyue.bean.OrderDetail;
 import com.nieyue.exception.CommonNotRollbackException;
 import com.nieyue.exception.NotAnymoreException;
 import com.nieyue.exception.NotIsNotExistException;
@@ -57,10 +55,11 @@ public class OrderController {
 	 */
 	@ApiOperation(value = "订单列表", notes = "订单分页浏览")
 	@ApiImplicitParams({
-	  @ApiImplicitParam(name="type",value="类型，1VIP购买，2团购卡团购，3付费课程",dataType="int", paramType = "query"),
-	  @ApiImplicitParam(name="payType",value="支付类型，1支付宝，2微信,3余额支付,4ios内购",dataType="int", paramType = "query"), 
+	  @ApiImplicitParam(name="type",value="类型，1购买商品，2账户提现，3退款，4诚信押金",dataType="int", paramType = "query"),
+	  @ApiImplicitParam(name="payType",value="方式，1支付宝，2微信,3百度钱包,4Paypal,5网银",dataType="int", paramType = "query"), 
 	  @ApiImplicitParam(name="accountId",value="下单人id外键",dataType="int", paramType = "query"),
-	  @ApiImplicitParam(name="status",value="订单状态，-1待处理删除，0已完成删除,1待处理，2已完成",dataType="int", paramType = "query"),
+	  @ApiImplicitParam(name="status",value="订单状态，1冻结单，2待支付，3已支付,4预购商品，5问题单，6已取消，7已删除",dataType="int", paramType = "query"),
+	  @ApiImplicitParam(name="substatus",value="子状态，1(1冻结单)，2（1待支付），3（1已支付），4（1等待发货），5（1待解决（买家提问后），2解决中（卖家回复后），3申请退款，4已退款，5已解决），6（1已取消），7（1已删除）",dataType="int", paramType = "query"),
 	  @ApiImplicitParam(name="createDate",value="创建时间",dataType="date-time", paramType = "query"),
 	  @ApiImplicitParam(name="updateDate",value="更新时间",dataType="date-time", paramType = "query"),
 	  @ApiImplicitParam(name="pageNum",value="页头数位",dataType="int", paramType = "query",defaultValue="1"),
@@ -69,11 +68,12 @@ public class OrderController {
 	  @ApiImplicitParam(name="orderWay",value="排序方式",dataType="string", paramType = "query",defaultValue="desc")
 	  })
 	@RequestMapping(value = "/list", method = {RequestMethod.GET,RequestMethod.POST})
-	public @ResponseBody StateResultList browsePagingOrder(
+	public @ResponseBody StateResultList<List<Order>> browsePagingOrder(
 			@RequestParam(value="type",required=false)Integer type,
 			@RequestParam(value="payType",required=false)Integer payType,
 			@RequestParam(value="accountId",required=false)Integer accountId,
 			@RequestParam(value="status",required=false)Integer status,
+			@RequestParam(value="substatus",required=false)Integer substatus,
 			@RequestParam(value="createDate",required=false)Date createDate,
 			@RequestParam(value="updateDate",required=false)Date updateDate,
 			@RequestParam(value="pageNum",defaultValue="1",required=false)int pageNum,
@@ -81,7 +81,7 @@ public class OrderController {
 			@RequestParam(value="orderName",required=false,defaultValue="create_date") String orderName,
 			@RequestParam(value="orderWay",required=false,defaultValue="desc") String orderWay)  {
 			List<Order> list = new ArrayList<Order>();
-			list= orderService.browsePagingOrder(type,payType,accountId,status,createDate,updateDate,pageNum, pageSize, orderName, orderWay);
+			list= orderService.browsePagingOrder(type,payType,accountId,status,substatus,createDate,updateDate,pageNum, pageSize, orderName, orderWay);
 			if(list.size()>0){
 				return ResultUtil.getSlefSRSuccessList(list);
 			}else{
@@ -89,22 +89,22 @@ public class OrderController {
 			}
 	}
 	/**
-	 * 申请订单 类型，1VIP购买，2团购卡团购，3付费课程
+	 * 申请订单 类型，1购买商品，2账户提现，3退款，4诚信押金
 	 * @return 
 	 * @throws CommonNotRollbackException 
 	 */
 	@ApiOperation(value = "申请订单", notes = "申请订单,返回值都是list里面的map格式,(生产环境，payType=3,mapkey是“order”,其他的返回 “result”，拿着这个result去请求支付。测试环境都是“order”)")
 	@ApiImplicitParams({
-		  @ApiImplicitParam(name="type",value="类型，1VIP购买，2团购卡团购，3付费课程",dataType="int", paramType = "query",required=true),
-		  @ApiImplicitParam(name="payType",value="支付类型，1支付宝，2微信,3余额支付,4ios内购",dataType="int", paramType = "query",required=true),
+		  @ApiImplicitParam(name="type",value="类型，1购买商品，2账户提现，3退款，4诚信押金",dataType="int", paramType = "query",required=true),
+		  @ApiImplicitParam(name="payType",value="方式，1支付宝，2微信,3百度钱包,4Paypal,5网银",dataType="int", paramType = "query",required=true),
 		  @ApiImplicitParam(name="accountId",value="下单人id外键",dataType="int", paramType = "query",required=true),
 		  @ApiImplicitParam(name="businessId",value="业务id",dataType="int", paramType = "query",required=true),
-		  @ApiImplicitParam(name="nickname",value="昵称(团购必填)",dataType="int", paramType = "query"),
-		  @ApiImplicitParam(name="phone",value="会员账号，手机号(团购必填)",dataType="string", paramType = "query"),
-		  @ApiImplicitParam(name="contactPhone",value="联系电话(团购必填)",dataType="string", paramType = "query"),
+		  @ApiImplicitParam(name="nickname",value="昵称",dataType="int", paramType = "query"),
+		  @ApiImplicitParam(name="phone",value="会员账号，手机号",dataType="string", paramType = "query"),
+		  @ApiImplicitParam(name="contactPhone",value="联系电话",dataType="string", paramType = "query"),
 		  })
 	@RequestMapping(value = "/payment", method = {RequestMethod.GET,RequestMethod.POST})
-	public @ResponseBody StateResultList paymentOrder(
+	public @ResponseBody StateResultList<List<Map<Object,Object>>> paymentOrder(
 			@RequestParam(value="type")Integer type,
 			@RequestParam(value="payType")Integer payType,
 			@RequestParam(value="accountId")Integer accountId,
@@ -134,47 +134,7 @@ public class OrderController {
 //		}
 		return ResultUtil.getSlefSRFailList(list);
 	}
-	/**
-	 * 视频集是否订单
-	 * @return
-	 */
-	@ApiOperation(value = "视频集是否订单。videoSetIsOrder默认0，非订单，1是已经是订单", notes = "视频集是否订单。videoSetIsOrder默认0，非订单，1是已经是订单")
-	@ApiImplicitParams({
-		  @ApiImplicitParam(name="accountId",value="账户Id",dataType="int", paramType = "query",required=true),
-		  @ApiImplicitParam(name="videoSetId",value="视频集id",dataType="int", paramType = "query",required=true)
-		  })
-	@RequestMapping(value = "/videoSetIsOrder", method = {RequestMethod.GET,RequestMethod.POST})
-	public @ResponseBody StateResultList VideoSetOrder(
-			@RequestParam(value="accountId")Integer accountId,
-			@RequestParam(value="videoSetId")Integer videoSetId,
-			HttpSession session)  {
-		int videoSetIsOrder=0;//默认0，非订单
-		//0是已成功删除
-		List<Order> o0l = orderService.browsePagingOrder(3, null, accountId, 0, null, null, 1, Integer.MAX_VALUE, "order_id", "asc");
-		for (int i = 0; i < o0l.size(); i++) {
-			Order o0 = o0l.get(i);
-			Integer o0Id = o0.getOrderId();
-			List<OrderDetail> o0dl = orderDetailService.browsePagingOrderDetail(o0Id, null, null, 1, 1, "order_detail_id", "asc");
-				if(o0dl.size()==1 &&o0dl.get(0).getBusinessId().equals(videoSetId)){
-					videoSetIsOrder=1;
-				}
-		}
-		//是已成功
-		List<Order> o2l = orderService.browsePagingOrder(3, null, accountId, 2, null, null, 1, Integer.MAX_VALUE,  "order_id", "asc");
-		for (int j = 0; j < o2l.size(); j++) {
-			Order o2 = o2l.get(j);
-			Integer o2Id = o2.getOrderId();
-			List<OrderDetail> o2dl = orderDetailService.browsePagingOrderDetail(o2Id, null, null, 1, 1, "order_detail_id", "asc");
-				if(o2dl.size()==1 &&o2dl.get(0).getBusinessId().equals(videoSetId)){
-					videoSetIsOrder=1;
-				}
-		}
-		List<Map<Object,Object>> list=new ArrayList<>();
-		Map<Object,Object> map=new HashMap<>();
-				map.put("videoSetIsOrder", videoSetIsOrder);
-				list.add(map);
-		return ResultUtil.getSlefSRSuccessList(list);
-	}
+
 	/**
 	 * 订单修改
 	 * @return
@@ -214,10 +174,11 @@ public class OrderController {
 	 */
 	@ApiOperation(value = "订单数量", notes = "订单数量查询")
 	@ApiImplicitParams({
-		  @ApiImplicitParam(name="type",value="类型，1VIP购买，2团购卡团购，3付费课程",dataType="int", paramType = "query"),
-		  @ApiImplicitParam(name="payType",value="支付类型，1支付宝，2微信,3余额支付,4ios内购",dataType="int", paramType = "query"),
+		  @ApiImplicitParam(name="type",value="类型，1购买商品，2账户提现，3退款，4诚信押金",dataType="int", paramType = "query"),
+		  @ApiImplicitParam(name="payType",value="方式，1支付宝，2微信,3百度钱包,4Paypal,5网银",dataType="int", paramType = "query"),
 		  @ApiImplicitParam(name="accountId",value="下单人id外键",dataType="int", paramType = "query"),
-		  @ApiImplicitParam(name="status",value="订单状态，-1待处理删除，0已完成删除,1待处理，2已完成",dataType="int", paramType = "query"),
+		  @ApiImplicitParam(name="status",value="订单状态，1冻结单，2待支付，3已支付,4预购商品，5问题单，6已取消，7已删除",dataType="int", paramType = "query"),
+		  @ApiImplicitParam(name="substatus",value="子状态，1(1冻结单)，2（1待支付），3（1已支付），4（1等待发货），5（1待解决（买家提问后），2解决中（卖家回复后），3申请退款，4已退款，5已解决），6（1已取消），7（1已删除）",dataType="int", paramType = "query"),
 		  @ApiImplicitParam(name="createDate",value="创建时间",dataType="date-time", paramType = "query"),
 		  @ApiImplicitParam(name="updateDate",value="更新时间",dataType="date-time", paramType = "query"),
 		  })
@@ -227,10 +188,11 @@ public class OrderController {
 			@RequestParam(value="payType",required=false)Integer payType,
 			@RequestParam(value="accountId",required=false)Integer accountId,
 			@RequestParam(value="status",required=false)Integer status,
+			@RequestParam(value="substatus",required=false)Integer substatus,
 			@RequestParam(value="createDate",required=false)Date createDate,
 			@RequestParam(value="updateDate",required=false)Date updateDate,
 			HttpSession session)  {
-		int count = orderService.countAll(type,payType,accountId,status,createDate,updateDate);
+		int count = orderService.countAll(type,payType,accountId,status,substatus,createDate,updateDate);
 		return count;
 	}
 	/**
@@ -239,10 +201,10 @@ public class OrderController {
 	 */
 	@ApiOperation(value = "订单单个加载", notes = "订单单个加载")
 	@ApiImplicitParams({
-		  @ApiImplicitParam(name="orderId",value="订单ID",dataType="int", paramType = "path",required=true)
+		  @ApiImplicitParam(name="orderId",value="订单ID",dataType="int", paramType = "query",required=true)
 		  })
-	@RequestMapping(value = "/{orderId}", method = {RequestMethod.GET,RequestMethod.POST})
-	public  StateResultList loadOrder(@PathVariable("orderId") Integer orderId,HttpSession session)  {
+	@RequestMapping(value = "/load", method = {RequestMethod.GET,RequestMethod.POST})
+	public  StateResultList<List<Order>> loadOrder(@RequestParam("orderId") Integer orderId,HttpSession session)  {
 		List<Order> list = new ArrayList<Order>();
 		Order order = orderService.loadOrder(orderId);
 			if(order!=null &&!order.equals("")){

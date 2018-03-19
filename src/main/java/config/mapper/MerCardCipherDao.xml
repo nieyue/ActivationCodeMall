@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+		PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"   
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">  
+<mapper namespace="com.nieyue.dao.MerCardCipherDao">
+<!-- 添加商品卡密 -->
+<insert id="addMerCardCipher" parameterType="MerCardCipher" keyProperty="merCardCipherId" flushCache="true"  >  
+   INSERT IGNORE INTO
+   		  mer_card_cipher_tb 
+   		 (
+   		 code,
+   		 img_address,
+   		 create_date,
+   		 mer_id
+   		 )
+   VALUES
+    	 (
+    	 #{code},
+    	 #{imgAddress},
+    	 #{createDate},
+    	 #{merId}
+    	 )  
+</insert>  
+<!-- 更新商品卡密 -->
+<update id="updateMerCardCipher" parameterType="MerCardCipher" >  
+    UPDATE 
+    	mer_card_cipher_tb 
+    <set>
+    	<if test="code!=null">
+    	code=#{code},
+    	</if>
+    	<if test="imgAddress!=null">
+    	img_address=#{imgAddress},
+    	</if>
+    	<if test="createDate!=null">
+    	create_date=#{createDate},
+    	</if>
+    	<if test="merId!=null">
+    	mer_id=#{merId},
+    	</if>
+    </set> 
+    WHERE
+    	 mer_card_cipher_id=#{MerCardCipherId} 
+</update> 
+<!-- 删除商品卡密-->
+<delete id="delMerCardCipher"  parameterType="Integer" >  
+    DELETE FROM
+    	 mer_card_cipher_tb 
+    	 WHERE mer_card_cipher_id=#{merCardCipherId}
+</delete>  
+<!-- 加载商品卡密-->
+<select id="loadMerCardCipher" parameterType="Integer" resultType="MerCardCipher" >
+SELECT 
+		 mer_card_cipher_id,
+	 	 code,
+   		 img_address,
+   		 create_date,
+   		 mer_id
+FROM mer_card_cipher_tb 
+WHERE mer_card_cipher_id=#{merCardCipherId}
+</select>
+
+<!-- 分页查询商品卡密-->
+<select id="browsePagingMerCardCipher" resultType="MerCardCipher">  
+        SELECT
+	     mer_card_cipher_id,
+	 	 code,
+   		 img_address,
+   		 create_date,
+   		 mer_id
+	FROM mer_card_cipher_tb
+	<where>
+	<if test="merId!=null">
+		AND  mer_id=#{merId}
+		</if>
+	AND ${orderName} 
+	<if test="orderWay=='asc'">
+	<![CDATA[>=]]> 
+	</if>
+	<if test="orderWay=='desc'">
+	  <![CDATA[<= ]]>
+	</if>
+	(SELECT ${orderName} FROM mer_card_cipher_tb 
+		<where>
+	<if test="merId!=null">
+		AND  mer_id=#{merId}
+		</if>
+		</where>
+		ORDER BY 
+			${orderName}  ${orderWay}
+		LIMIT #{pageNum}, 1
+		) 
+	</where>
+	ORDER BY
+		${orderName}  ${orderWay}
+	LIMIT
+		#{pageSize}
+</select> 
+
+<!-- 统计记录条数 -->
+<select id="countAll"  resultType="int">  
+	SELECT
+	 	count(mer_card_cipher_id)
+	FROM mer_card_cipher_tb
+	<where>
+	<if test="merId!=null">
+		AND  mer_id=#{merId}
+		</if>
+		</where>
+</select>   
+   
+ 
+</mapper>

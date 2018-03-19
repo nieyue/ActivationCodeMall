@@ -14,7 +14,6 @@ import org.springframework.transaction.annotation.Transactional;
 import com.nieyue.bean.Order;
 import com.nieyue.bean.OrderDetail;
 import com.nieyue.bean.Payment;
-import com.nieyue.business.FinanceBusiness;
 import com.nieyue.business.OrderBusiness;
 import com.nieyue.business.PaymentBusiness;
 import com.nieyue.dao.OrderDao;
@@ -25,7 +24,6 @@ import com.nieyue.service.AccountService;
 import com.nieyue.service.FinanceService;
 import com.nieyue.service.OrderDetailService;
 import com.nieyue.service.OrderService;
-import com.nieyue.util.DateUtil;
 
 import net.sf.json.JSONObject;
 @Service
@@ -39,15 +37,13 @@ public class OrderServiceImpl implements OrderService{
 	@Resource
 	FinanceService financeService;
 	@Resource
-	FinanceBusiness financeBusiness;
-	@Resource
 	PaymentBusiness paymentBusiness;
 	@Resource
 	OrderBusiness orderBusiness;
 	@Resource
 	AlipayUtil alipayUtil;
-	@Value("${myPugin.lordSayProjectDomainUrl}")
-	String lordSayProjectDomainUrl;
+	@Value("${myPugin.activationCodeMallProjectDomainUrl}")
+	String activationCodeMallProjectDomainUrl;
 	/**
 	 * 第三方支付
 	 * @throws CommonNotRollbackException 
@@ -65,13 +61,15 @@ public class OrderServiceImpl implements OrderService{
 			) throws CommonNotRollbackException {
 		String result=null;
 		//1.验证支付条件
-		boolean b = financeBusiness.canThirdPay(type, payType, accountId, businessId, nickname, phone, contactPhone);
+		boolean b=false;
+	//	boolean b = financeBusiness.canThirdPay(type, payType, accountId, businessId, nickname, phone, contactPhone);
 		if(!b){
 			return result;//不满足验证直接失败
 		}
 		//2.生成订单号
 		String orderNumber=orderBusiness.getOrderNumber(accountId);
-		OrderDetail orderDetail = paymentBusiness.getPaymentType(type, payType, accountId, businessId);
+		OrderDetail orderDetail=null;
+		//OrderDetail orderDetail = paymentBusiness.getPaymentType(type, payType, accountId, businessId);
 		//3.支付存储类
 		Payment payment=new Payment();
 		payment.setAccountId(accountId);
@@ -99,7 +97,7 @@ public class OrderServiceImpl implements OrderService{
 			payment.setBody("付费课程");
 		}
 		if(payType==1){//支付宝
-			payment.setNotifyUrl(lordSayProjectDomainUrl+"/payment/alipayNotifyUrl");
+			payment.setNotifyUrl(activationCodeMallProjectDomainUrl+"/payment/alipayNotifyUrl");
 			try {
 				result=alipayUtil.getAppPayment(payment);
 			} catch (UnsupportedEncodingException e) {
@@ -107,10 +105,10 @@ public class OrderServiceImpl implements OrderService{
 			}
 			return result;
 		}else if(payType==2){//微信
-			//payment.setNotifyUrl(lordSayProjectDomainUrl+"/payment/wechatNotifyUrl");
+			//payment.setNotifyUrl(activationCodeMallProjectDomainUrl+"/payment/wechatNotifyUrl");
 			return "暂未开通";
 		}else if(payType==4){//ios内购
-			//payment.setNotifyUrl(lordSayProjectDomainUrl+"/payment/iosNotifyUrl");
+			//payment.setNotifyUrl(activationCodeMallProjectDomainUrl+"/payment/iosNotifyUrl");
 			return "暂未开通";
 		}
 		return result;
@@ -131,7 +129,8 @@ public class OrderServiceImpl implements OrderService{
 		//1.生成订单号
 		String orderNumber=orderBusiness.getOrderNumber(accountId);
 		//2.财务执行
-		int r = financeBusiness.financeExcute(type, payType, accountId,businessId,orderNumber,nickname,phone,contactPhone);
+		int r=-1;
+		//int r = financeBusiness.financeExcute(type, payType, accountId,businessId,orderNumber,nickname,phone,contactPhone);
 		if(r==-1){
 			throw new PayException();
 		}else if(r==0){//部分成功
@@ -151,7 +150,7 @@ public class OrderServiceImpl implements OrderService{
 	@Override
 	public boolean delOrder(Integer orderId) {
 		boolean b = orderDao.delOrder(orderId);
-		List<OrderDetail> orderDetailList = orderDetailService.browsePagingOrderDetail(orderId, null, null, 1, Integer.MAX_VALUE, "order_detail_id", "asc");
+		List<OrderDetail> orderDetailList = orderDetailService.browsePagingOrderDetail(null,null,orderId, null, null, 1, Integer.MAX_VALUE, "order_detail_id", "asc");
 		for (int i = 0; i < orderDetailList.size(); i++) {
 			b=orderDetailService.delOrderDetail(orderDetailList.get(i).getOrderDetailId());
 		}
@@ -167,7 +166,7 @@ public class OrderServiceImpl implements OrderService{
 	@Override
 	public Order loadOrder(Integer orderId) {
 		Order r = orderDao.loadOrder(orderId);
-		List<OrderDetail> orderDetailList = orderDetailService.browsePagingOrderDetail(orderId, null, null, 1, Integer.MAX_VALUE, "order_detail_id", "asc");
+		List<OrderDetail> orderDetailList = orderDetailService.browsePagingOrderDetail(null,null,orderId, null, null, 1, Integer.MAX_VALUE, "order_detail_id", "asc");
 		r.setOrderDetailList(orderDetailList);
 		return r;
 	}
@@ -178,11 +177,12 @@ public class OrderServiceImpl implements OrderService{
 			Integer payType,
 			Integer accountId,
 			Integer status,
+			Integer substatus,
 			Date createDate,
 			Date updateDate
 			) {
 		int c = orderDao.countAll(
-				type,payType,accountId,status,createDate,updateDate);
+				type,payType,accountId,status,substatus,createDate,updateDate);
 		return c;
 	}
 
@@ -192,6 +192,7 @@ public class OrderServiceImpl implements OrderService{
 			Integer payType,
 			Integer accountId,
 			Integer status,
+			Integer substatus,
 			Date createDate,
 			Date updateDate,
 			int pageNum, int pageSize,
@@ -207,6 +208,7 @@ public class OrderServiceImpl implements OrderService{
 				payType,
 				accountId,
 				status,
+				substatus,
 				createDate,
 				updateDate,
 				pageNum-1,
@@ -215,7 +217,7 @@ public class OrderServiceImpl implements OrderService{
 				orderWay);
 		for (int i = 0; i < l.size(); i++) {
 			Order o = l.get(i);
-			List<OrderDetail> orderDetailList = orderDetailService.browsePagingOrderDetail(o.getOrderId(), null, null, 1, Integer.MAX_VALUE, "order_detail_id", "asc");
+			List<OrderDetail> orderDetailList = orderDetailService.browsePagingOrderDetail(null,null,o.getOrderId(), null, null, 1, Integer.MAX_VALUE, "order_detail_id", "asc");
 			o.setOrderDetailList(orderDetailList);
 		}
 		return l;

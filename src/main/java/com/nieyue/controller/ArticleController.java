@@ -8,7 +8,6 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -50,7 +49,7 @@ public class ArticleController {
 	@ApiOperation(value = "文章列表", notes = "文章分页浏览")
 	@ApiImplicitParams({
 	  @ApiImplicitParam(name="articleCateId",value="文章类型id外键",dataType="int", paramType = "query"),
-	  @ApiImplicitParam(name="commentNumber",value="评论数",dataType="int", paramType = "query"),
+	  @ApiImplicitParam(name="readingNumber",value="阅读数",dataType="long", paramType = "query"),
 	  @ApiImplicitParam(name="createDate",value="创建时间",dataType="date-time", paramType = "query"),
 	  @ApiImplicitParam(name="updateDate",value="更新时间",dataType="date-time", paramType = "query"),
 	  @ApiImplicitParam(name="status",value="状态0下架,默认1上架",dataType="int", paramType = "query"),
@@ -60,9 +59,9 @@ public class ArticleController {
 	  @ApiImplicitParam(name="orderWay",value="排序方式",dataType="string", paramType = "query",defaultValue="desc")
 	  })
 	@RequestMapping(value = "/list", method = {RequestMethod.GET,RequestMethod.POST})
-	public @ResponseBody StateResultList browsePagingArticle(
+	public @ResponseBody StateResultList<List<Article>> browsePagingArticle(
 			@RequestParam(value="articleCateId",required=false)Integer articleCateId,
-			@RequestParam(value="commentNumber",required=false)Integer commentNumber,
+			@RequestParam(value="readingNumber",required=false)Long readingNumber,
 			@RequestParam(value="createDate",required=false)Date createDate,
 			@RequestParam(value="updateDate",required=false)Date updateDate,
 			@RequestParam(value="status",required=false)Integer status,
@@ -71,7 +70,7 @@ public class ArticleController {
 			@RequestParam(value="orderName",required=false,defaultValue="update_date") String orderName,
 			@RequestParam(value="orderWay",required=false,defaultValue="desc") String orderWay)  {
 			List<Article> list = new ArrayList<Article>();
-			list= articleService.browsePagingArticle(articleCateId,commentNumber,createDate,updateDate,status,pageNum, pageSize, orderName, orderWay);
+			list= articleService.browsePagingArticle(articleCateId,readingNumber,createDate,updateDate,status,pageNum, pageSize, orderName, orderWay);
 			if(list.size()>0){
 				return ResultUtil.getSlefSRSuccessList(list);
 			}else{
@@ -118,7 +117,7 @@ public class ArticleController {
 	@ApiOperation(value = "文章数量", notes = "文章数量查询")
 	@ApiImplicitParams({
 		  @ApiImplicitParam(name="articleCateId",value="文章类型id,外键",dataType="int", paramType = "query"),
-		  @ApiImplicitParam(name="commentNumber",value="评论数",dataType="int", paramType = "query"),
+		  @ApiImplicitParam(name="readingNumber",value="阅读数",dataType="long", paramType = "query"),
 		  @ApiImplicitParam(name="createDate",value="创建时间",dataType="date-time", paramType = "query"),
 		  @ApiImplicitParam(name="updateDate",value="更新时间",dataType="date-time", paramType = "query"),
 		  @ApiImplicitParam(name="status",value="状态0下架,默认1上架",dataType="int", paramType = "query")
@@ -126,12 +125,12 @@ public class ArticleController {
 	@RequestMapping(value = "/count", method = {RequestMethod.GET,RequestMethod.POST})
 	public @ResponseBody int countAll(
 			@RequestParam(value="articleCateId",required=false)Integer articleCateId,
-			@RequestParam(value="commentNumber",required=false)Integer commentNumber,
+			@RequestParam(value="readingNumber",required=false)Long readingNumber,
 			@RequestParam(value="createDate",required=false)Date createDate,
 			@RequestParam(value="updateDate",required=false)Date updateDate,
 			@RequestParam(value="status",required=false)Integer status,
 			HttpSession session)  {
-		int count = articleService.countAll(articleCateId,commentNumber,createDate,updateDate,status);
+		int count = articleService.countAll(articleCateId,readingNumber,createDate,updateDate,status);
 		return count;
 	}
 	/**
@@ -140,10 +139,10 @@ public class ArticleController {
 	 */
 	@ApiOperation(value = "文章单个加载", notes = "文章单个加载")
 	@ApiImplicitParams({
-		  @ApiImplicitParam(name="articleId",value="文章ID",dataType="int", paramType = "path",required=true)
+		  @ApiImplicitParam(name="articleId",value="文章ID",dataType="int", paramType = "query",required=true)
 		  })
-	@RequestMapping(value = "/{articleId}", method = {RequestMethod.GET,RequestMethod.POST})
-	public  StateResultList loadArticle(@PathVariable("articleId") Integer articleId,HttpSession session)  {
+	@RequestMapping(value = "/load", method = {RequestMethod.GET,RequestMethod.POST})
+	public  StateResultList<List<Article>> loadArticle(@RequestParam("articleId") Integer articleId,HttpSession session)  {
 		List<Article> list = new ArrayList<Article>();
 		Article article = articleService.loadArticle(articleId);
 			if(article!=null &&!article.equals("")){

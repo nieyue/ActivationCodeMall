@@ -14,7 +14,7 @@ import com.nieyue.bean.Sincerity;
  *
  */
 @Mapper
-public interface SinceritylDao {
+public interface SincerityDao {
 	/** 新增诚信*/	
 	public boolean addSincerity(Sincerity sincerity) ;	
 	/** 删除诚信 */	

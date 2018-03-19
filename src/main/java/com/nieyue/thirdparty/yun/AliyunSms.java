@@ -4,6 +4,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Configuration;
 
 import com.aliyuncs.DefaultAcsClient;
 import com.aliyuncs.IAcsClient;
@@ -30,7 +31,7 @@ import com.aliyuncs.profile.IClientProfile;
  * @author yy
  *
  */
-//@Configuration
+@Configuration
 public class AliyunSms {
 
     //产品名称:云通信短信API产品,开发者无需替换

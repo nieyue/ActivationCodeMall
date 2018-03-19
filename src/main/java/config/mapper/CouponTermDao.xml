@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+		PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"   
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">  
+<mapper namespace="com.nieyue.dao.CouponTermDao">
+<!-- 添加优惠劵项 -->
+<insert id="addCouponTerm" parameterType="CouponTerm" keyProperty="couponTermId" flushCache="true"  >  
+   INSERT IGNORE INTO
+   		  coupon_term_tb 
+   		 (
+   		 name,
+   		 img_address,
+   		 discount,
+   		 content,
+   		 update_date,
+   		 mer_cate_id
+   		 )
+   VALUES
+    	 (
+    	 #{name},
+    	 #{imgAddress},
+    	 #{discount},
+    	 #{content},
+    	 #{updateDate},
+    	 #{merCateId}
+    	 )  
+</insert>  
+<!-- 更新优惠劵项 -->
+<update id="updateCouponTerm" parameterType="CouponTerm" >  
+    UPDATE 
+    	coupon_term_tb 
+    <set>
+		<if test="name!=null">
+    	name=#{name},
+		</if>
+		<if test="imgAddress!=null">
+    	img_address=#{imgAddress},
+		</if>
+		<if test="discount!=null">
+    	discount=#{discount},
+		</if>
+		<if test="content!=null">
+    	content=#{content},
+		</if>
+		<if test="updateDate!=null">
+    	update_date=#{updateDate},
+		</if>
+		<if test="merCateId!=null">
+    	mer_cate_id=#{merCateId},
+		</if>
+    </set> 
+    WHERE
+    	 coupon_term_id=#{couponTermId} 
+</update> 
+<!-- 删除优惠劵项-->
+<delete id="delCouponTerm"  parameterType="Integer" >  
+    DELETE FROM
+    	 coupon_term_tb 
+    	 WHERE coupon_term_id=#{couponTermId}
+</delete>  
+<!-- 加载优惠劵项-->
+<select id="loadCouponTerm" parameterType="Integer" resultType="CouponTerm" >
+SELECT 
+		coupon_term_id,
+	 	name,
+   		 img_address,
+   		 discount,
+   		 content,
+   		 update_date,
+   		 mer_cate_id
+FROM coupon_term_tb 
+WHERE coupon_term_id=#{couponTermId}
+</select>
+
+<!-- 分页查询优惠劵项-->
+<select id="browsePagingCouponTerm" resultType="CouponTerm">  
+        SELECT
+	    coupon_term_id,
+	 	name,
+   		 img_address,
+   		 discount,
+   		 content,
+   		 update_date,
+   		 mer_cate_id
+	FROM coupon_term_tb
+	WHERE ${orderName} 
+	<if test="orderWay=='asc'">
+	<![CDATA[>=]]> 
+	</if>
+	<if test="orderWay=='desc'">
+	  <![CDATA[<= ]]>
+	</if>
+	(SELECT ${orderName} FROM coupon_term_tb 
+		ORDER BY 
+			${orderName}  ${orderWay}
+		LIMIT #{pageNum}, 1
+		) 
+	ORDER BY
+		${orderName}  ${orderWay}
+	LIMIT
+		#{pageSize}
+</select> 
+
+<!-- 统计记录条数 -->
+<select id="countAll"  resultType="int">  
+	SELECT
+	 	count(coupon_term_id)
+	FROM coupon_term_tb
+</select>   
+   
+ 
+</mapper>

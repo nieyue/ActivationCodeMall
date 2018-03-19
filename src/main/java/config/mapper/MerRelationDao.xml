@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+		PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"   
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">  
+<mapper namespace="com.nieyue.dao.MerRelationDao">
+<!-- 添加商品关系 -->
+<insert id="addMerRelation" parameterType="MerRelation" keyProperty="merRelationId" flushCache="true"  >  
+   INSERT IGNORE INTO
+   		  mer_relation_tb 
+   		 (
+   		 create_date,
+   		 platform_mer_id,
+   		 seller_mer_id,
+   		 seller_account_id
+   		 )
+   VALUES
+    	 (
+    	 #{createDate},
+    	 #{platformMerId},
+    	 #{sellerMerId},
+    	 #{sellerAccountId}
+    	 )  
+</insert>  
+<!-- 更新商品关系 -->
+<update id="updateMerRelation" parameterType="MerRelation" >  
+    UPDATE 
+    	mer_relation_tb 
+    <set>
+    	<if test="createDate!=null">
+    	create_date=#{createDate},
+    	</if>
+    	<if test="platformMerId!=null">
+    	platform_mer_id=#{platformMerId},
+    	</if>
+    	<if test="sellerMerId!=null">
+    	seller_mer_id=#{sellerMerId},
+    	</if>
+    	<if test="sellerAccountId!=null">
+    	seller_account_id=#{sellerAccountId},
+    	</if>
+    </set> 
+    WHERE
+    	 mer_relation_id=#{merRelationId} 
+</update> 
+<!-- 删除商品关系-->
+<delete id="delMerRelation"  parameterType="Integer" >  
+    DELETE FROM
+    	 mer_relation_tb 
+    	 WHERE mer_relation_id=#{merRelationId}
+</delete>  
+<!-- 加载商品关系-->
+<select id="loadMerRelation" parameterType="Integer" resultType="MerRelation" >
+SELECT 
+		 mer_relation_id,
+	 	 create_date,
+   		 platform_mer_id,
+   		 seller_mer_id,
+   		 seller_account_id
+FROM mer_relation_tb 
+WHERE mer_relation_id=#{merRelationId}
+</select>
+
+<!-- 分页查询商品关系-->
+<select id="browsePagingMerRelation" resultType="MerRelation">  
+        SELECT
+	     mer_relation_id,
+	 	 create_date,
+   		 platform_mer_id,
+   		 seller_mer_id,
+   		 seller_account_id
+	FROM mer_relation_tb
+	<where>
+	<if test="platformMerId!=null">
+		AND  platform_mer_id=#{platformMerId}
+		</if>
+	<if test="sellerMerId!=null">
+		AND  seller_mer_id=#{sellerMerId}
+		</if>
+	<if test="sellerAccountId!=null">
+		AND seller_account_id=#{sellerAccountId}
+		</if>
+	AND ${orderName} 
+	<if test="orderWay=='asc'">
+	<![CDATA[>=]]> 
+	</if>
+	<if test="orderWay=='desc'">
+	  <![CDATA[<= ]]>
+	</if>
+	(SELECT ${orderName} FROM mer_relation_tb 
+		<where>
+	<if test="platformMerId!=null">
+		AND  platform_mer_id=#{platformMerId}
+		</if>
+	<if test="sellerMerId!=null">
+		AND  seller_mer_id=#{sellerMerId}
+		</if>
+	<if test="sellerAccountId!=null">
+		AND seller_account_id=#{sellerAccountId}
+		</if>
+		</where>
+		ORDER BY 
+			${orderName}  ${orderWay}
+		LIMIT #{pageNum}, 1
+		) 
+	</where>
+	ORDER BY
+		${orderName}  ${orderWay}
+	LIMIT
+		#{pageSize}
+</select> 
+
+<!-- 统计记录条数 -->
+<select id="countAll"  resultType="int">  
+	SELECT
+	 	count(mer_relation_id)
+	FROM mer_relation_tb
+	<where>
+	<if test="platformMerId!=null">
+		AND  platform_mer_id=#{platformMerId}
+		</if>
+	<if test="sellerMerId!=null">
+		AND  seller_mer_id=#{sellerMerId}
+		</if>
+	<if test="sellerAccountId!=null">
+		AND seller_account_id=#{sellerAccountId}
+		</if>
+		</where>
+</select>   
+   
+ 
+</mapper>

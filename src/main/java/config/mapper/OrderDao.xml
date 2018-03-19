@@ -13,6 +13,8 @@
    		 pay_type,
    		 account_id,
    		 status,
+   		 substatus,
+   		 payment_date,
    		 create_date,
    		 update_date
    		 )
@@ -23,6 +25,8 @@
     	 #{payType},
     	 #{accountId},
     	 #{status},
+    	 #{substatus},
+    	 #{paymentDate},
     	 #{createDate},
     	 #{updateDate}
     	 )  
@@ -46,6 +50,12 @@
     	</if>
     	<if test="status!=null">
     	status=#{status},
+    	</if>
+    	<if test="substatus!=null">
+    	substatus=#{substatus},
+    	</if>
+    	<if test="paymentDate!=null">
+    	payment_date=#{paymentDate},
     	</if>
     	<if test="createDate!=null">
     	create_date=#{createDate},
@@ -72,6 +82,8 @@ SELECT
    		 pay_type,
    		 account_id,
    		 status,
+   		 substatus,
+   		 payment_date,
    		 create_date,
    		 update_date
 FROM order_tb 
@@ -87,6 +99,8 @@ WHERE order_id=#{orderId}
    		 pay_type,
    		 account_id,
    		 status,
+   		 substatus,
+   		 payment_date,
    		 create_date,
    		 update_date
 	FROM order_tb
@@ -100,18 +114,12 @@ WHERE order_id=#{orderId}
 	<if test="accountId!=null">
 		AND  account_id=#{accountId}
 		</if>
-	<!-- <if test="status!=null">
+	<if test="status!=null">
 		AND  status=#{status}
-		</if> -->
-		<choose>
-			<when test="status!=null">  
-                AND status=#{status}  
-            </when>  
-            <otherwise>  
-                AND status!=0 
-                AND status!=-1 
-            </otherwise> 
-		</choose>
+		</if>
+	<if test="substatus!=null">
+		AND  substatus=#{substatus}
+		</if>
 <if test="createDate!=null">
 		AND  DATE(create_date)=DATE(#{createDate})
 		</if>
@@ -136,18 +144,12 @@ WHERE order_id=#{orderId}
 		<if test="accountId!=null">
 		AND  account_id=#{accountId}
 		</if>
-		<!-- <if test="status!=null">
+		<if test="status!=null">
 		AND  status=#{status}
-		</if> -->
-		<choose>
-			<when test="status!=null">  
-                AND status=#{status}  
-            </when>  
-            <otherwise>  
-                AND status!=0 
-                AND status!=-1 
-            </otherwise> 
-		</choose>
+		</if>
+	<if test="substatus!=null">
+		AND  substatus=#{substatus}
+		</if>
 	<if test="createDate!=null">
 		AND  DATE(create_date)=DATE(#{createDate})
 		</if>
@@ -181,18 +183,12 @@ WHERE order_id=#{orderId}
 	<if test="accountId!=null">
 		AND  account_id=#{accountId}
 		</if>
-	<!-- <if test="status!=null">
+	<if test="status!=null">
 		AND  status=#{status}
-		</if> -->
-		<choose>
-			<when test="status!=null">  
-                AND status=#{status}  
-            </when>  
-            <otherwise>  
-                AND status!=0 
-                AND status!=-1 
-            </otherwise> 
-		</choose>
+		</if>
+	<if test="substatus!=null">
+		AND  substatus=#{substatus}
+		</if>
 <if test="createDate!=null">
 		AND  DATE(create_date)=DATE(#{createDate})
 		</if>

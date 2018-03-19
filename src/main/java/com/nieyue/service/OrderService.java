@@ -48,6 +48,7 @@ public interface OrderService {
 			Integer payType,
 			Integer accountId,
 			Integer status,
+			Integer substatus,
 			Date createDate,
 			Date updateDate
 			);
@@ -57,6 +58,7 @@ public interface OrderService {
 			Integer payType,
 			Integer accountId,
 			Integer status,
+			Integer substatus,
 			Date createDate,
 			Date updateDate,
 			int pageNum,

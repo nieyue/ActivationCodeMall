@@ -7,22 +7,73 @@
 <insert id="addNotice" parameterType="Notice" keyProperty="noticeId" flushCache="true"  >  
    INSERT IGNORE INTO
    		  notice_tb 
-   		 (title,img_address,content,status,create_date,update_date,account_id)
+   		 (
+   		 region,
+   		 type,
+   		 title,
+   		 img_address,
+   		 content,
+   		 status,
+   		 create_date,
+   		 update_date,
+   		 account_id,
+   		 receive_account_id,
+   		 business_id
+   		 )
    VALUES
-    	 (#{title},#{imgAddress},#{content},#{status},#{createDate},#{updateDate},#{accountId})  
+    	 (
+    	 #{region},
+    	 #{type},
+    	 #{title},
+    	 #{imgAddress},
+    	 #{content},
+    	 #{status},
+    	 #{createDate},
+    	 #{updateDate},
+    	 #{accountId},
+    	 #{receiveAccountId},
+    	 #{businessId}
+    	 )  
 </insert>  
 <!-- 更新通知 -->
 <update id="updateNotice" parameterType="Notice" >  
     UPDATE 
     	notice_tb 
-    SET 
+    <set>
+    	<if test="region!=null">
+    	region=#{region},
+    	</if>
+    	<if test="type!=null">
+    	type=#{type},
+    	</if>
+    	<if test="title!=null">
     	title=#{title},
+    	</if>
+    	<if test="imgAddress!=null">
     	img_address=#{imgAddress},
+    	</if>
+    	<if test="content!=null">
     	content=#{content},
+    	</if>
+    	<if test="status!=null">
     	status=#{status},
+    	</if>
+    	<if test="createDate!=null">
     	create_date=#{createDate},
+    	</if>
+    	<if test="updateDate!=null">
     	update_date=#{updateDate},
-    	account_id=#{accountId}
+    	</if>
+    	<if test="accountId!=null">
+    	account_id=#{accountId},
+    	</if>
+    	<if test="receiveAccountId!=null">
+    	receive_account_id=#{receiveAccountId},
+    	</if>
+    	<if test="businessId!=null">
+    	business_id=#{businessId},
+    	</if>
+    </set> 
     WHERE
     	 notice_id=#{noticeId} 
 </update> 
@@ -35,14 +86,18 @@
 <!-- 加载通知-->
 <select id="loadNotice" parameterType="Integer" resultType="Notice" >
 SELECT 
-		notice_id,
-	 	title,
-	 	img_address,
-    	content,
-    	status,
-    	create_date,
-    	update_date,
-    	account_id
+		 notice_id,
+	 	 region,
+   		 type,
+   		 title,
+   		 img_address,
+   		 content,
+   		 status,
+   		 create_date,
+   		 update_date,
+   		 account_id,
+   		 receive_account_id,
+   		 business_id
 FROM notice_tb 
 WHERE notice_id=#{noticeId}
 </select>
@@ -50,18 +105,25 @@ WHERE notice_id=#{noticeId}
 <!-- 分页查询通知-->
 <select id="browsePagingNotice" resultType="Notice">  
  SELECT
-	    notice_id,
-	 	title,
-	 	img_address,
-    	content,
-    	status,
-    	create_date,
-    	update_date,
-    	account_id
+	     notice_id,
+	 	 region,
+   		 type,
+   		 title,
+   		 img_address,
+   		 content,
+   		 status,
+   		 create_date,
+   		 update_date,
+   		 account_id,
+   		 receive_account_id,
+   		 business_id
 	FROM notice_tb
 	<where>
-	<if test="title!=null">
-		AND  title=#{title}
+	<if test="region!=null">
+		AND  region=#{region}
+		</if>
+	<if test="type!=null">
+		AND  type=#{type}
 		</if>
 	<if test="status!=null">
 		AND  status=#{status}
@@ -69,6 +131,12 @@ WHERE notice_id=#{noticeId}
 	<if test="accountId!=null">
 		AND ( account_id=#{accountId}
 		OR ISNULL(account_id))
+		</if>
+	<if test="receiveAccountId!=null">
+		AND  receive_account_id=#{receiveAccountId}
+		</if>
+	<if test="businessId!=null">
+		AND  business_id=#{businessId}
 		</if>
 	AND ${orderName} 
 	<if test="orderWay=='asc'">
@@ -79,8 +147,11 @@ WHERE notice_id=#{noticeId}
 	</if>
 	(SELECT ${orderName} FROM notice_tb 
 	<where>
-	<if test="title!=null">
-		AND  title=#{title}
+		<if test="region!=null">
+		AND  region=#{region}
+		</if>
+	<if test="type!=null">
+		AND  type=#{type}
 		</if>
 	<if test="status!=null">
 		AND  status=#{status}
@@ -88,6 +159,12 @@ WHERE notice_id=#{noticeId}
 	<if test="accountId!=null">
 		AND ( account_id=#{accountId}
 		OR ISNULL(account_id))
+		</if>
+	<if test="receiveAccountId!=null">
+		AND  receive_account_id=#{receiveAccountId}
+		</if>
+	<if test="businessId!=null">
+		AND  business_id=#{businessId}
 		</if>
 	</where>
 		ORDER BY 
@@ -107,14 +184,24 @@ WHERE notice_id=#{noticeId}
 	 	count(notice_id)
 	FROM notice_tb
 	<where>
-	<if test="title!=null">
-		AND  title=#{title}
+		<if test="region!=null">
+		AND  region=#{region}
+		</if>
+	<if test="type!=null">
+		AND  type=#{type}
 		</if>
 	<if test="status!=null">
 		AND  status=#{status}
 		</if>
 	<if test="accountId!=null">
-		AND  account_id=#{accountId}
+		AND ( account_id=#{accountId}
+		OR ISNULL(account_id))
+		</if>
+	<if test="receiveAccountId!=null">
+		AND  receive_account_id=#{receiveAccountId}
+		</if>
+	<if test="businessId!=null">
+		AND  business_id=#{businessId}
 		</if>
 	</where>
 </select>   

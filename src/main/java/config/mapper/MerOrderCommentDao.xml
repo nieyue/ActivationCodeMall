@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+		PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"   
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">  
+<mapper namespace="com.nieyue.dao.MerOrderCommentDao">
+<!-- 添加商品订单评论 -->
+<insert id="addMerOrderComment" parameterType="MerOrderComment" keyProperty="merOrderCommentId" flushCache="true"  >  
+   INSERT IGNORE INTO
+   		  mer_order_comment_tb 
+   		 (
+   		 mer_score,
+   		 content,
+   		 create_date,
+   		 mer_id,
+   		 order_id,
+   		 account_id
+   		 )
+   VALUES
+    	 (
+    	 #{merScore},
+    	 #{content},
+    	 #{createDate},
+    	 #{merId},
+    	 #{orderId},
+    	 #{accountId}
+    	 )  
+</insert>  
+<!-- 更新商品订单评论 -->
+<update id="updateMerOrderComment" parameterType="MerOrderComment" >  
+    UPDATE 
+    	mer_order_comment_tb 
+    <set>
+    	<if test="merScore!=null">
+    	mer_score=#{merScore},
+    	</if>
+    	<if test="content!=null">
+    	content=#{content},
+    	</if>
+    	<if test="createDate!=null">
+    	create_date=#{createDate},
+    	</if>
+    	<if test="merId!=null">
+    	mer_id=#{merId},
+    	</if>
+    	<if test="orderId!=null">
+    	order_id=#{orderId},
+    	</if>
+    	<if test="accountId!=null">
+    	account_id=#{accountId},
+    	</if>
+    </set> 
+    WHERE
+    	 mer_order_comment_id=#{merOrderCommentId} 
+</update> 
+<!-- 删除商品订单评论-->
+<delete id="delMerOrderComment"  parameterType="Integer" >  
+    DELETE FROM
+    	 mer_order_comment_tb 
+    	 WHERE mer_order_comment_id=#{merOrderCommentId}
+</delete>  
+<!-- 加载商品订单评论-->
+<select id="loadMerOrderComment" parameterType="Integer" resultType="MerOrderComment" >
+SELECT 
+		 mer_order_comment_id,
+	 	 mer_score,
+   		 content,
+   		 create_date,
+   		 mer_id,
+   		 order_id,
+   		 account_id
+FROM mer_order_comment_tb 
+WHERE mer_order_comment_id=#{merOrderCommentId}
+</select>
+
+<!-- 分页查询商品订单评论-->
+<select id="browsePagingMerOrderComment" resultType="MerOrderComment">  
+        SELECT
+	      mer_order_comment_id,
+	 	 mer_score,
+   		 content,
+   		 create_date,
+   		 mer_id,
+   		 order_id,
+   		 account_id
+	FROM mer_order_comment_tb
+	<where>
+	<if test="merScore!=null">
+		AND  mer_score=#{merScore}
+		</if>
+	<if test="merId!=null">
+		AND  mer_id=#{merId}
+		</if>
+	<if test="orderId!=null">
+		AND  order_id=#{orderId}
+		</if>
+	<if test="accountId!=null">
+		AND  account_id=#{accountId}
+		</if>
+	AND ${orderName} 
+	<if test="orderWay=='asc'">
+	<![CDATA[>=]]> 
+	</if>
+	<if test="orderWay=='desc'">
+	  <![CDATA[<= ]]>
+	</if>
+	(SELECT ${orderName} FROM mer_order_comment_tb 
+		<where>
+		<if test="merScore!=null">
+		AND  mer_score=#{merScore}
+		</if>
+	<if test="merId!=null">
+		AND  mer_id=#{merId}
+		</if>
+	<if test="orderId!=null">
+		AND  order_id=#{orderId}
+		</if>
+	<if test="accountId!=null">
+		AND  account_id=#{accountId}
+		</if>
+		</where>
+		ORDER BY 
+			${orderName}  ${orderWay}
+		LIMIT #{pageNum}, 1
+		) 
+	</where>
+	ORDER BY
+		${orderName}  ${orderWay}
+	LIMIT
+		#{pageSize}
+</select> 
+
+<!-- 统计记录条数 -->
+<select id="countAll"  resultType="int">  
+	SELECT
+	 	count(mer_order_comment_id)
+	FROM mer_order_comment_tb
+	<where>
+	<if test="merScore!=null">
+		AND  mer_score=#{merScore}
+		</if>
+	<if test="merId!=null">
+		AND  mer_id=#{merId}
+		</if>
+	<if test="orderId!=null">
+		AND  order_id=#{orderId}
+		</if>
+	<if test="accountId!=null">
+		AND  account_id=#{accountId}
+		</if>
+		</where>
+</select>   
+   
+ 
+</mapper>

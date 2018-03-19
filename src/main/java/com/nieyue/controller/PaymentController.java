@@ -9,7 +9,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -58,8 +57,8 @@ public class PaymentController {
 	@ApiOperation(value = "支付列表", notes = "支付分页浏览")
 	@ApiImplicitParams({
 	  @ApiImplicitParam(name="orderNumber",value="订单号",dataType="string", paramType = "query"),
-	  @ApiImplicitParam(name="type",value="支付类型，默认1支付宝支付，2微信支付，3银联支付,4ios内购",dataType="int", paramType = "query"),
-	  @ApiImplicitParam(name="businessType",value="业务类型，1VIP购买，2团购卡团购，3付费课程",dataType="int", paramType = "query"),
+	  @ApiImplicitParam(name="type",value="支付类型，1支付宝，2微信,3百度钱包,4Paypal,5网银",dataType="int", paramType = "query"),
+	  @ApiImplicitParam(name="businessType",value="业务类型，1购买商品，2账户提现，3退款，4诚信押金",dataType="int", paramType = "query"),
 	  @ApiImplicitParam(name="businessId",value="业务ID",dataType="int", paramType = "query"),
 	  @ApiImplicitParam(name="accountId",value="账户ID",dataType="int", paramType = "query"),
 	  @ApiImplicitParam(name="createDate",value="创建时间",dataType="date-time", paramType = "query"),
@@ -71,7 +70,7 @@ public class PaymentController {
 	  @ApiImplicitParam(name="orderWay",value="排序方式",dataType="string", paramType = "query",defaultValue="desc")
 	  })
 	@RequestMapping(value = "/list", method = {RequestMethod.GET,RequestMethod.POST})
-	public @ResponseBody StateResultList browsePagingPayment(
+	public @ResponseBody StateResultList<List<Payment>> browsePagingPayment(
 			@RequestParam(value="orderNumber",required=false)String orderNumber,
 			@RequestParam(value="type",required=false)Integer type,
 			@RequestParam(value="businessType",required=false)Integer businessType,
@@ -112,7 +111,7 @@ public class PaymentController {
 	  @ApiImplicitParam(name="orderNumber",value="订单号",dataType="string", paramType = "query",required=true)
 	 	  })
 	@RequestMapping(value = "/alipayTradeQuery", method = {RequestMethod.GET,RequestMethod.POST})
-	public @ResponseBody StateResultList alipayAlipayTradeQuery(
+	public @ResponseBody StateResultList<List<String>> alipayAlipayTradeQuery(
 			@RequestParam(value="orderNumber") String orderNumber,
 			HttpSession session) throws AlipayApiException  {
 		String body = alipayUtil.getAlipayTradeQuery(orderNumber);
@@ -165,8 +164,8 @@ public class PaymentController {
 	@ApiOperation(value = "支付浏览数量", notes = "支付浏览数量")
 	@ApiImplicitParams({
 	  @ApiImplicitParam(name="orderNumber",value="订单号",dataType="string", paramType = "query"),
-	  @ApiImplicitParam(name="type",value="支付类型，默认1支付宝支付，2微信支付，3银联支付,4ios内购",dataType="int", paramType = "query"),
-	  @ApiImplicitParam(name="businessType",value="业务类型，1VIP购买，2团购卡团购，3付费课程",dataType="int", paramType = "query"),
+	  @ApiImplicitParam(name="type",value="支付类型，1支付宝，2微信,3百度钱包,4Paypal,5网银",dataType="int", paramType = "query"),
+	  @ApiImplicitParam(name="businessType",value="业务类型，1购买商品，2账户提现，3退款，4诚信押金",dataType="int", paramType = "query"),
 	  @ApiImplicitParam(name="businessId",value="业务ID",dataType="int", paramType = "query"),
 	  @ApiImplicitParam(name="accountId",value="账户ID",dataType="int", paramType = "query"),
 	  @ApiImplicitParam(name="createDate",value="创建时间",dataType="date-time", paramType = "query"),
@@ -193,10 +192,10 @@ public class PaymentController {
 	 */
 	@ApiOperation(value = "支付单个加载", notes = "支付单个加载")
 	@ApiImplicitParams({
-	  @ApiImplicitParam(name="paymentId",value="支付ID",dataType="int", paramType="path",required=true)
+	  @ApiImplicitParam(name="paymentId",value="支付ID",dataType="int", paramType="query",required=true)
 	 	  })
-	@RequestMapping(value = "/{paymentId}", method = {RequestMethod.GET,RequestMethod.POST})
-	public  StateResultList loadPayment(@PathVariable("paymentId") Integer paymentId,HttpSession session)  {
+	@RequestMapping(value = "/load", method = {RequestMethod.GET,RequestMethod.POST})
+	public  StateResultList<List<Payment>> loadPayment(@RequestParam("paymentId") Integer paymentId,HttpSession session)  {
 		List<Payment> list = new ArrayList<Payment>();
 		Payment payment = paymentService.loadPayment(paymentId);
 			if(payment!=null &&!payment.equals("")){

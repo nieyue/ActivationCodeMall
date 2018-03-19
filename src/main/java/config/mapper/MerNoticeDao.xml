@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+		PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"   
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">  
+<mapper namespace="com.nieyue.dao.MerNoticeDao">
+<!-- 添加商品公告 -->
+<insert id="addMerNotice" parameterType="MerNotice" keyProperty="merNoticeId" flushCache="true"  >  
+   INSERT IGNORE INTO
+   		  mer_notice_tb 
+   		 (
+   		 title,
+   		 content,
+   		 create_date,
+   		 mer_id
+   		 )
+   VALUES
+    	 (
+    	 #{title},
+    	 #{content},
+    	 #{createDate},
+    	 #{merId}
+    	 )  
+</insert>  
+<!-- 更新商品公告 -->
+<update id="updateMerNotice" parameterType="MerNotice" >  
+    UPDATE 
+    	mer_notice_tb 
+    <set>
+    	<if test="title!=null">
+    	title=#{title},
+    	</if>
+    	<if test="content!=null">
+    	content=#{content},
+    	</if>
+    	<if test="createDate!=null">
+    	create_date=#{createDate},
+    	</if>
+    	<if test="merId!=null">
+    	mer_id=#{merId},
+    	</if>
+    </set> 
+    WHERE
+    	 mer_notice_id=#{merNoticeId} 
+</update> 
+<!-- 删除商品公告-->
+<delete id="delMerNotice"  parameterType="Integer" >  
+    DELETE FROM
+    	 mer_notice_tb 
+    	 WHERE mer_notice_id=#{merNoticeId}
+</delete>  
+<!-- 加载商品公告-->
+<select id="loadMerNotice" parameterType="Integer" resultType="MerNotice" >
+SELECT 
+		 mer_notice_id,
+	 	 title,
+   		 content,
+   		 create_date,
+   		 mer_id
+FROM mer_notice_tb 
+WHERE mer_notice_id=#{merNoticeId}
+</select>
+
+<!-- 分页查询商品公告-->
+<select id="browsePagingMerNotice" resultType="MerNotice">  
+        SELECT
+	     mer_notice_id,
+	 	 title,
+   		 content,
+   		 create_date,
+   		 mer_id
+	FROM mer_notice_tb
+	<where>
+	<if test="merId!=null">
+		AND  mer_id=#{merId}
+		</if>
+	AND ${orderName} 
+	<if test="orderWay=='asc'">
+	<![CDATA[>=]]> 
+	</if>
+	<if test="orderWay=='desc'">
+	  <![CDATA[<= ]]>
+	</if>
+	(SELECT ${orderName} FROM mer_notice_tb 
+		<where>
+	<if test="merId!=null">
+		AND  mer_id=#{merId}
+		</if>
+		</where>
+		ORDER BY 
+			${orderName}  ${orderWay}
+		LIMIT #{pageNum}, 1
+		) 
+	</where>
+	ORDER BY
+		${orderName}  ${orderWay}
+	LIMIT
+		#{pageSize}
+</select> 
+
+<!-- 统计记录条数 -->
+<select id="countAll"  resultType="int">  
+	SELECT
+	 	count(mer_notice_id)
+	FROM mer_notice_tb
+	<where>
+	<if test="merId!=null">
+		AND  mer_id=#{merId}
+		</if>
+		</where>
+</select>   
+   
+ 
+</mapper>
