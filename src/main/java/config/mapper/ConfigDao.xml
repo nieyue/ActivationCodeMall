@@ -74,7 +74,7 @@
 	    <if test="withdrawalsProportion!=null">
     	withdrawals_proportion=#{withdrawalsProportion},
     	</if>
-	    <if test="cwithdrawalsMinBrokerage!=null">
+	    <if test="withdrawalsMinBrokerage!=null">
     	withdrawals_min_brokerage=#{withdrawalsMinBrokerage},
     	</if>
 	    <if test="createDate!=null">

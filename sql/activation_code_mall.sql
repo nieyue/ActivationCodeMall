@@ -581,3 +581,9 @@ VALUES ("聂跃","15111336587","278076304@qq.com","11874bb6149dd45428da628c9766b
 #财务
 INSERT IGNORE INTO finance_tb (money,recharge,consume,withdrawals,refund,frozen,recommend_commission,base_profit,create_date,update_date,account_id) 
 VALUES (10000,0,0,0,0,0,0,0,now(),now(),1000);   
+#积分
+INSERT IGNORE INTO integral_tb (name,level,integral,upgrade_integral,consume,base_profit,create_date,update_date,account_id) 
+VALUES ('初级',0,0,1000,0,0,now(),now(),1000);   
+#诚信
+INSERT IGNORE INTO sincerity_tb (level,money,upgrade_money,create_date,update_date,account_id) 
+VALUES (0,0,10000,now(),now(),1000);   
