@@ -38,9 +38,11 @@ public class AccountServiceImpl implements AccountService{
 			return b;
 		}
 		Date date=new Date();
-		account.setCreateDate(date);
-		account.setLoginDate(date);
+		account.setCreateDate(new Date());
+		account.setLoginDate(new Date());
 		account.setStatus(0);
+		account.setCardSecretReceive(0);//默认卡密接收全部
+		account.setSafetyGrade(1);//默认安全低
 		account.setAuth(0);//没认证
 		//增加账户
 		b = accountDao.addAccount(account);

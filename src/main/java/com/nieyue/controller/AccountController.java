@@ -639,7 +639,7 @@ public class AccountController {
 		@ApiImplicitParam(name="roleType",value="角色类型，1商户，2推广户，3用户",dataType="string", paramType = "query",required=true),
 		  @ApiImplicitParam(name="nickname",value="用户名称",dataType="string", paramType = "query",required=true),
 		  @ApiImplicitParam(name="email",value="邮箱号",dataType="string", paramType = "query",required=true),
-		  @ApiImplicitParam(name="adminName",value="手机号",dataType="string", paramType = "query"),
+		  @ApiImplicitParam(name="phone",value="手机号",dataType="string", paramType = "query",required=true),
 		  @ApiImplicitParam(name="password",value="密码",dataType="string", paramType = "query",required=true),
 		  @ApiImplicitParam(name="validCode",value="验证码",dataType="string", paramType = "query",required=true)
 		  })
@@ -687,9 +687,6 @@ public class AccountController {
 					account.setEmail(email);
 					account.setNickname(nickname);
 					account.setPassword(MyDESutil.getMD5(password));
-					account.setCardSecretReceive(0);//默认卡密接收全部
-					account.setSafetyGrade(1);//默认安全低
-					account.setCreateDate(new Date());
 					List<Role> roleList = roleService.browsePagingRole(1, Integer.MAX_VALUE, "role_id","asc");
 					for (Role role : roleList) {
 							if(role!=null  ){
@@ -706,7 +703,6 @@ public class AccountController {
 								
 							}
 						}
-					account.setLoginDate(new Date());
 					boolean b = accountService.addAccount(account);
 				if(b){
 				
