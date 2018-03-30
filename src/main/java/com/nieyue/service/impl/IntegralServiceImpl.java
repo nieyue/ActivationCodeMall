@@ -19,6 +19,10 @@ public class IntegralServiceImpl implements IntegralService{
 	@Transactional(propagation=Propagation.REQUIRED)
 	@Override
 	public boolean addIntegral(Integral integral) {
+		integral.setBaseProfit(0.0);
+		integral.setIntegral(0.0);
+		integral.setConsume(0.0);
+		integral.setLevel(0);
 		integral.setCreateDate(new Date());
 		integral.setUpdateDate(new Date());
 		boolean b = integralDao.addIntegral(integral);

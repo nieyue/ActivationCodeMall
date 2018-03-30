@@ -67,7 +67,7 @@ public class Mer implements Serializable{
 	 * 推荐，默认0不推，1封推，2推荐
 	 */
 	@ApiModelProperty(value="推荐，默认0不推，1封推，2推荐",example="推荐，默认0不推，1封推，2推荐")
-	private String recommend;
+	private Integer recommend;
 	/**
 	 * 原始单价
 	 */
@@ -197,10 +197,10 @@ public class Mer implements Serializable{
 	public void setPlatform(String platform) {
 		this.platform = platform;
 	}
-	public String getRecommend() {
+	public Integer getRecommend() {
 		return recommend;
 	}
-	public void setRecommend(String recommend) {
+	public void setRecommend(Integer recommend) {
 		this.recommend = recommend;
 	}
 	public Double getOldUnitPrice() {

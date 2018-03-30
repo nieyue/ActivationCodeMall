@@ -21,6 +21,10 @@ public class MerServiceImpl implements MerService{
 	public boolean addMer(Mer mer) {
 		mer.setCreateDate(new Date());
 		mer.setUpdateDate(new Date());
+		mer.setSaleNumber(0);
+		mer.setStockNumber(0);
+		mer.setMerScore(0.0);
+		mer.setMerCommentNumber(0);
 		boolean b = merDao.addMer(mer);
 		return b;
 	}

@@ -30,6 +30,7 @@ import com.nieyue.bean.AccountLevel;
 import com.nieyue.bean.Finance;
 import com.nieyue.bean.Integral;
 import com.nieyue.bean.Role;
+import com.nieyue.bean.Sincerity;
 import com.nieyue.exception.AccountAlreadyAuthException;
 import com.nieyue.exception.AccountAuthAuditException;
 import com.nieyue.exception.AccountIsExistException;
@@ -52,6 +53,7 @@ import com.nieyue.service.FinanceService;
 import com.nieyue.service.IntegralService;
 import com.nieyue.service.NoticeService;
 import com.nieyue.service.RoleService;
+import com.nieyue.service.SincerityService;
 import com.nieyue.thirdparty.yun.AliyunSms;
 import com.nieyue.util.MyDESutil;
 import com.nieyue.util.MyValidator;
@@ -85,6 +87,8 @@ public class AccountController {
 	@Resource
 	private IntegralService integralService;
 	@Resource
+	private SincerityService sincerityService;
+	@Resource
 	private NoticeService noticeService;
 	@Resource
 	private  AliyunSms aliyunSms;
@@ -99,7 +103,7 @@ public class AccountController {
 	 * 账户分页浏览
 	 * @param orderName 商品排序数据库字段
 	 * @param orderWay 商品排序方法 asc升序 desc降序
-	 * @return
+	 * @return 
 	 */
 	@ApiOperation(value = "账户列表", notes = "账户分页浏览")
 	@ApiImplicitParams({
@@ -518,7 +522,7 @@ public class AccountController {
 				content="身份验证";
 			}
 			String uuid=UUID.randomUUID().toString();
-			String link=activationCodeMallProjectDomainUrl+"?validCodeEmail="+uuid;
+			String link=activationCodeMallProjectDomainUrl+"/account/validCodeEmail?validCodeEmail="+uuid;
 			//邮箱验证，发送链接到邮箱
 			boolean b = SendMailDemo.sendLinkMail(adminName, link, "激活码商城", content);
 			if(b){
@@ -534,7 +538,7 @@ public class AccountController {
 				}
 				session.setAttribute("validCodeEmail", uuid);
 				session.setAttribute("validCodeEmailIsValid", "-1");//-1没有验证通过，1是验证通过了
-				l.add(link);	
+				//l.add(link);	
 				return ResultUtil.getSlefSRSuccessList(l);
 			}
 		}
@@ -619,6 +623,9 @@ public class AccountController {
 			//未读通知数
 //			int noticeCount = noticeService.countAll(null, 0, account.getAccountId());
 //			map.put("notice0", noticeCount);
+			//诚信
+			List<Sincerity> sinceritylist = sincerityService.browsePagingSincerity(account.getAccountId(), null, null, 1, 1, "sincerity_id", "asc");
+			map.put("sincerity",  sinceritylist.get(0));
 			list.add(map);
 			return ResultUtil.getSlefSRSuccessList(list);
 			}
@@ -639,9 +646,9 @@ public class AccountController {
 		@ApiImplicitParam(name="roleType",value="角色类型，1商户，2推广户，3用户",dataType="string", paramType = "query",required=true),
 		  @ApiImplicitParam(name="nickname",value="用户名称",dataType="string", paramType = "query",required=true),
 		  @ApiImplicitParam(name="email",value="邮箱号",dataType="string", paramType = "query",required=true),
-		  @ApiImplicitParam(name="phone",value="手机号",dataType="string", paramType = "query",required=true),
+		  @ApiImplicitParam(name="phone",value="手机号",dataType="string", paramType = "query"),
 		  @ApiImplicitParam(name="password",value="密码",dataType="string", paramType = "query",required=true),
-		  @ApiImplicitParam(name="validCode",value="验证码",dataType="string", paramType = "query",required=true)
+		  @ApiImplicitParam(name="validCode",value="验证码",dataType="string", paramType = "query")
 		  })
 	@RequestMapping(value = "/webregister", method = {RequestMethod.GET,RequestMethod.POST})
 	public @ResponseBody StateResultList<List<Map<Object,Object>>> webRegisterAccount(
@@ -660,13 +667,13 @@ public class AccountController {
 		//手机验证码
 		if(phone!=null){
 		String vc = (String) session.getAttribute("validCode");
-		if(!vc.equals(validCode)){
+		if(validCode==null||!validCode.equals(vc)){
 			throw new VerifyCodeErrorException();//验证码错误
 		}
 		}
 		//邮箱验证码
 		String vce = (String) session.getAttribute("validCodeEmailIsValid");
-		if(!vce.equals("1")){
+		if(!"1".equals(vce)){
 			throw new CommonNotRollbackException("email没有验证");
 		}
 		//判断是否存在
@@ -735,6 +742,9 @@ public class AccountController {
 				map.put("integrall",  integrall.get(0));
 				//未读
 //				map.put("notice0", 0);
+				//诚信
+				List<Sincerity> sinceritylist = sincerityService.browsePagingSincerity(account.getAccountId(), null, null, 1, 1, "sincerity_id", "asc");
+				map.put("sincerity",  sinceritylist.get(0));
 				list.add(map);
 				return ResultUtil.getSlefSRSuccessList(list);
 				}else{

@@ -19,6 +19,15 @@ public class FinanceServiceImpl implements FinanceService{
 	@Transactional(propagation=Propagation.REQUIRED)
 	@Override
 	public boolean addFinance(Finance finance) {
+		finance.setRecharge(0.0);//充值金额
+		finance.setConsume(0.0);//消费金额
+		finance.setWithdrawals(0.0);//提现金额
+		finance.setRefund(0.0);//退款金额
+		finance.setFrozen(0.0);//冻结金额
+		finance.setRecommendCommission(0.0);//推荐佣金
+		Double unitBaseProfit=0.0;//赠送金钱
+		finance.setBaseProfit(unitBaseProfit);
+		finance.setMoney(finance.getBaseProfit());//初始余额=赠送金钱+0.0
 		finance.setCreateDate(new Date());
 		finance.setUpdateDate(new Date());
 		boolean b = financeDao.addFinance(finance);

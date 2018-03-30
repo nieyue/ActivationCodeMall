@@ -15,6 +15,34 @@ update_date datetime COMMENT '更新时间',
 PRIMARY KEY (role_id)
 )ENGINE = InnoDB AUTO_INCREMENT=1000 DEFAULT CHARSET=utf8 COMMENT='角色表';
 
+#创建权限表
+CREATE TABLE permission_tb(
+permission_id int(11) NOT NULL AUTO_INCREMENT COMMENT '权限id',
+type tinyint(4) COMMENT '权限类型，默认0开放，1鉴权',
+manager_name varchar(255) COMMENT '权限管理名',
+name varchar(255) COMMENT '权限名',
+route varchar(255) COMMENT '权限路由',
+update_date datetime COMMENT '更新时间',
+PRIMARY KEY (permission_id),
+INDEX INDEX_TYPE (type) USING BTREE,
+INDEX INDEX_MANAGERNAME (manager_name) USING BTREE,
+INDEX INDEX_NAME (name) USING BTREE,
+INDEX INDEX_ROUTE (route) USING BTREE
+)ENGINE = InnoDB AUTO_INCREMENT=1000 DEFAULT CHARSET=utf8 COMMENT='权限表';
+
+#创建角色权限表
+CREATE TABLE role_permission_tb(
+role_permission_id int(11) NOT NULL AUTO_INCREMENT COMMENT '角色权限id',
+region tinyint(4) COMMENT "范围，1公共，2自身",
+role_id int(11) COMMENT '角色id,外键',
+permission_id int(11) COMMENT '权限id,外键',
+update_date datetime COMMENT '更新时间',
+PRIMARY KEY (role_permission_id),
+INDEX INDEX_REGION (region) USING BTREE,
+INDEX INDEX_ROLEID (role_id) USING BTREE,
+INDEX INDEX_PERMISSIONID (permission_id) USING BTREE
+)ENGINE = InnoDB AUTO_INCREMENT=1000 DEFAULT CHARSET=utf8 COMMENT='角色权限表';
+
 #创建等级表
 CREATE TABLE account_level_tb(
 account_level_id int(11) NOT NULL AUTO_INCREMENT COMMENT '账户等级id',

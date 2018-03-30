@@ -1,6 +1,9 @@
 #日志记录
 logging:
-  level: 
+  level:
+    com:
+      nieyue:
+        dao: INFO 
     org:
       springframework:
         web: DEBUG
