@@ -7,6 +7,8 @@ import java.lang.reflect.Method;
 import java.util.Date;
 import java.util.Enumeration;
 
+import com.nieyue.exception.AccountAlreadyAuthException;
+
 import gnu.io.CommPortIdentifier;
 
 public class Test1 {
@@ -75,7 +77,7 @@ public class Test1 {
 	
 
 
-	public static void main(String[] args) throws IOException {
+	public static void main(String[] args) throws IOException, AccountAlreadyAuthException {
 		//System.out.println((new Test1().dispose(new Account())).toString());
 		  //设置Headless模式
 //        System.setProperty("java.awt.headless","true");
@@ -90,5 +92,7 @@ public class Test1 {
 		 String name = em.nextElement().getName();
 		 	System.out.println(name);
         }
+		 
+		 throw new AccountAlreadyAuthException();
 }
 }

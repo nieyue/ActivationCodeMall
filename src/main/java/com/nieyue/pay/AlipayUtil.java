@@ -15,10 +15,13 @@ import com.alipay.api.AlipayApiException;
 import com.alipay.api.AlipayClient;
 import com.alipay.api.DefaultAlipayClient;
 import com.alipay.api.domain.AlipayTradeAppPayModel;
+import com.alipay.api.domain.AlipayTradePagePayModel;
 import com.alipay.api.internal.util.AlipaySignature;
 import com.alipay.api.request.AlipayTradeAppPayRequest;
+import com.alipay.api.request.AlipayTradePagePayRequest;
 import com.alipay.api.request.AlipayTradeQueryRequest;
 import com.alipay.api.response.AlipayTradeAppPayResponse;
+import com.alipay.api.response.AlipayTradePagePayResponse;
 import com.alipay.api.response.AlipayTradeQueryResponse;
 import com.nieyue.bean.Payment;
 import com.nieyue.service.PaymentService;
@@ -92,9 +95,9 @@ public class AlipayUtil {
 		 //实例化客户端
 		 AlipayClient alipayClient = new DefaultAlipayClient("https://openapi.alipay.com/gateway.do", APP_ID, APP_PRIVATE_KEY, "json", "UTF-8", ALIPAY_PUBLIC_KEY, "RSA2");
 		 //实例化具体API对应的request类,类名称和接口名称对应,当前调用接口名称：alipay.trade.app.pay
-		 AlipayTradeAppPayRequest request = new AlipayTradeAppPayRequest();
+		 AlipayTradePagePayRequest request = new AlipayTradePagePayRequest();
 		 //SDK已经封装掉了公共参数，这里只需要传入业务参数。以下方法为sdk的model入参方式(model和biz_content同时存在的情况下取biz_content)。
-		 AlipayTradeAppPayModel model = new AlipayTradeAppPayModel();
+		 AlipayTradePagePayModel model = new AlipayTradePagePayModel();
 		 request.setReturnUrl("http://localhost:9000/404.html");//同步返回地址
 		 //存储payment
 		 boolean b = paymentService.addPayment(payment);
@@ -106,7 +109,7 @@ public class AlipayUtil {
 		 model.setOutTradeNo(payment.getOrderNumber());//订单号
 		 model.setTimeoutExpress("30m");
 		 model.setTotalAmount(String.valueOf(payment.getMoney()));//金额
-		 model.setProductCode("QUICK_MSECURITY_PAY");
+		 model.setProductCode("FAST_INSTANT_TRADE_PAY");
 		 model.setPassbackParams(payment.getPaymentId().toString());//支付id
 		 request.setBizModel(model);
 		 if(payment.getNotifyUrl()!=null && !payment.getNotifyUrl().equals("")){
@@ -114,7 +117,7 @@ public class AlipayUtil {
 		 }
 		 try {
 			 //这里和普通的接口调用不同，使用的是sdkExecute
-			 AlipayTradeAppPayResponse response = alipayClient.pageExecute(request);
+			 AlipayTradePagePayResponse response = alipayClient.pageExecute(request);
 			 return response.getBody();
 		 } catch (AlipayApiException e) {
 			 e.printStackTrace();
