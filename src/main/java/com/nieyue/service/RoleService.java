@@ -21,5 +21,5 @@ public interface RoleService {
 	/** 角色总共数目 */	
 	public int countAll();
 	/** 分页角色信息 */
-	public List<Role> browsePagingRole(int pageNum,int pageSize,String orderName,String orderWay) ;
+	public List<Role> browsePagingRole(int pageNum, int pageSize, String orderName, String orderWay) ;
 }

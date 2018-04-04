@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+		PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"   
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.nieyue.dao.RolePermissionDao">
+<!-- 添加角色权限 -->
+<insert id="addRolePermission" parameterType="RolePermission" keyProperty="rolePermissionId" flushCache="true"  >
+   INSERT IGNORE INTO
+   		  role_permission_tb
+   		 (
+   		 region,
+   		 role_id,
+   		 permission_id,
+   		 update_date
+   		 )
+   VALUES
+    	 (
+    	 #{region},
+    	 #{roleId},
+    	 #{permissionId},
+    	 #{updateDate})
+</insert>
+<!-- 更新角色权限 -->
+<update id="updateRolePermission" parameterType="RolePermission" >
+    UPDATE
+    	role_permission_tb
+    <set>
+		<if test="region!=null">
+			region=#{region},
+		</if>
+		<if test="roleId!=null">
+			role_id=#{roleId},
+		</if>
+		<if test="permissionId!=null">
+			permission_id=#{permissionId},
+		</if>
+		<if test="updateDate!=null">
+			update_date=#{updateDate},
+		</if>
+	</set>
+    WHERE
+    	 role_permission_id=#{rolePermissionId}
+</update>
+<!-- 删除角色权限-->
+<delete id="delRolePermission"  parameterType="Integer" >
+    DELETE FROM
+    	 role_permission_tb
+    	 WHERE role_permission_id=#{rolePermissionId}
+</delete>
+<!-- 加载角色权限-->
+<select id="loadRolePermission" parameterType="Integer" resultType="RolePermission" >
+SELECT
+		 role_permission_id,
+	 	 region,
+   		 role_id,
+   		 permission_id,
+   		 update_date
+FROM role_permission_tb
+WHERE role_permission_id=#{rolePermissionId}
+</select>
+
+<!-- 分页查询角色权限-->
+<select id="browsePagingRolePermission" resultType="RolePermission">
+        SELECT
+			role_permission_id,
+			region,
+			role_id,
+			permission_id,
+			update_date
+	FROM role_permission_tb
+	<where>
+		<if test="region!=null">
+			AND region=#{region}
+		</if>
+		<if test="roleId!=null">
+			AND role_id=#{roleId}
+		</if>
+		<if test="permissionId!=null">
+			AND permission_id=#{permissionId}
+		</if>
+	AND ${orderName}
+	<if test="orderWay=='asc'">
+	<![CDATA[>=]]>
+	</if>
+	<if test="orderWay=='desc'">
+	  <![CDATA[<= ]]>
+	</if>
+	(SELECT ${orderName} FROM role_permission_tb
+	<where>
+		<if test="region!=null">
+			AND region=#{region}
+		</if>
+		<if test="roleId!=null">
+			AND role_id=#{roleId}
+		</if>
+		<if test="permissionId!=null">
+			AND permission_id=#{permissionId}
+		</if>
+	  </where>
+		ORDER BY
+			${orderName}  ${orderWay}
+		LIMIT #{pageNum}, 1
+		)
+	</where>
+	ORDER BY
+		${orderName}  ${orderWay}
+	LIMIT
+		#{pageSize}
+</select>
+
+<!-- 统计记录条数 -->
+<select id="countAll"  resultType="int">
+	SELECT
+	 	count(role_permission_id)
+	FROM role_permission_tb
+	<where>
+		<if test="region!=null">
+			AND region=#{region}
+		</if>
+		<if test="roleId!=null">
+			AND role_id=#{roleId}
+		</if>
+		<if test="permissionId!=null">
+			AND permission_id=#{permissionId}
+		</if>
+	</where>
+</select>
+
+
+</mapper>

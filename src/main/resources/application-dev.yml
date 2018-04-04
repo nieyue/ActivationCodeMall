@@ -20,6 +20,16 @@ spring:
      url: jdbc:mysql://127.0.0.1:3306/activation_code_mall_db
      username: root
      password: liliu 
+   redis:
+     host: 127.0.0.1
+     password: liliu
+     port: 6379
+     database: 0
+     timeout: 3000
+     pool:
+       min-idle: 100
+       max-idle: 300
+       max-active: 800
 myPugin: 
   session: 
     myDomainName: null

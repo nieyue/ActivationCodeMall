@@ -13,6 +13,10 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authc.AuthenticationException;
+import org.apache.shiro.authc.UsernamePasswordToken;
+import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -31,6 +35,7 @@ import com.nieyue.bean.Finance;
 import com.nieyue.bean.Integral;
 import com.nieyue.bean.Role;
 import com.nieyue.bean.Sincerity;
+import com.nieyue.business.AccountBusiness;
 import com.nieyue.exception.AccountAlreadyAuthException;
 import com.nieyue.exception.AccountAuthAuditException;
 import com.nieyue.exception.AccountIsExistException;
@@ -78,6 +83,8 @@ import io.swagger.annotations.ApiOperation;
 public class AccountController {
 	@Resource
 	private AccountService accountService;
+	@Resource
+	private AccountBusiness accountBusiness;
 	@Resource
 	private RoleService roleService;
 	@Resource
@@ -411,40 +418,13 @@ public class AccountController {
 		  @ApiImplicitParam(name="random",value="验证码",dataType="string", paramType = "query",required=true)
 		  })
 	@RequestMapping(value = "/login", method = {RequestMethod.GET,RequestMethod.POST})
-	public @ResponseBody StateResultList<List<Account>> loginAccount(
+	public @ResponseBody StateResultList<List<Map<String,Object>>> loginAccount(
 			@RequestParam(value="adminName") String adminName,
 			@RequestParam(value="password") String password,
 			@RequestParam(value="random",required=false) String random,
 			HttpSession session) throws MySessionException  {
-		//1代验证码
-		String ran= (String) session.getAttribute("random");
-		List<Account> list = new ArrayList<Account>();
-		if(!ran.equals(random)){
-			throw new VerifyCodeErrorException();
-		}
-		Account account = accountService.loginAccount(adminName, MyDESutil.getMD5(password),null);
-		if(account==null||account.equals("")){
-			throw new AccountLoginException();//账户或密码错误
-		}
-		if(account.getStatus().equals(1)){
-			throw new AccountLockException();//账户锁定
-		}
-		account.setLoginDate(new Date());
-		boolean b = accountService.updateAccount(account);
-		if(b){
-		Integer roleId = account.getRoleId();
-		Role r = roleService.loadRole(roleId);
-		if(r.getName().equals("用户")){
-		throw new MySessionException();//没权限	
-		}
-		session.setAttribute("account", account);
-		session.setAttribute("role", r);
-		List<Finance> f = financeService.browsePagingFinance(null,account.getAccountId(), 1, 1, "finance_id", "asc");
-		session.setAttribute("finance", f.get(0));
-		list.add(account);
-		return ResultUtil.getSlefSRSuccessList(list);
-		}
-		return ResultUtil.getSlefSRFailList(list);
+		List<Map<String, Object>> list = accountBusiness.login(adminName, password,random, session);
+		 return ResultUtil.getSlefSRSuccessList(list);
 	}
 	
 	/**
@@ -579,60 +559,8 @@ public class AccountController {
 			@RequestParam("password") String password,
 			@RequestParam(value="random",required=false) String random,
 			HttpSession session)  {
-		//1代验证码
-//		String ran= (String) session.getAttribute("random");
-//		List<Account> list = new ArrayList<Account>();
-//		if(!ran.equals(random)){
-//			return ResultUtil.getSlefSRFailList(list);
-//		}
-		List<Map<String,Object>> list = new ArrayList<>();
-		Account account = accountService.loginAccount(adminName, MyDESutil.getMD5(password),null);
-		//自动登陆
-//		if(account==null|| account.equals("")){
-//			account=accountService.loginAccount(adminName, password, null);
-//		}
-		if(account==null||account.equals("")){
-			throw new AccountLoginException();//账户或密码错误
-		}
-		if(account.getStatus().equals(0)||account.getStatus().equals(2)){
-			account.setLoginDate(new Date());
-			boolean b = accountService.updateAccount(account);
-			if(b){
-			session.setAttribute("account", account);
-			Integer roleId = account.getRoleId();
-			Role r = roleService.loadRole(roleId);
-			session.setAttribute("role", r);
-			
-			List<Finance> f = financeService.browsePagingFinance(null,account.getAccountId(), 1, 1, "finance_id", "asc");
-			session.setAttribute("finance", f.get(0));
-			Map<String,Object> map=new HashMap<>();
-			//账户
-			map.put("account", account);
-			//财务
-			map.put("finance",  f.get(0));
-			//账户等级
-			List<AccountLevel> all = accountLevelService.browsePagingAccountLevel(null,  1, Integer.MAX_VALUE, "account_level_id", "desc");
-			if(all.size()>0){
-				map.put("accountLevelList",  all);
-				}else{
-				map.put("accountLevelList",  new ArrayList<AccountLevel>());
-				}
-			//积分
-			List<Integral> integrall = integralService.browsePagingIntegral(account.getAccountId(), null, null, 1, 1, "integral_id", "asc");
-			map.put("integrall",  integrall.get(0));
-			//未读通知数
-//			int noticeCount = noticeService.countAll(null, 0, account.getAccountId());
-//			map.put("notice0", noticeCount);
-			//诚信
-			List<Sincerity> sinceritylist = sincerityService.browsePagingSincerity(account.getAccountId(), null, null, 1, 1, "sincerity_id", "asc");
-			map.put("sincerity",  sinceritylist.get(0));
-			list.add(map);
-			return ResultUtil.getSlefSRSuccessList(list);
-			}
-		}else if(account.getStatus().equals(1)){
-			throw new AccountLockException();//账户锁定
-		}
-		return ResultUtil.getSlefSRFailList(list);
+		List<Map<String, Object>> list = accountBusiness.webLogin(adminName, password,random, session);
+		 return ResultUtil.getSlefSRSuccessList(list);
 	}
 	/**
 	 * web用户注册
@@ -651,7 +579,7 @@ public class AccountController {
 		  @ApiImplicitParam(name="validCode",value="验证码",dataType="string", paramType = "query")
 		  })
 	@RequestMapping(value = "/webregister", method = {RequestMethod.GET,RequestMethod.POST})
-	public @ResponseBody StateResultList<List<Map<Object,Object>>> webRegisterAccount(
+	public @ResponseBody StateResultList<List<Map<String,Object>>> webRegisterAccount(
 			@RequestParam("roleType") Integer roleType,
 			@RequestParam("nickname") String nickname,
 			@RequestParam("email") String email,
@@ -660,97 +588,9 @@ public class AccountController {
 			@RequestParam(value="validCode",required=false) String validCode,
 			HttpServletRequest request,
 			HttpSession session) throws AccountIsExistException, VerifyCodeErrorException, CommonNotRollbackException  {
-		List<Map<Object,Object>> list = new ArrayList<>();
-		if(roleType!=3 &&phone==null){//不是用户，必须有phone
-			throw new AccountPhoneException();//手机号异常
-		}
-		//手机验证码
-		if(phone!=null){
-		String vc = (String) session.getAttribute("validCode");
-		if(validCode==null||!validCode.equals(vc)){
-			throw new VerifyCodeErrorException();//验证码错误
-		}
-		}
-		//邮箱验证码
-		String vce = (String) session.getAttribute("validCodeEmailIsValid");
-		if(!"1".equals(vce)){
-			throw new CommonNotRollbackException("email没有验证");
-		}
-		//判断是否存在
-		Account ac = accountService.loginAccount(email, null, null);
-		if(ac!=null&&ac.getAccountId()!=null){
-			throw new AccountIsExistException();//账户已经存在
-		}
-		//判断是否存在
-		Account acp = accountService.loginAccount(phone, null, null);
-		if(acp!=null&&acp.getAccountId()!=null){
-			throw new AccountIsExistException();//账户已经存在
-		}
-			//新用户注册登录
-				Account account=new Account();
-				if(phone!=null){
-					account.setPhone(phone);					
-				}
-					account.setEmail(email);
-					account.setNickname(nickname);
-					account.setPassword(MyDESutil.getMD5(password));
-					List<Role> roleList = roleService.browsePagingRole(1, Integer.MAX_VALUE, "role_id","asc");
-					for (Role role : roleList) {
-							if(role!=null  ){
-								if( roleType.equals(1) && role.getName().equals("商户") ){
-									account.setRoleId(role.getRoleId());
-									account.setRoleName(role.getName());
-								}else if( roleType.equals(2) && role.getName().equals("推广户") ){
-									account.setRoleId(role.getRoleId());
-									account.setRoleName(role.getName());
-								}else if( roleType.equals(3) && role.getName().equals("用户") ){
-									account.setRoleId(role.getRoleId());
-									account.setRoleName(role.getName());
-								}
-								
-							}
-						}
-					boolean b = accountService.addAccount(account);
-				if(b){
+		List<Map<String,Object>> list = accountBusiness.webRegister(roleType, nickname, email, phone, password, validCode, session);
+		return ResultUtil.getSlefSRSuccessList(list);
 				
-				session.setAttribute("account", account);
-				Role role = roleService.loadRole(account.getRoleId());
-//				//当前sessionId放入单例map
-//				if(role.getName().equals("用户")){
-//					HashMap<String,Object> smap=  SingletonHashMap.getInstance(); 
-//					smap.put("accountId"+account.getAccountId(), session.getId());
-//					
-//				 }
-				session.setAttribute("role", role);
-				List<Finance> f = financeService.browsePagingFinance(null,account.getAccountId(), 1, 1, "finance_id", "asc");
-				//System.out.println(f.get(0).toString());
-				session.setAttribute("finance", f.get(0));
-				Map<Object,Object> map=new HashMap<>();
-				//账户
-				map.put("account", account);
-				//财务
-				map.put("finance",  f.get(0));
-				//账户等级
-				List<AccountLevel> all = accountLevelService.browsePagingAccountLevel(null, 1, Integer.MAX_VALUE, "account_level_id", "desc");
-				if(all.size()>0){
-					map.put("accountLevelList",  all);
-					}else{
-					map.put("accountLevelList",  new ArrayList<AccountLevel>());
-					}
-				//积分
-				List<Integral> integrall = integralService.browsePagingIntegral(account.getAccountId(), null, null, 1, 1, "integral_id", "asc");
-				map.put("integrall",  integrall.get(0));
-				//未读
-//				map.put("notice0", 0);
-				//诚信
-				List<Sincerity> sinceritylist = sincerityService.browsePagingSincerity(account.getAccountId(), null, null, 1, 1, "sincerity_id", "asc");
-				map.put("sincerity",  sinceritylist.get(0));
-				list.add(map);
-				return ResultUtil.getSlefSRSuccessList(list);
-				}else{
-					return ResultUtil.getSlefSRFailList(list);
-					
-				}	
 	}
 
 	/**

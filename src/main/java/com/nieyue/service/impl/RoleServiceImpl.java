@@ -5,6 +5,8 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
+import com.nieyue.bean.RolePermission;
+import com.nieyue.service.RolePermissionService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,6 +18,8 @@ import com.nieyue.service.RoleService;
 public class RoleServiceImpl implements RoleService{
 	@Resource
 	RoleDao roleDao;
+	@Resource
+	RolePermissionService rolePermissionService;
 	@Transactional(propagation=Propagation.REQUIRED)
 	@Override
 	public boolean addRole(Role role) {
@@ -27,6 +31,12 @@ public class RoleServiceImpl implements RoleService{
 	@Override
 	public boolean delRole(Integer roleId) {
 		boolean b = roleDao.delRole(roleId);
+		if(b){
+			List<RolePermission> rpl = rolePermissionService.browsePagingRolePermission(null, roleId, null, 1, Integer.MAX_VALUE, "role_permission_id", "asc");
+			for (RolePermission rolePermission : rpl) {
+				b=rolePermissionService.delRolePermission(rolePermission.getRolePermissionId());
+			}
+		}
 		return b;
 	}
 	@Transactional(propagation=Propagation.REQUIRED)

@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+		PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"   
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.nieyue.dao.PermissionDao">
+<!-- 添加权限 -->
+<insert id="addPermission" parameterType="Permission" keyProperty="permissionId" flushCache="true"  >
+   INSERT IGNORE INTO
+   		  permission_tb
+   		 (
+   		 type,
+   		 manager_name,
+   		 name,
+   		 route,
+   		 update_date
+   		 )
+   VALUES
+    	 (
+    	 #{type},
+    	 #{managerName},
+    	 #{name},
+    	 #{route},
+    	 #{updateDate})
+</insert>
+<!-- 更新权限 -->
+<update id="updatePermission" parameterType="Permission" >
+    UPDATE
+    	permission_tb
+    <set>
+		<if test="type!=null">
+			type=#{type},
+		</if>
+		<if test="managerName!=null">
+			manager_name=#{managerName},
+		</if>
+		<if test="name!=null">
+			name=#{name},
+		</if>
+		<if test="route!=null">
+			route=#{route},
+		</if>
+		<if test="updateDate!=null">
+			update_date=#{updateDate},
+		</if>
+	</set>
+    WHERE
+    	 permission_id=#{permissionId}
+</update>
+<!-- 删除权限-->
+<delete id="delPermission"  parameterType="Integer" >
+    DELETE FROM
+    	 permission_tb
+    	 WHERE permission_id=#{permissionId}
+</delete>
+<!-- 加载权限-->
+<select id="loadPermission" parameterType="Integer" resultType="Permission" >
+SELECT
+		permission_id,
+	 	type,
+   		manager_name,
+   		name,
+   		route,
+   		update_date
+FROM permission_tb
+WHERE permission_id=#{permissionId}
+</select>
+
+<!-- 分页查询权限-->
+<select id="browsePagingPermission" resultType="Permission">
+        SELECT
+	    permission_id,
+		type,
+		manager_name,
+		name,
+		route,
+		update_date
+	FROM permission_tb
+	<where>
+		<if test="type!=null">
+			AND type=#{type}
+		</if>
+		<if test="managerName!=null">
+			AND manager_name like CONCAT('%','${managerName}','%' )
+		</if>
+		<if test="name!=null">
+			AND name like CONCAT('%','${name}','%' )
+		</if>
+		<if test="route!=null">
+			AND route=#{route}
+		</if>
+	AND ${orderName}
+	<if test="orderWay=='asc'">
+	<![CDATA[>=]]>
+	</if>
+	<if test="orderWay=='desc'">
+	  <![CDATA[<= ]]>
+	</if>
+	(SELECT ${orderName} FROM permission_tb
+	<where>
+		<if test="type!=null">
+			AND type=#{type}
+		</if>
+		<if test="managerName!=null">
+			AND manager_name like CONCAT('%','${managerName}','%' )
+		</if>
+		<if test="name!=null">
+			AND name like CONCAT('%','${name}','%' )
+		</if>
+		<if test="route!=null">
+			AND route=#{route}
+		</if>
+	  </where>
+		ORDER BY
+			${orderName}  ${orderWay}
+		LIMIT #{pageNum}, 1
+		)
+	</where>
+	ORDER BY
+		${orderName}  ${orderWay}
+	LIMIT
+		#{pageSize}
+</select>
+
+<!-- 统计记录条数 -->
+<select id="countAll"  resultType="int">
+	SELECT
+	 	count(permission_id)
+	FROM permission_tb
+	<where>
+		<if test="type!=null">
+			AND type=#{type}
+		</if>
+		<if test="managerName!=null">
+			AND manager_name like CONCAT('%','${managerName}','%' )
+		</if>
+		<if test="name!=null">
+			AND name like CONCAT('%','${name}','%' )
+		</if>
+		<if test="route!=null">
+			AND route=#{route}
+		</if>
+	</where>
+</select>
+
+
+</mapper>

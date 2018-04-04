@@ -44,6 +44,11 @@ public class RolePermission implements Serializable{
      */
     @ApiModelProperty(value="角色权限更新时间",example="角色权限更新时间")
     private Date updateDate;
+    /**
+     * 权限
+     */
+    @ApiModelProperty(value="权限",example="权限")
+    private Permission permission;
 
     public static long getSerialVersionUID() {
         return serialVersionUID;
@@ -87,5 +92,13 @@ public class RolePermission implements Serializable{
 
     public void setUpdateDate(Date updateDate) {
         this.updateDate = updateDate;
+    }
+
+    public Permission getPermission() {
+        return permission;
+    }
+
+    public void setPermission(Permission permission) {
+        this.permission = permission;
     }
 }

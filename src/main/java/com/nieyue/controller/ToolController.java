@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.view.RedirectView;
 
 import com.nieyue.comments.RequestToMethdoItemUtils;
 import com.nieyue.thirdparty.qiniu.QiniuUtil;
@@ -35,6 +34,7 @@ import io.swagger.annotations.ApiOperation;
  */
 @Api(tags={"tool"},value="工具",description="工具接口管理")
 @RestController
+@RequestMapping("/tool")
 public class ToolController {
 	@Resource
 	RequestToMethdoItemUtils requestToMethdoItemUtils;
@@ -45,23 +45,13 @@ public class ToolController {
 	@Value("${myPugin.projectName}")
 	String projectName;
 	/**
-	 * 首页
-	 * @return
-	 */
-	@ApiOperation(value = "首页", notes = "首页/seller/index.html")
-	@RequestMapping(value={"/"}, method = {RequestMethod.GET,RequestMethod.POST})
-	public RedirectView index(){
-		return new RedirectView("/seller/index.html");
-		
-	}
-	/**
 	 * 验证码
 	 * @param date
 	 * @return
 	 * @throws Exception 
 	 */
 	@ApiOperation(value = "验证码", notes = "验证码")
-	@RequestMapping("/getVerificationCode")
+	@RequestMapping(value = "/getVerificationCode", method = {RequestMethod.GET,RequestMethod.POST})
 	public void getVerificationCode(
 			HttpSession session,HttpServletRequest request,HttpServletResponse response) throws Exception{
 			ByteArrayOutputStream vc = verificationCode.execute(session);
@@ -73,7 +63,7 @@ public class ToolController {
 	 * 获取Session
 	 * @return
 	 */
-	@RequestMapping(value={"/tool/getSession"}, method = {RequestMethod.GET,RequestMethod.POST})
+	@RequestMapping(value = "/getSession", method = {RequestMethod.GET,RequestMethod.POST})
 	public String getSession(
 			HttpSession	 session
 			){
@@ -87,7 +77,7 @@ public class ToolController {
 	 * 获取七牛token
 	 * @return
 	 */
-	@RequestMapping(value={"/tool/qiniuToken"}, method = {RequestMethod.GET,RequestMethod.POST})
+	@RequestMapping(value = "/qiniuToken", method = {RequestMethod.GET,RequestMethod.POST})
 	public StateResultList<List<String>> getQiniuToken(
 			){
 		List<String> list = new ArrayList<>();
@@ -104,7 +94,7 @@ public class ToolController {
 	 * @throws Exception 
 	 */
 	@ApiOperation(value = "二维码", notes = "二维码")
-	@RequestMapping(value="/getBarcode", method = {RequestMethod.GET,RequestMethod.POST})
+	@RequestMapping(value = "/getBarcode", method = {RequestMethod.GET,RequestMethod.POST})
 	public void getBarcode(
 			@RequestParam("acountId")Integer acountId,
 			HttpSession session,HttpServletRequest request,HttpServletResponse response) throws Exception{
@@ -120,7 +110,7 @@ public class ToolController {
 	 * @throws Exception 
 	 */
 	@ApiOperation(value = "二维码Url", notes = "二维码Url")
-	@RequestMapping(value="/getBarcodeUrl", method = {RequestMethod.GET,RequestMethod.POST})
+	@RequestMapping(value = "/getBarcodeUrl", method = {RequestMethod.GET,RequestMethod.POST})
 	public StateResultList<List<String>> getBarcodeUrl(
 			@RequestParam("acountId")Integer acountId,
 			HttpSession session,HttpServletRequest request,HttpServletResponse response) throws Exception{

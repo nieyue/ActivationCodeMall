@@ -25,5 +25,5 @@ public interface RoleDao {
 	/** 角色总共数目 */	
 	public int countAll();	
 	/** 分页角色信息 */
-	public List<Role> browsePagingRole(@Param("pageNum")int pageNum,@Param("pageSize")int pageSize,@Param("orderName")String orderName,@Param("orderWay")String orderWay) ;		
+	public List<Role> browsePagingRole(@Param("pageNum") int pageNum, @Param("pageSize") int pageSize, @Param("orderName") String orderName, @Param("orderWay") String orderWay) ;
 }
