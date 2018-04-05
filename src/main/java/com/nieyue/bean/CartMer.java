@@ -53,6 +53,11 @@ public class CartMer implements Serializable{
 	 */
 	@ApiModelProperty(value="账户id外键",example="账户id外键")
 	private Integer accountId;
+	/**
+	 * 商品
+	 */
+	@ApiModelProperty(value="商品",example="商品")
+	private Mer mer;
 	public Integer getCartMerId() {
 		return cartMerId;
 	}
@@ -97,6 +102,12 @@ public class CartMer implements Serializable{
 	}
 	public static long getSerialversionuid() {
 		return serialVersionUID;
+	}
+	public Mer getMer() {
+		return mer;
+	}
+	public void setMer(Mer mer) {
+		this.mer = mer;
 	}
 	
 }

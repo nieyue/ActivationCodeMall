@@ -2,6 +2,7 @@ package com.nieyue.bean;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -143,6 +144,12 @@ public class Mer implements Serializable{
 	 */
 	@ApiModelProperty(value="商品更新时间",example="商品更新时间")
 	private Date updateDate;
+	/**
+	 * 商品图片
+	 */
+	@ApiModelProperty(value="商品图片",example="商品图片")
+	private List<MerImg> merImgList;
+	
 	public Integer getMerId() {
 		return merId;
 	}
@@ -295,6 +302,12 @@ public class Mer implements Serializable{
 	}
 	public static long getSerialversionuid() {
 		return serialVersionUID;
+	}
+	public List<MerImg> getMerImgList() {
+		return merImgList;
+	}
+	public void setMerImgList(List<MerImg> merImgList) {
+		this.merImgList = merImgList;
 	}
 
 	

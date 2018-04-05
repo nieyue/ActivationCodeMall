@@ -10,12 +10,17 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.nieyue.bean.Mer;
+import com.nieyue.bean.MerImg;
 import com.nieyue.dao.MerDao;
+import com.nieyue.service.MerImgService;
 import com.nieyue.service.MerService;
 @Service
 public class MerServiceImpl implements MerService{
 	@Resource
 	MerDao merDao;
+	@Resource
+	MerImgService merImgService;
+	
 	@Transactional(propagation=Propagation.REQUIRED)
 	@Override
 	public boolean addMer(Mer mer) {
@@ -45,6 +50,8 @@ public class MerServiceImpl implements MerService{
 	@Override
 	public Mer loadMer(Integer merId) {
 		Mer r = merDao.loadMer(merId);
+		List<MerImg> mil=merImgService.browsePagingMerImg(merId, 1, Integer.MAX_VALUE, "mer_img_id", "asc");
+		r.setMerImgList(mil);
 		return r;
 	}
 
@@ -114,6 +121,10 @@ public class MerServiceImpl implements MerService{
 				updateDate,
 				status,
 				pageNum-1, pageSize, orderName, orderWay);
+		l.forEach((m)->{
+			List<MerImg> mil=merImgService.browsePagingMerImg(m.getMerId(), 1, Integer.MAX_VALUE, "mer_img_id", "asc");
+			m.setMerImgList(mil);
+		});
 		return l;
 	}
 

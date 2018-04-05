@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+		PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"   
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">  
+<mapper namespace="com.nieyue.dao.BannerDao">
+<!-- 添加banner -->
+<insert id="addBanner" parameterType="Banner" keyProperty="bannerId" flushCache="true"  >  
+   INSERT IGNORE INTO
+   		  banner_tb 
+   		 (name,type,img_address,content,link,update_date,status)
+   VALUES
+    	 (#{name},#{type},#{imgAddress},#{content},#{link},#{updateDate},#{status})  
+</insert>  
+<!-- 更新banner -->
+<update id="updateBanner" parameterType="Banner" >  
+    UPDATE 
+    	banner_tb 
+    <set>
+    <if test="name!=null">
+    	name=#{name},
+    </if>
+    <if test="type!=null">
+    	type=#{type},
+    </if>
+    <if test="imgAddress!=null">
+    	img_address=#{imgAddress},
+    </if>
+    <if test="content!=null">
+    	content=#{content},
+    </if>
+    <if test="link!=null">
+    	link=#{link},
+    </if>
+    <if test="updateDate!=null">
+    	update_date=#{updateDate},
+    </if>
+    <if test="status!=null">
+    	status=#{status}
+    </if>
+    </set> 
+    WHERE
+    	 banner_id=#{bannerId} 
+</update> 
+<!-- 删除banner-->
+<delete id="delBanner"  parameterType="Integer" >  
+    DELETE FROM
+    	 banner_tb 
+    	 WHERE banner_id=#{bannerId}
+</delete>  
+<!-- 加载banner-->
+<select id="loadBanner" parameterType="Integer" resultType="Banner" >
+SELECT 
+		banner_id,
+	 	name,
+	 	type,
+	 	img_address,
+	 	content,
+    	link,
+    	update_date,
+    	status
+FROM banner_tb 
+WHERE banner_id=#{bannerId}
+</select>
+
+<!-- 分页查询banner-->
+<select id="browsePagingBanner" resultType="Banner">  
+        SELECT
+	    banner_id,
+	 	name,
+	 	type,
+	 	img_address,
+	 	content,
+    	link,
+    	update_date,
+    	status
+	FROM banner_tb
+	<where>
+	<if test="type!=null">
+		AND  type=#{type}
+		</if>
+	<if test="status!=null">
+		AND  status=#{status}
+		</if>
+	 AND ${orderName} 
+	<if test="orderWay=='asc'">
+	<![CDATA[>=]]> 
+	</if>
+	<if test="orderWay=='desc'">
+	  <![CDATA[<= ]]>
+	</if>
+	(SELECT ${orderName} FROM banner_tb
+	<where>
+	<if test="type!=null">
+		AND  type=#{type}
+		</if>
+	<if test="status!=null">
+		AND  status=#{status}
+		</if>
+	</where> 
+		ORDER BY 
+			${orderName}  ${orderWay}
+		LIMIT #{pageNum}, 1
+		) 
+	</where> 
+	ORDER BY
+		${orderName}  ${orderWay}
+	LIMIT
+		#{pageSize}
+</select> 
+
+<!-- 统计记录条数 -->
+<select id="countAll"  resultType="int">  
+	SELECT
+	 	count(banner_id)
+	FROM banner_tb
+	<where>
+	<if test="type!=null">
+		AND  type=#{type}
+		</if>
+	<if test="status!=null">
+		AND  status=#{status}
+		</if>
+	</where> 
+</select>   
+   
+ 
+</mapper>

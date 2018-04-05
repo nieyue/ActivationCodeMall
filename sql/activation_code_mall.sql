@@ -593,6 +593,20 @@ INDEX INDEX_CREATEDATE (create_date) USING BTREE,
 INDEX INDEX_UPDATEDATE (update_date) USING BTREE
 )ENGINE = InnoDB AUTO_INCREMENT=1000 DEFAULT CHARSET=utf8 COMMENT='支付表';
 
+#创建banner表 
+CREATE TABLE banner_tb(
+banner_id int(11) NOT NULL AUTO_INCREMENT COMMENT 'bannerid',
+name varchar(255)  COMMENT '名称',
+type tinyint(4) DEFAULT 0 COMMENT '类型，默认1首页轮播',
+img_address varchar(255)  COMMENT '图片',
+content varchar(255)  COMMENT '内容',
+link varchar(255)  COMMENT '链接',
+update_date datetime COMMENT '更新时间',
+status tinyint(4)  COMMENT '状态，默认0下架，1上架',
+PRIMARY KEY (banner_id),
+INDEX INDEX_TYPE (type) USING BTREE,
+INDEX INDEX_STATUS (status) USING BTREE
+)ENGINE = InnoDB AUTO_INCREMENT=1000 DEFAULT CHARSET=utf8 COMMENT='banner表';
 
 #设置初始角色
 INSERT IGNORE INTO role_tb (name,duty,update_date) 

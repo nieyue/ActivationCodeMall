@@ -10,12 +10,16 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.nieyue.bean.CartMer;
+import com.nieyue.bean.Mer;
 import com.nieyue.dao.CartMerDao;
 import com.nieyue.service.CartMerService;
+import com.nieyue.service.MerService;
 @Service
 public class CartMerServiceImpl implements CartMerService{
 	@Resource
 	CartMerDao cartMerDao;
+	@Resource
+	MerService merService;
 	@Transactional(propagation=Propagation.REQUIRED)
 	@Override
 	public boolean addCartMer(CartMer cartMer) {
@@ -41,6 +45,8 @@ public class CartMerServiceImpl implements CartMerService{
 	@Override
 	public CartMer loadCartMer(Integer cartMerId) {
 		CartMer r = cartMerDao.loadCartMer(cartMerId);
+		Mer mer=merService.loadMer(r.getMerId());
+		r.setMer(mer);
 		return r;
 	}
 
@@ -67,6 +73,10 @@ public class CartMerServiceImpl implements CartMerService{
 			pageSize=0;//没有数据
 		}
 		List<CartMer> l = cartMerDao.browsePagingCartMer(number,merId,accountId,pageNum-1, pageSize, orderName, orderWay);
+		l.forEach((cm)->{
+			Mer mer=merService.loadMer(cm.getMerId());
+			cm.setMer(mer);
+		});
 		return l;
 	}
 
