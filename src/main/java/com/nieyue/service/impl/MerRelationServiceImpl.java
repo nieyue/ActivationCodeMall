@@ -9,13 +9,21 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.nieyue.bean.Account;
+import com.nieyue.bean.Mer;
 import com.nieyue.bean.MerRelation;
 import com.nieyue.dao.MerRelationDao;
+import com.nieyue.service.AccountService;
 import com.nieyue.service.MerRelationService;
+import com.nieyue.service.MerService;
 @Service
 public class MerRelationServiceImpl implements MerRelationService{
 	@Resource
 	MerRelationDao merRelationDao;
+	@Resource
+	AccountService accountService;
+	@Resource
+	MerService merService;
 	@Transactional(propagation=Propagation.REQUIRED)
 	@Override
 	public boolean addMerRelation(MerRelation merRelation) {
@@ -39,6 +47,10 @@ public class MerRelationServiceImpl implements MerRelationService{
 	@Override
 	public MerRelation loadMerRelation(Integer merRelationId) {
 		MerRelation r = merRelationDao.loadMerRelation(merRelationId);
+		Mer mer=merService.loadMer(r.getSellerMerId());
+		Account a=accountService.loadAccount(r.getSellerAccountId());
+		r.setSellerAccount(a);
+		r.setSellerMer(mer);
 		return r;
 	}
 
@@ -65,6 +77,12 @@ public class MerRelationServiceImpl implements MerRelationService{
 			pageSize=0;//没有数据
 		}
 		List<MerRelation> l = merRelationDao.browsePagingMerRelation(platformMerId,sellerMerId,sellerAccountId,pageNum-1, pageSize, orderName, orderWay);
+		l.forEach((mr)->{
+			Mer mer=merService.loadMer(mr.getSellerMerId());
+			Account a=accountService.loadAccount(mr.getSellerAccountId());
+			mr.setSellerAccount(a);
+			mr.setSellerMer(mer);
+		});
 		return l;
 	}
 

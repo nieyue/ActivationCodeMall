@@ -20,7 +20,8 @@
    		 status,
    		 mer_cate_id,
    		 account_id,
-   		 coupon_term_id
+   		 coupon_term_id,
+   		 order_id
    		 )
    VALUES
     	 (
@@ -36,7 +37,8 @@
     	 #{status},
     	 #{merCateId},
     	 #{accountId},
-    	 #{couponTermId}
+    	 #{couponTermId},
+    	 #{orderId}
     	 )  
 </insert>  
 <!-- 更新优惠劵 -->
@@ -83,6 +85,9 @@
 		<if test="couponTermId!=null">
     	coupon_term_id=#{couponTermId},
 		</if>
+		<if test="orderId!=null">
+    	order_id=#{orderId},
+		</if>
     </set> 
     WHERE
     	 coupon_id=#{couponId} 
@@ -109,7 +114,8 @@ SELECT
    		 status,
    		 mer_cate_id,
    		 account_id,
-   		 coupon_term_id
+   		 coupon_term_id,
+   		 order_id
 FROM coupon_tb 
 WHERE coupon_id=#{couponId}
 </select>
@@ -130,7 +136,8 @@ WHERE coupon_id=#{couponId}
    		 status,
    		 mer_cate_id,
    		 account_id,
-   		 coupon_term_id
+   		 coupon_term_id,
+   		 order_id
 	FROM coupon_tb
 	<where>
 	<if test="code!=null">
@@ -144,6 +151,9 @@ WHERE coupon_id=#{couponId}
 		</if>
 	<if test="accountId!=null">
 		AND  account_id=#{accountId}
+		</if>
+	<if test="orderId!=null">
+		AND  order_id=#{orderId}
 		</if>
 	<if test="startDate!=null">
 		AND  DATE(start_date)=DATE(#{startDate})
@@ -180,6 +190,9 @@ WHERE coupon_id=#{couponId}
 		</if>
 	<if test="accountId!=null">
 		AND  account_id=#{accountId}
+		</if>
+		<if test="orderId!=null">
+		AND  order_id=#{orderId}
 		</if>
 	<if test="startDate!=null">
 		AND  DATE(start_date)=DATE(#{startDate})
@@ -225,6 +238,9 @@ WHERE coupon_id=#{couponId}
 		</if>
 	<if test="accountId!=null">
 		AND  account_id=#{accountId}
+		</if>
+		<if test="orderId!=null">
+		AND  order_id=#{orderId}
 		</if>
 	<if test="startDate!=null">
 		AND  DATE(start_date)=DATE(#{startDate})

@@ -35,11 +35,11 @@ myPugin:
     myDomainName: null
   projectName: ActivationCodeMall
   requestAuth: requestAuthDev
-  activationCodeMallProjectDomainUrl: http://192.168.7.111:9000
-  activationCodeMallClientDomainUrl: http://192.168.7.111:9000
+  activationCodeMallProjectDomainUrl: http://localhost:9000
+  activationCodeMallClientDomainUrl: http://localhost:9000
   paypal:
-    payCancelUrl: http://192.168.7.111:9000/payCancel.html
-    paySuccessUrl: http://192.168.7.111:9000/paySuccess.html
+    payCancelUrl: http://localhost:9000/payCancel.html
+    paySuccessUrl: http://localhost:9000/paySuccess.html
     mode: sandbox
     client:
       app: AW_Y_UZgVqf_LI8qTc8FqkuNFkCC4BSZqKegRdJF5oKORhYCKUsLnQNR7bpFWh_0EJzGHHcQU6K20HLe

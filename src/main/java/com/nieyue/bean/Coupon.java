@@ -88,6 +88,11 @@ public class Coupon implements Serializable{
 	 */
 	@ApiModelProperty(value="优惠劵项ID",example="优惠劵项ID")
 	private Integer couponTermId;
+	/**
+	 * 订单id
+	 */
+	@ApiModelProperty(value="订单id",example="订单id")
+	private Integer orderId;
 	public Integer getCouponId() {
 		return couponId;
 	}
@@ -174,6 +179,12 @@ public class Coupon implements Serializable{
 	}
 	public static long getSerialversionuid() {
 		return serialVersionUID;
+	}
+	public Integer getOrderId() {
+		return orderId;
+	}
+	public void setOrderId(Integer orderId) {
+		this.orderId = orderId;
 	}
 	
 }

@@ -40,7 +40,7 @@
     	</if>
     </set> 
     WHERE
-    	 mer_card_cipher_id=#{MerCardCipherId} 
+    	 mer_card_cipher_id=#{merCardCipherId} 
 </update> 
 <!-- 删除商品卡密-->
 <delete id="delMerCardCipher"  parameterType="Integer" >  

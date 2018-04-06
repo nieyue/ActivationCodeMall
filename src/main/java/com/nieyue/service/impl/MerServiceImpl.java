@@ -21,6 +21,7 @@ public class MerServiceImpl implements MerService{
 	@Resource
 	MerImgService merImgService;
 	
+	
 	@Transactional(propagation=Propagation.REQUIRED)
 	@Override
 	public boolean addMer(Mer mer) {

@@ -43,6 +43,16 @@ public class MerRelation implements Serializable{
 	 */
 	@ApiModelProperty(value="商家账户id外键",example="商家账户id外键")
 	private Integer sellerAccountId;
+	/**
+	 * 商家账户
+	 */
+	@ApiModelProperty(value="商家账户",example="商家账户")
+	private Account sellerAccount;
+	/**
+	 * 商家商品
+	 */
+	@ApiModelProperty(value="商家商品",example="商家商品")
+	private Mer sellerMer;
 	public Integer getMerRelationId() {
 		return merRelationId;
 	}
@@ -76,6 +86,17 @@ public class MerRelation implements Serializable{
 	public static long getSerialversionuid() {
 		return serialVersionUID;
 	}
+	public Account getSellerAccount() {
+		return sellerAccount;
+	}
+	public void setSellerAccount(Account sellerAccount) {
+		this.sellerAccount = sellerAccount;
+	}
+	public Mer getSellerMer() {
+		return sellerMer;
+	}
+	public void setSellerMer(Mer sellerMer) {
+		this.sellerMer = sellerMer;
+	}
 
-	
 }

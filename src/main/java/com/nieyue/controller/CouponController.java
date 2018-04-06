@@ -48,15 +48,16 @@ public class CouponController {
 	 */
 	@ApiOperation(value = "优惠劵列表", notes = "优惠劵分页浏览")
 	@ApiImplicitParams({
-		@ApiImplicitParam(name="code",value="优惠劵码",dataType="string", paramType = "query",defaultValue="1"),
-		@ApiImplicitParam(name="merCateId",value="商品类型id,此商品类型才能使用",dataType="int", paramType = "query",defaultValue="1"),
-		@ApiImplicitParam(name="couponTermId",value="优惠劵项ID",dataType="int", paramType = "query",defaultValue="1"),
-		@ApiImplicitParam(name="accountId",value="优惠劵人ID，此id账户才能使用",dataType="int", paramType = "query",defaultValue="1"),
-		@ApiImplicitParam(name="startDate",value="开始时间",dataType="date-time", paramType = "query",defaultValue="1"),
-		@ApiImplicitParam(name="endDate",value="结束时间",dataType="date-time", paramType = "query",defaultValue="1"),
-		@ApiImplicitParam(name="createDate",value="创建时间",dataType="date-time", paramType = "query",defaultValue="1"),
-		@ApiImplicitParam(name="updateDate",value="更新时间",dataType="date-time", paramType = "query",defaultValue="1"),
-		@ApiImplicitParam(name="status",value="状态，默认1可用，2已用，3已失效",dataType="int", paramType = "query",defaultValue="1"),
+		@ApiImplicitParam(name="code",value="优惠劵码",dataType="string", paramType = "query"),
+		@ApiImplicitParam(name="merCateId",value="商品类型id,此商品类型才能使用",dataType="int", paramType = "query"),
+		@ApiImplicitParam(name="couponTermId",value="优惠劵项ID",dataType="int", paramType = "query"),
+		@ApiImplicitParam(name="accountId",value="优惠劵人ID，此id账户才能使用",dataType="int", paramType = "query"),
+		@ApiImplicitParam(name="orderId",value="订单ID",dataType="int", paramType = "query"),
+		@ApiImplicitParam(name="startDate",value="开始时间",dataType="date-time", paramType = "query"),
+		@ApiImplicitParam(name="endDate",value="结束时间",dataType="date-time", paramType = "query"),
+		@ApiImplicitParam(name="createDate",value="创建时间",dataType="date-time", paramType = "query"),
+		@ApiImplicitParam(name="updateDate",value="更新时间",dataType="date-time", paramType = "query"),
+		@ApiImplicitParam(name="status",value="状态，默认1可用，2已用，3已失效",dataType="int", paramType = "query"),
 	    @ApiImplicitParam(name="pageNum",value="页头数位",dataType="int", paramType = "query",defaultValue="1"),
 	    @ApiImplicitParam(name="pageSize",value="每页数目",dataType="int", paramType = "query",defaultValue="10"),
 	    @ApiImplicitParam(name="orderName",value="排序字段",dataType="string", paramType = "query",defaultValue="update_date"),
@@ -68,6 +69,7 @@ public class CouponController {
 			@RequestParam(value="merCateId",required=false)Integer merCateId,
 			@RequestParam(value="couponTermId",required=false)Integer couponTermId,
 			@RequestParam(value="accountId",required=false)Integer accountId,
+			@RequestParam(value="orderId",required=false)Integer orderId,
 			@RequestParam(value="startDate",required=false)Date startDate,
 			@RequestParam(value="endDate",required=false)Date endDate,
 			@RequestParam(value="createDate",required=false)Date createDate,
@@ -79,7 +81,7 @@ public class CouponController {
 			@RequestParam(value="orderWay",required=false,defaultValue="desc") String orderWay)  {
 			List<Coupon> list = new ArrayList<Coupon>();
 			list= couponService.browsePagingCoupon(
-					code,merCateId,couponTermId,accountId,startDate,endDate,createDate,updateDate,status,
+					code,merCateId,couponTermId,accountId,orderId,startDate,endDate,createDate,updateDate,status,
 					pageNum, pageSize, orderName, orderWay);
 			if(list.size()>0){
 				return ResultUtil.getSlefSRSuccessList(list);
@@ -126,15 +128,16 @@ public class CouponController {
 	 */
 	@ApiOperation(value = "优惠劵数量", notes = "优惠劵数量查询")
 	@ApiImplicitParams({
-		@ApiImplicitParam(name="code",value="优惠劵码",dataType="string", paramType = "query",defaultValue="1"),
-		@ApiImplicitParam(name="merCateId",value="商品类型id,此商品类型才能使用",dataType="int", paramType = "query",defaultValue="1"),
-		@ApiImplicitParam(name="couponTermId",value="优惠劵项ID",dataType="int", paramType = "query",defaultValue="1"),
-		@ApiImplicitParam(name="accountId",value="优惠劵人ID，此id账户才能使用",dataType="int", paramType = "query",defaultValue="1"),
-		@ApiImplicitParam(name="startDate",value="开始时间",dataType="date-time", paramType = "query",defaultValue="1"),
-		@ApiImplicitParam(name="endDate",value="结束时间",dataType="date-time", paramType = "query",defaultValue="1"),
-		@ApiImplicitParam(name="createDate",value="创建时间",dataType="date-time", paramType = "query",defaultValue="1"),
-		@ApiImplicitParam(name="updateDate",value="更新时间",dataType="date-time", paramType = "query",defaultValue="1"),
-		@ApiImplicitParam(name="status",value="状态，默认1可用，2已用，3已失效",dataType="int", paramType = "query",defaultValue="1")
+		@ApiImplicitParam(name="code",value="优惠劵码",dataType="string", paramType = "query"),
+		@ApiImplicitParam(name="merCateId",value="商品类型id,此商品类型才能使用",dataType="int", paramType = "query"),
+		@ApiImplicitParam(name="couponTermId",value="优惠劵项ID",dataType="int", paramType = "query"),
+		@ApiImplicitParam(name="accountId",value="优惠劵人ID，此id账户才能使用",dataType="int", paramType = "query"),
+		@ApiImplicitParam(name="orderId",value="订单ID",dataType="int", paramType = "query"),
+		@ApiImplicitParam(name="startDate",value="开始时间",dataType="date-time", paramType = "query"),
+		@ApiImplicitParam(name="endDate",value="结束时间",dataType="date-time", paramType = "query"),
+		@ApiImplicitParam(name="createDate",value="创建时间",dataType="date-time", paramType = "query"),
+		@ApiImplicitParam(name="updateDate",value="更新时间",dataType="date-time", paramType = "query"),
+		@ApiImplicitParam(name="status",value="状态，默认1可用，2已用，3已失效",dataType="int", paramType = "query")
 	  })
 	@RequestMapping(value = "/count", method = {RequestMethod.GET,RequestMethod.POST})
 	public @ResponseBody int countAll(
@@ -142,13 +145,14 @@ public class CouponController {
 			@RequestParam(value="merCateId",required=false)Integer merCateId,
 			@RequestParam(value="couponTermId",required=false)Integer couponTermId,
 			@RequestParam(value="accountId",required=false)Integer accountId,
+			@RequestParam(value="orderId",required=false)Integer orderId,
 			@RequestParam(value="startDate",required=false)Date startDate,
 			@RequestParam(value="endDate",required=false)Date endDate,
 			@RequestParam(value="createDate",required=false)Date createDate,
 			@RequestParam(value="updateDate",required=false)Date updateDate,
 			@RequestParam(value="status",required=false)Integer status,
 			HttpSession session)  {
-		int count = couponService.countAll(code,merCateId,couponTermId,accountId,startDate,endDate,createDate,updateDate,status);
+		int count = couponService.countAll(code,merCateId,couponTermId,accountId,orderId,startDate,endDate,createDate,updateDate,status);
 		return count;
 	}
 	/**

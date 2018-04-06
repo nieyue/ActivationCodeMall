@@ -9,24 +9,35 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.nieyue.bean.Mer;
 import com.nieyue.bean.MerCardCipher;
 import com.nieyue.dao.MerCardCipherDao;
 import com.nieyue.service.MerCardCipherService;
+import com.nieyue.service.MerService;
 @Service
 public class MerCardCipherServiceImpl implements MerCardCipherService{
 	@Resource
 	MerCardCipherDao merCardCipherDao;
+	@Resource
+	MerService merservice;
 	@Transactional(propagation=Propagation.REQUIRED)
 	@Override
 	public boolean addMerCardCipher(MerCardCipher merCardCipher) {
 		merCardCipher.setCreateDate(new Date());
 		boolean b = merCardCipherDao.addMerCardCipher(merCardCipher);
+		Mer mer=merservice.loadMer(merCardCipher.getMerId());
+		mer.setStockNumber(mer.getStockNumber()+1);
+		b=merservice.updateMer(mer);
 		return b;
 	}
 	@Transactional(propagation=Propagation.REQUIRED)
 	@Override
 	public boolean delMerCardCipher(Integer merCardCipherId) {
+		MerCardCipher merCardCipher=loadMerCardCipher(merCardCipherId);
 		boolean b = merCardCipherDao.delMerCardCipher(merCardCipherId);
+		Mer mer=merservice.loadMer(merCardCipher.getMerId());
+		mer.setStockNumber(mer.getStockNumber()-1);
+		b=merservice.updateMer(mer);
 		return b;
 	}
 	@Transactional(propagation=Propagation.REQUIRED)
