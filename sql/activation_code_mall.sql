@@ -507,6 +507,33 @@ INDEX INDEX_CREATEDATE (create_date) USING BTREE,
 INDEX INDEX_UPDATEDATE (update_date) USING BTREE
 )ENGINE = InnoDB AUTO_INCREMENT=1000 DEFAULT CHARSET=utf8 COMMENT='收货地址表 ';
 
+#创建订单收货信息表 
+CREATE TABLE order_receipt_info_tb(
+order_receipt_info_id int(11) NOT NULL AUTO_INCREMENT COMMENT '订单收货信息id',
+name varchar(255) COMMENT '收货地址姓名',
+phone varchar(255) COMMENT '手机号',
+telephone_area varchar(255) COMMENT '电话区号',
+telephone varchar(255) COMMENT '电话号',
+telephone_extension varchar(255) COMMENT '电话分机',
+postcode varchar(255) COMMENT '邮政编码',
+country varchar(255) COMMENT '国家',
+province varchar(255) COMMENT '省',
+city varchar(255) COMMENT '市',
+area varchar(255) COMMENT '区',
+address varchar(255) COMMENT '收货地址',
+is_default tinyint(4) DEFAULT 0 COMMENT '默认为0不是，1是',
+create_date datetime   COMMENT '创建时间',
+update_date datetime   COMMENT '更新时间',
+account_id int(11) COMMENT '账户id,外键',
+order_id int(11) COMMENT '订单id,外键',
+PRIMARY KEY (order_receipt_info_id),
+INDEX INDEX_ACCOUNTID (account_id) USING BTREE,
+INDEX INDEX_ISDEFAULT (is_default) USING BTREE,
+INDEX INDEX_ORDERID (order_id) USING BTREE,
+INDEX INDEX_CREATEDATE (create_date) USING BTREE,
+INDEX INDEX_UPDATEDATE (update_date) USING BTREE
+)ENGINE = InnoDB AUTO_INCREMENT=1000 DEFAULT CHARSET=utf8 COMMENT='订单收货地址表 ';
+
 #创建优惠劵项表 
 CREATE TABLE coupon_term_tb(
 coupon_term_id int(11) NOT NULL AUTO_INCREMENT COMMENT '优惠劵项id',
@@ -609,6 +636,51 @@ PRIMARY KEY (banner_id),
 INDEX INDEX_TYPE (type) USING BTREE,
 INDEX INDEX_STATUS (status) USING BTREE
 )ENGINE = InnoDB AUTO_INCREMENT=1000 DEFAULT CHARSET=utf8 COMMENT='banner表';
+
+#创建推广链接项表 
+CREATE TABLE spread_link_term_tb(
+spread_link_term_id int(11) NOT NULL AUTO_INCREMENT COMMENT '推广链接项id',
+link varchar(255)  COMMENT '链接',
+create_date datetime COMMENT '创建时间',
+PRIMARY KEY (spread_link_term_id)
+)ENGINE = InnoDB AUTO_INCREMENT=1000 DEFAULT CHARSET=utf8 COMMENT='推广链接项表';
+
+#创建推广链接表 
+CREATE TABLE spread_link_tb(
+spread_link_id int(11) NOT NULL AUTO_INCREMENT COMMENT '推广链接id',
+link varchar(255)  COMMENT '链接',
+spread_number int(11)  COMMENT '推广次数',
+create_date datetime COMMENT '创建时间',
+account_id int(11) COMMENT '推广账户id',
+PRIMARY KEY (spread_link_id),
+INDEX INDEX_ACCOUNTID (account_id) USING BTREE
+)ENGINE = InnoDB AUTO_INCREMENT=1000 DEFAULT CHARSET=utf8 COMMENT='推广链接表';
+
+#创建推广订单账户表 
+CREATE TABLE spread_order_account_tb(
+spread_order_account_id int(11) NOT NULL AUTO_INCREMENT COMMENT '推广订单账户id',
+name varchar(255)  COMMENT '用户名',
+email varchar(255)  COMMENT '用户邮箱',
+trade_number int(11)  COMMENT '交易笔数',
+create_date datetime COMMENT '创建时间',
+account_id int(11) COMMENT '推广账户id',
+PRIMARY KEY (spread_order_account_id),
+INDEX INDEX_ACCOUNTID (account_id) USING BTREE
+)ENGINE = InnoDB AUTO_INCREMENT=1000 DEFAULT CHARSET=utf8 COMMENT='推广订单账户表';
+
+#创建推广记录表 
+CREATE TABLE spread_record_tb(
+spread_record_id int(11) NOT NULL AUTO_INCREMENT COMMENT '推广记录id',
+name varchar(255)  COMMENT '用户名',
+money decimal(11,2) COMMENT '交易金额',
+spread_proportion decimal(11,2) DEFAULT 1  COMMENT '返利分成比例，单位%',
+spread_money decimal(11,2)   COMMENT '返利金额',
+link varchar(255)  COMMENT '链接',
+create_date datetime COMMENT '创建时间',
+account_id int(11) COMMENT '推广账户id',
+PRIMARY KEY (spread_record_id),
+INDEX INDEX_ACCOUNTID (account_id) USING BTREE
+)ENGINE = InnoDB AUTO_INCREMENT=1000 DEFAULT CHARSET=utf8 COMMENT='推广记录表';
 
 #设置初始角色
 INSERT IGNORE INTO role_tb (name,duty,update_date) 

@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+		PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"   
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">  
+<mapper namespace="com.nieyue.dao.SpreadLinkTermDao">
+<!-- 添加推广链接项 -->
+<insert id="addSpreadLinkTerm" parameterType="SpreadLinkTerm" keyProperty="spreadLinkTermId" flushCache="true"  >  
+   INSERT IGNORE INTO
+   		  spread_link_term_tb 
+   		 (
+   		 link,
+   		 create_date
+   		 )
+   VALUES
+    	 (
+    	 #{link},
+    	 #{createDate})  
+</insert>  
+<!-- 更新推广链接项 -->
+<update id="updateSpreadLinkTerm" parameterType="SpreadLinkTerm" >  
+    UPDATE 
+    	spread_link_term_tb 
+    <set>
+    <if test="link!=null">
+    	link=#{link},
+    </if>
+    <if test="createDate!=null">
+    	create_date=#{createDate},
+    </if>
+    </set> 
+    WHERE
+    	 spread_link_term_id=#{spreadLinkTermId} 
+</update> 
+<!-- 删除推广链接项-->
+<delete id="delSpreadLinkTerm"  parameterType="Integer" >  
+    DELETE FROM
+    	 spread_link_term_tb 
+    	 WHERE spread_link_term_id=#{spreadLinkTermId}
+</delete>  
+<!-- 加载推广链接项-->
+<select id="loadSpreadLinkTerm" parameterType="Integer" resultType="SpreadLinkTerm" >
+SELECT 
+		 spread_link_term_id,
+	 	 link,
+   		 create_date
+FROM spread_link_term_tb 
+WHERE spread_link_term_id=#{spreadLinkTermId}
+</select>
+
+<!-- 分页查询推广链接项-->
+<select id="browsePagingSpreadLinkTerm" resultType="SpreadLinkTerm">  
+        SELECT
+	     spread_link_term_id,
+	 	 link,
+   		 create_date
+	FROM spread_link_term_tb
+	WHERE ${orderName} 
+	<if test="orderWay=='asc'">
+	<![CDATA[>=]]> 
+	</if>
+	<if test="orderWay=='desc'">
+	  <![CDATA[<= ]]>
+	</if>
+	(SELECT ${orderName} FROM spread_link_term_tb 
+		ORDER BY 
+			${orderName}  ${orderWay}
+		LIMIT #{pageNum}, 1
+		) 
+	ORDER BY
+		${orderName}  ${orderWay}
+	LIMIT
+		#{pageSize}
+</select> 
+
+<!-- 统计记录条数 -->
+<select id="countAll"  resultType="int">  
+	SELECT
+	 	count(spread_link_term_id)
+	FROM spread_link_term_tb
+</select>   
+   
+ 
+</mapper>

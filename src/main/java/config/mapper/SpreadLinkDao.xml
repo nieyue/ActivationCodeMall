@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+		PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"   
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">  
+<mapper namespace="com.nieyue.dao.SpreadLinkDao">
+<!-- 添加推广链接 -->
+<insert id="addSpreadLink" parameterType="SpreadLink" keyProperty="spreadLinkId" flushCache="true"  >  
+   INSERT IGNORE INTO
+   		  spread_link_tb 
+   		 (
+   		 link,
+   		 spread_number,
+   		 create_date,
+   		 account_id
+   		 )
+   VALUES
+    	 (
+    	 #{link},
+    	 #{spreadNumber},
+    	 #{createDate},
+    	 #{accountId}
+    	 )  
+</insert>  
+<!-- 更新推广链接 -->
+<update id="updateSpreadLink" parameterType="SpreadLink" >  
+    UPDATE 
+    	spread_link_tb 
+    <set>
+    <if test="link!=null">
+    	link=#{link},
+    </if>
+    <if test="spreadNumber!=null">
+    	spread_number=#{spreadNumber},
+    </if>
+    <if test="createDate!=null">
+    	create_date=#{createDate},
+    </if>
+    <if test="accountId!=null">
+    	account_id=#{accountId},
+    </if>
+    </set> 
+    WHERE
+    	 spread_link_id=#{spreadLinkId} 
+</update> 
+<!-- 删除推广链接-->
+<delete id="delSpreadLink"  parameterType="Integer" >  
+    DELETE FROM
+    	 spread_link_tb 
+    	 WHERE spread_link_id=#{spreadLinkId}
+</delete>  
+<!-- 加载推广链接-->
+<select id="loadSpreadLink" parameterType="Integer" resultType="SpreadLink" >
+SELECT 
+		 spread_link_id,
+	 	 link,
+   		 spread_number,
+   		 create_date,
+   		 account_id
+FROM spread_link_tb 
+WHERE spread_link_id=#{spreadLinkId}
+</select>
+
+<!-- 分页查询推广链接-->
+<select id="browsePagingSpreadLink" resultType="SpreadLink">  
+        SELECT
+	     spread_link_id,
+	 	 link,
+   		 spread_number,
+   		 create_date,
+   		 account_id
+	FROM spread_link_tb
+	<where>
+	<if test="accountId!=null">
+	AND account_id=#{accountId}
+	</if>
+	AND ${orderName} 
+	<if test="orderWay=='asc'">
+	<![CDATA[>=]]> 
+	</if>
+	<if test="orderWay=='desc'">
+	  <![CDATA[<= ]]>
+	</if>
+	(SELECT ${orderName} FROM spread_link_tb 
+	<where>
+		<if test="accountId!=null">
+		AND account_id=#{accountId}
+		</if>
+	</where>
+		ORDER BY 
+			${orderName}  ${orderWay}
+		LIMIT #{pageNum}, 1
+		) 
+	</where>
+	ORDER BY
+		${orderName}  ${orderWay}
+	LIMIT
+		#{pageSize}
+</select> 
+
+<!-- 统计记录条数 -->
+<select id="countAll"  resultType="int">  
+	SELECT
+	 	count(spread_link_id)
+	FROM spread_link_tb
+	<where>
+		<if test="accountId!=null">
+		AND account_id=#{accountId}
+		</if>
+	</where>
+</select>   
+   
+ 
+</mapper>

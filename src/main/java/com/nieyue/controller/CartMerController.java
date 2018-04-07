@@ -1,7 +1,9 @@
 package com.nieyue.controller;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpSession;
@@ -71,6 +73,51 @@ public class CartMerController {
 			}else{
 				throw new NotAnymoreException();//没有更多
 			}
+	}
+	/**
+	 * 用户购物车信息
+	 * @param orderName 商品排序数据库字段
+	 * @param orderWay 商品排序方法 asc升序 desc降序
+	 * @return
+	 */
+	@ApiOperation(value = "购物车商品列表", notes = "购物车商品分页浏览,"
+			+ "cartMerCountAll总数,cartMerListAll总列表,"
+			+ "cartMerCount2降价总数,cartMerList2降价列表,"
+			+ "cartMerCount3预购总数,cartMerList3预购列表")
+	@ApiImplicitParams({
+		@ApiImplicitParam(name="accountId",value="账户id",dataType="int", paramType = "query")
+	})
+	@RequestMapping(value = "/userlist", method = {RequestMethod.GET,RequestMethod.POST})
+	public @ResponseBody StateResultList<List<Map<String,Object>>> browseUserCartMer(
+			@RequestParam(value="accountId",required=false)Integer accountId
+			)  {
+		List<CartMer> cartMerListAll= cartMerService.browsePagingCartMer(null,null,accountId,1,Integer.MAX_VALUE, "cart_mer_id", "asc");
+		if(cartMerListAll.size()>0){
+			List<Map<String,Object>> list=new ArrayList<Map<String,Object>>();
+			Map<String,Object> map=new HashMap<>();
+			map.put("cartMerCountAll", cartMerListAll.size());//总数
+			map.put("cartMerListAll", cartMerListAll);//总列表
+			List<CartMer> cartMerList2 = new ArrayList<CartMer>();
+			cartMerListAll.forEach((cm)->{
+				if(cm.getMer().getType().equals(2)){
+					cartMerList2.add(cm);
+				}
+			});
+			map.put("cartMerCount2", cartMerList2.size());//降价总数
+			map.put("cartMerList2", cartMerList2);//降价列表
+			List<CartMer> cartMerList3 = new ArrayList<CartMer>();
+			cartMerListAll.forEach((cm)->{
+				if(cm.getMer().getType().equals(3)){
+					cartMerList3.add(cm);
+				}
+			});
+			map.put("cartMerCount3", cartMerList3.size());//预购总数
+			map.put("cartMerList3", cartMerList3);//预购列表
+			list.add(map);
+			return ResultUtil.getSlefSRSuccessList(list);
+		}else{
+			throw new NotAnymoreException();//没有更多
+		}
 	}
 	/**
 	 * 购物车商品修改

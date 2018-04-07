@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.nieyue.bean.CartMer;
 import com.nieyue.bean.Order;
 import com.nieyue.exception.CommonNotRollbackException;
 import com.nieyue.exception.NotAnymoreException;
@@ -87,6 +88,83 @@ public class OrderController {
 			}else{
 				throw new NotAnymoreException();//没有更多
 			}
+	}
+	/**
+	 * 用户订单
+	 * @return
+	 */
+	@ApiOperation(value = "订单列表", notes = "订单分页浏览"
+			+ "orderCount2待支付总数,orderList2待支付列表"
+			+ "orderCount3已支付总数,orderList3已支付列表"
+			+ "orderCount4预购商品总数,orderList4预购商品列表"
+			+ "orderCount5我的问题单总数,orderList5我的问题单列表"
+			+ "orderCount6已取消总数,orderList6已取消列表"
+			+ "orderCount5_4已退款总数,orderList5_4已退款列表")
+	@ApiImplicitParams({
+		@ApiImplicitParam(name="accountId",value="下单人id外键",dataType="int", paramType = "query"),
+		@ApiImplicitParam(name="status",value="订单状态，1冻结单，2待支付，3已支付,4预购商品，5问题单，6已取消，7已删除",dataType="int", paramType = "query"),
+		@ApiImplicitParam(name="substatus",value="子状态，1(1冻结单)，2（1待支付），3（1已支付），4（1等待发货），5（1待解决（买家提问后），2解决中（卖家回复后），3申请退款，4已退款，5已解决），6（1已取消），7（1已删除）",dataType="int", paramType = "query"),
+	})
+	@RequestMapping(value = "/list", method = {RequestMethod.GET,RequestMethod.POST})
+	public @ResponseBody StateResultList<List<Map<String,Object>>> browseUserOrder(
+			@RequestParam(value="accountId",required=false)Integer accountId,
+			@RequestParam(value="status",required=false)Integer status,
+			@RequestParam(value="substatus",required=false)Integer substatus
+			)  {
+		//类型，1购买商品，2账户提现，3退款，4诚信押金"
+		List<Order> orderListAll= orderService.browsePagingOrder(1,null,accountId,status,substatus,null,null,1, Integer.MAX_VALUE, "order_id", "asc");
+		if(orderListAll.size()>0){
+			List<Map<String,Object>> list=new ArrayList<Map<String,Object>>();
+			Map<String,Object> map=new HashMap<>();
+			List<Order> orderList2 = new ArrayList<Order>();
+			List<Order> orderList3 = new ArrayList<Order>();
+			List<Order> orderList4 = new ArrayList<Order>();
+			List<Order> orderList5 = new ArrayList<Order>();
+			List<Order> orderList5_4 = new ArrayList<Order>();
+			List<Order> orderList6 = new ArrayList<Order>();
+			orderListAll.forEach((o)->{
+				if(o.getStatus().equals(2)&&o.getSubstatus().equals(1)){
+					orderList2.add(o);
+				}
+				if(o.getStatus().equals(3)&&o.getSubstatus().equals(1)){
+					orderList3.add(o);
+				}
+				if(o.getStatus().equals(4)&&o.getSubstatus().equals(1)){
+					orderList4.add(o);
+				}
+				if(o.getStatus().equals(5)){
+					if(o.getSubstatus().equals(1)
+							||o.getSubstatus().equals(2)
+							||o.getSubstatus().equals(5)
+							){//除去申请退款和已退款
+						orderList5.add(o);						
+					}else{
+						if(o.getSubstatus().equals(4)){
+							orderList5_4.add(o);
+						}
+					}
+				}
+				if(o.getStatus().equals(6)&&o.getSubstatus().equals(1)){
+					orderList6.add(o);
+				}
+			});
+			map.put("orderCount2", orderList2.size());//待支付总数
+			map.put("orderList2", orderList2);//待支付列表
+			map.put("orderCount3", orderList3.size());//已支付总数
+			map.put("orderList3", orderList3);//已支付列表
+			map.put("orderCount4", orderList4.size());//预购商品总数
+			map.put("orderList4", orderList4);//预购商品列表
+			map.put("orderCount5", orderList5.size());//我的问题单总数
+			map.put("orderList5", orderList5);//我的问题单列表
+			map.put("orderCount6", orderList6.size());//已取消总数
+			map.put("orderList6", orderList6);//已取消列表
+			map.put("orderCount5_4", orderList5_4.size());//已退款总数
+			map.put("orderList5_4", orderList5_4);//已退款列表
+			list.add(map);
+			return ResultUtil.getSlefSRSuccessList(list);
+		}else{
+			throw new NotAnymoreException();//没有更多
+		}
 	}
 	/**
 	 * 申请订单 类型，1购买商品，2账户提现，3退款，4诚信押金

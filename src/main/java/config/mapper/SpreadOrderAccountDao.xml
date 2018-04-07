@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+		PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"   
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">  
+<mapper namespace="com.nieyue.dao.SpreadOrderAccountDao">
+<!-- 添加推广订单账户 -->
+<insert id="addSpreadOrderAccount" parameterType="SpreadOrderAccount" keyProperty="spreadOrderAccountId" flushCache="true"  >  
+   INSERT IGNORE INTO
+   		  spread_order_account_tb 
+   		 (
+   		 name,
+   		 email,
+   		 trade_number,
+   		 create_date,
+   		 account_id
+   		 )
+   VALUES
+    	 (
+    	 #{name},
+    	 #{email},
+    	 #{tradeNumber},
+    	 #{createDate},
+    	 #{accountId}
+    	 )  
+</insert>  
+<!-- 更新推广订单账户 -->
+<update id="updateSpreadOrderAccount" parameterType="SpreadOrderAccount" >  
+    UPDATE 
+    	spread_order_account_tb 
+    <set>
+    <if test="name!=null">
+    	name=#{name},
+    </if>
+    <if test="email!=null">
+    	email=#{email},
+    </if>
+    <if test="tradeNumber!=null">
+    	trade_number=#{tradeNumber},
+    </if>
+    <if test="createDate!=null">
+    	create_date=#{createDate},
+    </if>
+    <if test="accountId!=null">
+    	account_id=#{accountId},
+    </if>
+    </set> 
+    WHERE
+    	 spread_order_account_id=#{spreadOrderAccountId} 
+</update> 
+<!-- 删除推广订单账户-->
+<delete id="delSpreadOrderAccount"  parameterType="Integer" >  
+    DELETE FROM
+    	 spread_order_account_tb 
+    	 WHERE spread_order_account_id=#{spreadOrderAccountId}
+</delete>  
+<!-- 加载推广订单账户-->
+<select id="loadSpreadOrderAccount" parameterType="Integer" resultType="SpreadOrderAccount" >
+SELECT 
+		 spread_order_account_id,
+	 	 name,
+   		 email,
+   		 trade_number,
+   		 create_date,
+   		 account_id
+FROM spread_order_account_tb 
+WHERE spread_order_account_id=#{spreadOrderAccountId}
+</select>
+
+<!-- 分页查询推广订单账户-->
+<select id="browsePagingSpreadOrderAccount" resultType="SpreadOrderAccount">  
+        SELECT
+	     spread_order_account_id,
+	 	 name,
+   		 email,
+   		 trade_number,
+   		 create_date,
+   		 account_id
+	FROM spread_order_account_tb
+	<where>
+	<if test="accountId!=null">
+	AND account_id=#{accountId}
+	</if>
+	AND ${orderName} 
+	<if test="orderWay=='asc'">
+	<![CDATA[>=]]> 
+	</if>
+	<if test="orderWay=='desc'">
+	  <![CDATA[<= ]]>
+	</if>
+	(SELECT ${orderName} FROM spread_order_account_tb 
+	<where>
+		<if test="accountId!=null">
+		AND account_id=#{accountId}
+		</if>
+	</where>
+		ORDER BY 
+			${orderName}  ${orderWay}
+		LIMIT #{pageNum}, 1
+		) 
+	</where>
+	ORDER BY
+		${orderName}  ${orderWay}
+	LIMIT
+		#{pageSize}
+</select> 
+
+<!-- 统计记录条数 -->
+<select id="countAll"  resultType="int">  
+	SELECT
+	 	count(spread_order_account_id)
+	FROM spread_order_account_tb
+	<where>
+		<if test="accountId!=null">
+		AND account_id=#{accountId}
+		</if>
+	</where>
+</select>   
+   
+ 
+</mapper>
