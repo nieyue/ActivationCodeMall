@@ -105,7 +105,7 @@ public class OrderController {
 		@ApiImplicitParam(name="status",value="订单状态，1冻结单，2待支付，3已支付,4预购商品，5问题单，6已取消，7已删除",dataType="int", paramType = "query"),
 		@ApiImplicitParam(name="substatus",value="子状态，1(1冻结单)，2（1待支付），3（1已支付），4（1等待发货），5（1待解决（买家提问后），2解决中（卖家回复后），3申请退款，4已退款，5已解决），6（1已取消），7（1已删除）",dataType="int", paramType = "query"),
 	})
-	@RequestMapping(value = "/list", method = {RequestMethod.GET,RequestMethod.POST})
+	@RequestMapping(value = "/userlist", method = {RequestMethod.GET,RequestMethod.POST})
 	public @ResponseBody StateResultList<List<Map<String,Object>>> browseUserOrder(
 			@RequestParam(value="accountId",required=false)Integer accountId,
 			@RequestParam(value="status",required=false)Integer status,

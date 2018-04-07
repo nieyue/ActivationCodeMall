@@ -37,6 +37,6 @@ spring:
   session:
     store-type: none      
   profiles:
-    #active: dev
-    active: prod
+    active: dev
+    #active: prod
 
