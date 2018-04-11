@@ -17,11 +17,11 @@ public class SendMailDemo {
 		mailInfo.setValidate(true);
 		
 		// 邮箱用户名
-		mailInfo.setUserName("benzhenchayuan@yayao8.com");
+		mailInfo.setUserName("email@tmall188.xin");
 		// 邮箱密码
-		mailInfo.setPassword("yayao123+++");
+		mailInfo.setPassword("123456qqQQ");
 		// 发件人邮箱
-		mailInfo.setFromAddress("benzhenchayuan@yayao8.com");
+		mailInfo.setFromAddress("email@tmall188.xin");
 		// 收件人邮箱
 		mailInfo.setToAddress(email);
 		//mailInfo.setToAddress("278076304@qq.com");
@@ -56,11 +56,11 @@ public class SendMailDemo {
 		mailInfo.setValidate(true);
 		
 		// 邮箱用户名
-		mailInfo.setUserName("benzhenchayuan@yayao8.com");
+		mailInfo.setUserName("email@tmall188.xin");
 		// 邮箱密码
-		mailInfo.setPassword("yayao123+++");
+		mailInfo.setPassword("123456qqQQ");
 		// 发件人邮箱
-		mailInfo.setFromAddress("benzhenchayuan@yayao8.com");
+		mailInfo.setFromAddress("email@tmall188.xin");
 		// 收件人邮箱
 		mailInfo.setToAddress(email);
 		// 邮件标题

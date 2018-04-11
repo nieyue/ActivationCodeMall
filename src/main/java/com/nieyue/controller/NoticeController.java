@@ -48,7 +48,8 @@ public class NoticeController {
 	@ApiOperation(value = "通知列表", notes = "通知分页浏览")
 	@ApiImplicitParams({
 	  @ApiImplicitParam(name="region",value="范围，1全局，2个人",dataType="int", paramType = "query"),
-	  @ApiImplicitParam(name="type",value="类型，1系统消息，2商品动态，3问题单反馈，4商品申请自营，5提现申请，6新增商品类型",dataType="int", paramType = "query"),
+	  @ApiImplicitParam(name="type",value="类型，1系统消息，2产品上架申请，3新增商品类型，4商品申请自营，5提现申请，6问题单反馈，7订单商品动态",dataType="int", paramType = "query"),
+	  @ApiImplicitParam(name="isMerDynamic",value="是否商品动态，默认0不是，1是",dataType="int", paramType = "query"),
 	  @ApiImplicitParam(name="status",value="状态，默认为1审核中，2申请成功，3申请失败",dataType="int", paramType = "query"),
 	  @ApiImplicitParam(name="accountId",value="申请人id",dataType="int", paramType = "query"),
 	  @ApiImplicitParam(name="receiveAccountId",value="接收人id",dataType="int", paramType = "query"),
@@ -62,6 +63,7 @@ public class NoticeController {
 	public @ResponseBody StateResultList<List<Notice>> browsePagingNotice(
 			@RequestParam(value="region",required=false)Integer region,
 			@RequestParam(value="type",required=false)Integer type,
+			@RequestParam(value="isMerDynamic",required=false)Integer isMerDynamic,
 			@RequestParam(value="status",required=false)Integer status,
 			@RequestParam(value="accountId",required=false)Integer accountId,
 			@RequestParam(value="receiveAccountId",required=false)Integer receiveAccountId,
@@ -71,7 +73,7 @@ public class NoticeController {
 			@RequestParam(value="orderName",required=false,defaultValue="notice_id") String orderName,
 			@RequestParam(value="orderWay",required=false,defaultValue="desc") String orderWay)  {
 			List<Notice> list = new ArrayList<Notice>();
-			list= noticeService.browsePagingNotice(region,type,status,accountId,receiveAccountId,businessId,pageNum, pageSize, orderName, orderWay);
+			list= noticeService.browsePagingNotice(region,type,isMerDynamic,status,accountId,receiveAccountId,businessId,pageNum, pageSize, orderName, orderWay);
 			if(list.size()>0){
 				return ResultUtil.getSlefSRSuccessList(list);
 				
@@ -119,7 +121,8 @@ public class NoticeController {
 	@ApiOperation(value = "通知数量", notes = "通知数量查询")
 	@ApiImplicitParams({
 		@ApiImplicitParam(name="region",value="范围，1全局，2个人",dataType="int", paramType = "query"),
-		  @ApiImplicitParam(name="type",value="类型，1系统消息，2商品动态，3问题单反馈，4商品申请自营，5提现申请，6新增商品类型",dataType="int", paramType = "query"),
+		  @ApiImplicitParam(name="type",value="类型，1系统消息，2产品上架申请，3新增商品类型，4商品申请自营，5提现申请，6问题单反馈，7订单商品动态",dataType="int", paramType = "query"),
+		  @ApiImplicitParam(name="isMerDynamic",value="是否商品动态，默认0不是，1是",dataType="int", paramType = "query"),
 		  @ApiImplicitParam(name="status",value="状态，默认为1审核中，2申请成功，3申请失败",dataType="int", paramType = "query"),
 		  @ApiImplicitParam(name="accountId",value="申请人id",dataType="int", paramType = "query"),
 		  @ApiImplicitParam(name="receiveAccountId",value="接收人id",dataType="int", paramType = "query"),
@@ -129,12 +132,13 @@ public class NoticeController {
 	public @ResponseBody int countAll(
 			@RequestParam(value="region",required=false)Integer region,
 			@RequestParam(value="type",required=false)Integer type,
+			@RequestParam(value="isMerDynamic",required=false)Integer isMerDynamic,
 			@RequestParam(value="status",required=false)Integer status,
 			@RequestParam(value="accountId",required=false)Integer accountId,
 			@RequestParam(value="receiveAccountId",required=false)Integer receiveAccountId,
 			@RequestParam(value="businessId",required=false)Integer businessId,
 			HttpSession session)  {
-		int count = noticeService.countAll(region,type,status,accountId,receiveAccountId,businessId);
+		int count = noticeService.countAll(region,type,isMerDynamic,status,accountId,receiveAccountId,businessId);
 		return count;
 	}
 	/**

@@ -4,7 +4,7 @@ package com.nieyue.exception;
  * @author 聂跃
  * @date 2018年3月12日
  */
-public class AccountIsNotExistException extends RuntimeException {
+public class AccountIsNotExistException extends CommonRollbackException {
 	
 	/**
 	 * 

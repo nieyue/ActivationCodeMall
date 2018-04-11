@@ -1,6 +1,6 @@
 package com.nieyue.exception;
 
-public class RequestLimitException extends RuntimeException{
+public class RequestLimitException extends CommonRollbackException{
 
 	/**
 	 * 

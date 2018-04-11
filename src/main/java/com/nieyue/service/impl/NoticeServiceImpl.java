@@ -9,25 +9,86 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.nieyue.bean.Account;
 import com.nieyue.bean.Notice;
+import com.nieyue.business.NoticeBusiness;
 import com.nieyue.dao.NoticeDao;
+import com.nieyue.service.AccountService;
 import com.nieyue.service.NoticeService;
 @Service
 public class NoticeServiceImpl implements NoticeService{
 	@Resource
 	NoticeDao noticeDao;
+	@Resource
+	AccountService accountService;
+	@Resource
+	NoticeBusiness noticeBusiness;
 	@Transactional(propagation=Propagation.REQUIRED)
 	@Override
 	public boolean addNotice(Notice notice) {
+		boolean b=false;
 		notice.setCreateDate(new Date());
 		notice.setUpdateDate(new Date());
-		boolean b = noticeDao.addNotice(notice);
+		notice.setRegion(2);//默认都是个人
+		if(notice.getType().equals(1)){
+			notice.setRegion(1);//系统通知为全局
+		}
+		notice.setIsMerDynamic(noticeBusiness.getIsMerDynamicByType(notice.getType()));
+		notice.setContent(noticeBusiness.getContentByType(notice));//json数据
+		b = noticeDao.addNotice(notice);
+		 if(b&&notice.getType().equals(1)){//系统通知
+				//通知到所有人
+				new Thread(new Runnable() {
+					
+					@Override
+					public void run() {
+						List<Account> al = accountService.browsePagingAccount(null, null, null, null, null, null, null, null, null, 1, Integer.MAX_VALUE, "account_id", "asc");
+						al.forEach((account)->{
+							Integer aid = account.getAccountId();
+							Notice n=new Notice();
+							n.setContent(notice.getContent());
+							n.setCreateDate(notice.getCreateDate());
+							n.setUpdateDate(notice.getUpdateDate());
+							n.setImgAddress(notice.getImgAddress());
+							n.setRegion(2);//个人
+							n.setType(1);//系统通知
+							n.setStatus(0);//系统消息为0
+							n.setIsMerDynamic(0);//0不是商品动态
+							n.setContent(notice.getContent());//json数据
+							n.setTitle(notice.getTitle());
+							n.setAccountId(aid);//系统消息需要两个都有
+							n.setReceiveAccountId(aid);//系统消息需要两个都有
+							n.setBusinessId(notice.getNoticeId());//业务id为父id
+							noticeDao.addNotice(n);
+						});
+					}
+				}).start();
+			}
 		return b;
 	}
 	@Transactional(propagation=Propagation.REQUIRED)
 	@Override
 	public boolean delNotice(Integer noticeId) {
+		Notice notice = noticeDao.loadNotice(noticeId);
 		boolean b = noticeDao.delNotice(noticeId);
+		if(b&&notice.getType().equals(1)){
+			//通知到所有人
+			new Thread(new Runnable() {
+				
+				@Override
+				public void run() {
+					List<Account> al = accountService.browsePagingAccount(null, null, null, null, null, null, null, null, null, 1, Integer.MAX_VALUE, "account_id", "asc");
+					al.forEach((account)->{
+						Integer aid = account.getAccountId();
+						List<Notice> nl = browsePagingNotice(2, 1, null, null, aid, aid, notice.getNoticeId(), 1, Integer.MAX_VALUE, "notice_id", "asc");
+						if(nl.size()==1){
+						Notice n = nl.get(0);
+						delNotice(n.getNoticeId());
+						}
+					});
+				}
+			}).start();
+		}
 		return b;
 	}
 	@Transactional(propagation=Propagation.REQUIRED)
@@ -35,6 +96,28 @@ public class NoticeServiceImpl implements NoticeService{
 	public boolean updateNotice(Notice notice) {
 		notice.setUpdateDate(new Date());
 		boolean b = noticeDao.updateNotice(notice);
+		if(b&&notice.getType().equals(1)){
+			//通知到所有人
+			new Thread(new Runnable() {
+				
+				@Override
+				public void run() {
+					List<Account> al = accountService.browsePagingAccount(null, null, null, null, null, null, null, null, null, 1, Integer.MAX_VALUE, "account_id", "asc");
+					al.forEach((account)->{
+						Integer aid = account.getAccountId();
+						List<Notice> nl = browsePagingNotice(2, 1, null, null, aid, aid, notice.getNoticeId(), 1, Integer.MAX_VALUE, "notice_id", "asc");
+						if(nl.size()==1){
+						Notice n = nl.get(0);
+						n.setContent(notice.getContent());
+						n.setUpdateDate(notice.getUpdateDate());
+						n.setImgAddress(notice.getImgAddress());
+						n.setRegion(2);//个人
+						noticeDao.updateNotice(n);
+						}
+					});
+				}
+			}).start();
+		}
 		return b;
 	}
 
@@ -48,6 +131,7 @@ public class NoticeServiceImpl implements NoticeService{
 	public int countAll(
 			Integer region,
 			Integer type,
+			Integer isMerDynamic,
 			Integer status,
 			Integer accountId,
 			Integer receiveAccountId,
@@ -55,6 +139,7 @@ public class NoticeServiceImpl implements NoticeService{
 		int c = noticeDao.countAll(
 				region, 
 				type,
+				isMerDynamic,
 				status,
 				accountId,
 				receiveAccountId,
@@ -66,6 +151,7 @@ public class NoticeServiceImpl implements NoticeService{
 	public List<Notice> browsePagingNotice(
 			Integer region,
 			Integer type,
+			Integer isMerDynamic,
 			Integer status,
 			Integer accountId,
 			Integer receiveAccountId,
@@ -81,6 +167,7 @@ public class NoticeServiceImpl implements NoticeService{
 		List<Notice> l = noticeDao.browsePagingNotice(
 				region, 
 				type,
+				isMerDynamic,
 				status,
 				accountId,
 				receiveAccountId,

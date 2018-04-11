@@ -3,7 +3,6 @@ package com.nieyue.controller;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -13,10 +12,6 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.authc.AuthenticationException;
-import org.apache.shiro.authc.UsernamePasswordToken;
-import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -30,21 +25,13 @@ import org.springframework.web.servlet.view.RedirectView;
 import com.aliyuncs.dysmsapi.model.v20170525.SendSmsResponse;
 import com.aliyuncs.exceptions.ClientException;
 import com.nieyue.bean.Account;
-import com.nieyue.bean.AccountLevel;
-import com.nieyue.bean.Finance;
-import com.nieyue.bean.Integral;
-import com.nieyue.bean.Role;
-import com.nieyue.bean.Sincerity;
 import com.nieyue.business.AccountBusiness;
 import com.nieyue.exception.AccountAlreadyAuthException;
 import com.nieyue.exception.AccountAuthAuditException;
 import com.nieyue.exception.AccountIsExistException;
 import com.nieyue.exception.AccountIsNotExistException;
 import com.nieyue.exception.AccountIsNotLoginException;
-import com.nieyue.exception.AccountLockException;
-import com.nieyue.exception.AccountLoginException;
 import com.nieyue.exception.AccountMessageException;
-import com.nieyue.exception.AccountPhoneException;
 import com.nieyue.exception.AccountPhoneIsExistException;
 import com.nieyue.exception.CommonNotRollbackException;
 import com.nieyue.exception.MySessionException;
@@ -535,13 +522,16 @@ public class AccountController {
 	@RequestMapping(value = "/validCodeEmail", method = {RequestMethod.GET,RequestMethod.POST})
 	public  ModelAndView validCodeEmail(
 			@RequestParam("validCodeEmail") String validCodeEmail,
-			HttpSession session)  {
+			HttpSession session,
+			HttpServletRequest request)  {
 		//验证成功
 		if(validCodeEmail.equals((String)session.getAttribute("validCodeEmail"))){
 			session.setAttribute("validCodeEmailIsValid", "1");//-1没有验证通过，1是验证通过了
-			return new ModelAndView(new RedirectView(activationCodeMallClientDomainUrl));
+			return new ModelAndView(new RedirectView(request.getHeader("Referer")));
 		}
-		return new ModelAndView(new RedirectView(activationCodeMallClientDomainUrl));
+		StringBuffer url = request.getRequestURL();  
+		String redirect_url = url.delete(url.length() - request.getRequestURI().length(), url.length()).toString(); 
+		return new ModelAndView(new RedirectView(redirect_url));
 	}
 	/**
 	 * web用户登录

@@ -47,19 +47,23 @@ public class OrderProblemAnswerController {
 	 */
 	@ApiOperation(value = "商品订单问题反馈列表", notes = "商品订单问题反馈分页浏览")
 	@ApiImplicitParams({
-	  @ApiImplicitParam(name="pageNum",value="页头数位",dataType="int", paramType = "query",defaultValue="1"),
-	  @ApiImplicitParam(name="pageSize",value="每页数目",dataType="int", paramType = "query",defaultValue="10"),
-	  @ApiImplicitParam(name="orderName",value="排序字段",dataType="string", paramType = "query",defaultValue="create_date"),
-	  @ApiImplicitParam(name="orderWay",value="排序方式",dataType="string", paramType = "query",defaultValue="desc")
+		@ApiImplicitParam(name="orderProblemId",value="订单问题id",dataType="int", paramType = "query"),
+		@ApiImplicitParam(name="accountId",value="账户id",dataType="int", paramType = "query"),
+		@ApiImplicitParam(name="pageNum",value="页头数位",dataType="int", paramType = "query",defaultValue="1"),
+		@ApiImplicitParam(name="pageSize",value="每页数目",dataType="int", paramType = "query",defaultValue="10"),
+		@ApiImplicitParam(name="orderName",value="排序字段",dataType="string", paramType = "query",defaultValue="create_date"),
+		@ApiImplicitParam(name="orderWay",value="排序方式",dataType="string", paramType = "query",defaultValue="desc")
 	  })
 	@RequestMapping(value = "/list", method = {RequestMethod.GET,RequestMethod.POST})
 	public @ResponseBody StateResultList<List<OrderProblemAnswer>> browsePagingOrderProblemAnswer(
+			@RequestParam(value="orderProblemId",required=false)Integer orderProblemId,
+			@RequestParam(value="accountId",required=false)Integer accountId,
 			@RequestParam(value="pageNum",defaultValue="1",required=false)int pageNum,
 			@RequestParam(value="pageSize",defaultValue="10",required=false) int pageSize,
 			@RequestParam(value="orderName",required=false,defaultValue="create_date") String orderName,
 			@RequestParam(value="orderWay",required=false,defaultValue="desc") String orderWay)  {
 			List<OrderProblemAnswer> list = new ArrayList<OrderProblemAnswer>();
-			list= orderProblemAnswerService.browsePagingOrderProblemAnswer(pageNum, pageSize, orderName, orderWay);
+			list= orderProblemAnswerService.browsePagingOrderProblemAnswer(orderProblemId,accountId,pageNum, pageSize, orderName, orderWay);
 			if(list.size()>0){
 				return ResultUtil.getSlefSRSuccessList(list);
 			}else{
@@ -104,10 +108,16 @@ public class OrderProblemAnswerController {
 	 * @return
 	 */
 	@ApiOperation(value = "商品订单问题反馈数量", notes = "商品订单问题反馈数量查询")
+	@ApiImplicitParams({
+		@ApiImplicitParam(name="orderProblemId",value="订单问题id",dataType="int", paramType = "query"),
+		@ApiImplicitParam(name="accountId",value="账户id",dataType="int", paramType = "query")
+	  })
 	@RequestMapping(value = "/count", method = {RequestMethod.GET,RequestMethod.POST})
 	public @ResponseBody int countAll(
+			@RequestParam(value="orderProblemId",required=false)Integer orderProblemId,
+			@RequestParam(value="accountId",required=false)Integer accountId,
 			HttpSession session)  {
-		int count = orderProblemAnswerService.countAll();
+		int count = orderProblemAnswerService.countAll(orderProblemId,accountId);
 		return count;
 	}
 	/**

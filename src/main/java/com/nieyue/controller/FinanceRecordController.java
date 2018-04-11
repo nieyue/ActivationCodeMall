@@ -187,7 +187,7 @@ public class FinanceRecordController {
 		boolean b = financeRecordService.updateFinanceRecord(financeRecord);
 		if(b && financeRecord!=null &&!financeRecord.equals("")){
 			//到账通知
-			Notice notice = noticeBusiness.getNoticeByDaozhang(financeRecord.getAccountId(), financeRecord.getMethod(), financeRecord.getMoney());
+			Notice notice =new Notice();// noticeBusiness.getNoticeByDaozhang(financeRecord.getAccountId(), financeRecord.getMethod(), financeRecord.getMoney());
 			b=noticeService.addNotice(notice);
 			if(b){
 				list.add(financeRecord);

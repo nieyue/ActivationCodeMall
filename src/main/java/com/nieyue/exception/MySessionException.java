@@ -3,7 +3,7 @@ package com.nieyue.exception;
 
 
 
-public class MySessionException extends RuntimeException {
+public class MySessionException extends CommonRollbackException {
 
 	/**
 	 * 

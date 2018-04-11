@@ -145,6 +145,11 @@ public class Mer implements Serializable{
 	@ApiModelProperty(value="商品更新时间",example="商品更新时间")
 	private Date updateDate;
 	/**
+	 * 商品类型
+	 */
+	@ApiModelProperty(value="商品类型",example="商品类型")
+	private MerCate merCate;
+	/**
 	 * 商品图片
 	 */
 	@ApiModelProperty(value="商品图片",example="商品图片")
@@ -309,6 +314,11 @@ public class Mer implements Serializable{
 	public void setMerImgList(List<MerImg> merImgList) {
 		this.merImgList = merImgList;
 	}
+	public MerCate getMerCate() {
+		return merCate;
+	}
+	public void setMerCate(MerCate merCate) {
+		this.merCate = merCate;
+	}
 
-	
 }

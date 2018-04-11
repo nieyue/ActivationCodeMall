@@ -131,6 +131,11 @@ public class MyExceptionAdvice {
 	public StateResult financePasswordExceptionHandler( Exception e) throws Exception {
 		return ResultUtil.getSlefSR(41001, "交易密码错误");
 	}
+	@ExceptionHandler(value=NoticeException.class)
+	@ResponseBody
+	public StateResult noticeExceptionHandler( NoticeException e) throws Exception {
+		return ResultUtil.getSlefSR(42001, e.getTitle());
+	}
 	@ExceptionHandler(value=BindException.class)
 	@ResponseBody
 	public StateResult paramsExceptionHandler( Exception e) throws Exception {

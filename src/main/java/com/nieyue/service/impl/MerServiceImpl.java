@@ -10,8 +10,10 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.nieyue.bean.Mer;
+import com.nieyue.bean.MerCate;
 import com.nieyue.bean.MerImg;
 import com.nieyue.dao.MerDao;
+import com.nieyue.service.MerCateService;
 import com.nieyue.service.MerImgService;
 import com.nieyue.service.MerService;
 @Service
@@ -20,6 +22,8 @@ public class MerServiceImpl implements MerService{
 	MerDao merDao;
 	@Resource
 	MerImgService merImgService;
+	@Resource
+	MerCateService merCateService;
 	
 	
 	@Transactional(propagation=Propagation.REQUIRED)
@@ -51,6 +55,8 @@ public class MerServiceImpl implements MerService{
 	@Override
 	public Mer loadMer(Integer merId) {
 		Mer r = merDao.loadMer(merId);
+		MerCate merCate=merCateService.loadMerCate(r.getMerCateId());
+		r.setMerCate(merCate);
 		List<MerImg> mil=merImgService.browsePagingMerImg(merId, 1, Integer.MAX_VALUE, "mer_img_id", "asc");
 		r.setMerImgList(mil);
 		return r;
@@ -123,6 +129,8 @@ public class MerServiceImpl implements MerService{
 				status,
 				pageNum-1, pageSize, orderName, orderWay);
 		l.forEach((m)->{
+			MerCate merCate=merCateService.loadMerCate(m.getMerCateId());
+			m.setMerCate(merCate);
 			List<MerImg> mil=merImgService.browsePagingMerImg(m.getMerId(), 1, Integer.MAX_VALUE, "mer_img_id", "asc");
 			m.setMerImgList(mil);
 		});

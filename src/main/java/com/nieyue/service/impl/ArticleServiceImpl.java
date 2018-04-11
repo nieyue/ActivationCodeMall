@@ -58,7 +58,6 @@ public class ArticleServiceImpl implements ArticleService{
 				articleCateId,readingNumber,createDate,updateDate,status);
 		return c;
 	}
-
 	@Override
 	public List<Article> browsePagingArticle(
 			Integer articleCateId,

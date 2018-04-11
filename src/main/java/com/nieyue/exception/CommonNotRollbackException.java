@@ -10,7 +10,11 @@ public class CommonNotRollbackException extends Exception{
 	 */
 	private static final long serialVersionUID = 1L;
 	private String title;//名称
-	
+	@Override
+	public synchronized Throwable fillInStackTrace() {
+		// TODO Auto-generated method stub
+		return super.fillInStackTrace();
+	}
 	public CommonNotRollbackException(){
 		
 	}

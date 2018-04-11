@@ -7,7 +7,7 @@ package com.nieyue.exception;
  * @author 聂跃
  * @date 2017年8月8日
  */
-public class MyCertificateException extends RuntimeException {
+public class MyCertificateException extends CommonRollbackException {
 
 	/**
 	 * 

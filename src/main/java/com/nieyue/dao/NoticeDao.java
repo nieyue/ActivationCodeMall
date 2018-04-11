@@ -26,6 +26,7 @@ public interface NoticeDao {
 	public int countAll(
 			@Param("region")Integer region,
 			@Param("type")Integer type,
+			@Param("isMerDynamic")Integer isMerDynamic,
 			@Param("status")Integer status,
 			@Param("accountId")Integer accountId,
 			@Param("receiveAccountId")Integer receiveAccountId,
@@ -35,6 +36,7 @@ public interface NoticeDao {
 	public List<Notice> browsePagingNotice(
 			@Param("region")Integer region,
 			@Param("type")Integer type,
+			@Param("isMerDynamic")Integer isMerDynamic,
 			@Param("status")Integer status,
 			@Param("accountId")Integer accountId,
 			@Param("receiveAccountId")Integer receiveAccountId,

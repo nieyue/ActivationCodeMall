@@ -426,7 +426,9 @@ content varchar(255) COMMENT '内容',
 create_date datetime COMMENT '创建时间',
 order_problem_id int(11) COMMENT '商品订单问题id外键',
 account_id int(11) COMMENT '回复人id外键',
-PRIMARY KEY (order_problem_answer_id)
+PRIMARY KEY (order_problem_answer_id),
+INDEX INDEX_ORDERPROBLEMID (order_problem_id) USING BTREE,
+INDEX INDEX_ACCOUNTID (account_id) USING BTREE
 )ENGINE = InnoDB AUTO_INCREMENT=1000 DEFAULT CHARSET=utf8 COMMENT='商品订单问题反馈表';
 
 #创建文章类型表 
@@ -463,7 +465,8 @@ INDEX INDEX_STATUS (status) USING BTREE
 CREATE TABLE notice_tb(
 notice_id int(11) NOT NULL AUTO_INCREMENT COMMENT '通知id',
 region tinyint(4) COMMENT '范围，1全局，2个人',
-type tinyint(4) COMMENT '类型，1系统消息，2商品动态，3问题单反馈，4商品申请自营，5提现申请，6新增商品类型',
+type tinyint(4) COMMENT '类型，1系统消息，2产品上架申请，3新增商品类型，4商品申请自营，5提现申请，6问题单反馈，7订单商品动态',
+is_mer_dynamic tinyint(4) COMMENT '是否商品动态，默认0不是，1是',
 title varchar(255) COMMENT '标题',
 img_address varchar(255) COMMENT '图片地址',
 content longtext COMMENT '内容',
@@ -476,6 +479,7 @@ business_id int(11) COMMENT '业务id,外键',
 PRIMARY KEY (notice_id),
 INDEX INDEX_REGION (region) USING BTREE,
 INDEX INDEX_TYPE (type) USING BTREE,
+INDEX INDEX_ISMERDYNAMIC (is_mer_dynamic) USING BTREE,
 INDEX INDEX_STATUS (status) USING BTREE,
 INDEX INDEX_ACCOUNTID (account_id) USING BTREE,
 INDEX INDEX_RECEIVEACCOUNTID (receive_account_id) USING BTREE,

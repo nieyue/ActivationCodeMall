@@ -7,12 +7,11 @@ package com.nieyue.exception;
  * @author 聂跃
  * @date 2017年8月8日
  */
-public class VerifyCodeErrorException extends RuntimeException {
+public class VerifyCodeErrorException extends CommonRollbackException {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 
-	
 }

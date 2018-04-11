@@ -6,17 +6,11 @@ package com.nieyue.exception;
  * @author 聂跃
  * @date 2017年8月8日
  */
-public class AccountAlreadyAuthException extends RuntimeException {
-
+public class AccountAlreadyAuthException extends CommonRollbackException {
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	@Override
-	public synchronized Throwable fillInStackTrace() {
-		// TODO Auto-generated method stub
-		return super.fillInStackTrace();
-	}
 }
 
 

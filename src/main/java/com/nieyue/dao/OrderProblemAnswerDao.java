@@ -23,7 +23,13 @@ public interface OrderProblemAnswerDao {
 	/** 装载商品订单问题反馈 */	
 	public OrderProblemAnswer loadOrderProblemAnswer(Integer orderProblemAnswerId);	
 	/** 商品订单问题反馈总共数目 */	
-	public int countAll();	
+	public int countAll(
+			@Param("orderProblemId")Integer orderProblemId,
+			@Param("accountId")Integer accountId
+			);	
 	/** 分页商品订单问题反馈信息 */
-	public List<OrderProblemAnswer> browsePagingOrderProblemAnswer(@Param("pageNum")int pageNum,@Param("pageSize")int pageSize,@Param("orderName")String orderName,@Param("orderWay")String orderWay) ;		
+	public List<OrderProblemAnswer> browsePagingOrderProblemAnswer(
+			@Param("orderProblemId")Integer orderProblemId,
+			@Param("accountId")Integer accountId,
+			@Param("pageNum")int pageNum,@Param("pageSize")int pageSize,@Param("orderName")String orderName,@Param("orderWay")String orderWay) ;		
 }

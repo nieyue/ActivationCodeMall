@@ -22,6 +22,7 @@ public interface NoticeService {
 	public int countAll(
 			Integer region,
 			Integer type,
+			Integer isMerDynamic,
 			Integer status,
 			Integer accountId,
 			Integer receiveAccountId,
@@ -30,6 +31,7 @@ public interface NoticeService {
 	public List<Notice> browsePagingNotice(
 			Integer region,
 			Integer type,
+			Integer isMerDynamic,
 			Integer status,
 			Integer accountId,
 			Integer receiveAccountId,

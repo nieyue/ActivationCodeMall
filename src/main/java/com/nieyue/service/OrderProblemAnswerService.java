@@ -20,9 +20,13 @@ public interface OrderProblemAnswerService {
 	public OrderProblemAnswer loadOrderProblemAnswer(Integer orderProblemAnswerId);	
 	/** 商品订单问题反馈总共数目 */	
 	public int countAll(
+			Integer orderProblemId,
+			Integer accountId
 			);
 	/** 分页商品订单问题反馈信息 */
 	public List<OrderProblemAnswer> browsePagingOrderProblemAnswer(
+			Integer orderProblemId,
+			Integer accountId,
 			int pageNum,
 			int pageSize,
 			String orderName,

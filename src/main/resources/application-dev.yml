@@ -70,15 +70,3 @@ myPugin:
     secretKey: pwEvywJ8HDoUuX6XOgPQsC_iNXXsmlJa3hdw-4qr
     bucketName: jihuoma
     domain: p55v5f6od.bkt.clouddn.com
-  noticeXitongTitle: 系统通知
-  noticeTuangouTitle: 团购通知
-  noticeBuzuTitle: 团购卡余额不足
-  noticeDaozhangTitle: 提现到账通知
-  noticeShenqingTitle: 团购申请
-  noticeXitongImgUrl: http://p2bhwwngu.bkt.clouddn.com/o_1c5gaqqst68db2j16nno61q3cp.jpg
-  noticeTuangouImgUrl: http://p2bhwwngu.bkt.clouddn.com/o_1c5gav4cn173evs35fv1g8f1e6pu.png
-  noticeBuzuImgUrl: http://p2bhwwngu.bkt.clouddn.com/o_1c5gb3tvce1e1d7sivg5kr1naq13.png
-  noticeDaozhangImgUrl: http://p2bhwwngu.bkt.clouddn.com/o_1c5gb6olh2b49fi11hvqv914c818.png
-  noticeShenqingImgUrl: http://p2bhwwngu.bkt.clouddn.com/o_1c5gb9b7411vottl4am19qm7i81d.png
-  
-  

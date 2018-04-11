@@ -44,13 +44,19 @@ public class OrderProblemAnswerServiceImpl implements OrderProblemAnswerService{
 
 	@Override
 	public int countAll(
+			Integer orderProblemId,
+			Integer accountId
 			) {
-		int c = orderProblemAnswerDao.countAll();
+		int c = orderProblemAnswerDao.countAll(
+				 orderProblemId,
+				 accountId);
 		return c;
 	}
 
 	@Override
 	public List<OrderProblemAnswer> browsePagingOrderProblemAnswer(
+			Integer orderProblemId,
+			Integer accountId,
 			int pageNum, int pageSize,
 			String orderName, String orderWay) {
 		if(pageNum<1){
@@ -59,7 +65,10 @@ public class OrderProblemAnswerServiceImpl implements OrderProblemAnswerService{
 		if(pageSize<1){
 			pageSize=0;//没有数据
 		}
-		List<OrderProblemAnswer> l = orderProblemAnswerDao.browsePagingOrderProblemAnswer(pageNum-1, pageSize, orderName, orderWay);
+		List<OrderProblemAnswer> l = orderProblemAnswerDao.browsePagingOrderProblemAnswer(
+				orderProblemId,
+				accountId,
+				pageNum-1, pageSize, orderName, orderWay);
 		return l;
 	}
 

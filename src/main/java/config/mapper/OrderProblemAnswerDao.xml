@@ -70,6 +70,12 @@ WHERE order_problem_answer_id=#{orderProblemAnswerId}
    		 account_id
 	FROM order_problem_answer_tb
 	<where>
+	<if test="orderProblemId!=null">
+	AND order_problem_id=#{orderProblemId}
+	</if>
+	<if test="accountId!=null">
+	AND account_id=#{accountId}
+	</if>
 	AND ${orderName} 
 	<if test="orderWay=='asc'">
 	<![CDATA[>=]]> 
@@ -78,6 +84,14 @@ WHERE order_problem_answer_id=#{orderProblemAnswerId}
 	  <![CDATA[<= ]]>
 	</if>
 	(SELECT ${orderName} FROM order_problem_answer_tb 
+	<where>
+		<if test="orderProblemId!=null">
+		AND order_problem_id=#{orderProblemId}
+		</if>
+		<if test="accountId!=null">
+		AND account_id=#{accountId}
+		</if>
+	</where>
 		ORDER BY 
 			${orderName}  ${orderWay}
 		LIMIT #{pageNum}, 1
@@ -94,6 +108,14 @@ WHERE order_problem_answer_id=#{orderProblemAnswerId}
 	SELECT
 	 	count(order_problem_answer_id)
 	FROM order_problem_answer_tb
+	<where>
+		<if test="orderProblemId!=null">
+		AND order_problem_id=#{orderProblemId}
+		</if>
+		<if test="accountId!=null">
+		AND account_id=#{accountId}
+		</if>
+	</where>
 </select>   
    
  
