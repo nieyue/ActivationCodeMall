@@ -40,7 +40,14 @@ public class SpreadLinkTermServiceImpl implements SpreadLinkTermService{
 					al.forEach((account)->{
 						Integer aid = account.getAccountId();
 						SpreadLink sl=new SpreadLink();
-						sl.setLink(spreadLinkTerm.getLink());
+						String link=spreadLinkTerm.getLink();
+						if(link.indexOf("?")>0||
+								link.indexOf("？")>0){
+							link+="&accountId="+aid;
+						}else{
+							link+="?accountId="+aid;
+						}
+						sl.setLink(link);
 						sl.setSpreadNumber(0);
 						sl.setAccountId(aid);
 						spreadLinkService.addSpreadLink(sl);
@@ -90,7 +97,14 @@ public class SpreadLinkTermServiceImpl implements SpreadLinkTermService{
 						List<SpreadLink> sll = spreadLinkService.browsePagingSpreadLink(aid, 1, Integer.MAX_VALUE, "spread_link_id", "asc");
 						if(sll.size()==1){
 							SpreadLink sl=sll.get(0);
-							sl.setLink(spreadLinkTerm.getLink());
+							String link=spreadLinkTerm.getLink();
+							if(link.indexOf("?")>0||
+									link.indexOf("？")>0){
+								link+="&accountId="+aid;
+							}else{
+								link+="?accountId="+aid;
+							}
+							sl.setLink(link);
 							sl.setSpreadNumber(sl.getSpreadNumber());
 							sl.setAccountId(aid);
 							spreadLinkService.updateSpreadLink(sl);
