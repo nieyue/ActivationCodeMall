@@ -43,9 +43,9 @@ public class SpreadLinkTermServiceImpl implements SpreadLinkTermService{
 						String link=spreadLinkTerm.getLink();
 						if(link.indexOf("?")>0||
 								link.indexOf("？")>0){
-							link+="&accountId="+aid;
+							link+="&spreadAccountId="+aid;
 						}else{
-							link+="?accountId="+aid;
+							link+="?spreadAccountId="+aid;
 						}
 						sl.setLink(link);
 						sl.setSpreadNumber(0);
@@ -100,9 +100,9 @@ public class SpreadLinkTermServiceImpl implements SpreadLinkTermService{
 							String link=spreadLinkTerm.getLink();
 							if(link.indexOf("?")>0||
 									link.indexOf("？")>0){
-								link+="&accountId="+aid;
+								link+="&spreadAccountId="+aid;
 							}else{
-								link+="?accountId="+aid;
+								link+="?spreadAccountId="+aid;
 							}
 							sl.setLink(link);
 							sl.setSpreadNumber(sl.getSpreadNumber());

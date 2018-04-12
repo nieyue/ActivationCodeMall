@@ -35,9 +35,9 @@ myPugin:
   requestAuth: requestAuthProd
   activationCodeMallProjectDomainUrl: http://app.jiehao9.com
   activationCodeMallClientDomainUrl: http://mall.jiehao9.com 
+  payCancelUrl: http://mall.jiehao9.com/payCancel.html
+  paySuccessUrl: http://mall.jiehao9.com/paySuccess.html
   paypal: 
-    payCancelUrl: http://mall.jiehao9.com/payCancel.html
-    paySuccessUrl: http://mall.jiehao9.com/paySuccess.html
     #mode: live
     mode: sandbox
     client: 

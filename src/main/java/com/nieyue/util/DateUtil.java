@@ -10,6 +10,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
+import org.thymeleaf.util.StringUtils;
+
 import net.sf.json.JSONObject;
 
 /**
@@ -493,5 +495,10 @@ public class DateUtil {
 		System.err.println(getFirstDayOfWeek(new Date()).toLocaleString());
 		System.err.println(getFirstDayOfWeek(new Date()).getDay());
 		System.err.println(getStartTime(getFirstDayOfMonth(new Date("2018/01/01 00:00:00"))).toLocaleString());
+		String aaa="a";
+		//System.err.println(StringUtils.isEmpty(aaa));
+		String bbb="a";
+		System.err.println(aaa.equals(bbb));
+		
     }  
 }

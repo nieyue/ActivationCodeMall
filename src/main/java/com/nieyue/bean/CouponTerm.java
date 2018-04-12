@@ -54,6 +54,11 @@ public class CouponTerm implements Serializable{
 	 */
 	@ApiModelProperty(value="商品类型id,外键",example="商品类型id,外键")
 	private Integer merCateId;
+	/**
+	 * 商品类型
+	 */
+	@ApiModelProperty(value="商品类型",example="商品类型")
+	private MerCate merCate;
 	public Integer getCouponTermId() {
 		return couponTermId;
 	}
@@ -98,5 +103,11 @@ public class CouponTerm implements Serializable{
 	}
 	public static long getSerialversionuid() {
 		return serialVersionUID;
+	}
+	public MerCate getMerCate() {
+		return merCate;
+	}
+	public void setMerCate(MerCate merCate) {
+		this.merCate = merCate;
 	}
 }

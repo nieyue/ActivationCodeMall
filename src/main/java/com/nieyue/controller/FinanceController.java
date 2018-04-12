@@ -197,14 +197,15 @@ public class FinanceController {
 		return s;
 	}
 	/**
-	 * 充值
+	 * 诚信押金
 	 * @return 
 	 */
-	@ApiOperation(value = "充值", notes = "充值")
+	@ApiOperation(value = "诚信押金", notes = "诚信押金，备注：返回的是数据"
+			+ "需要前端解析data数组中的html数据")
 	@ApiImplicitParams({
-		  @ApiImplicitParam(name="accountId",value="账户ID",dataType="int", paramType = "query"),
-		  @ApiImplicitParam(name="method",value="方式，1支付宝，2微信,3百度钱包,4Paypal,5网银",dataType="int", paramType = "query"),
-		  @ApiImplicitParam(name="money",value="金额",dataType="double", paramType = "query")
+		  @ApiImplicitParam(name="accountId",value="账户ID",dataType="int", paramType = "query",required=true),
+		  @ApiImplicitParam(name="method",value="方式，1支付宝，2微信,3百度钱包,4Paypal,5网银",dataType="int", paramType = "query",required=true),
+		  @ApiImplicitParam(name="money",value="金额",dataType="double", paramType = "query",required=true)
 		  })
 	@RequestMapping(value = "/recharge", method = {RequestMethod.GET,RequestMethod.POST})
 	public @ResponseBody StateResultList<List<String>> rechargeFinance(
@@ -227,46 +228,26 @@ public class FinanceController {
 		String transactionNumber = orderBusiness.getOrderNumber(accountId);
 		Payment payment=new Payment();
 		payment.setAccountId(accountId);
-		payment.setBusinessType(4);//充值
+		payment.setBusinessType(4);//诚信押金
 		payment.setCreateDate(new Date());
 		payment.setMoney(money);
 		payment.setOrderNumber(transactionNumber);
 		payment.setStatus(1);//默认已下单
 		payment.setType(method);
 		payment.setUpdateDate(new Date());
-		payment.setSubject("充值");
-		payment.setBody("充值");
+		payment.setSubject("诚信押金");
+		payment.setBody("诚信押金");
 		
 		if(method==1){//支付宝
 			payment.setNotifyUrl(activationCodeMallProjectDomainUrl+"/finance/alipayRechargeNotifyUrl");
 			//真实环境
 			try {
-				result=alipayUtil.getAppPayment(payment);
+				result=alipayUtil.getPcWebPayment(payment);
 			} catch (UnsupportedEncodingException e) {
 				throw new PayException();//支付异常
 			}
 			list.add(result);
 			
-			//测试环境
-		/*	FinanceRecord fr=new FinanceRecord();
-			fr.setAccountId(payment.getAccountId());
-			fr.setMethod(payment.getType());//支付类型
-			fr.setMoney(payment.getMoney());//金额
-			fr.setTransactionNumber(payment.getOrderNumber());//订单号
-			fr.setType(1);//1是账户充值
-			fr.setStatus(2);//充值直接成功
-			boolean b = financeRecordService.addFinanceRecord(fr);
-			if(b){
-				List<Finance> fl = financeService.browsePagingFinance(null, payment.getAccountId(), 1, 1, "finance_id", "asc");
-				if(fl.size()==1){
-					Finance f = fl.get(0);
-					f.setMoney(f.getMoney()+payment.getMoney());
-					f.setRecharge(f.getRecharge()+payment.getMoney());
-					b= financeService.updateFinance(f);
-					list.add(f);
-					return ResultUtil.getSlefSRSuccessList(list);
-				}
-			}*/
 		}else if(method==2){//微信
 			list.add("暂未开通");
 			return ResultUtil.getSlefSRFailList(list);
@@ -282,9 +263,9 @@ public class FinanceController {
 	 */
 	@ApiOperation(value = "提现", notes = "提现")
 	@ApiImplicitParams({
-		  @ApiImplicitParam(name="accountId",value="账户ID",dataType="int", paramType = "query"),
-		  @ApiImplicitParam(name="method",value="方式，1支付宝，2微信,3百度钱包,4Paypal,5网银",dataType="int", paramType = "query"),
-		  @ApiImplicitParam(name="money",value="金额",dataType="double", paramType = "query")
+		  @ApiImplicitParam(name="accountId",value="账户ID",dataType="int", paramType = "query",required=true),
+		  @ApiImplicitParam(name="method",value="方式，1支付宝，2微信,3百度钱包,4Paypal,5网银",dataType="int", paramType = "query",required=true),
+		  @ApiImplicitParam(name="money",value="金额",dataType="double", paramType = "query",required=true)
 		  })
 	@RequestMapping(value = "/withdrawals", method = {RequestMethod.GET,RequestMethod.POST})
 	public @ResponseBody StateResultList<List<Finance>> withdrawalsFinance(

@@ -33,9 +33,9 @@ public class PaypalUtil {
     private String clientSecret;
     @Value("${myPugin.paypal.mode}")
     private String mode;
-    @Value("${myPugin.paypal.payCancelUrl}")
+    @Value("${myPugin.payCancelUrl}")
     private String payCancelUrl;
-    @Value("${myPugin.paypal.paySuccessUrl}")
+    @Value("${myPugin.paySuccessUrl}")
     private String paySuccessUrl;
 
     public final String PAYPAL_SUCCESS_URL = "/paypal/success";
@@ -84,13 +84,13 @@ public class PaypalUtil {
     }
     /**
      * 创建Payment
-     * @param total
-     * @param currency
-     * @param method
-     * @param intent
-     * @param description
-     * @param cancelUrl
-     * @param successUrl
+     * @param total 总额 如： 500.00
+     * @param currency 货币类型 如："USD"，不支持人民币
+     * @param method  支付方式，如： PaypalPaymentMethod.paypal
+     * @param intent 支付模式 ，如： PaypalPaymentIntent.sale
+     * @param description 支付描述，如："payment description",也可以传参数
+     * @param cancelUrl 取消跳转路径
+     * @param successUrl 成功跳转路径
      * @return
      * @throws PayPalRESTException
      */

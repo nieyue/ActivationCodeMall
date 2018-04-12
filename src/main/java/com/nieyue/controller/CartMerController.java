@@ -145,7 +145,7 @@ public class CartMerController {
 	 */
 	@ApiOperation(value = "购物车商品删除", notes = "购物车商品删除")
 	@ApiImplicitParams({
-		  @ApiImplicitParam(name="CartMerId",value="购物车商品ID",dataType="int", paramType = "query",required=true)
+		  @ApiImplicitParam(name="cartMerId",value="购物车商品ID",dataType="int", paramType = "query",required=true)
 		  })
 	@RequestMapping(value = "/delete", method = {RequestMethod.GET,RequestMethod.POST})
 	public @ResponseBody StateResult delCartMer(@RequestParam("cartMerId") Integer cartMerId,HttpSession session)  {

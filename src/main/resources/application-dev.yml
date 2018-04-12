@@ -37,9 +37,9 @@ myPugin:
   requestAuth: requestAuthDev
   activationCodeMallProjectDomainUrl: http://localhost:9000
   activationCodeMallClientDomainUrl: http://localhost:9000
+  payCancelUrl: http://localhost:9000/payCancel.html
+  paySuccessUrl: http://localhost:9000/paySuccess.html
   paypal:
-    payCancelUrl: http://localhost:9000/payCancel.html
-    paySuccessUrl: http://localhost:9000/paySuccess.html
     mode: sandbox
     client:
       app: AW_Y_UZgVqf_LI8qTc8FqkuNFkCC4BSZqKegRdJF5oKORhYCKUsLnQNR7bpFWh_0EJzGHHcQU6K20HLe

@@ -8,12 +8,15 @@ import javax.annotation.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.ObjectUtils;
 
 import com.nieyue.bean.CartMer;
 import com.nieyue.bean.Mer;
 import com.nieyue.dao.CartMerDao;
+import com.nieyue.exception.CommonRollbackException;
 import com.nieyue.service.CartMerService;
 import com.nieyue.service.MerService;
+import com.nieyue.util.Arith;
 @Service
 public class CartMerServiceImpl implements CartMerService{
 	@Resource
@@ -25,6 +28,23 @@ public class CartMerServiceImpl implements CartMerService{
 	public boolean addCartMer(CartMer cartMer) {
 		cartMer.setCreateDate(new Date());
 		cartMer.setUpdateDate(new Date());
+		Integer number=cartMer.getNumber();
+		if(number==null||number<=0){
+			throw new CommonRollbackException("商品至少1个");
+		}
+		if(number>5){
+			throw new CommonRollbackException("商品最大数5个");
+		}
+		Integer merId=cartMer.getMerId();
+		if(ObjectUtils.isEmpty(merId)){
+			throw new CommonRollbackException("请选择商品");
+		}
+		Mer mer=merService.loadMer(merId);
+		if(ObjectUtils.isEmpty(mer)){
+			throw new CommonRollbackException("请选择商品");
+		}
+		//设置总价
+		cartMer.setTotalPrice(Arith.mul(mer.getUnitPrice(), number));
 		boolean b = cartMerDao.addCartMer(cartMer);
 		return b;
 	}

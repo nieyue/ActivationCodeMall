@@ -690,6 +690,8 @@ INDEX INDEX_ACCOUNTID (account_id) USING BTREE
 INSERT IGNORE INTO role_tb (name,duty,update_date) 
 VALUES ("超级管理员","超级管理员",now());
 INSERT IGNORE INTO role_tb (name,duty,update_date) 
+VALUES ("普通管理员","普通管理员",now());
+INSERT IGNORE INTO role_tb (name,duty,update_date) 
 VALUES ("商户","商户",now());
 INSERT IGNORE INTO role_tb (name,duty,update_date) 
 VALUES ("推广户","推广户",now());

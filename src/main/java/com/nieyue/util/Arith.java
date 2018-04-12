@@ -90,7 +90,7 @@ public static void main(String[] args) {
       System.err.println(Arith.sub(1.0, 0.42));
 
       System.out.println(4.015*100);
-      System.err.println(Arith.mul(4.015, 100));
+      System.err.println(Arith.mul(4.015, new Integer(100)));
 
       System.out.println(123.3/100);
       System.err.println(Arith.div(123.3,100,2));

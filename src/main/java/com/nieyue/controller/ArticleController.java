@@ -3,10 +3,15 @@ package com.nieyue.controller;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.redis.core.BoundSetOperations;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -15,9 +20,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.nieyue.bean.Article;
+import com.nieyue.comments.IPCountUtil;
 import com.nieyue.exception.NotAnymoreException;
 import com.nieyue.exception.NotIsNotExistException;
 import com.nieyue.service.ArticleService;
+import com.nieyue.util.DateUtil;
 import com.nieyue.util.ResultUtil;
 import com.nieyue.util.StateResult;
 import com.nieyue.util.StateResultList;
@@ -39,6 +46,10 @@ import io.swagger.annotations.ApiOperation;
 public class ArticleController {
 	@Resource
 	private ArticleService articleService;
+	@Resource
+	private StringRedisTemplate stringRedisTemplate;
+	@Value("${myPugin.projectName}")
+	String projectName;
 	
 	/**
 	 * 文章分页浏览
@@ -142,10 +153,22 @@ public class ArticleController {
 		  @ApiImplicitParam(name="articleId",value="文章ID",dataType="int", paramType = "query",required=true)
 		  })
 	@RequestMapping(value = "/load", method = {RequestMethod.GET,RequestMethod.POST})
-	public  StateResultList<List<Article>> loadArticle(@RequestParam("articleId") Integer articleId,HttpSession session)  {
+	public  StateResultList<List<Article>> loadArticle(@RequestParam("articleId") Integer articleId,
+			HttpSession session,
+			HttpServletRequest request)  {
 		List<Article> list = new ArrayList<Article>();
 		Article article = articleService.loadArticle(articleId);
 			if(article!=null &&!article.equals("")){
+				//记录文章当日ip
+				BoundSetOperations<String, String> an = stringRedisTemplate.boundSetOps(projectName+"articleId"+articleId+"ips"+DateUtil.getImgDir());
+				an.expire(DateUtil.currentToEndTime(), TimeUnit.SECONDS);
+				long oldsize=an.size();
+				an.add(IPCountUtil.getIpAddr(request));
+				long newsize=an.size();
+				if(newsize>oldsize){
+					article.setReadingNumber(article.getReadingNumber()+1);
+					articleService.updateArticle(article);
+				}
 				list.add(article);
 				return ResultUtil.getSlefSRSuccessList(list);
 			}else{

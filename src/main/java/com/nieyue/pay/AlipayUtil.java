@@ -43,6 +43,8 @@ public class AlipayUtil {
 	 String APP_PUBLIC_KEY;
 	 @Value("${myPugin.alibaba.alipay.ALIPAY_PUBLIC_KEY}")
 	 String ALIPAY_PUBLIC_KEY;
+	 @Value("${myPugin.paySuccessUrl}")
+	 String paySuccessUrl;
 	 @Resource
 	 PaymentService paymentService;
 	 /**
@@ -98,7 +100,7 @@ public class AlipayUtil {
 		 AlipayTradePagePayRequest request = new AlipayTradePagePayRequest();
 		 //SDK已经封装掉了公共参数，这里只需要传入业务参数。以下方法为sdk的model入参方式(model和biz_content同时存在的情况下取biz_content)。
 		 AlipayTradePagePayModel model = new AlipayTradePagePayModel();
-		 request.setReturnUrl("http://localhost:9000/404.html");//同步返回地址
+		 request.setReturnUrl(paySuccessUrl);//同步返回地址
 		 //存储payment
 		 boolean b = paymentService.addPayment(payment);
 		 if(!b){
@@ -235,7 +237,7 @@ public class AlipayUtil {
 				
 	 }
 	 /**
-	  * 充值异步通知
+	  * 诚信押金异步通知
 	  * @param paramsMap
 	  * @throws Exception 
 	  */

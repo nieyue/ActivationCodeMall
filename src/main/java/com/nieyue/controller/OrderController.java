@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.nieyue.bean.CartMer;
 import com.nieyue.bean.Order;
 import com.nieyue.exception.CommonNotRollbackException;
 import com.nieyue.exception.NotAnymoreException;
@@ -93,7 +92,7 @@ public class OrderController {
 	 * 用户订单
 	 * @return
 	 */
-	@ApiOperation(value = "订单列表", notes = "订单分页浏览"
+	@ApiOperation(value = "用户订单", notes = "订单分页浏览"
 			+ "orderCount2待支付总数,orderList2待支付列表"
 			+ "orderCount3已支付总数,orderList3已支付列表"
 			+ "orderCount4预购商品总数,orderList4预购商品列表"
@@ -171,45 +170,22 @@ public class OrderController {
 	 * @return 
 	 * @throws CommonNotRollbackException 
 	 */
-	@ApiOperation(value = "申请订单", notes = "申请订单,返回值都是list里面的map格式,(生产环境，payType=3,mapkey是“order”,其他的返回 “result”，拿着这个result去请求支付。测试环境都是“order”)")
+	@ApiOperation(value = "申请订单", notes = "申请订单,body为业务体json数组字符串，"
+			+ "如：\"[{\"businessId\":1000,\"number\":2},{\"businessId\":1001,\"number\":3}]\""
+			+ ";类型1购买商品:businessId就是购物车商品id+,merCateId.类型3购买商品:businessId就是订单id+,orderId.")
 	@ApiImplicitParams({
 		  @ApiImplicitParam(name="type",value="类型，1购买商品，2账户提现，3退款，4诚信押金",dataType="int", paramType = "query",required=true),
-		  @ApiImplicitParam(name="payType",value="方式，1支付宝，2微信,3百度钱包,4Paypal,5网银",dataType="int", paramType = "query",required=true),
 		  @ApiImplicitParam(name="accountId",value="下单人id外键",dataType="int", paramType = "query",required=true),
-		  @ApiImplicitParam(name="businessId",value="业务id",dataType="int", paramType = "query",required=true),
-		  @ApiImplicitParam(name="nickname",value="昵称",dataType="int", paramType = "query"),
-		  @ApiImplicitParam(name="phone",value="会员账号，手机号",dataType="string", paramType = "query"),
-		  @ApiImplicitParam(name="contactPhone",value="联系电话",dataType="string", paramType = "query"),
+		  @ApiImplicitParam(name="body",value="业务体,根据类型选填",dataType="string", paramType = "query")
 		  })
 	@RequestMapping(value = "/payment", method = {RequestMethod.GET,RequestMethod.POST})
 	public @ResponseBody StateResultList<List<Map<Object,Object>>> paymentOrder(
 			@RequestParam(value="type")Integer type,
-			@RequestParam(value="payType")Integer payType,
 			@RequestParam(value="accountId")Integer accountId,
-			@RequestParam(value="businessId")Integer businessId,
-			@RequestParam(value="nickname",required=false)String nickname,
-			@RequestParam(value="phone",required=false)String phone,
-			@RequestParam(value="contactPhone",required=false)String contactPhone,
+			@RequestParam(value="body",required=false)String body,
 			 HttpSession session) throws CommonNotRollbackException {
 		List<Map<Object,Object>> list=new ArrayList<>();
-		if(payType==3){//余额支付
-			boolean b= orderService.balancePaymentOrder(type, payType, accountId, businessId,nickname,phone,contactPhone);
-			if(b){
-				return ResultUtil.getSlefSRSuccessList(list);
-			}
-		}else{//微信、支付宝、ios内购支付
-			String str = orderService.thirdPartyPaymentOrder(type,payType,accountId,businessId,nickname,phone,contactPhone);
-			if(str!=null && !str.equals("")){
-			Map<Object,Object> map=new HashMap<Object,Object>();
-			map.put("result", str);
-			list.add(map);
-			return ResultUtil.getSlefSRSuccessList(list);
-			}
-		}
-//		boolean b = orderService.balancePaymentOrder(type, payType, accountId, businessId,nickname,phone,contactPhone);
-//		if(b){
-//			return ResultUtil.getSlefSRSuccessList(list);
-//		}
+		
 		return ResultUtil.getSlefSRFailList(list);
 	}
 
