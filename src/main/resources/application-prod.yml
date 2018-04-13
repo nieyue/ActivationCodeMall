@@ -19,7 +19,7 @@ spring:
      username: root
      password: liliu
    redis:
-     host: 120.77.253.90
+     host: 118.190.133.146
      password: liliu
      port: 6379
      database: 0
