@@ -1,22 +1,22 @@
 package com.nieyue.shiro;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Configuration;
+
 import com.nieyue.bean.Permission;
 import com.nieyue.service.PermissionService;
-import com.nieyue.service.RolePermissionService;
 import com.nieyue.util.HttpClientUtil;
+
 import io.swagger.models.Path;
 import io.swagger.models.Swagger;
 import io.swagger.models.Tag;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Lazy;
-
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 /**
  * Created by 聂跃 on 2018/4/3.
@@ -40,9 +40,9 @@ public class ShiroUtil {
            return b;
         }
         JSONObject json = JSONObject.fromObject(s);
-        Map<String, Class> classMap = new HashMap<String, Class>();
+        Map<String, Class<?>> classMap = new HashMap<String, Class<?>>();
         classMap.put("tags", Tag.class);
-        Map<String,Class> pathMap = new HashMap<String, Class>();
+        Map<String,Class<?>> pathMap = new HashMap<String, Class<?>>();
         classMap.put("paths",pathMap.getClass());
         Swagger swagger= (Swagger) JSONObject.toBean(json, Swagger.class,classMap);
         List<Tag> tagslist=swagger.getTags();

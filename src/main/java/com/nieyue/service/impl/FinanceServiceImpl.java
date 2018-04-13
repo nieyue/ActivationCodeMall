@@ -9,13 +9,64 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.nieyue.bean.Account;
 import com.nieyue.bean.Finance;
+import com.nieyue.bean.FinanceRecord;
+import com.nieyue.business.ConfigBusiness;
+import com.nieyue.business.OrderBusiness;
 import com.nieyue.dao.FinanceDao;
+import com.nieyue.exception.CommonRollbackException;
+import com.nieyue.exception.FinanceMoneyNotEnoughException;
+import com.nieyue.exception.PayException;
+import com.nieyue.service.FinanceRecordService;
 import com.nieyue.service.FinanceService;
+import com.nieyue.util.Arith;
 @Service
 public class FinanceServiceImpl implements FinanceService{
 	@Resource
 	FinanceDao financeDao;
+	@Resource
+	OrderBusiness orderBusiness;
+	@Resource
+	FinanceRecordService financeRecordService;
+	@Resource
+	ConfigBusiness  configBusiness;
+	@Transactional(propagation=Propagation.REQUIRED)
+	@Override
+	public Finance withdrawals(Account account, Integer method, Double money) {
+		List<Finance> fl = browsePagingFinance(null, account.getAccountId(), 1, 1, "finance_id", "asc");
+		boolean b=false;
+			if(fl.size()!=1){
+				throw new CommonRollbackException("财务异常");
+			}
+			Finance f = fl.get(0);
+			if(f.getMoney()-money<0){
+				throw new FinanceMoneyNotEnoughException();//余额不足
+			}
+			f.setMoney(Arith.sub(f.getMoney(), money));//减
+			f.setWithdrawals(Arith.add(f.getWithdrawals(), money));
+			b= updateFinance(f);
+			if(!b){
+				throw new PayException();
+			}
+			FinanceRecord fr=new FinanceRecord();
+			fr.setAccountId(account.getAccountId());
+			fr.setRealname(account.getRealname());
+			fr.setMethod(method);//方式，1支付宝，2微信,3百度钱包,4Paypal,5网银
+			fr.setMoney(money);//金额
+			Double realMoney=configBusiness.getWithdrawalsMoney(money);
+			fr.setRealMoney(realMoney);//实际金额
+			fr.setBrokerage(Arith.sub(money, realMoney));//手续费
+			String transactionNumber = orderBusiness.getOrderNumber(account.getAccountId());
+			fr.setTransactionNumber(transactionNumber);
+			fr.setType(2);//2是账户提现
+			fr.setStatus(1);//提现待处理，后台显示操作成功
+			b = financeRecordService.addFinanceRecord(fr);
+			if(!b){
+				throw new PayException();
+			}
+			return f;
+	}
 	@Transactional(propagation=Propagation.REQUIRED)
 	@Override
 	public boolean addFinance(Finance finance) {

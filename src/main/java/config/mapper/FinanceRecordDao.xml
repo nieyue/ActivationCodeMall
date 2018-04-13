@@ -11,6 +11,7 @@
    		 method,
    		 type,
    		 transaction_number,
+   		 realname,
    		 brokerage,
    		 money,
    		 real_money,
@@ -24,6 +25,7 @@
     	 #{method},
     	 #{type},
     	 #{transactionNumber},
+    	 #{realname},
     	 #{brokerage},
     	 #{money},
     	 #{realMoney},
@@ -46,6 +48,9 @@
     	</if>
     	<if test="transactionNumber!=null">
     	transaction_number=#{transactionNumber},
+    	</if>
+    	<if test="realname!=null">
+    	realname=#{realname},
     	</if>
     	<if test="brokerage!=null">
     	brokerage=#{brokerage},
@@ -85,6 +90,7 @@ SELECT
 	 	 method,
    		 type,
    		 transaction_number,
+   		 realname,
 	 	 brokerage,
    		 money,
    		 real_money,
@@ -103,6 +109,7 @@ WHERE finance_record_id=#{financeRecordId}
 	 	 method,
    		 type,
    		 transaction_number,
+   		 realname,
    		 brokerage,
    		 money,
    		 real_money,

@@ -68,15 +68,10 @@ public class Notice  implements Serializable{
 	@ApiModelProperty(value="更新时间",example="更新时间")
 	private Date updateDate;
 	/**
-	 * 申请人id
+	 * 账户id
 	 */
-	@ApiModelProperty(value="申请人id",example="申请人id")
+	@ApiModelProperty(value="账户id",example="账户id")
 	private Integer accountId;
-	/**
-	 * 接收人id外键
-	 */
-	@ApiModelProperty(value="接收人id外键",example="接收人id外键")
-	private Integer receiveAccountId;
 	/**
 	 * 业务id,外键
 	 */
@@ -141,12 +136,6 @@ public class Notice  implements Serializable{
 	}
 	public void setAccountId(Integer accountId) {
 		this.accountId = accountId;
-	}
-	public Integer getReceiveAccountId() {
-		return receiveAccountId;
-	}
-	public void setReceiveAccountId(Integer receiveAccountId) {
-		this.receiveAccountId = receiveAccountId;
 	}
 	public Integer getBusinessId() {
 		return businessId;

@@ -104,7 +104,6 @@ public class ShiroConfiguration {
         //shiroFilterFactoryBean.setSuccessUrl("/test/sessionid");
         // 未授权界面;
        // shiroFilterFactoryBean.setUnauthorizedUrl("/test/unauth");
-
         filterMap.put("anon", new MyAnonymousFilter());//自定义匿名访问权限
         filterMap.put("authc", new MyAuthenticationFilter());//对没有登陆的，需要跳转的过滤
         filterMap.put("perms", new MyPermissionsAuthorizationFilter());//对权限过滤
@@ -132,6 +131,8 @@ public class ShiroConfiguration {
         securityManager.setRealm(accountRealm());
         // 自定义session管理 使用redis
         securityManager.setSessionManager(sessionManager());
+        //缓存放入cache
+        securityManager.setCacheManager(cacheManager());
         return securityManager;
     }
 
@@ -163,6 +164,7 @@ public class ShiroConfiguration {
      * 使用的是shiro-redis开源插件
      * @return
      */
+    @Bean
     public RedisCacheManager cacheManager() {
         RedisCacheManager redisCacheManager = new RedisCacheManager();
         redisCacheManager.setRedisManager(redisManager());
@@ -174,6 +176,7 @@ public class ShiroConfiguration {
      * 使用的是shiro-redis开源插件
      * @return
      */
+    @Bean
     public RedisManager redisManager() {
         RedisManager redisManager = new RedisManager();
         redisManager.setHost(redishost);

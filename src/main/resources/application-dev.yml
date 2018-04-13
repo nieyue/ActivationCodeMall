@@ -1,8 +1,8 @@
 server:
   port: 9000
   session:
-    #timeout: 1800 
-    timeout: 1296000 #1个月  
+    timeout: 36000 
+    #timeout: 1296000 #1个月  
     cookie: 
       name: SESSION
 

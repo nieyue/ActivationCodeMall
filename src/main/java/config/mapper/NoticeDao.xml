@@ -17,7 +17,6 @@
    		 create_date,
    		 update_date,
    		 account_id,
-   		 receive_account_id,
    		 business_id
    		 )
    VALUES
@@ -31,7 +30,6 @@
     	 #{createDate},
     	 #{updateDate},
     	 #{accountId},
-    	 #{receiveAccountId},
     	 #{businessId}
     	 )  
 </insert>  
@@ -67,9 +65,6 @@
     	<if test="accountId!=null">
     	account_id=#{accountId},
     	</if>
-    	<if test="receiveAccountId!=null">
-    	receive_account_id=#{receiveAccountId},
-    	</if>
     	<if test="businessId!=null">
     	business_id=#{businessId},
     	</if>
@@ -96,7 +91,6 @@ SELECT
    		 create_date,
    		 update_date,
    		 account_id,
-   		 receive_account_id,
    		 business_id
 FROM notice_tb 
 WHERE notice_id=#{noticeId}
@@ -115,7 +109,6 @@ WHERE notice_id=#{noticeId}
    		 create_date,
    		 update_date,
    		 account_id,
-   		 receive_account_id,
    		 business_id
 	FROM notice_tb
 	<where>
@@ -129,11 +122,7 @@ WHERE notice_id=#{noticeId}
 		AND  status=#{status}
 		</if>
 	<if test="accountId!=null">
-		AND ( account_id=#{accountId}
-		OR ISNULL(account_id))
-		</if>
-	<if test="receiveAccountId!=null">
-		AND  receive_account_id=#{receiveAccountId}
+		AND account_id=#{accountId}
 		</if>
 	<if test="businessId!=null">
 		AND  business_id=#{businessId}
@@ -157,11 +146,7 @@ WHERE notice_id=#{noticeId}
 		AND  status=#{status}
 		</if>
 	<if test="accountId!=null">
-		AND ( account_id=#{accountId}
-		OR ISNULL(account_id))
-		</if>
-	<if test="receiveAccountId!=null">
-		AND  receive_account_id=#{receiveAccountId}
+		AND  account_id=#{accountId}
 		</if>
 	<if test="businessId!=null">
 		AND  business_id=#{businessId}
@@ -194,11 +179,7 @@ WHERE notice_id=#{noticeId}
 		AND  status=#{status}
 		</if>
 	<if test="accountId!=null">
-		AND ( account_id=#{accountId}
-		OR ISNULL(account_id))
-		</if>
-	<if test="receiveAccountId!=null">
-		AND  receive_account_id=#{receiveAccountId}
+		AND account_id=#{accountId}
 		</if>
 	<if test="businessId!=null">
 		AND  business_id=#{businessId}

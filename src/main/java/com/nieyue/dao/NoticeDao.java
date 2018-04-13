@@ -29,7 +29,6 @@ public interface NoticeDao {
 			@Param("isMerDynamic")Integer isMerDynamic,
 			@Param("status")Integer status,
 			@Param("accountId")Integer accountId,
-			@Param("receiveAccountId")Integer receiveAccountId,
 			@Param("businessId")Integer businessId
 			);	
 	/** 分页通知信息 */
@@ -39,7 +38,6 @@ public interface NoticeDao {
 			@Param("isMerDynamic")Integer isMerDynamic,
 			@Param("status")Integer status,
 			@Param("accountId")Integer accountId,
-			@Param("receiveAccountId")Integer receiveAccountId,
 			@Param("businessId")Integer businessId,
 			@Param("pageNum")int pageNum,@Param("pageSize")int pageSize,@Param("orderName")String orderName,@Param("orderWay")String orderWay) ;		
 }

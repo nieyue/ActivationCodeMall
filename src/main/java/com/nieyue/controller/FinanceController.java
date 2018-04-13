@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -19,13 +20,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.nieyue.bean.Account;
 import com.nieyue.bean.Finance;
-import com.nieyue.bean.FinanceRecord;
 import com.nieyue.bean.Payment;
 import com.nieyue.business.OrderBusiness;
 import com.nieyue.exception.AccountAuthAuditException;
 import com.nieyue.exception.AccountIsNotExistException;
 import com.nieyue.exception.AccountNotAuthException;
-import com.nieyue.exception.FinanceMoneyNotEnoughException;
 import com.nieyue.exception.FinancePasswordException;
 import com.nieyue.exception.NotAnymoreException;
 import com.nieyue.exception.NotIsNotExistException;
@@ -35,7 +34,6 @@ import com.nieyue.pay.AlipayUtil;
 import com.nieyue.service.AccountService;
 import com.nieyue.service.FinanceRecordService;
 import com.nieyue.service.FinanceService;
-import com.nieyue.util.Arith;
 import com.nieyue.util.MyDESutil;
 import com.nieyue.util.ResultUtil;
 import com.nieyue.util.StateResult;
@@ -284,33 +282,11 @@ public class FinanceController {
 		if(a.getAuth()==1){//审核中
 			throw new AccountAuthAuditException();//账户审核中
 		}
-		List<Finance> fl = financeService.browsePagingFinance(null, accountId, 1, 1, "finance_id", "asc");
-		boolean b=false;
-		if(fl.size()==1){
-			Finance f = fl.get(0);
-			if(f.getMoney()-money<0){
-				throw new FinanceMoneyNotEnoughException();//余额不足
-			}
-			f.setMoney(Arith.sub(f.getMoney(), money));
-			f.setWithdrawals(f.getWithdrawals()+money);
-			b= financeService.updateFinance(f);
-			if(b){
-				FinanceRecord fr=new FinanceRecord();
-				fr.setAccountId(accountId);
-				fr.setMethod(method);
-				fr.setMoney(money);
-				String transactionNumber = orderBusiness.getOrderNumber(accountId);
-				fr.setTransactionNumber(transactionNumber);
-				fr.setType(2);//2是账户提现
-				fr.setStatus(1);//提现待处理，后台显示操作成功
-				b = financeRecordService.addFinanceRecord(fr);
-				if(b){
-					list.add(f);
-					return ResultUtil.getSlefSRSuccessList(list);
-				}
-			}
-		}
-		
+		Finance f=financeService.withdrawals(a, method, money);
+		if(!ObjectUtils.isEmpty(f)){	
+			list.add(f);
+			return ResultUtil.getSlefSRSuccessList(list);
+		}		
 		return ResultUtil.getSlefSRFailList(list);
 	}
 	/**

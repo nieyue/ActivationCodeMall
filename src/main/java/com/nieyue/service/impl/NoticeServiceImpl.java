@@ -56,8 +56,7 @@ public class NoticeServiceImpl implements NoticeService{
 							n.setIsMerDynamic(0);//0不是商品动态
 							n.setContent(notice.getContent());//json数据
 							n.setTitle(notice.getTitle());
-							n.setAccountId(aid);//系统消息需要两个都有
-							n.setReceiveAccountId(aid);//系统消息需要两个都有
+							n.setAccountId(aid);//系统消息
 							n.setBusinessId(notice.getNoticeId());//业务id为父id
 							noticeDao.addNotice(n);
 						});
@@ -80,7 +79,7 @@ public class NoticeServiceImpl implements NoticeService{
 					List<Account> al = accountService.browsePagingAccount(null, null, null, null, null, null, null, null, null, 1, Integer.MAX_VALUE, "account_id", "asc");
 					al.forEach((account)->{
 						Integer aid = account.getAccountId();
-						List<Notice> nl = browsePagingNotice(2, 1, null, null, aid, aid, notice.getNoticeId(), 1, Integer.MAX_VALUE, "notice_id", "asc");
+						List<Notice> nl = browsePagingNotice(2, 1, null, null, aid, notice.getNoticeId(), 1, Integer.MAX_VALUE, "notice_id", "asc");
 						if(nl.size()==1){
 						Notice n = nl.get(0);
 						delNotice(n.getNoticeId());
@@ -105,7 +104,7 @@ public class NoticeServiceImpl implements NoticeService{
 					List<Account> al = accountService.browsePagingAccount(null, null, null, null, null, null, null, null, null, 1, Integer.MAX_VALUE, "account_id", "asc");
 					al.forEach((account)->{
 						Integer aid = account.getAccountId();
-						List<Notice> nl = browsePagingNotice(2, 1, null, null, aid, aid, notice.getNoticeId(), 1, Integer.MAX_VALUE, "notice_id", "asc");
+						List<Notice> nl = browsePagingNotice(2, 1, null, null, aid, notice.getNoticeId(), 1, Integer.MAX_VALUE, "notice_id", "asc");
 						if(nl.size()==1){
 						Notice n = nl.get(0);
 						n.setContent(notice.getContent());
@@ -134,7 +133,6 @@ public class NoticeServiceImpl implements NoticeService{
 			Integer isMerDynamic,
 			Integer status,
 			Integer accountId,
-			Integer receiveAccountId,
 			Integer businessId) {
 		int c = noticeDao.countAll(
 				region, 
@@ -142,7 +140,6 @@ public class NoticeServiceImpl implements NoticeService{
 				isMerDynamic,
 				status,
 				accountId,
-				receiveAccountId,
 				businessId);
 		return c;
 	}
@@ -154,7 +151,6 @@ public class NoticeServiceImpl implements NoticeService{
 			Integer isMerDynamic,
 			Integer status,
 			Integer accountId,
-			Integer receiveAccountId,
 			Integer businessId,
 			int pageNum, int pageSize,
 			String orderName, String orderWay) {
@@ -170,7 +166,6 @@ public class NoticeServiceImpl implements NoticeService{
 				isMerDynamic,
 				status,
 				accountId,
-				receiveAccountId,
 				businessId,
 				pageNum-1, pageSize, orderName, orderWay);
 		return l;

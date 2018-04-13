@@ -140,6 +140,7 @@ public class AccountBusiness {
 	 * web登录
 	 * @return false 不包含，  true 包含
 	 */
+	@SuppressWarnings("unchecked")
 	public List<Map<String,Object>> webLogin(
 			String adminName,
 			String password,
@@ -168,6 +169,7 @@ public class AccountBusiness {
 	 * 管理员登录
 	 * @return false 不包含，  true 包含
 	 */
+	@SuppressWarnings("unchecked")
 	public List<Map<String,Object>> login(
 			String adminName,
 			String password,

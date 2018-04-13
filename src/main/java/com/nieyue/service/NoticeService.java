@@ -25,7 +25,6 @@ public interface NoticeService {
 			Integer isMerDynamic,
 			Integer status,
 			Integer accountId,
-			Integer receiveAccountId,
 			Integer businessId);
 	/** 分页通知信息 */
 	public List<Notice> browsePagingNotice(
@@ -34,7 +33,6 @@ public interface NoticeService {
 			Integer isMerDynamic,
 			Integer status,
 			Integer accountId,
-			Integer receiveAccountId,
 			Integer businessId,
 			int pageNum,int pageSize,String orderName,String orderWay) ;
 }

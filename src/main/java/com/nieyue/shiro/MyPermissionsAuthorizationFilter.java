@@ -46,7 +46,8 @@ public class MyPermissionsAuthorizationFilter extends PermissionsAuthorizationFi
         if(account.getRoleName().equals("超级管理员")){
         	return true;
         }
-        List<RolePermission> rolePermissionList = (List<RolePermission>) subject.getSession().getAttribute("rolePermissionList");
+        @SuppressWarnings("unchecked")
+		List<RolePermission> rolePermissionList = (List<RolePermission>) subject.getSession().getAttribute("rolePermissionList");
         //默认有权限
         boolean isPermitted = true;
         if(perms != null && perms.length > 0) {

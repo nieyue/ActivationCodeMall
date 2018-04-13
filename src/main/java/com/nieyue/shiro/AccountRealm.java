@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.Resource;
-import javax.servlet.http.HttpSession;
-import javax.servlet.http.HttpSessionContext;
 
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
@@ -17,10 +15,7 @@ import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.PrincipalCollection;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-import com.nieyue.bean.Account;
 import com.nieyue.bean.RolePermission;
 import com.nieyue.business.AccountBusiness;
 
@@ -30,7 +25,7 @@ import com.nieyue.business.AccountBusiness;
  * @date: 2017/10/24 10:06
  */
 public class AccountRealm extends AuthorizingRealm {
-    private Logger logger = LoggerFactory.getLogger(AccountRealm.class);
+    //private Logger logger = LoggerFactory.getLogger(AccountRealm.class);
     @Resource
    AccountBusiness accountBusiness;
 
@@ -39,11 +34,12 @@ public class AccountRealm extends AuthorizingRealm {
      * @param principals
      * @return
      */
-    @Override
+    @SuppressWarnings("unchecked")
+	@Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
         Session session = SecurityUtils.getSubject().getSession();
         //查询用户的权限
-        Account account = (Account) session.getAttribute("account");
+       // Account account = (Account) session.getAttribute("account");
         //Object account = session.getAttribute("account");
         //logger.info(account.toString());
         //为当前用户设置角色和权限
@@ -55,7 +51,6 @@ public class AccountRealm extends AuthorizingRealm {
         rpl.forEach((rp)->{
             rolePermissionList.add(rp.getPermission().getRoute());//放置自身权限路径
         });
-       // System.out.println(111111);
       // authorizationInfo.addRoles(set);
         authorizationInfo.addStringPermissions(rolePermissionList);
         return authorizationInfo;
