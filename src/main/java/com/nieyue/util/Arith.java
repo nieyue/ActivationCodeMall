@@ -1,5 +1,7 @@
 package com.nieyue.util;
-import java.math.BigDecimal;   
+import java.math.BigDecimal;
+import java.util.Random;
+import java.util.concurrent.atomic.AtomicInteger;   
 /**  
 * 由于Java的简单类型不能够精确的对浮点数进行运算，这个工具类提供精  
 * 确的浮点数运算，包括加减乘除和四舍五入。  
@@ -97,5 +99,23 @@ public static void main(String[] args) {
 	double v=4.005;
 	double v2=4;
 	System.out.println(Arith.div(v, v2,3));
+	
+	System.out.println("----------------------");
+	int count=0;
+	int count2=0;
+	AtomicInteger ai = new AtomicInteger();
+	ai.getAndIncrement();
+	for (;;) {
+		int ni = ai.get();
+		int next =ni+1 ;
+		boolean b=	ai.compareAndSet(ni, next);
+		if(b){
+			System.out.println(++count+"成功,ni="+ni+"和next="+next);
+		}
+		System.err.println(++count2+"原始");
+		//System.out.println(b);
+		
+	}
+	
 }
 } 

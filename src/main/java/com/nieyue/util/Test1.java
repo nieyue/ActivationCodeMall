@@ -6,6 +6,11 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Date;
 import java.util.Enumeration;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 import com.nieyue.exception.AccountAlreadyAuthException;
 
@@ -87,12 +92,42 @@ public class Test1 {
 //        g.drawString(new String(s.getBytes(),"UTF8"), 50, 50);
 //        ImageIO.write(bi,"jpeg", new File("test.jpg"));
 			//System.out.println(generateShortUuid());
-		Enumeration<CommPortIdentifier> em = CommPortIdentifier.getPortIdentifiers();
+		/*Enumeration<CommPortIdentifier> em = CommPortIdentifier.getPortIdentifiers();
 		 while (em.hasMoreElements()) {
 		 String name = em.nextElement().getName();
 		 	System.out.println(name);
         }
 		 
-		 throw new AccountAlreadyAuthException();
+		 throw new AccountAlreadyAuthException();*/
+		ExecutorService es = Executors.newFixedThreadPool(5);
+		/*es.submit(new Thread(new Runnable() {
+			@Override
+			public void run() {
+				System.out.println(Math.random());
+				
+			}
+		}));*/
+		Future<Integer> future =  es.submit(new Callable<Integer>() {
+			@Override
+            public Integer call() throws Exception {
+                int sum = 0;
+                for (int i = 0; i < 100; i++) {
+                    sum += i;
+                }
+                return sum;
+            }
+        });
+		
+		try {
+			System.out.println(future.get());
+			System.out.println(100*99/2);
+			es.shutdown();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ExecutionException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 }
 }

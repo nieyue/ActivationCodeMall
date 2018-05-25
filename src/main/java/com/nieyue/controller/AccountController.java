@@ -161,7 +161,7 @@ public class AccountController {
 		}
 		boolean um = accountService.updateAccount(account);
 		if(um){
-		session.setAttribute("account", account);
+		//session.setAttribute("account", account);
 		list.add(account);
 		return ResultUtil.getSlefSRSuccessList(list);
 		}
@@ -251,7 +251,7 @@ public class AccountController {
 		}
 		boolean um = accountService.updateAccount(newa);
 		if(um){
-			session.setAttribute("account", newa);
+			//session.setAttribute("account", newa);
 			list.add(newa);
 			return ResultUtil.getSlefSRSuccessList(list);
 		}
@@ -604,7 +604,7 @@ public class AccountController {
 		return ResultUtil.getSlefSRSuccessList(list);
 	}
 	/**
-	 * 登录
+	 * 是否登录
 	 * @return
 	 */
 	@ApiOperation(value = "是否登录", notes = "是否登录")
