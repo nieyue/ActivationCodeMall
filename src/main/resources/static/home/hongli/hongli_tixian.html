@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8" />
+		<title>提现历史</title>
+		<meta name="Description" content="" />
+		<meta name="Keywords" content="" />
+		<link rel="stylesheet" type="text/css" href="../css/public.css" />
+		<link rel="stylesheet" type="text/css" href="../css/style.css" />
+		<link rel="stylesheet" type="text/css" href="../css/index.css" />
+		<link rel="stylesheet" href="../css/hongli_index.css" />
+		<!--<link rel="stylesheet" href="css/bootstrap.min.css" />-->
+	</head>
+
+	<body class="bg_eeeeee">
+		<!--head-->
+		<div class="head bg_fff">
+			
+			<div class="loginStatus" style="display: none;" id="nologindiv">
+				<div class="width1200 font_size14 clearfix">
+					<p class="fl color_666">我是商家，<a id="hongli_sellgologin" title="" class="color_eb6100">登录</a></p>
+					<p class="fl padding_left40 color_666">我是推广人，<a id="hongli_tuiguanggologin" title="" class="color_eb6100">登录</a></p>
+					<a id="hongli_usergologin" title="" class="fr color_eb6100"><img src="../img/touxiang.png" alt="" title=""/>买家登录</a>
+				</div>
+			</div>
+			
+			<div class="loginStatus" id="havelogindiv"> 
+				
+				<div class="width1200 font_size14 clearfix">
+					<a style="float: left;" href="hongli_index.html">首页</a>
+					<p style="float: left;">>推广链接</p>
+					<!--alreadyLoginBox-->
+					<div class="alreadyLoginBox fr clearfix">
+						
+						<ul class="alreadyLogin_ul clearfix fl">
+
+							<li>
+								<a href="" title="" id="hongliMessage"><span>我的消息</span></a>
+							</li>
+						</ul>
+						<div class="fl clearfix padding_left20 padding_right10" id="gomayuserinfo">
+							<img src="../img/touxiang_c.png" alt="" title="" class="fl alreadyLogin_img" />
+							<div class="fl alreadyLogin_centerBox color_666">
+								<div class="honglialreadyLogin_infop clearfix">
+									<p class="fl alreadyLogin_namep ellipsisp"></p>
+								</div>
+
+							</div>
+						</div>
+						<a href="" title="" class="color_eb6100" id="exit">退出</a>
+					</div>
+					<!--alreadyLoginBox end-->
+				</div>
+			</div>
+
+		</div>
+		<!--head end-->
+		<!--content-->
+		
+		<div class="bg_fff margin_top10">
+		<div class="width1200 bg_fff" style="height: 120px;margin-bottom: 20px;">
+			<p class="font_size14" style="margin-left: 20px;margin-top: 20px;float: left;">红利账户余额</p>
+			<p class="yuep">￥0</p>
+			<div style="float: right;margin-right: 40px;">
+				<a class="tixianbtn">提现</a>
+				<p style="color: #FF7400;margin-top: 20px;" class="font_size14">？提现规则</p>
+			</div>
+
+		</div>
+		</div>
+		<div class="width1200 bg_fff" style="height: 45px;margin-bottom: 20px;line-height: 45px;margin-top: 20px;">
+			
+			<div style="float: right;margin-right: 40px;">
+				<div class="rilidiv" onclick="JTC.setday()">
+					<p class="font_size14" style="float: left;margin-left: 10px;">2018-24-21</p>
+					<img src="../img/rili.png" style="width: 15px;height: 15px;"/>
+				</div>
+				<p style="float: left;margin-left: 10px;margin-right: 10px;line-height: 45px;">~</p>
+				<div class="rilidiv" onclick="JTC.setday()">
+					<p class="font_size14" style="float: left;margin-left: 10px;">2018-24-21</p>
+					<img src="../img/rili.png" style="width: 15px;height: 15px;"/>
+				</div>
+				
+				
+			</div>
+
+		</div>
+
+		<div class="width1200 bg_fff margin_bottom30" >
+			<div class="onlytablediv">
+
+				<div class="tabletopdiv">
+					<p style="color: white;float: left;" class="font_size14">提现历史</p>
+					
+				</div>
+				<table class="bg_fff onlytabletdtable" frame="void" rules="cols">
+
+					<thead>
+						<tr class="bg_fff tabletd" style="height: 40px;background: rgba(255, 233, 214, 1);">
+							<th style="width: 25%;">提现日期</th>
+							<th style="width: 25%;">提现方式</th>
+							<th style="width: 25%;">账号所有人</th>
+							<th style="width: 25%;">提现金额</th>
+						</tr>
+					</thead>
+					<tbody id="tixian_tb">
+
+						
+						
+
+					</tbody>
+				</table>
+
+			</div>
+
+			
+			
+
+			<div style="clear: both;"></div>
+		</div>
+
+		<!--content end-->
+
+		<!--footer-->
+		<div class="footer bg_fff">
+			<!--footer_info-->
+			<div class="footer_info">
+				<div class="width1200 clearfix">
+					<div class="left fl">
+						<p class="font_size18 color_666 lineheight70">客服咨询</p>
+						<p class="font_size16 color_aaaaaa lineheight30">客服在线时间：09:00 - 12:00 <br />客&nbsp;&nbsp;服&nbsp;&nbsp;电&nbsp;&nbsp;话：400-000-8888</p>
+					</div>
+					<div class="center fl clearfix">
+						<div class="footer_ulbox fl">
+							<p class="font_size14 color_666 padding_top10 margin_bottom5">支付方式</p>
+							<ul>
+								<li>
+									<a href="" title="">支付宝</a>
+								</li>
+								<li>
+									<a href="" title="">微信</a>
+								</li>
+								<li>
+									<a href="" title="">百度钱包</a>
+								</li>
+								<li>
+									<a href="" title="">Paypal</a>
+								</li>
+								<li>
+									<a href="contactus.html" title="">网银</a>
+								</li>
+							</ul>
+						</div>
+						<div class="footer_ulbox fl margin_left60">
+							<p class="font_size14 color_666 padding_top10 margin_bottom5">接收卡密</p>
+							<ul>
+								<li>
+									<a href="" title="">平台接收 </a>
+								</li>
+								<li>
+									<a href="" title="">手机接收 </a>
+								</li>
+								<li>
+									<a href="" title="">邮箱接收</a>
+								</li>
+							</ul>
+						</div>
+						<div class="footer_ulbox fl margin_left60">
+							<p class="font_size14 color_666 padding_top10 margin_bottom5">售后服务</p>
+							<ul>
+								<li>
+									<a href="" title="">创建问题单 </a>
+								</li>
+								<li>
+									<a href="" title="">退款说明 </a>
+								</li>
+							</ul>
+						</div>
+						<div class="footer_ulbox fl margin_left60">
+							<p class="font_size14 color_666 padding_top10 margin_bottom5">客服互动</p>
+							<ul>
+								<li>
+									<a href="" title="">在线客服 </a>
+								</li>
+							</ul>
+						</div>
+						<div class="footer_ulbox fl margin_left60">
+							<p class="font_size14 color_666 padding_top10 margin_bottom5">购物指南</p>
+							<ul>
+								<li>
+									<a href="" title="">购物指南 </a>
+								</li>
+							</ul>
+						</div>
+					</div>
+					<div class="right fr">
+						<ul class="clearfix">
+							<li>
+								<p class="lineheight38 margin_bottom5"><img src="../img/footer1.png" alt="" title="" />官方微信</p>
+								<div class="imgbox">
+									<img src="../img/erweima1.jpg" alt="" title="" />
+								</div>
+							</li>
+							<li class="margin_left60">
+								<p class="lineheight38 margin_bottom5"><img src="../img/footer2.png" alt="" title="" />官方微博</p>
+								<div class="imgbox">
+									<img src="../img/erweima2.jpg" alt="" title="" />
+								</div>
+							</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+			<!--footer_info-->
+			<!--footer_support-->
+			<div class="footer_support text_center">
+				<div class="abox margin_bottom10">
+					<a href="" title="">关于网站</a>
+					<a href="" title="">合作伙伴</a>
+					<a href="" title="">联系客服</a>
+					<a href="" title="">诚征英才</a>
+					<a href="" title="">联系我们</a>
+					<a href="" title="">网站地图</a>
+					<a href="" title="">法律声明</a>
+					<a href="" title="">隐私权政策</a>
+					<a href="" title="">知识产权</a>
+				</div>
+				<p class="font_size12 color_666">© 2016 - 2017 Play2a.com 大型点卡交易商城 版权所有 <i class="color_bb0404">浙CIP备111222333号-1 </i>互联网违法和不良信息举报电话:0571-86158858 admin@Play2A.com</p>
+			</div>
+			<!--footer_support-->
+		</div>
+		<!--footer-->
+		<!--fixed_box-->
+		<div class="fixed_box">
+			<ul>
+				<li class="backtop"><img src="../img/fixright.png" alt="" title="" />TOP</li>
+				<li>
+					<a href="" title="">客服</a>
+				</li>
+				<li>
+					<a href="" title="">购物车</a>
+				</li>
+			</ul>
+		</div>
+		<!--fixed_box-->
+	</body>
+
+</html>
+<script src="../js/jquery-1.12.2.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="../js/public.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript" src="../js/myorder.js"></script>
+<script type="text/javascript" src="../js/JTimer_1.3.js" ></script>
+<script type="text/javascript" src="../js/hongli.js" ></script>
+<script>
+	gettixian(1);
+</script>

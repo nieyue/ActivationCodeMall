@@ -1,0 +1,37 @@
+.goodoldprice{color: #666666;font-size: 12px;text-decoration:line-through;width: auto;float: left;}
+.goodnewprice{color: #666666;font-size: 14px;color: #FF7400;text-align: right;}
+.gooddetail{width: 900px;height: auto;margin-bottom: 40px;float: left;margin-top: 20px;}
+.goodbtn{margin-top:10px;text-align: center;background-color: #ff8700;width: 220px;height: 40px;margin-left: 20px;}
+.goodtuijiantext{width: 100%;height: 40px;line-height: 40px;font-size: 16px;margin-top: 20px;padding-bottom: 5px;}
+.wansellgood{width: 120px; height: 30px;text-align: center;border-radius: 5px;background: #FF7400;}
+ .comment {
+            font-size: 20px;
+            color: #FF7400;
+            list-style: none;
+        }
+
+        .commentli {
+            float: left;
+            line-height: 30px;
+            cursor: pointer;
+        }
+        
+.sellotheritem{height: 80px;background: rgba(238, 238, 238, 1);padding: 20px;margin-top: 10px;}
+.detail_positionul>li{width: 110px;height: 40px;line-height: 40px;float: left;text-align: center;font-size: 14px;color: #fff;}
+.detail_positionul>li>a{font-size: 14px;display: block;text-decoration: none;color: #000000;}
+.detailclickli{background-color: #FFFFFF;border: solid;border-color: #FF7400;border-width: 1px 0px 0px 0px;}
+.detailclickli>a{color: #FF7400;}
+
+.goodjieshao{height: 300px;padding: 20px;}
+.pingjia{}
+.detailhomeimg{height: 300px;width: 360px;margin-left: 20px;margin-top: 20px;margin-right: 20px;float: left;}
+.goodinfodiv{width: 480px;float: left;margin-top: 20px;padding-right: 20px;}
+.gooddetailinfop{width: 100%;height: 40px;line-height: 40px;font-size: 16px;margin-left: 20px;}
+.detailinfodiv{width: 252px;background: white;margin-top: 10px;}
+.guangwangziyingp{width: 100%;height: 40px;line-height: 40px;font-size: 20px;font-family: ﻿bold;margin-left: 160px;}
+.detailhomeimg2{width: 120px;height: 40px;float: left;margin-left: 20px;}
+
+
+.tuijianbuynum{color: #666666;font-size: 14px;width: auto;float: left;}
+.tuijiancommentnum{color: #666666;font-size: 14px;text-align: right;}
+.tuijiangoodname{line-height: 20px;width: 220px;font-size: 14px;}

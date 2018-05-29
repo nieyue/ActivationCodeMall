@@ -1,0 +1,56 @@
+/*txtScroll_top*/
+.txtScroll_top{width: 100%;height: 30px;line-height: 30px;background-color: #fd831d;border-bottom: 1px solid #fb9036;}
+.txtScroll_top a{color: #fff;font-size: 14px;display: block;line-height: 30px;height: 30px;}
+.banner{width: 100%;height:380px; position:relative;z-index: 1; margin-bottom:50px;}
+.newsbanner{width: 100%;height:42px;overflow:hidden; position:relative;z-index: 1;}
+.banner .width200_20{width: 100%;height: 20px; position:absolute;left: 0;bottom:0px;z-index: 2;text-align: center;}
+.banner .hd{width: 1200px; height:20px;  margin:auto;}
+.banner .hd ul{width: 100%; height:20px;}
+.banner .hd ul li{width: 15px;height: 15px;display: inline-block;border-radius: 100%;margin:0 5px;cursor: pointer;background-color: #fff;}
+.banner .hd ul li.on{background-color:#eb6100;}
+.banner .bd{width: 100%; position:absolute; right:0; top:42px;height:100%;}
+.banner .bd #indexbanner{width: 1200px !important;text-align:center;margin:auto;height:100% !important;}
+.banner .bd #indexbanner li{width: 1200px !important;margin:auto;height:100% !important; }
+.banner_position{width: 100%;height:42px;background-color: #ff7400;position: absolute;top: 0;}
+.banner_positionul>li{width: 232px;height: 42px;line-height: 42px;float: left;text-align: center;font-size: 14px;color: #fff;}
+.banner_positionul>li>a{font-size: 14px;color: #fff;display: block;}
+.banner_positionul>li.this{background-color: #573c1e;}
+.banner_classiul{background-color: #fff;width: 230px;height: 336px;overflow: hidden;border: 1px solid #ececec;position: relative; z-index: 200;}
+.banner_classiul li{display: block;line-height: 41px;}
+.banner_classiul li a:hover{
+	background-color:red;
+	color:#fff !important;
+	}
+.bannerli{width:100%; height:380px;}
+
+/*.indexBox*/
+.indexBox_icon{position: relative;top: 6px;margin-right: 20px;}
+.indexBox_icon1{position: relative;top: 2px;}
+.index_listul.threeli{width: 1200px;}
+.index_listul.twoli{width:790px;}
+.index_listul li{width: 360px;float: left;margin-right: 33px;margin-bottom: 35px;border:1px solid #ececec;box-shadow:5px 5px 5px #ececec;transition:width 2s,height 2s,transform 2s;}
+.index_listul li:hover{
+	transform:translateY(-22px);
+}
+.index_listul li a{position: relative;}
+.index_listul li .imgbox,.index_listul li .imgbox>img{width: 360px;height: 225px;}
+.index_listul li .top_mengban{z-index:100;position: absolute;width:340px;top:0;left:0;height:45px;padding:0 10px;background-color: #000000;filter:alpha(opacity=50);-moz-opacity:0.5;-webkit-opacity: 0.5; -khtml-opacity:0.5;opacity: 0.5;}
+.index_listul li .top_p{z-index:101;position: absolute;width:340px;top:0;left:0;height:45px;line-height:45px;padding:0 10px;color: #fff;font-size: 14px;}
+/*index_left785*/
+.index_left785{width: 785px;}
+.index_right361{width: 361px;}
+.index_right361 .index_titlep{height: 65px;line-height:65px;color:#fff;padding-left: 10px;background-color: #573c1e;}
+.index_right361 .index_sortul li{width: 361px;height: 42px;background: url(../img/paihang4.png) no-repeat;margin-top: 1px;}
+.index_right361 .index_sortul li.sort1{background: url(../img/paihang1.png) no-repeat;}
+.index_right361 .index_sortul li.sort2{background: url(../img/paihang2.png) no-repeat;}
+.index_right361 .index_sortul li.sort3{background: url(../img/paihang3.png) no-repeat;}
+.index_right361 .index_sortul li a{padding-right:10px;display: block;line-height: 42px;height: 42px;}
+.index_right361 .index_sortul li .num_p{width: 80px;padding-left: 10px;color: #fff;}
+.index_right361 .index_sortul li .ellipsisp{width:261px;}
+
+/*新闻*/
+.news_positionul li{width: 1200px;height: 200px;}
+.acticleimg{width: 180px;height: 180px;float: left;margin:10px;}
+.articletitlediv{width: auto;height: 200px;margin-left: 190px;padding-top: 15px;}
+.newscontent{padding: 20px;}
+.newscontent>p{line-height: 35px;}

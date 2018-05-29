@@ -1,0 +1,27 @@
+.tixianbtn{background: #FF7400;width: 94px;height: 30px;line-height: 30px;text-align: center;color: white;margin-top: 20px;}
+.yuep{font-size: 24px;line-height: 120px;margin-left: 200px;color: #ff0000;width: 300px;float: left;}
+.tablediv{width: 590px;float: left;height: 260px;}
+.tabletopdiv{height: 40px;line-height: 40px;padding-left: 10px;padding-right: 10px;background: rgba(224, 70, 0, 1);}
+
+.tabletd{border:solid rgba(166, 166, 166, 1); border-width:0px 0px 1px 0px;height: 36px;}
+
+.tabletd>td{vertical-align: middle;text-align: center;font-size: 14px;}
+.tabletdtable{width: 590px;border:solid rgba(166, 166, 166, 1);border-width:1px;}
+.onlyone{overflow: hidden;text-overflow: ellipsis;display: box;display: -webkit-box;-webkit-line-clamp: 1;-webkit-box-orient: vertical;}
+
+.onlytablediv{width: 1120px;float: left;height: 260px;margin-top: 20px;margin-left: 40px;}
+.onlytabletdtable{width: 1120px;border:solid rgba(166, 166, 166, 1);border-width:1px;}
+.rilidiv{width: 120px;height: 25px;border: solid 1px rgba(102, 102, 102, 1);margin-top: 10px;line-height: 25px;text-align: center;float: left;}
+
+.infoitem{height: 50px;line-height: 50px;padding-left: 10px;padding-right: 10px;margin-top: 20px;background-color: rgba(238, 238, 238, 1);}
+.inputstyle{margin-left: 10px;float: left;border: solid 1px rgba(204, 204, 204, 1);font-size: 14px;height: 36px;width: 260px;}
+.tixian_positionul>li{width: 220px;height: 80px;line-height: 80px;float: left;font-size: 14px;color: #000;margin-left: 20px;margin-top: 20px;}
+.tixian_positionul>li>a{font-size: 14px;color: #fff;display: block;}
+.tixian_positionul>li.this{background-color: #573c1e;}
+.tixianborder{border-radius:5px;border: solid 1px rgba(224, 224, 224, 1);}
+.tixianborder7400{border-radius:5px;border: solid 1px rgba(255, 116, 0, 1);}
+.tixianimg{float: left;margin-left: 20px;margin-top: 15px;}
+.tixiantext{color: #999999;margin-left: 84px;}
+
+.guanbi{width: 120px;height: 50px;margin: auto;background: #d3d3d3;float: left;margin-left: 20px;text-align: center;}
+.fourtbdiv{width: 590px;float: left;height: 260px;}

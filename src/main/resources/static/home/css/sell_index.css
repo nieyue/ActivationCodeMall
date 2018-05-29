@@ -1,0 +1,147 @@
+.item{text-decoration: none;height: 40px;width: 170px;background: #FF7400;text-align: center;line-height: 40px;color: white;border: solid;border-width: 0px 0px 1px 0px;border-color: white;}
+
+.itemchilder{height: 40px;width: 170px;background: #FFFFFF;text-align: center;line-height: 40px;display: block;color: black;border: solid;border-width: 0px 0px 1px 0px;border-color: #EBEBEB;}
+.itemchilder>a{display: block;color: black;text-decoration: none;}
+.diansearchbox{width: 420px;height: 30px;background: url(../img/suosuokuang.png) no-repeat;position: relative;}
+.diansearchbox input{font-size: 14px;color: #a5a5a5;background-color: transparent;height: 30px;line-height:30px;width: 310px;}
+.diansearchboxbutton{font-size: 14px;color: #fff;height: 30px;line-height:30px;width: 66px;background: #FF7400;}
+.diansearchbox img{padding: 0 8px 0 10px;position: relative;top: 3px;}
+.diansearchbox .searchbox_alert{position: absolute;width: 372px;height: 250px;border: 1px solid #f5f5f5;background-color: #fff;z-index: 200;top: 30px;left: 0;padding: 10px;line-height: 32px;display: none;}
+.diansearchbox .searchbox_alert li{cursor: pointer;}
+.selltable{width: 960px;text-align: center;}
+.tabletd{border:solid #EBEBEB; border-width:0px 0px 1px 0px;height: 120px;}
+.tabletd>td{vertical-align: middle;text-align: center;font-size: 14px;}
+.tabletd1{border:solid #EBEBEB; border-width:0px 0px 1px 0px;height: 40px;}
+.tabletd1>th{vertical-align: middle;text-align: center;font-size: 14px;color: #FF7400;}
+.itemimg{width: 100px;height: 100px;margin-top: 10px;}
+.xiaoshoubtn{width: 100px;height: 30px;background: #FF7400;float: right;font-size: 14px;text-align: center;color: #FFFFFF;line-height: 30px;margin-top: 20px;}
+.otherbtn{width: 100px;height: 30px;background: #FF7400;float: left;font-size: 14px;text-align: center;color: #FFFFFF;line-height: 30px;margin-top: 55px;margin-left: 35px;}
+.otherbtn1{width: 100px;height: 30px;float: left;font-size: 14px;text-align: center;color: #FF7400;line-height: 30px;margin-top: 55px;margin-left: 35px;border: solid;border-color: #FF7400;border-width: 1px;}
+.detailimg{width: 100px;height: 100px;float: left;margin-left: 10px;}
+.detailitem{height: 100px;line-height: 100px;border: solid;border-color: #EBEBEB;border-width: 0px 0px 1px 0px;}
+.detailitem>p{margin: 0;font-size: 14px;float: left;}
+
+.detail_positionul>li{width: 120px;height: 40px;line-height: 40px;float: left;text-align: center;font-size: 14px;color: #fff;}
+.detail_positionul>li>a{font-size: 14px;display: block;text-decoration: none;color: #000000;}
+.clickli{background-color: #FFFFFF;border: solid;border-color: #FF7400;border-width: 1px 0px 0px 0px;}
+.clickli>a{color: #FF7400;}
+.goodjieshao{height: 300px;}
+ .comment {
+	font-size: 20px;
+	color: #FF7400;
+	list-style: none;
+	}
+
+.commentli {
+	float: left;
+	line-height: 30px;
+	cursor: pointer;
+	}
+.pingjia{}
+.applynewbtn{margin-top:25px;float: right;width: 200px;height: 30px;background: #FF7400;font-size: 14px;text-align: center;color: #FFFFFF;line-height: 30px;text-decoration: none;}
+
+.sellnew_positionul>li{width: 120px;height: 40px;line-height: 40px;float: left;text-align: center;font-size: 14px;color: #fff;}
+.sellnew_positionul>li>a{font-size: 14px;display: block;text-decoration: none;color: #000000;}
+.clicknewli{background-color: #FFFFFF;border: solid;border-color: #FF7400 #EBEBEB #EBEBEB;border-width: 2px 1px 0px 1px;}
+.clicknewli>a{color: #FF7400;}
+
+.ordertabletd1{border:solid #EBEBEB; border-width:0px 0px 1px 0px;height: 40px;}
+.ordertabletd1>th{vertical-align: middle;text-align: center;font-size: 14px;color: #FF7400;}
+.ordertabletd{border:solid #EBEBEB; border-width:0px 0px 1px 0px;height: 60px;}
+.ordertabletd>td{vertical-align: middle;text-align: center;font-size: 14px;}
+
+.titlep{font-size: 16px;width: 100px;border: solid;border-color: #FF7400;border-width: 0px 0px 0px 1px;text-align: center;font-weight: bold;}
+.tuikuanbtn{border: solid; border-color: #FF7400;width: 150px;height: 40px;line-height: 40px;color: #FF7400;border-radius: 5px;float: left;background: #FFFFFF;border-width: 1px;margin-left: 35%;}
+.finishquestionbtn{background: #FF7400;width: 150px;height: 40px;line-height: 40px;color: #FFFFFF;border-radius: 5px;float: left;margin-left: 20px;}
+
+
+.tixianbtn{background: #FF7400;width: 94px;height: 30px;line-height: 30px;text-align: center;color: white;}
+.rilidiv{width: 120px;height: 25px;border: solid 1px rgba(102, 102, 102, 1);line-height: 25px;text-align: center;float: left;}
+.recordtabletd1{border:solid #EBEBEB; border-width:0px 0px 1px 0px;height: 36px;background: rgba(224, 70, 0, 1);}
+.recordtabletd1>th{vertical-align: middle;text-align: center;font-size: 14px;color: white;}
+.recordtabletd{border:solid #EBEBEB; border-width:0px 0px 1px 0px;height: 36px;}
+.recordtabletd>td{vertical-align: middle;text-align: center;font-size: 14px;}
+.recordtable{width: 920px;text-align: center;margin-left: 20px;margin-right: 20px;border: solid;border-color: #EBEBEB;border-width: 1px;margin-bottom: 100px;}
+
+.messagediv{width: 960px;height: auto;background: #FFFFFF;margin-top: 10px;padding-bottom: 20px;}
+.messagediv2{width: 960px;height: auto;margin-top: 20px;padding-left: 50px;}
+.messagediv3{width: 540px;height: 67px;margin-left: 106px;}
+.messagep1{font-size: 16px;color: #1B1B1B;float: left;}
+
+
+.infoitem{height: 50px;line-height: 50px;padding-left: 10px;padding-right: 10px;margin-top: 20px;background-color: rgba(238, 238, 238, 1);}
+.inputstyle{margin-left: 10px;float: left;border: solid 1px rgba(204, 204, 204, 1);font-size: 14px;height: 36px;width: 260px;}
+.tixian_positionul>li{width: 220px;height: 80px;line-height: 80px;float: left;font-size: 14px;color: #000;margin-left: 20px;margin-top: 20px;}
+.tixian_positionul>li>a{font-size: 14px;color: #fff;display: block;}
+.tixian_positionul>li.this{background-color: #573c1e;}
+.tixianborder{border-radius:5px;border: solid 1px rgba(224, 224, 224, 1);}
+.tixianborder7400{border-radius:5px;border: solid 1px rgba(255, 116, 0, 1);}
+.tixianimg{float: left;margin-left: 20px;margin-top: 15px;}
+.tixiantext{color: #999999;margin-left: 84px;}
+
+.guanbi{width: 120px;height: 50px;margin: auto;background: #d3d3d3;float: left;margin-left: 20px;text-align: center;}
+
+/*安全设置*/
+
+.bghui{margin-top: 20px;width: 900px;background: rgba(238, 238, 238, 1);}
+.setitem{margin-top: 20px;width: 890px;background: rgba(238, 238, 238, 1);height: 50px;line-height: 50px;padding-left: 10px;padding-right: 10px;}
+
+/*诚信升级*/
+.applytui{width: 117px;height: 30px;background-color: rgba(197, 197, 197, 1);border-radius: 2px 2px 2px 2px;color: #FFFFFF;line-height: 30px;text-align: center;}
+.chosemoneytext{width: 127px;height: 30px;background: #FF7400;float: left;color: white;text-align: center;margin-left: 10px;}
+.rechargebtn{border-radius:5px;margin: auto;position: relative;width: 206px;height: 46px;text-align:center;line-height:46px;background: #FF7400;color: white;margin-top: 200px;text-decoration: none;}
+
+/*等级成长历史*/
+.radio-span {  
+    width: 24px;  
+    height: 18px;  
+    padding-top: 3px;  
+    cursor: pointer;;  
+    text-align: center;  
+    margin-right: 10px;  
+    background-image: url(../image/inputradio.gif);  
+    background-repeat: no-repeat;  
+    background-position: -24px 0;  
+    display: inline-block;  
+    vertical-align: middle;  
+}  
+.radio-span > input {  
+    display: inline-block;  
+}  
+.on {  
+    background-position: 0 0;  
+}  
+.radioClass {  
+    opacity: 0;  
+    cursor: pointer;  
+    -ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";  
+    filter: alpha(opacity=0);  
+}  
+  
+.check-custom {  
+    width: 20px;  
+    height: 20px;  
+    cursor: pointer;  
+    margin-left: 10px;  
+    text-align: center;  
+    background-image: url(../image/checkbox_01.gif);  
+    background-repeat: no-repeat;  
+    background-position: 0 0;  
+    display: inline-block;  
+    margin-right: 5px;  
+}  
+  
+.check-on {  
+    background-position: 0 -21px;  
+}  
+
+/*绑定银行卡*/
+.bindbank{width: 40%;background-image: url(../img/yuanjiao_k.png);background-size: 100%;height: 140px;float: left;margin-left: 5%;margin-top: 20px;}
+.bankinput{width: 260px;height: 30px;border: solid 1px rgba(102, 102, 102, 1);float: left;margin-left: 40px;}
+.getcodebtn{width: 107px;height: 30px;background-color: rgba(181, 181, 181, 1);border: solid 1px rgba(102, 102, 102, 1);color: white;line-height: 30px;margin-left: 10px;text-align: center;float: left;}
+.infodiv{line-height: 30px;margin-top: 20px;margin-left: 50px;}
+.bankbtn{width: 120px;height: 30px;line-height: 30px;color: white;text-align: center;border-radius: 3px;}
+
+.wrapper {display:inline-block;height:122px; width:192px;overflow:hidden;cursor:pointer ;margin-left: 25px;}
+.wrapper input{ opacity:0; height:122px; width:192px;}
+.updatadiv{width: 960px;margin-left: 10px;float: left;margin-top: 10px;padding-left: 80px;padding-bottom: 100px;}

@@ -1,0 +1,47 @@
+/*register*/
+.height24borderLeftp{line-height: 24px;padding-left: 20px;border-left: 1px solid #cccccc;}
+.register_statusulBox{border-bottom: 2px solid #fdab85;}
+.register_statusul{width:690px;margin: 0 auto -2px;}
+.register_statusul li{width: 230px;border-bottom: 2px solid #fdab85;text-align: center;color: #a5a5a5;font-size: 14px;padding: 8px 0;float: left;}
+.register_statusul li span{display:inline-block;width: 20px; height: 20px;margin-right:10px;text-align: center; line-height: 20px; border-radius: 100%; background-color: #a5a5a5; color: #fff; font-size: 14px;}
+.register_statusul li.this{border-color:#f56503;color: #f56503;}
+.register_statusul li.this span{background-color: #eb6100;}
+.register_height530{height: 420px;padding-top: 90px;}
+.register_height530 .width450{width: 450px;margin:0 auto;}
+.register_button{width: 260px;height: 30px;line-height: 30px;text-align: center;color: #fff;font-size: 14px;background-color: #ff7400;border-radius: 3px;}
+/*outer*/
+.outer{ position: relative; width: 260px; height: 24px; line-height: 24px; border:1px solid #666666; }
+.inner{ width: 46px; height: 20px; line-height: 20px; border:1px solid #666666; text-align: center; background: #b5b5b5; cursor: pointer; font-family: "宋体"; z-index: 10; font-weight: bold; color: #1b1b1b; margin: 1px 0 0 1px; }
+.outer span,.filter-box,.inner{ position: absolute; top: 0; left: 0; }
+.outer span{ display: block; width: 190px; padding-left:70px; color: #fff; color: #a5a5a5; font-size: 14px; }
+.filter-box{ width: 0; height: 100%; background:#ff7400; z-index: 9; }
+.outer.act span{ text-align: center; padding:0 36px 0 0; color: #fff; z-index: 99; }
+.outer.act .inner{margin: 0;width: 46px;height: 24px;border: none;line-height: 24px;} 
+.width260input{width: 250px;height: 24px;line-height:24px;border:1px solid #666666;font-size: 14px;padding-left: 10px;}
+.width200input{width: 190px;height: 24px;line-height:24px;border:1px solid #666666;font-size: 14px;padding-left: 10px;}
+.width210input{width: 200px;height: 24px;line-height:24px;font-size: 14px;padding-left: 10px;}
+.register_height530 input::-webkit-input-placeholder{color: #a5a5a5;}
+.register_height530 input:-moz-placeholder{color: #a5a5a5;}
+.register_height530 input:-ms-input-placeholder{color: #a5a5a5;}
+.width110span{display: inline-block;width: 110px;color: #1b1b1b;text-align: right;margin-right: 22px;height: 26px;}
+.width100span{display: inline-block;width: 100px;color: #1b1b1b;text-align: right;margin-right: 20px;height: 26px;}
+/*register_step2*/
+.register_havejihuo{width:50px;height: 26px;line-height: 24px;color: #fff;background-color: #b5b5b5;text-align: center;font-size: 12px;border:1px solid #666666;margin-left: 10px;}
+.register_yzm{width:50px;height: 26px;line-height: 24px;color: #fff;background-color: #b5b5b5;text-align: center;font-size: 12px;border:1px solid #666666;margin-left: 10px;}
+.register_selectbox{width: 260px;height: 24px;line-height:24px;border:1px solid #666666;}
+.register_selectbox select{width: 50px;font-size: 14px;color: #1b1b1b;background-color: #b5b5b5;height: 24px;line-height: 24px;}
+.register_checkbox{position: relative;top: 3px;margin-right: 10px;}
+/*login_content*/
+.login_content{width: 400px;height: 470px;margin-top: 83px;}
+.login_borderp{width: 100%;height: 70px;line-height: 70px;text-align: center;border-bottom: 1px solid #e6e6e6;font-size: 16px;}
+/*forgetPassword*/
+.forgetPassword_statusul{width: 460px;}
+/*goodsClassify*/
+.banner_positionul>li{width: 232px;height: 42px;line-height: 42px;float: left;text-align: center;font-size: 14px;color: #fff;}
+.banner_positionul>li>a{font-size: 14px;color: #fff;display: block;}
+.banner_positionul>li.this{background-color: #573c1e;}
+.banner_classiul{background-color: #fff;width: 230px;height: 336px;overflow: hidden;border: 1px solid #ff5000;position: relative; z-index: 200;display: none;}
+.banner_classiul li a{display: block;line-height: 41px;color: #1a1a1a;}
+.classify_p{cursor: pointer;}
+.classifyi{display:inline-block;width: 15px;height: 9px;background: url(../img/xiala.png) no-repeat;margin-left: 8px;}
+.emailp{float: left;font-weight: bold;font-size: 20px;}

@@ -1,0 +1,44 @@
+.shopecarbanner_positionul>li{width: 232px;height: 42px;line-height: 42px;float: left;text-align: center;font-size: 14px;color: #fff;margin-left: 1px;}
+.shopecarbanner_positionul>li>a{font-size: 14px;color: #fff;display: block;}
+.shopecarbanner_positionul>li.this{background-color: #573c1e;}
+.gw_num{border: 1px solid #dbdbdb;width: 100px;line-height: 26px;overflow: hidden;margin: auto;}
+.gw_num em{display: block;height: 26px;width: 26px;float: left;color: #7A7979;border-right: 1px solid #dbdbdb;text-align: center;cursor: pointer;}
+.gw_num .num{display: block;float: left;text-align: center;width: 42px;font-style: normal;font-size: 14px;line-height: 24px;border: 0;background: rgba(250, 249, 229, 1);}
+.gw_num em.add{float: right;border-right: 0;border-left: 1px solid #dbdbdb;}
+.td{border:solid #FFFFFF; border-width:0px 0px 10px 0px;}
+.td>td{vertical-align: middle;text-align: center;}
+.tablecenter{vertical-align: middle;text-align: center;}
+.parentcenter{
+    position:fixed;          
+    top:0;             
+    right:0;             
+    bottom:0;             
+    left:0;             
+    margin:auto;
+}
+.cargood{width: 1200px;height: auto;margin-top: 20px;}
+.cargooddiv{cursor:pointer; margin-bottom: 10px;width: 220px;margin-left: 15px;background: #FFFFFF; float: left;box-shadow:5px 5px 5px #b1a4d0;transition:width 2s,height 2s,transform 2s;}
+.cargooddiv:hover{
+	transform:translateY(-22px);
+}
+.goodoldprice{color: #666666;font-size: 12px;text-decoration:line-through;width: auto;float: left;}
+.goodnewprice{color: #666666;font-size: 14px;color: #FF7400;text-align: right;}
+.gooddetail{width: 800px;height: auto;margin-bottom: 40px;float: left;margin-top: 20px;}
+.goodbtn{margin-top:10px;text-align: center;background-color: #ff8700;width: 220px;height: 40px;margin-left: 16px;}
+.goodtuijiantext{width: 100%;height: 40px;line-height: 40px;font-size: 16px;margin-top: 20px;padding-bottom: 5px;}
+.pdiv{margin-top: 10px;padding-left: 5px;padding-right: 5px;}
+.textdiv{width: auto;height: 50px;margin: auto;float: left;}
+.textdiv>p{text-align: center;}
+.summoney{text-align: center;color: #bb0404;font-size: 20px;}
+.delectdiv{width: 120px;text-align: center;height: 50px;margin: auto;background: #d3d3d3;float: left;margin-left: 20px;}
+.delectdiv>a{color: #bb0404;}
+.commitbtn{width: 120px;height: 50px;margin: auto;background: #FF7400;float: left;text-align: center;}
+.commitbtn>a{color: #FFFFFF;}
+.shopeitem{height: 88px;background: rgba(250, 249, 229, 1);}
+.caritemimg{width: 66px;height: 66px;float: left;margin-left: 10px;}
+.caritemname{margin-left: 20px;width: auto;float: left;}
+.commitorder{width: auto;display: block;color: #000000;}
+.deletshopcar{width: auto;color: #FF7400;margin-top: 10px;}
+.buynum{color: #666666;font-size: 14px;width: auto;float: left;}
+.commentnum{color: #666666;font-size: 14px;text-align: right;}
+.tuijianname{line-height: 20px;width: 218px;font-size: 14px;}

@@ -1,0 +1,686 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>我的订单</title>
+		<meta name="Description" content=""/>
+		<meta name="Keywords" content=""/>
+		<link rel="stylesheet" type="text/css" href="css/public.css"/>
+		<link rel="stylesheet" type="text/css" href="css/style.css"/>
+		<link rel="stylesheet" type="text/css" href="css/index.css"/>
+		<link rel="stylesheet" href="css/shopcar.css" />
+		<link rel="stylesheet" href="css/myorder.css" />
+		<!--<link rel="stylesheet" href="css/bootstrap.min.css" />-->
+	</head>
+	<body class="bg_eeeeee">
+		<!--head-->
+		<div class="head bg_fff">
+			<div class="loginStatus" style="display: none;" id="nologindiv">
+				<div class="width1200 font_size14 clearfix">
+					<p class="fl color_666">我是商家，<a id="sellgologin" title="" class="color_eb6100">登录</a></p>
+					<p class="fl padding_left40 color_666">我是推广人，<a id="tuiguanggologin" title="" class="color_eb6100">登录</a></p>
+					<a id="usergologin" title="" class="fr color_eb6100"><img src="img/touxiang.png" alt="" title=""/>买家登录</a>
+				</div>
+			</div>
+			
+			<div class="loginStatus" id="havelogindiv">
+				<div class="width1200 font_size14 clearfix">
+					<!--alreadyLoginBox-->
+					<div class="alreadyLoginBox fr clearfix">
+						<ul class="alreadyLogin_ul clearfix fl">
+							<li class="alreadyLogin_carli this">
+								<a href="" title=""><span>购物车<i class="alreadyLogin_i"></i></span></a>
+								<!--alreadyLogin_goodsul-->
+								<ul class="alreadyLogin_goodsul">
+									
+									<div class="height90 lineheight90" id="nogood">
+									    	<p style="text-align: center;color: #FF7400;">暂无商品~</p>
+									    </div>
+								</ul>
+								<!--alreadyLogin_goodsul end-->
+							</li>
+							<li>
+								<a href="myorder.html" title=""><span>我的订单</span></a>
+							</li>
+							<li>
+								<a href="mymessage.html" title=""><span>我的消息</span></a>
+							</li>
+						</ul>
+						<div class="fl clearfix padding_left20 padding_right10">
+							<img src="img/touxiang_c.png" alt="" title="" class="fl alreadyLogin_img"/>
+							<div class="fl alreadyLogin_centerBox color_666">
+								<div class="alreadyLogin_infop clearfix"><p class="fl alreadyLogin_namep ellipsisp">强壮的土豆</p>&nbsp;&nbsp;<i class="fontfamily_song font_size12 ellipsisp" id="userleve">LV7</i></div>
+								<ul class="alreadyLogin_centerul">
+									<li><a title="">个人资料</a></li>
+									<li><a title="">我的优惠券</a></li>
+									<li><a title="">我的成长</a></li>
+									<li><a title="">交易账单</a></li>
+									<li><a title="">安全设置</a></li>
+								</ul>
+							</div>
+						</div>
+						<a href="" title="" class="color_eb6100" id="exit">退出</a>
+					</div>
+					<!--alreadyLoginBox end-->
+				</div>
+			</div>
+			<div class="width1200 clearfix height102box">
+				<div class="padding_top27 clearfix fl">
+					<a href="" class="fl imgbox"><img src="img/logo.jpg" alt="" title="" class="logoimg"/></a>
+				    <p class="lineheight50 fl padding_left20 font_size14 color_666">大型交易点卡平台</p>
+				</div>
+				<div class="padding_top27 fl padding_left130">
+				     <div class="searchbox clearfix">
+				     	<div class="fl">
+				     		 <img src="img/sousuo.png" alt="" title=""/>
+				     		 <input type="" name="" id="searchbox_input" value="" placeholder="输入关键字进行搜索"/>
+				     	</div>
+					     <button class="fr" id="seachbtn">搜索</button>
+					     <div class="searchbox_alert font_size14 color_666">
+					     	<ul id="seachlist">
+					     		
+					     	</ul>
+					     </div>
+				     </div>
+				     <div class="clearfix lineheight30">
+				     	<div class="fl abox clearfix" id="hotseachlist">
+				     		
+				     		
+				     		
+				     	</div>
+				     	<!--<a href="" title="" class="fr color_eb6100 font_size12 fontfamily_song">展示更多>></a>-->
+				     </div>
+				</div>
+				<div class="fr padding_top20">
+					<a href="" title="" class="kefu_a"><img src="img/indexkefu.png" alt="" title=""/>在线客服咨询</a>
+					<p class="font_size16 color_eb6100 text_center padding_top5">400-000-8888</p>
+					<p class="fontfamily_song color_666 font_size12 text_center padding_top5">( 09:00 - 12:00 )</p>
+				</div>
+			</div>
+		</div>
+		<!--head end-->
+		<!--banner-->
+		<div class="bg_ff7400">
+			<div class="width1200">
+				<ul class="banner_positionul clearfix">
+					<li >
+						<p class="classify_p">全部商品分类<i class="classifyi"></i></p>
+						<ul class="banner_classiul">
+							
+							
+						</ul>
+					</li>
+					<li>
+						<a href="index.html" title="">首页</a>
+					</li>
+					<li>
+						<a href="news.html" title="">新闻资讯</a>
+					</li>
+					<li>
+						<a href="" title="">平台公告</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+		
+		
+		<div class="margin_top20 margin_bottom20">
+			<div class="width1200 " >
+				
+				<p style="font-size: 20px;color: #1B1B1B;margin-top: 20px;">我的订单</p>
+					<div class="bg_fff" style="width: 1200px;">
+						<div >
+							<ul class="orderbanner_positionul clearfix">
+								
+								<li class="bg_ff7400 bg_573c1e" id="daizhifu">
+									<a  title="" >待支付(0)</a>
+								</li>
+								<li class="bg_ff7400" id="yizhifu">
+									<a  title="">已支付(0)</a>
+								</li>
+								<li class="bg_ff7400" id="wantbuygood">
+									<a  title="">预购商品(0)</a>
+								</li>
+								<li class="bg_ff7400" id="quesionorder">
+									<a  title="">我的问题单(0)</a>
+								</li>
+								<li class="bg_ff7400" id="tuikuanoredr">
+									<a  title="">已退款订单(0)</a>
+								</li>
+								<li class="bg_ff7400" id="quxiaoorder">
+									<a  title="">已取消订单(0)</a>
+								</li>
+								
+							</ul>
+						</div>
+					</div>
+				<!--待支付列表-->
+				<div class="width1200 bg_fff" id="nozhifu" >
+				<table class="width1200 bg_fff" frame="void" rules="cols">
+						  
+						  <thead>
+						    <tr class="bg_fff td" style="height: 40px;">
+						      <th class="tablecenter" style="width: 13%;">订单编号</th>
+						      <th class="tablecenter" style="width: 21%;">商品名称</th>
+						      <th class="tablecenter" style="width: 13%;">下单日期</th>
+						      <th class="tablecenter" style="width: 13%;">收货人</th>
+						      <th class="tablecenter" style="width: 13%;">单价*数</th>
+						      <th class="tablecenter" style="width: 13%;">总金额</th>
+						      <th class="tablecenter" style="width: 13%;">操作</th>
+						    </tr>
+						  </thead>
+						  <tbody id="nopay_tb">
+						  	
+						    <tr class="td item">
+						      <td >
+						      	<div >
+						      		<input name="checkbox" type="checkbox" style="" class="ordercheck"/>
+						      		
+						      		<p class="ordercode">1325454</p>
+						      	</div>
+						      </td>
+						      <td style="padding-left: 10px;padding-right: 10px;">暗黑破坏神3-《死暗黑破坏神3-《死法師的崛起》台服版本</td>
+						      <td >
+						      	<p class="ordertimeday">2017-09-21</p>
+						      	<p class="ordertimehour">11:34</p>
+						      </td>
+						      <td>啦啦啦</td>
+						      <td>
+						      	¥80*3
+						      </td>
+						      
+						      <td>
+						      	¥240
+						      </td>
+						      
+						      <td>
+						      	<a class="deletorderbtn">取消</a>
+						      	<a class="topaybtn">支付</a>
+						      </td>
+						    </tr>
+						    
+						    
+						    
+						  </tbody>
+						</table>
+
+						<div class="width1200 paybottom">
+							<input name="checkbox" type="checkbox" style="" class="choseallcheck"/>
+							
+						     <p class="margin_left20 fl" style="width: auto;">全选</p>
+						     <div style="width: auto;float: right;height: 50px;">
+						     	<div class="chosmoneydiv">
+						     		<p style="">已选<span style="color: #bb0404;">0</span>件&nbsp;&nbsp;合计：<span style="color: #bb0404;">0.00</span></p>	
+						     	</div>
+						     	
+						     	<div class="quxiaodiv">
+						     		<a style="color: #bb0404;">删除</a>				     	
+						     	</div>
+						     	
+						     	<div class="commitorderdiv">
+						     		<a style="color: #FFFFFF;">提交订单</a>				     	
+						     </div>
+						     
+						</div>
+				
+				</div>
+				
+				
+			</div>
+			
+			<!--已支付-->
+			<div class="width1200 bg_fff" id="havezhifu" style="display: none;">
+				<table class="width1200 bg_fff" frame="void" rules="cols">
+						  
+						  <thead>
+						    <tr class="bg_fff td" style="height: 40px;">
+						      <th class="tablecenter" style="width: 13%;">订单编号</th>
+						      <th class="tablecenter" style="width: 21%;">商品名称</th>
+						      <th class="tablecenter" style="width: 13%;">下单日期</th>
+						      <th class="tablecenter" style="width: 13%;">收货人</th>
+						      <th class="tablecenter" style="width: 13%;">单价*数</th>
+						      <th class="tablecenter" style="width: 13%;">总金额</th>
+						      <th class="tablecenter" style="width: 13%;">操作</th>
+						    </tr>
+						  </thead>
+						  <tbody id="havepay_tb">
+						  	
+						    <tr class="td item" >
+						      <td >
+						      	<div >
+						      		<input name="checkbox" type="checkbox" style="" class="ordercheck"/>
+						      		
+						      		<p class="ordercode">1325454</p>
+						      	</div>
+						      </td>
+						      <td style="padding-left: 10px;padding-right: 10px;">暗黑破坏神3-《死暗黑破坏神3-《死法師的崛起》台服版本</td>
+						      <td >
+						      	<p class="ordertimeday">2017-09-21</p>
+						      	<p class="ordertimehour">11:34</p>
+						      </td>
+						      <td>啦啦啦</td>
+						      <td>
+						      	¥80*3
+						      </td>
+						      
+						      <td>
+						      	¥240
+						      </td>
+						      
+						      <td>
+						      	<a class="deletorderbtn">评价订单</a>
+						      	<a class="topaybtn">提取卡密</a>
+						      	<a class="shouhoubtn">售后服务</a>
+						      </td>
+						    </tr>
+						    
+						    
+						    
+						  </tbody>
+						</table>
+
+						<div class="width1200 paybottom">
+							<input name="checkbox" type="checkbox" style="" class="choseallcheck"/>
+							
+						     <p class="margin_left20 fl" style="width: auto;">全选</p>
+						     <div style="width: auto;float: right;height: 50px;">
+						     	
+						     	
+						     	<div class="quxiaodiv">
+						     		<a style="color: #bb0404;">删除</a>				     	
+						     	</div>
+						     	
+						     	
+						     
+						</div>
+				
+				</div>
+				
+				
+			</div>
+			
+			<!--预购商品-->
+			<div class="width1200 bg_fff" id="wantbuy" style="display: none;">
+				<table class="width1200 bg_fff" frame="void" rules="cols">
+						  
+						  <thead>
+						    <tr class="bg_fff td" style="height: 40px;">
+						      <th class="tablecenter" style="width: 13%;">订单编号</th>
+						      <th class="tablecenter" style="width: 21%;">商品名称</th>
+						      <th class="tablecenter" style="width: 13%;">下单日期</th>
+						      <th class="tablecenter" style="width: 13%;">收货人</th>
+						      <th class="tablecenter" style="width: 13%;">单价*数</th>
+						      <th class="tablecenter" style="width: 13%;">总金额</th>
+						      <th class="tablecenter" style="width: 13%;">商品状态</th>
+						    </tr>
+						  </thead>
+						  <tbody id="yugou_tb">
+						  	
+						    <tr class="td item">
+						      <td >
+						      	<div >
+						      		<input name="checkbox" type="checkbox" style="" class="ordercheck"/>
+						      		
+						      		<p class="ordercode">1325454</p>
+						      	</div>
+						      </td>
+						      <td style="padding-left: 10px;padding-right: 10px;">暗黑破坏神3-《死暗黑破坏神3-《死法師的崛起》台服版本</td>
+						      <td >
+						      	<p class="ordertimeday">2017-09-21</p>
+						      	<p class="ordertimehour">11:34</p>
+						      </td>
+						      <td>啦啦啦</td>
+						      <td>
+						      	¥80*3
+						      </td>
+						      
+						      <td>
+						      	¥240
+						      </td>
+						      
+						      <td>
+						      	<a class="deletorderbtn">等待发货</a>
+						      	
+						      </td>
+						    </tr>
+						    
+						    
+						    
+						  </tbody>
+						</table>
+
+			</div>
+			
+			<!--我的问题单-->
+			<div class="width1200 bg_fff" id="wentidan" style="display: none;">
+				<table class="width1200 bg_fff" frame="void" rules="cols">
+						  
+						  <thead>
+						    <tr class="bg_fff td" style="height: 40px;">
+						      <th class="tablecenter" style="width: 13%;">订单编号</th>
+						      <th class="tablecenter" style="width: 21%;">商品名称</th>
+						      <th class="tablecenter" style="width: 13%;">下单日期</th>
+						      <th class="tablecenter" style="width: 39%;">问题描述</th>
+						      <th class="tablecenter" style="width: 13%;">状态</th>
+						    </tr>
+						  </thead>
+						  <tbody id="question_tb">
+						  	
+						    <tr class="td item">
+						      <td >
+						      	<div >
+						      		<input name="checkbox" type="checkbox" style="" class="ordercheck"/>
+						      		
+						      		<p class="ordercode">1325454</p>
+						      	</div>
+						      </td>
+						      <td style="padding-left: 10px;padding-right: 10px;">暗黑破坏神3-《死暗黑破坏神3-《死法師的崛起》台服版本</td>
+						      <td >
+						      	<p class="ordertimeday">2017-09-21</p>
+						      	<p class="ordertimehour">11:34</p>
+						      </td>
+						      <td>不知道什么原因就是用不了</td>
+						      
+						      
+						      <td>
+						      	<a class="deletorderbtn">待解决</a>
+						      	
+						      </td>
+						    </tr>
+						    
+						    
+						    
+						  </tbody>
+						</table>
+
+			</div>
+			
+			
+			<!--已退款订单-->
+			<div class="width1200 bg_fff" id="yituikuan" style="display: none;">
+				<table class="width1200 bg_fff" frame="void" rules="cols">
+						  
+						  <thead>
+						    <tr class="bg_fff td" style="height: 40px;">
+						      <th class="tablecenter" style="width: 13%;">订单编号</th>
+						      <th class="tablecenter" style="width: 21%;">商品名称</th>
+						      
+						      <th class="tablecenter" style="width: 13%;">收货人</th>
+						      <th class="tablecenter" style="width: 13%;">单价*数</th>
+						      <th class="tablecenter" style="width: 13%;">总金额</th>
+						      
+						      <th class="tablecenter" style="width: 13%;">订单状态</th>
+						      <th class="tablecenter" style="width: 13%;">退款日期</th>
+						    </tr>
+						  </thead>
+						  <tbody id="tuikuan_tb">
+						  	
+						    <tr class="td item">
+						      <td >
+						      	<div >
+						      		<input name="checkbox" type="checkbox" style="" class="ordercheck"/>
+						      		
+						      		<p class="ordercode">1325454</p>
+						      	</div>
+						      </td>
+						      <td style="padding-left: 10px;padding-right: 10px;">暗黑破坏神3-《死暗黑破坏神3-《死法師的崛起》台服版本</td>
+						      
+						      <td>啦啦啦</td>
+						      <td>
+						      	¥80*3
+						      </td>
+						      
+						      <td>
+						      	¥240
+						      </td>
+						      
+						      <td>
+						      	<a class="deletorderbtn">已取消</a>
+						      </td>
+						      <td >
+						      	<p class="ordertimeday">2017-09-21</p>
+						      	<p class="ordertimehour">11:34</p>
+						      </td>
+						    </tr>
+						    
+						    
+						    
+						  </tbody>
+						</table>
+
+						<div class="width1200 paybottom">
+							<input name="checkbox" type="checkbox" style="" class="choseallcheck"/>
+							
+						     <p class="margin_left20 fl" style="width: auto;">全选</p>
+						     <div style="width: auto;float: right;height: 50px;">
+						     	
+						     	
+						     	<div class="quxiaodiv">
+						     		<a style="color: #bb0404;">删除</a>				     	
+						     	</div>
+						     	
+						     	
+						     
+						</div>
+				
+				</div>
+				
+				
+			</div>
+			
+			<!--已取消订单-->
+			<div class="width1200 bg_fff" id="yiquxiao" style="display: none;">
+				<table class="width1200 bg_fff" frame="void" rules="cols">
+						  
+						  <thead>
+						    <tr class="bg_fff td" style="height: 40px;">
+						      <th class="tablecenter" style="width: 13%;">订单编号</th>
+						      <th class="tablecenter" style="width: 21%;">商品名称</th>
+						      
+						      <th class="tablecenter" style="width: 13%;">收货人</th>
+						      <th class="tablecenter" style="width: 13%;">单价*数</th>
+						      <th class="tablecenter" style="width: 13%;">总金额</th>
+						      
+						      <th class="tablecenter" style="width: 13%;">订单状态</th>
+						      <th class="tablecenter" style="width: 13%;">取消日期</th>
+						    </tr>
+						  </thead>
+						  <tbody id="quxiao_tb">
+						  	
+						    <tr class="td item">
+						      <td >
+						      	<div >
+						      		<input name="checkbox" type="checkbox" style="" class="ordercheck"/>
+						      		
+						      		<p class="ordercode">1325454</p>
+						      	</div>
+						      </td>
+						      <td style="padding-left: 10px;padding-right: 10px;">暗黑破坏神3-《死暗黑破坏神3-《死法師的崛起》台服版本</td>
+						      
+						      <td>啦啦啦</td>
+						      <td>
+						      	¥80*3
+						      </td>
+						      
+						      <td>
+						      	¥240
+						      </td>
+						      
+						      <td>
+						      	<a class="deletorderbtn">已取消</a>
+						      </td>
+						      <td >
+						      	<p class="ordertimeday">2017-09-21</p>
+						      	<p class="ordertimehour">11:34</p>
+						      </td>
+						    </tr>
+						    
+						    
+						    
+						  </tbody>
+						</table>
+
+						<div class="width1200 paybottom">
+							<input name="checkbox" type="checkbox" style="" class="choseallcheck"/>
+							
+						     <p class="margin_left20 fl" style="width: auto;">全选</p>
+						     <div style="width: auto;float: right;height: 50px;">
+						     	
+						     	
+						     	<div class="quxiaodiv">
+						     		<a style="color: #bb0404;">删除</a>				     	
+						     	</div>
+						     	
+						     	
+						     
+						</div>
+				
+				</div>
+				
+				
+			</div>
+			
+			
+			
+			
+			<p style="font-size: 20px;color: #1B1B1B;margin-top: 20px;">推荐商品</p>
+			
+			<div class="width1200" >
+			<div class="cargood clearfix" >
+				
+				
+				<!--<div class="cargooddiv" >
+					<div style="text-align: center;">
+					<img src="img/index_goods1.jpg" style="width: 220px;height: 160px;" />
+					</div>
+					<div style="width: 220px;">
+						<p  class="color_333 tuijianname">台服战网点数450点战网币450点-战网卡</p>
+					
+					</div>
+					<div class="pdiv">
+						<p class="goodoldprice">市场价¥200</p>
+						<p class="goodnewprice">¥198</p>
+					</div>
+					<div class="pdiv">
+						<p class="buynum">450人付款</p>
+						<p class="commentnum">137人评论</p>
+					</div>
+				</div>-->
+				
+				
+			</div>
+		</div>
+		
+		
+		<!--banner-->
+		<!--footer-->
+		<div class="footer bg_fff">
+			<!--footer_info-->
+			<div class="footer_info">
+				<div class="width1200 clearfix">
+					<div class="left fl">
+						<p class="font_size18 color_666 lineheight70">客服咨询</p>
+						<p class="font_size16 color_aaaaaa lineheight30">客服在线时间：09:00 - 12:00 <br />客&nbsp;&nbsp;服&nbsp;&nbsp;电&nbsp;&nbsp;话：400-000-8888</p>
+					</div>
+					<div class="center fl clearfix">
+	        			<div class="footer_ulbox fl">
+	        				<p class="font_size14 color_666 padding_top10 margin_bottom5">支付方式</p>
+	        				<ul>
+	        					<li><a href="" title="">支付宝</a></li>
+	        					<li><a href="" title="">微信</a></li>
+	        					<li><a href="" title="">百度钱包</a></li>
+	        					<li><a href="" title="">Paypal</a></li>
+	        					<li><a href="contactus.html" title="">网银</a></li>
+	        				</ul>
+	        			</div>
+	        			<div class="footer_ulbox fl margin_left60">
+	        				<p class="font_size14 color_666 padding_top10 margin_bottom5">接收卡密</p>
+	        				<ul>
+	        					<li><a href="" title="">平台接收 </a></li>
+	        					<li><a href="" title="">手机接收 </a></li>
+	        					<li><a href="" title="">邮箱接收</a></li>
+	        				</ul>
+	        			</div>
+	        			<div class="footer_ulbox fl margin_left60">
+	        				<p class="font_size14 color_666 padding_top10 margin_bottom5">售后服务</p>
+	        				<ul>
+	        					<li><a href="" title="">创建问题单 </a></li>
+	        					<li><a href="" title="">退款说明 </a></li>
+	        				</ul>
+	        			</div>
+	        			<div class="footer_ulbox fl margin_left60">
+	        				<p class="font_size14 color_666 padding_top10 margin_bottom5">客服互动</p>
+	        				<ul>
+	        					<li><a href="" title="">在线客服 </a></li>
+	        				</ul>
+	        			</div>
+	        			<div class="footer_ulbox fl margin_left60">
+	        				<p class="font_size14 color_666 padding_top10 margin_bottom5">购物指南</p>
+	        				<ul>
+	        					<li><a href="" title="">购物指南 </a></li>
+	        				</ul>
+	        			</div>
+	        		</div>
+	        		<div class="right fr">
+	        			<ul class="clearfix">
+        					<li>
+        						<p class="lineheight38 margin_bottom5"><img src="img/footer1.png" alt="" title=""/>官方微信</p>
+        						<div class="imgbox">
+        							<img src="img/erweima1.jpg" alt="" title=""/>
+        						</div>
+        					</li>
+        					<li class="margin_left60">
+        						<p class="lineheight38 margin_bottom5"><img src="img/footer2.png" alt="" title=""/>官方微博</p>
+        						<div class="imgbox">
+        							<img src="img/erweima2.jpg" alt="" title=""/>
+        						</div>
+        					</li>
+        				</ul>
+	        		</div>
+				</div>
+			</div>
+			<!--footer_info-->
+			<!--footer_support-->
+			<div class="footer_support text_center">
+				<div class="abox margin_bottom10">
+					<a href="" title="">关于网站</a>
+					<a href="" title="">合作伙伴</a>
+					<a href="" title="">联系客服</a>
+					<a href="" title="">诚征英才</a>
+					<a href="" title="">联系我们</a>
+					<a href="" title="">网站地图</a>
+					<a href="" title="">法律声明</a>
+					<a href="" title="">隐私权政策</a>
+					<a href="" title="">知识产权</a>
+				</div>
+				<p class="font_size12 color_666">© 2016 - 2017 Play2a.com 大型点卡交易商城 版权所有 <i class="color_bb0404">浙CIP备111222333号-1 </i>互联网违法和不良信息举报电话:0571-86158858 admin@Play2A.com</p>
+			</div>
+			<!--footer_support-->
+		</div>
+		<!--footer-->
+		<!--fixed_box-->
+		<div class="fixed_box">
+			<ul>
+				<li class="backtop"><img src="img/fixright.png" alt="" title=""/>TOP</li>
+				<li><a href="" title="">客服</a></li>
+				<li><a href="" title="">购物车</a></li>
+			</ul>
+		</div>
+		<!--fixed_box-->
+	</body>
+</html>
+<script src="js/jquery-1.12.2.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="js/public.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript" src="js/myorder.js" ></script>
+<script>
+	getmercate();
+	getshopcarlist();
+	gethotseachlist();
+	getlist(2);
+	getlist(3);
+	getlist(4);
+	getlist(5);
+	getlist(6);
+	getlist(7);
+	gettuijian();
+</script>

@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>商品详情</title>
+		<meta name="Description" content=""/>
+		<meta name="Keywords" content=""/>
+		<link rel="stylesheet" type="text/css" href="css/public.css"/>
+		<link rel="stylesheet" type="text/css" href="css/index.css"/>
+		<link rel="stylesheet" type="text/css" href="css/style.css"/>
+		<link rel="stylesheet" href="css/good.css" />
+	</head>
+	<body class="bg_eeeeee">
+		<div class="head bg_fff">
+			<div class="loginStatus" style="display: none;" id="nologindiv">
+				<div class="width1200 font_size14 clearfix">
+					<p class="fl color_666">我是商家，<a id="sellgologin" title="" class="color_eb6100">登录</a></p>
+					<p class="fl padding_left40 color_666">我是推广人，<a id="tuiguanggologin" title="" class="color_eb6100">登录</a></p>
+					<a id="usergologin" title="" class="fr color_eb6100"><img src="img/touxiang.png" alt="" title=""/>买家登录</a>
+				</div>
+			</div>
+			
+			<div class="loginStatus" id="havelogindiv">
+				<div class="width1200 font_size14 clearfix">
+					<!--alreadyLoginBox-->
+					<div class="alreadyLoginBox fr clearfix">
+						<ul class="alreadyLogin_ul clearfix fl">
+							<li class="alreadyLogin_carli this">
+								<a href="" title=""><span>购物车<i class="alreadyLogin_i"></i></span></a>
+								<!--alreadyLogin_goodsul-->
+								<ul class="alreadyLogin_goodsul">
+									<div class="height90 lineheight90" id="nogood">
+									    	<p style="text-align: center;color: #FF7400;">暂无商品~</p>
+									    </div>
+								</ul>
+								<!--alreadyLogin_goodsul end-->
+							</li>
+							<li>
+								<a href="myorder.html" title=""><span>我的订单</span></a>
+							</li>
+							<li>
+								<a href="mymessage.html" title=""><span>我的消息</span></a>
+							</li>
+						</ul>
+						<div class="fl clearfix padding_left20 padding_right10">
+							<img src="img/touxiang_c.png" alt="" title="" class="fl alreadyLogin_img"/>
+							<div class="fl alreadyLogin_centerBox color_666">
+								<div class="alreadyLogin_infop clearfix"><p class="fl alreadyLogin_namep ellipsisp">强壮的土豆</p>&nbsp;&nbsp;<i class="fontfamily_song font_size12 ellipsisp" id="userleve">LV7</i></div>
+								<ul class="alreadyLogin_centerul">
+									<li><a  title="">个人资料</a></li>
+									<li><a  title="">我的优惠券</a></li>
+									<li><a  title="">我的成长</a></li>
+									<li><a  title="">交易账单</a></li>
+									<li><a  title="">安全设置</a></li>
+								</ul>
+							</div>
+						</div>
+						<a href="" title="" class="color_eb6100" id="exit">退出</a>
+					</div>
+					<!--alreadyLoginBox end-->
+				</div>
+			</div>
+			<div class="width1200 clearfix height102box">
+				<div class="padding_top27 clearfix fl">
+					<a href="" class="fl imgbox"><img src="img/logo.jpg" alt="" title="" class="logoimg"/></a>
+				    <p class="lineheight50 fl padding_left20 font_size14 color_666">大型交易点卡平台</p>
+				</div>
+				<div class="padding_top27 fl padding_left130">
+				     <div class="searchbox clearfix">
+				     	<div class="fl">
+				     		 <img src="img/sousuo.png" alt="" title=""/>
+				     		 <input type="" name="" id="searchbox_input" value="" placeholder="输入关键字进行搜索"/>
+				     	</div>
+					     <button class="fr">搜索</button>
+					     <div class="searchbox_alert font_size14 color_666">
+					     	<ul id="seachlist">
+					     		
+					     	</ul>
+					     </div>
+				     </div>
+				     <div class="clearfix lineheight30">
+				     	<div class="fl abox clearfix" id="hotseachlist">
+				     		
+				     		
+				     	</div>
+				     	<!--<a href="" title="" class="fr color_eb6100 font_size12 fontfamily_song">展示更多>></a>-->
+				     </div>
+				</div>
+				<div class="fr padding_top20">
+					<a href="" title="" class="kefu_a"><img src="img/indexkefu.png" alt="" title=""/>在线客服咨询</a>
+					<p class="font_size16 color_eb6100 text_center padding_top5">400-000-8888</p>
+					<p class="fontfamily_song color_666 font_size12 text_center padding_top5">( 09:00 - 12:00 )</p>
+				</div>
+			</div>
+		</div>
+		
+		<div class="bg_ff7400">
+			<div class="width1200">
+				<ul class="banner_positionul clearfix">
+					<li class="this">
+						<p class="classify_p">全部商品分类<i class="classifyi"></i></p>
+						<ul class="banner_classiul">
+							
+							
+						</ul>
+					</li>
+					<li>
+						<a href="index.html" title="">首页</a>
+					</li>
+					<li>
+						<a href="news.html" title="">新闻资讯</a>
+					</li>
+					<li>
+						<a href="" title="">平台公告</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+		
+		
+		<div class="width1200">
+			
+			<div class="gooddetail" >
+				<!--详情-->
+				<div style="height: 430px;background: white;">
+					<div style="height: 320px;" class="clearfix">
+						<img class="detailhomeimg" src="img/tu1_.png" />
+						<div class="goodinfodiv">
+							<p id="detailname" class="onlyone font_size20"></p>
+							<div class="margin_top20" style="display: none;"> 
+								<p class="fl font_size14 font_blod">可用语言：</p>
+								<img style="height: 80px;width: 233px;" src="img/yuyan.png" />
+							</div>
+							<p class="margin_top20 font_size14 font_blod">平&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;台：<span id="pingtai"> STEAM</span></p>
+							<div class="margin_top20 clearfix">
+								<p class="font_size20 font_blod color_7400 fl" id="nowprice">￥80</p>
+								<p class="fl font_size14 text_linethrough margin_top5 margin_left20" id="oldprice">￥90</p>
+								<p class="fl margin_left20 font_size14 color_7400 margin_top5" id="zhekou">9.8折</p>
+								
+								<p class="fr font_size14 margin_top5" id="kucun">库存：72</p>
+							</div>
+							
+							<div class="margin_top20 clearfix">
+								<p class="fl font_size14 " id="paynum">0人付款</p>
+								<p class="fl font_size14 margin_left40" id="commentnum">0人评论</p>
+							</div>
+							<p class="font_size12 margin_top30">付款方式：支付宝，微信，百度钱包，Paypal，网银</p>
+						</div>
+					
+						
+					
+					
+					</div>
+					<div class="margin_top10">
+					<div class=" fl" style="margin-left: 14px;">
+						<img class=" fl" style="height: 71px;width: 85px;margin-left: 6px;" src="img/tu1_.png"/>
+						<img class=" fl" style="height: 71px;width: 85px;margin-left: 6px;" src="img/tu1_.png"/>	
+						<img class=" fl" style="height: 71px;width: 85px;margin-left: 6px;" src="img/tu1_.png"/>	
+						<img class=" fl" style="height: 71px;width: 85px;margin-left: 6px;" src="img/tu1_.png"/>	
+					</div>
+						<div class="fl margin_left20 clearfix">
+							<div class="clearfix">
+								<p class="fl font_size12 color_fff lineheight30 wansellgood" class="">我要出售此商品</p>
+								<p class="fl font_size12 color_fff lineheight30 margin_left40 wansellgood" >我要推荐此商品</p>
+							</div>
+							
+							<div class="margin_top20">
+								<p class="font_size12 font_blod fl">分&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;享：</p>
+								<img class="fl" src="img/shareqqimg.png" />
+								<img class="fl margin_left20" src="img/sharewximg.png" />
+							</div>
+						</div>
+						
+						
+						
+					</div>
+				</div>
+				
+				
+				<!--销售此产品的其他商家-->
+				<div class="margin_top30 padding_20 bg_fff">
+					<p class="color_7400">销售此产品的其他商家</p>
+					
+					<div style="width: 860px;" class="margin_top20 ">
+						<div class="sellotheritem">
+							<img style="height: 80px;width: 80px;" src="img/touxiang1.png" class="fl"/>
+							<div class="fl margin_left20">
+								<div>
+									<p style="line-height: 26px;" class="fl">国籍：</p>
+									<img src="img/guoqi.png" style="width: 36px;height: 26px;" class="fl"/>
+								</div>
+								<div class="fl margin_top20">
+								
+								<ul class="comment fl">
+								    <li class="commentli">☆</li>
+								    <li class="commentli">☆</li>
+								    <li class="commentli">☆</li>
+								    <li class="commentli">☆</li>
+								    <li class="commentli">☆</li>
+								</ul>
+								
+								<p class="fl margin_left10 lineheight30">0</p>
+								<p class="fl margin_left20 lineheight30">月售：0</p>
+							</div>
+								
+							</div>
+							
+							<div class="fl margin_left60">
+								<div >
+									<p class="fl lineheight30">商家诚信：</p>
+									<img  src="img/chengxin4.png"/>
+								</div>
+								<p class="lineheight30 margin_top20">商户等级：青铜</p>
+							</div>
+							
+							<div class="fr" >
+								<p class="color_7400 font_size20 font_blod " style="text-align: center;">￥ 79</p>
+								<a class="font_size12 color_fff lineheight30 wansellgood margin_top20" >立即购买</a>
+							</div>
+							
+						</div>
+						
+						
+						<div class="sellotheritem">
+							<img style="height: 80px;width: 80px;" src="img/touxiang1.png" class="fl"/>
+							<div class="fl margin_left20">
+								<div>
+									<p style="line-height: 26px;" class="fl">国籍：</p>
+									<img src="img/guoqi.png" style="width: 36px;height: 26px;" class="fl"/>
+								</div>
+								<div class="fl margin_top20">
+								
+								<ul class="comment fl">
+								    <li class="commentli">☆</li>
+								    <li class="commentli">☆</li>
+								    <li class="commentli">☆</li>
+								    <li class="commentli">☆</li>
+								    <li class="commentli">☆</li>
+								</ul>
+								
+								<p class="fl margin_left10 lineheight30">0</p>
+								<p class="fl margin_left20 lineheight30">月售：0</p>
+							</div>
+								
+							</div>
+							
+							<div class="fl margin_left60">
+								<div >
+									<p class="fl lineheight30">商家诚信：</p>
+									<img  src="img/chengxin4.png"/>
+								</div>
+								<p class="lineheight30 margin_top20">商户等级：青铜</p>
+							</div>
+							
+							<div class="fr" >
+								<p class="color_7400 font_size20 font_blod " style="text-align: center;">￥ 79</p>
+								<a class="font_size12 color_fff lineheight30 wansellgood margin_top20" >立即购买</a>
+							</div>
+							
+						</div>
+						
+						
+						<div class="sellotheritem">
+							<img style="height: 80px;width: 80px;" src="img/touxiang1.png" class="fl"/>
+							<div class="fl margin_left20">
+								<div>
+									<p style="line-height: 26px;" class="fl">国籍：</p>
+									<img src="img/guoqi.png" style="width: 36px;height: 26px;" class="fl"/>
+								</div>
+								<div class="fl margin_top20">
+								
+								<ul class="comment fl">
+								    <li class="commentli">☆</li>
+								    <li class="commentli">☆</li>
+								    <li class="commentli">☆</li>
+								    <li class="commentli">☆</li>
+								    <li class="commentli">☆</li>
+								</ul>
+								
+								<p class="fl margin_left10 lineheight30">0</p>
+								<p class="fl margin_left20 lineheight30">月售：0</p>
+							</div>
+								
+							</div>
+							
+							<div class="fl margin_left60">
+								<div >
+									<p class="fl lineheight30">商家诚信：</p>
+									<img  src="img/chengxin4.png"/>
+								</div>
+								<p class="lineheight30 margin_top20">商户等级：青铜</p>
+							</div>
+							
+							<div class="fr" >
+								<p class="color_7400 font_size20 font_blod " style="text-align: center;">￥ 79</p>
+								<a class="font_size12 color_fff lineheight30 wansellgood margin_top20" >立即购买</a>
+							</div>
+							
+						</div>
+						
+						
+					</div>
+					
+					
+					<div style="line-height:40px;width: 860px;background: rgba(238, 238, 238, 1);height: 40px;text-align: center;" class="margin_top20 margin_bottom30">
+						<a>查看所有商家</a>
+					</div>
+				</div>
+				
+				<!--商品详情-->
+				<div style="margin-top: 20px;background: white;width: 900px;">
+					<div style="height: 41px;background: rgba(218, 218, 218, 1);">
+						<ul class="detail_positionul clearfix">
+
+							<li class="detailclickli">
+								<a title="">商品介绍</a>
+							</li>
+							<li>
+								<a title="">商品评价</a>
+							</li>
+							<li>
+								<a  title="">配置要求</a>
+							</li>
+							<li>
+								<a  title="">安装激活</a>
+							</li>
+							<li>
+								<a title="">问题反馈</a>
+							</li>
+							<li>
+								<a title="">购物指南</a>
+							</li>
+							<li>
+								<a title="">售后保障</a>
+							</li>
+							<li>
+								<a title="">相关公告</a>
+							</li>
+
+						</ul>
+					</div>
+					<!--商品介绍-->
+					<div class="goodjieshao">
+						
+					</div>
+					
+					<!--评论-->
+					<div class="pingjia"  style="display: none;">
+						<div style="height: 40px;line-height: 40px;padding-left: 20px;padding-right: 20px;">
+							<p style="font-size: 14px;float: left;">评价数：123</p>
+							<div style="float: left;margin-top: 3px;margin-left: 10px;">
+								<ul class="comment">
+								    <li class="commentli">☆</li>
+								    <li class="commentli">☆</li>
+								    <li class="commentli">☆</li>
+								    <li class="commentli">☆</li>
+								    <li class="commentli">☆</li>
+								</ul>
+							</div>
+							<p style="float: left;margin-left: 5px;">0分</p>
+							<div style="float: right;">
+								
+								<input type="radio" name="radio" value="1" checked="checked" style="margin-left: 20px;">好评
+								<input type="radio" name="radio" value="2" style="margin-left: 20px;">中评
+								<input type="radio" name="radio" value="3" style="margin-left: 20px;">差评
+							</div>
+						</div>
+						<hr width="100%" size="1" color="#EBEBEB" style="margin: 0;"/>
+						<div class="clearfix" style="border: solid;border-color: #EBEBEB;border-width: 0px 0px 1px 0px;">
+							<img style="margin-top: 20px;margin-left: 20px;width: 60px;height: 60px;float: left;"  src="img/touxiang1.png"/>
+						
+							<div style="float: left;margin-left: 20px;margin-top: 20px;width: 780px;">
+								<div style="" class="clearfix">
+									<p style="font-size: 14px;float: left;">lalal</p>
+									<p style="font-size: 14px;float: left;margin-left: 15px;color: #a6a6a6;">国籍：中国</p>
+									<p style="font-size: 14px;float: right;color: #a6a6a6;">2018-09-09     13:40</p>
+								</div>
+								<div class=" clearfix" >
+									<div style="float: left;">
+										<ul class="comment">
+										    <li class="commentli">☆</li>
+										    <li class="commentli">☆</li>
+										    <li class="commentli">☆</li>
+										    <li class="commentli">☆</li>
+										    <li class="commentli">☆</li>
+										</ul>
+									</div>
+									<p style="float: left;line-height: 30px;margin-left: 10px;">0</p>
+								</div>
+								
+								<p style="font-size: 16px;margin-bottom: 10px;">很好，很棒，客服很细心，教我怎么操作，秒充成功。我一直在这家买暗黑的东西，信得过，速度飞一般的到了，充值神速100%的诚信！</p>
+							</div>
+						</div>
+						
+						<div class="clearfix" style="border: solid;border-color: #EBEBEB;border-width: 0px 0px 1px 0px;">
+							<img style="margin-top: 20px;margin-left: 20px;width: 60px;height: 60px;float: left;"  src="img/touxiang1.png"/>
+						
+							<div style="float: left;margin-left: 20px;margin-top: 20px;width: 780px;">
+								<div style="" class="clearfix">
+									<p style="font-size: 14px;float: left;">lalal</p>
+									<p style="font-size: 14px;float: left;margin-left: 15px;color: #a6a6a6;">国籍：中国</p>
+									<p style="font-size: 14px;float: right;color: #a6a6a6;">2018-09-09     13:40</p>
+								</div>
+								<div class=" clearfix" >
+									<div style="float: left;">
+										<ul class="comment">
+										    <li class="commentli">☆</li>
+										    <li class="commentli">☆</li>
+										    <li class="commentli">☆</li>
+										    <li class="commentli">☆</li>
+										    <li class="commentli">☆</li>
+										</ul>
+									</div>
+									<p style="float: left;line-height: 30px;margin-left: 10px;">0</p>
+								</div>
+								
+								<p style="font-size: 16px;margin-bottom: 10px;">很好，很棒，客服很细心，教我怎么操作，秒充成功。我一直在这家买暗黑的东西，信得过，速度飞一般的到了，充值神速100%的诚信！</p>
+							</div>
+						</div>
+						
+						
+						
+						
+						
+					</div>
+					
+				</div>
+				
+			</div>
+			
+			<!--推荐商品-->
+			<div class="detailgood">
+				<p class="gooddetailinfop">商家信息</p>
+				
+				
+					<div class="detailinfodiv">
+					<img src="img/logo.jpg" class="detailhomeimg2" />
+					<p class="guangwangziyingp">官网自营</p>
+				
+					<button type="button" class="goodbtn" id="addtoshopcar">加入购物车</button>
+					<button type="button" class="goodbtn" id="buyfast">立即购买</button>
+					<p class="goodtuijiantext margin_left20">推荐商品</p>
+					</div>
+				
+				<!--<div class="detailgooddiv">
+					<div style="text-align: center;">
+					<img src="img/index_goods1.jpg"  class="width220 height160"/>
+					</div>
+					<div class="width220">
+						<p class="color_333 tuijiangoodname">台服战网点数450点战网币450点-战网卡</p>
+					
+					</div>
+					<div class="width220 margin_top10">
+						<p class="goodoldprice">市场价¥200</p>
+						<p class="goodnewprice">¥198</p>
+					</div>
+					<div class="width220 margin_top10">
+						<p class="tuijianbuynum">450人付款</p>
+						<p class="tuijiancommentnum">137人评论</p>
+					</div>
+				</div>-->
+		
+				
+				
+				
+		
+			
+			
+			</div>
+		<div style="clear:both"></div>
+		</div>
+		
+		
+		
+		<div class="footer bg_fff">
+			<!--friendslink-->
+			<!--footer_info-->
+			<div class="footer_info">
+				<div class="width1200 clearfix">
+					<div class="left fl">
+						<p class="font_size18 color_666 lineheight70">客服咨询</p>
+						<p class="font_size16 color_aaaaaa lineheight30">客服在线时间：09:00 - 12:00 <br />客&nbsp;&nbsp;服&nbsp;&nbsp;电&nbsp;&nbsp;话：400-000-8888</p>
+					</div>
+					<div class="center fl clearfix">
+	        			<div class="footer_ulbox fl">
+	        				<p class="font_size14 color_666 padding_top10 margin_bottom5">支付方式</p>
+	        				<ul>
+	        					<li><a href="" title="">支付宝</a></li>
+	        					<li><a href="" title="">微信</a></li>
+	        					<li><a href="" title="">百度钱包</a></li>
+	        					<li><a href="" title="">Paypal</a></li>
+	        					<li><a href="contactus.html" title="">网银</a></li>
+	        				</ul>
+	        			</div>
+	        			<div class="footer_ulbox fl margin_left60">
+	        				<p class="font_size14 color_666 padding_top10 margin_bottom5">接收卡密</p>
+	        				<ul>
+	        					<li><a href="" title="">平台接收 </a></li>
+	        					<li><a href="" title="">手机接收 </a></li>
+	        					<li><a href="" title="">邮箱接收</a></li>
+	        				</ul>
+	        			</div>
+	        			<div class="footer_ulbox fl margin_left60">
+	        				<p class="font_size14 color_666 padding_top10 margin_bottom5">售后服务</p>
+	        				<ul>
+	        					<li><a href="" title="">创建问题单 </a></li>
+	        					<li><a href="" title="">退款说明 </a></li>
+	        				</ul>
+	        			</div>
+	        			<div class="footer_ulbox fl margin_left60">
+	        				<p class="font_size14 color_666 padding_top10 margin_bottom5">客服互动</p>
+	        				<ul>
+	        					<li><a href="" title="">在线客服 </a></li>
+	        				</ul>
+	        			</div>
+	        			<div class="footer_ulbox fl margin_left60">
+	        				<p class="font_size14 color_666 padding_top10 margin_bottom5">购物指南</p>
+	        				<ul>
+	        					<li><a href="" title="">购物指南 </a></li>
+	        				</ul>
+	        			</div>
+	        		</div>
+	        		<div class="right fr">
+	        			<ul class="clearfix">
+        					<li>
+        						<p class="lineheight38 margin_bottom5"><img src="img/footer1.png" alt="" title=""/>官方微信</p>
+        						<div class="imgbox">
+        							<img src="img/erweima1.jpg" alt="" title=""/>
+        						</div>
+        					</li>
+        					<li class="margin_left60">
+        						<p class="lineheight38 margin_bottom5"><img src="img/footer2.png" alt="" title=""/>官方微博</p>
+        						<div class="imgbox">
+        							<img src="img/erweima2.jpg" alt="" title=""/>
+        						</div>
+        					</li>
+        				</ul>
+	        		</div>
+				</div>
+			</div>
+			<!--footer_info-->
+			<!--footer_support-->
+			<div class="footer_support text_center">
+				<div class="abox margin_bottom10">
+					<a href="" title="">关于网站</a>
+					<a href="" title="">合作伙伴</a>
+					<a href="" title="">联系客服</a>
+					<a href="" title="">诚征英才</a>
+					<a href="" title="">联系我们</a>
+					<a href="" title="">网站地图</a>
+					<a href="" title="">法律声明</a>
+					<a href="" title="">隐私权政策</a>
+					<a href="" title="">知识产权</a>
+				</div>
+				<p class="font_size12 color_666">© 2016 - 2017 Play2a.com 大型点卡交易商城 版权所有 <i class="color_bb0404">浙CIP备111222333号-1 </i>互联网违法和不良信息举报电话:0571-86158858 admin@Play2A.com</p>
+			</div>
+			<!--footer_support-->
+		</div>
+		<!--footer-->
+		<!--fixed_box-->
+		<div class="fixed_box">
+			<ul>
+				<li class="backtop"><img src="img/fixright.png" alt="" title=""/>TOP</li>
+				<li><a href="" title="">客服</a></li>
+				<li><a href="" title="">购物车</a></li>
+			</ul>
+		</div>
+	</body>
+	<script src="js/jquery-1.12.2.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/public.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript" src="js/good.js" charset="utf-8"></script>
+	<script type="text/javascript" src="js/gooddetail.js" ></script>
+	<!--<script src="js/jquery.SuperSlide.2.1.1.js" type="text/javascript" charset="utf-8"></script>-->
+	<script>
+		
+		gethotseachlist();
+		getmercate();
+		getshopcarlist();
+		gettuijian();
+	</script>
+
+	
+</html>

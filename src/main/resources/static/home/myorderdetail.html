@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>订单详情</title>
+		<meta name="Description" content=""/>
+		<meta name="Keywords" content=""/>
+		<link rel="stylesheet" type="text/css" href="css/public.css"/>
+		<link rel="stylesheet" type="text/css" href="css/style.css"/>
+		<link rel="stylesheet" type="text/css" href="css/index.css"/>
+		<link rel="stylesheet" href="css/shopcar.css" />
+		<link rel="stylesheet" href="css/myorder.css" />
+		<!--<link rel="stylesheet" href="css/bootstrap.min.css" />-->
+	</head>
+	<body class="bg_eeeeee">
+		<!--head-->
+		<div class="head bg_fff">
+			<div class="loginStatus" style="display: none;" id="nologindiv">
+				<div class="width1200 font_size14 clearfix">
+					<p class="fl color_666">我是商家，<a id="sellgologin" title="" class="color_eb6100">登录</a></p>
+					<p class="fl padding_left40 color_666">我是推广人，<a id="tuiguanggologin" title="" class="color_eb6100">登录</a></p>
+					<a id="usergologin" title="" class="fr color_eb6100"><img src="img/touxiang.png" alt="" title=""/>买家登录</a>
+				</div>
+			</div>
+			
+			<div class="loginStatus" id="havelogindiv">
+				<div class="width1200 font_size14 clearfix">
+					<!--alreadyLoginBox-->
+					<div class="alreadyLoginBox fr clearfix">
+						<ul class="alreadyLogin_ul clearfix fl">
+							<li class="alreadyLogin_carli this">
+								<a href="" title=""><span>购物车<i class="alreadyLogin_i"></i></span></a>
+								<!--alreadyLogin_goodsul-->
+								<ul class="alreadyLogin_goodsul">
+									
+									<div class="height90 lineheight90" id="nogood">
+									    	<p style="text-align: center;color: #FF7400;">暂无商品~</p>
+									    </div>
+								</ul>
+								<!--alreadyLogin_goodsul end-->
+							</li>
+							<li>
+								<a href="myorder.html" title=""><span>我的订单</span></a>
+							</li>
+							<li>
+								<a href="mymessage.html" title=""><span>我的消息</span></a>
+							</li>
+						</ul>
+						<div class="fl clearfix padding_left20 padding_right10">
+							<img src="img/touxiang_c.png" alt="" title="" class="fl alreadyLogin_img"/>
+							<div class="fl alreadyLogin_centerBox color_666">
+								<div class="alreadyLogin_infop clearfix"><p class="fl alreadyLogin_namep ellipsisp">强壮的土豆</p>&nbsp;&nbsp;<i class="fontfamily_song font_size12 ellipsisp" id="userleve">LV7</i></div>
+								<ul class="alreadyLogin_centerul">
+									<li><a  title="">个人资料</a></li>
+									<li><a  title="">我的优惠券</a></li>
+									<li><a  title="">我的成长</a></li>
+									<li><a  title="">交易账单</a></li>
+									<li><a  title="">安全设置</a></li>
+								</ul>
+							</div>
+						</div>
+						<a href="" title="" class="color_eb6100" id="exit">退出</a>
+					</div>
+					<!--alreadyLoginBox end-->
+				</div>
+			</div>
+			<div class="width1200 clearfix height102box">
+				<div class="padding_top27 clearfix fl">
+					<a href="" class="fl imgbox"><img src="img/logo.jpg" alt="" title="" class="logoimg"/></a>
+				    <p class="lineheight50 fl padding_left20 font_size14 color_666">大型交易点卡平台</p>
+				</div>
+				<div class="padding_top27 fl padding_left130">
+				     <div class="searchbox clearfix">
+				     	<div class="fl">
+				     		 <img src="img/sousuo.png" alt="" title=""/>
+				     		 <input type="" name="" id="searchbox_input" value="" placeholder="输入关键字进行搜索"/>
+				     	</div>
+					     <button class="fr">搜索</button>
+					     <div class="searchbox_alert font_size14 color_666">
+					     	<ul id="seachlist">
+					     		
+					     		
+					     	</ul>
+					     </div>
+				     </div>
+				     <div class="clearfix lineheight30">
+				     	<div class="fl abox clearfix" id="hotseachlist">
+				     		
+				     		
+				     	</div>
+				     	<!--<a href="" title="" class="fr color_eb6100 font_size12 fontfamily_song">展示更多>></a>-->
+				     </div>
+				</div>
+				<div class="fr padding_top20">
+					<a href="" title="" class="kefu_a"><img src="img/indexkefu.png" alt="" title=""/>在线客服咨询</a>
+					<p class="font_size16 color_eb6100 text_center padding_top5">400-000-8888</p>
+					<p class="fontfamily_song color_666 font_size12 text_center padding_top5">( 09:00 - 12:00 )</p>
+				</div>
+			</div>
+		</div>
+		<!--head end-->
+		<!--banner-->
+		<div class="bg_ff7400">
+			<div class="width1200">
+				<ul class="banner_positionul clearfix">
+					<li >
+						<p class="classify_p">全部商品分类<i class="classifyi"></i></p>
+						<ul class="banner_classiul">
+							
+							
+						</ul>
+					</li>
+					<li>
+						<a href="index.html" title="">首页</a>
+					</li>
+					<li>
+						<a href="news.html" title="">新闻资讯</a>
+					</li>
+					<li>
+						<a href="" title="">平台公告</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+		
+		
+		<div class="margin_top20 margin_bottom20">
+			<div class="width1200 " >
+				<div class="width1200 " >
+				<a style="font-size: 20px;color: #1B1B1B;margin-top: 20px;float: left;">我的订单</a>
+				<p style="font-size: 20px;color: #1B1B1B;margin-top: 20px;float: left;">>订单详情</p>
+				<div style="clear: both;"></div>
+				<div style="font-size: 14px;color: #1B1B1B;background: white;width: 1200px;margin-top: 20px;">
+					<p style="font-size: 14px;color: #1B1B1B;line-height:48px;margin-left: 10px;">订单详情</p>
+					
+					<div style="background: rgba(250, 249, 229, 1);height: auto;width: 1200px;">
+						<div style="width: 100%;height: 80px;">
+							<div style="width: 50%;height: 100%;position:relative;float: left;">
+								<div style="position: absolute;top: 50%;transform: translateY(-50%);">
+									<p style="font-size: 14px;margin-left: 10px;">商品名称：暗黑破坏神3-《死靈法師的崛起》台服版本</p>
+									
+									<div style="margin-left: 10px;margin-top: 20px;">
+										<p style="font-size: 14px;float: left;">单价：¥80</p>
+										<p style="font-size: 14px;float: right;">数量：3</p>
+									</div>
+								</div>
+								
+							</div>
+							<div style="width: 40%;height: 100%;position:relative;float: left;">
+								<div style="position: absolute;top: 50%;transform: translateY(-50%);">
+									<p style="font-size: 14px;margin-left: 10px;">商品种类：暗黑破坏神</p>
+									<p style="font-size: 14px;margin-left: 10px;margin-top: 20px;">折扣券：未使用</p>
+								</div>
+								
+							</div>
+							
+							<div style="width: 10%;height: 100%;position:relative;float: left;">
+								<div style="position: absolute;top: 50%;transform: translateY(-50%);">
+									<p style="font-size: 14px;margin-left: 10px;float: left;">总金额：</p>
+									<p style="font-size: 14px;margin-left: 10px;float: left;color: #BB0404;">¥240</p>
+								</div>
+								
+							</div>
+						</div>
+						<hr align="center" width="100%" color="#E6E6E6" size="1" />
+						
+						<div style="width: 100%;height: 200px;">
+							<div style="width: 30%;height: 80px;float: left;margin-top: 10px;">
+								<div style="position: absolute;">
+									<p style="font-size: 14px;margin-left: 10px;">订单编号：121354</p>
+									<div style="margin-left: 10px;margin-top: 20px;">
+										<p style="font-size: 14px;float: left;">卡密：546545464564</p>
+										<a style="font-size: 14px;color: #FF7400;margin-left: 30px;float: left;display: block;">提取卡密</a>
+									</div>
+									
+									
+								</div>
+								
+							</div>
+							<div style="width: 40%;height: 80px;float: left;margin-top: 10px;">
+								<div style="position: absolute;">
+									<p style="font-size: 14px;margin-left: 10px;">下单时间：2018-04-26</p>
+									<p style="font-size: 14px;margin-left: 10px;margin-top: 20px;">收货人：啦啦啦</p>
+								</div>
+								
+							</div>
+							
+							<div style="width: 30%;height: 80px;float: left;margin-top: 10px;">
+								<div style="position: absolute;">
+									<p style="font-size: 14px;margin-left: 10px;">支付时间：2018-04-26</p>
+									<p style="font-size: 14px;margin-left: 10px;margin-top: 20px;">收货邮箱：1122334455@qq.com</p>
+								</div>
+								
+								
+								
+							</div>
+							
+							<div style="margin-left: 10px;margin-top: 20px;">
+										<p style="font-size: 14px;float: left;">我的评价：未评价</p>
+										<a class="addcommentbtn">添加评价</a>
+							<div style="clear: both;"></div>
+							</div>
+							
+							<div style="width: 100%;margin-top: 20px;height: auto;">
+								
+								<a class="questionbtn">创建问题单</a>
+								<p style="font-size: 14px;color: #a6a6a6;float: right;line-height: 30px;">对此单有疑问？</p>
+							</div>
+							
+						</div>
+						
+						
+						
+					</div>
+				</div>
+				
+					
+					
+					<div class="commentdiv" style="display: none;" id="comment">
+						<p style="font-size: 16px;color: #1B1B1B;line-height:48px;padding-left: 10px;background: rgba(250, 249, 229, 1);">我的评价</p>
+						<div style="margin-left: 50px;margin-top: 50px;">
+							<p style="float: left;line-height: 30px;">为此商品打分：</p>
+							<div style="float: left;">
+								<ul class="comment">
+								    <li class="commentli">☆</li>
+								    <li class="commentli">☆</li>
+								    <li class="commentli">☆</li>
+								    <li class="commentli">☆</li>
+								    <li class="commentli">☆</li>
+								</ul>
+							</div>
+							<div style="clear: both;"></div>
+						</div>
+					
+					<div class="commenttext">
+						<textarea  type="text" style="width: 1008px;height: 235px;background: rgba(245, 245, 245, 1);color: #000000;word-wrap:break-word" >
+						
+						</textarea>
+					</div>
+					
+					<div style="text-align: center;width: 270px;margin: auto;">
+						<a class="commentbtn" style="background: rgba(197, 197, 197, 1);" id="canclecomment">取消</a>
+						<a class="commentbtn" style="margin-left: 30px;background: #FF7400;">提交评价</a>
+						<div style="clear: both;"></div>
+					</div>
+					
+					
+					</div>
+					
+					
+					<div class="commentdiv" style="display: none;" id="question">
+						<p style="font-size: 16px;color: #1B1B1B;line-height:48px;padding-left: 10px;background: rgba(250, 249, 229, 1);">我的问题</p>
+						<div style="margin-left: 50px;margin-top: 50px;">
+							<p style="float: left;line-height: 30px;">选择申请原因：</p>
+							<div class="checkdiv">
+								
+								<input type="radio" name="radio" value="1">不能充值
+								<input type="radio" name="radio" value="2">卡密无效
+								<input type="radio" name="radio" value="3">提示卡密错误
+								<input type="radio" name="radio" value="4">其他
+							</div>
+							<div style="clear: both;"></div>
+						</div>
+					
+					<div class="commenttext">
+						<textarea  type="text" style="width: 1008px;height: 235px;background: rgba(245, 245, 245, 1);color: #000000;" >
+						
+						</textarea>
+					</div>
+					
+					<div style="text-align: center;width: 270px;margin: auto;">
+						<a class="commentbtn" style="background: rgba(197, 197, 197, 1);" id="canclequestion">取消</a>
+						<a class="commentbtn" style="margin-left: 30px;background: #FF7400;">提交评价</a>
+						<div style="clear: both;"></div>
+					</div>
+					
+					
+					</div>
+		
+				</div>
+			</div>
+		</div>
+		
+		
+		<!--banner-->
+		<!--footer-->
+		<div class="footer bg_fff">
+			<!--footer_info-->
+			<div class="footer_info">
+				<div class="width1200 clearfix">
+					<div class="left fl">
+						<p class="font_size18 color_666 lineheight70">客服咨询</p>
+						<p class="font_size16 color_aaaaaa lineheight30">客服在线时间：09:00 - 12:00 <br />客&nbsp;&nbsp;服&nbsp;&nbsp;电&nbsp;&nbsp;话：400-000-8888</p>
+					</div>
+					<div class="center fl clearfix">
+	        			<div class="footer_ulbox fl">
+	        				<p class="font_size14 color_666 padding_top10 margin_bottom5">支付方式</p>
+	        				<ul>
+	        					<li><a href="" title="">支付宝</a></li>
+	        					<li><a href="" title="">微信</a></li>
+	        					<li><a href="" title="">百度钱包</a></li>
+	        					<li><a href="" title="">Paypal</a></li>
+	        					<li><a href="contactus.html" title="">网银</a></li>
+	        				</ul>
+	        			</div>
+	        			<div class="footer_ulbox fl margin_left60">
+	        				<p class="font_size14 color_666 padding_top10 margin_bottom5">接收卡密</p>
+	        				<ul>
+	        					<li><a href="" title="">平台接收 </a></li>
+	        					<li><a href="" title="">手机接收 </a></li>
+	        					<li><a href="" title="">邮箱接收</a></li>
+	        				</ul>
+	        			</div>
+	        			<div class="footer_ulbox fl margin_left60">
+	        				<p class="font_size14 color_666 padding_top10 margin_bottom5">售后服务</p>
+	        				<ul>
+	        					<li><a href="" title="">创建问题单 </a></li>
+	        					<li><a href="" title="">退款说明 </a></li>
+	        				</ul>
+	        			</div>
+	        			<div class="footer_ulbox fl margin_left60">
+	        				<p class="font_size14 color_666 padding_top10 margin_bottom5">客服互动</p>
+	        				<ul>
+	        					<li><a href="" title="">在线客服 </a></li>
+	        				</ul>
+	        			</div>
+	        			<div class="footer_ulbox fl margin_left60">
+	        				<p class="font_size14 color_666 padding_top10 margin_bottom5">购物指南</p>
+	        				<ul>
+	        					<li><a href="" title="">购物指南 </a></li>
+	        				</ul>
+	        			</div>
+	        		</div>
+	        		<div class="right fr">
+	        			<ul class="clearfix">
+        					<li>
+        						<p class="lineheight38 margin_bottom5"><img src="img/footer1.png" alt="" title=""/>官方微信</p>
+        						<div class="imgbox">
+        							<img src="img/erweima1.jpg" alt="" title=""/>
+        						</div>
+        					</li>
+        					<li class="margin_left60">
+        						<p class="lineheight38 margin_bottom5"><img src="img/footer2.png" alt="" title=""/>官方微博</p>
+        						<div class="imgbox">
+        							<img src="img/erweima2.jpg" alt="" title=""/>
+        						</div>
+        					</li>
+        				</ul>
+	        		</div>
+				</div>
+			</div>
+			<!--footer_info-->
+			<!--footer_support-->
+			<div class="footer_support text_center">
+				<div class="abox margin_bottom10">
+					<a href="" title="">关于网站</a>
+					<a href="" title="">合作伙伴</a>
+					<a href="" title="">联系客服</a>
+					<a href="" title="">诚征英才</a>
+					<a href="" title="">联系我们</a>
+					<a href="" title="">网站地图</a>
+					<a href="" title="">法律声明</a>
+					<a href="" title="">隐私权政策</a>
+					<a href="" title="">知识产权</a>
+				</div>
+				<p class="font_size12 color_666">© 2016 - 2017 Play2a.com 大型点卡交易商城 版权所有 <i class="color_bb0404">浙CIP备111222333号-1 </i>互联网违法和不良信息举报电话:0571-86158858 admin@Play2A.com</p>
+			</div>
+			<!--footer_support-->
+		</div>
+		<!--footer-->
+		<!--fixed_box-->
+		<div class="fixed_box">
+			<ul>
+				<li class="backtop"><img src="img/fixright.png" alt="" title=""/>TOP</li>
+				<li><a href="" title="">客服</a></li>
+				<li><a href="" title="">购物车</a></li>
+			</ul>
+		</div>
+		<!--fixed_box-->
+	</body>
+</html>
+<script src="js/jquery-1.12.2.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="js/public.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript" src="js/myorder.js" ></script>
+<script>
+	getshopcarlist();
+	gethotseachlist();
+	getmercate();
+</script>

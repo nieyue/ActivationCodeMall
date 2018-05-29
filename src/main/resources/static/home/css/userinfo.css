@@ -1,0 +1,57 @@
+.userinfoul{width: 160px;text-align: center;}
+.userinfoul>li{height: 42px;line-height: 42px;border-top: 1px solid #ffffff;}
+.userinfoul>li a{color: #fff;}
+.userinfocontent{width: 1010px;margin-left:10px;height: 500px;background: white;float: left;padding-left: 20px;}
+.sexdiv{float: left;line-height: 20px;}
+.sexdiv>input{margin-left: 20px;}
+.birthday{float: left;border-style: solid;border-color:rgba(202, 201, 201, 1);border-style: solid;margin-left: 20px;}
+.updataimg{float: left;color: #FF7400;position:absolute;left;0;bottom:0;margin-left: 30px;}
+.username{font-size: 14px;float: left;margin-left: 20px;}
+.updataname{font-size: 14px;float: right;color: #4cafe9;margin-right: 20px;}
+.userheadimg{float: left;margin-left: 20px;}
+.useremail{font-size: 14px;float: left;margin-left: 20px;}
+.bindphone{font-size: 14px;float: left;margin-left: 20px;color: #FF7400;}
+.userphone{font-size: 14px;float: left;}
+/*优惠券css*/
+
+.youhuiquandiv{width: 1010px;margin-left:20px;height: auto;float: left;padding-left: 10px;}
+.youhuiquanimg{width: 130px;height: 74px;margin-left: 20px;margin-left: 10px;float: left;}
+.youhuiquanitem{width: 100%;height: 200px;background: white;margin-top: 10px;}
+.youquanyouxiaoqi{color: #666666;font-size: 14px;line-height: 30px;float: right;padding-right: 10px;}
+/*我的成长css*/
+.chengzhangdiv{width: 1020px;margin-left:20px;height: auto;float: left;background: #FFFFFF;padding-bottom: 30px;}
+.chengzhangtd{border:solid rgba(166, 166, 166, 1); border-width:0px 0px 1px 0px;}
+.chengzhangtd1{border:solid #FFFFFF; border-width:0px 0px 1px 0px;}
+.chengzhangtd>td{vertical-align: middle;text-align: center;}
+.chengzhangtable{width: 990px;margin-top: 30px;margin-left: 15px;border:solid rgba(166, 166, 166, 1);border-width:1px;}
+.onlyone{overflow: hidden;text-overflow: ellipsis;display: box;display: -webkit-box;-webkit-line-clamp: 1;-webkit-box-orient: vertical;}
+.chengzhangtime{margin-left: 13%;width: auto;float: left;}
+/*安全设置*/
+.setdiv{width: 1000px;margin-left:20px;height: auto;float: left;background: #FFFFFF;padding-bottom: 30px;padding-left: 20px;}
+.bghui{margin-top: 20px;width: 980px;background: rgba(238, 238, 238, 1);}
+.setitem{margin-top: 20px;width: 960px;background: rgba(238, 238, 238, 1);height: 50px;line-height: 50px;padding-left: 10px;padding-right: 10px;}
+.setitem2{height: 50px;line-height: 50px;padding-left: 10px;padding-right: 10px;}
+.safediv{margin-top: 20px;width: 50%;height: 30px;background: #FF7400;border-radius: 15px;}
+.safeuseremail{margin-left: 20px;font-size: 14px;}
+.safebindphone{float: right;color: #FF7400;font-size: 14px;}
+.safephone{margin-left: 10px;font-size: 14px;float: left;}
+.setitemimg{float: left;width: 12px;height: 12px;margin-top: 18px;}
+.mimadengji{margin-left: 10px;font-size: 14px;width: 200px;float: left;}
+.updatapassword{float: right;color: #FF7400;font-size: 14px;}
+.setkami{margin-left: 20px;font-size: 14px;width: 300px;float: left;}
+.kamiselect{line-height: 50px;}
+/*交易记录*/
+.jiaoyidiv{width: 1020px;margin-left:20px;height: auto;float: left;background: #FFFFFF;padding-bottom: 30px;}
+
+/*收货地址*/
+.shouhuodiv{width: 1020px;margin-left:20px;float: left;padding-bottom: 30px;}
+.countryselect{border: solid 1px #000000;height: 26px;margin-left: 15px;}
+.inputstyle{width: 250px;margin-left: 15px;float: left;border: solid 1px rgba(204, 204, 204, 1);font-size: 14px;height: 26px;width: 260px;padding-left: 10px;}
+.inputdiv{margin-left: 25px;margin-top: 25px;line-height: 26px;}
+.savebtn{background: #FF7400;width: 60px;height: 30px;line-height: 30px;color: white;text-align: center;border-radius: 5px;}
+.addresstd{border:solid #FFFFFF; border-width:0px 0px 1px 0px;background: rgba(238, 238, 238, 1);}
+.addresstd1{border:solid #FFFFFF; border-width:0px 0px 1px 1px;}
+.addresstd>td{vertical-align: middle;text-align: center;}
+.addresstable{width: 975px;margin-top: 30px;}
+
+

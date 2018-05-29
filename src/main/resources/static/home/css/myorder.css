@@ -1,0 +1,45 @@
+.orderbanner_positionul>li{width: 199px;height: 42px;line-height: 42px;float: left;text-align: center;font-size: 14px;color: #fff;margin-left: 1px;}
+.orderbanner_positionul>li>a{font-size: 14px;color: #fff;display: block;}
+.orderbanner_positionul>li.this{background-color: #573c1e;}
+.inputstyle{margin-left: 10px;float: left;border: solid 1px rgba(204, 204, 204, 1);font-size: 14px;height: 32px;width: 200px;}
+.pay_positionul>li{width: 220px;height: 80px;line-height: 80px;float: left;font-size: 14px;color: #000;margin-left: 20px;margin-top: 20px;}
+.pay_positionul>li>a{font-size: 14px;color: #fff;display: block;}
+.pay_positionul>li.this{background-color: #573c1e;}
+.payborder{border-radius:5px;border: solid 1px rgba(224, 224, 224, 1);}
+.payborder7400{border-radius:5px;border: solid 1px rgba(255, 116, 0, 1);}
+.payimg{float: left;margin-left: 20px;margin-top: 15px;}
+.paytext{color: #999999;margin-left: 84px;}
+.questionbtn{font-size: 14px;color: #FF7400;display: block;background: #FF7400;height: 30px;width: 120px;color: white;text-align: center;line-height: 30px;float: right;margin-right: 10px;border-radius: 5px;}
+.addcommentbtn{font-size: 14px;color: #FF7400;margin-left: 30px;float: left;display: block;}
+ .comment {
+            font-size: 20px;
+            color: #FF7400;
+            list-style: none;
+        }
+
+        .commentli {
+            float: left;
+            line-height: 30px;
+            cursor: pointer;
+        }
+.commenttext{width: 1018px;height: 245px;margin-top: 20px;margin-left: 50px;background: rgba(245, 245, 245, 1);padding: 5px;}
+.commentbtn{margin-top: 30px;width: 120px;height: 30px;text-align: center;line-height: 30px;float: left;border-radius: 5px;color:white;}      
+.commentdiv{width: 1200px;margin-top: 20px;height: auto;background: white;padding-bottom: 20px;}
+.checkdiv{float: left;line-height: 30px;}
+.checkdiv>input{margin-left: 20px;}
+.ordercheck{margin-left: 10%;float: left;margin-top: 5px;}
+.ordercode{margin-left: 13%;width: auto;float: left;color: #FF7400;height: 20px;}
+.ordertimeday{width: auto;display: block;color: #000000;}
+.ordertimehour{width: auto;color: #000000;margin-top: 5px;}
+.deletorderbtn{width: auto;display: block;color: #FF7400;font-size: 14px;}
+.topaybtn{width: auto;color: #FF7400;display: block;margin-top: 5px;font-size: 14px;}
+.shouhoubtn{width: auto;color: #FF7400;display: block;margin-top: 5px;font-size: 14px;}
+.paybottom{background: rgba(224, 224, 224, 1);height: 50px;margin-top: 30px;line-height: 50px;}
+.choseallcheck{margin-left: 15px;float: left;margin-top: 18px;}
+.quxiaodiv{text-align: center;width: 120px;height: 50px;margin: auto;background: #d3d3d3;float: left;margin-left: 20px;}
+.commitorderdiv{text-align: center;width: 120px;height: 50px;margin: auto;background: #FF7400;float: left;}
+.chosmoneydiv{width: auto;height: 50px;margin: auto;float: left;}
+.item{height: 88px;background: rgba(250, 249, 229, 1);}
+.buynum{color: #666666;font-size: 14px;width: auto;float: left;}
+.commentnum{color: #666666;font-size: 14px;text-align: right;}
+.tuijianname{line-height: 20px;width: 218px;font-size: 14px;}
