@@ -53,6 +53,11 @@ public class MerOrderComment implements Serializable{
 	 */
 	@ApiModelProperty(value="评论人id外键",example="评论人id外键")
 	private Integer accountId;
+	/**
+	 * 评论人
+	 */
+	@ApiModelProperty(value="评论人",example="评论人")
+	private Account account;
 	public Integer getMerOrderCommentId() {
 		return merOrderCommentId;
 	}
@@ -98,7 +103,11 @@ public class MerOrderComment implements Serializable{
 	public static long getSerialversionuid() {
 		return serialVersionUID;
 	}
-	
-
+	public Account getAccount() {
+		return account;
+	}
+	public void setAccount(Account account) {
+		this.account = account;
+	}
 	
 }

@@ -1,16 +1,17 @@
 $(function(){
-	
-	var request  = getUrlInfo(location.search);
-	var roletype = request["roletype"];
-	if(roletype==1){
+	business.request  = getUrlInfo(location.search);
+	business.roletype = business.request["roletype"];
+	if(business.roletype==1){
 		$("#whologin").text("点卡交易平台-商户登录");
-	}else if(roletype==2){
+	}else if(business.roletype==2){
 		$("#whologin").text("点卡交易平台-推广人登录");
-	}else if(roletype==3){
+	}else if(business.roletype==3){
 		$("#whologin").text("点卡交易平台-用户登录");
+	}else{
+		location.href="/"
 	}
 	$("#goregiest").click(function(){
-		window.location.href = "register_step1.html?roletype="+roletype;
+		window.location.href = "register_step1.html?roletype="+business.roletype;
 	});
 	
 	$(".register_button").click(function(){
@@ -25,19 +26,19 @@ $(function(){
 				$(".register_button").attr("disabled", true);
 				ajxget("/account/weblogin",info,function(data){
 					if(data.code==200){
-						var roleId = data.data[0].account.roleId;
+						var roleName = data.data[0].account.roleName;
 						sessionStorage.setItem("account",JSON.stringify(data.data[0].account));
 						sessionStorage.setItem("accountLevelList",JSON.stringify(data.data[0].accountLevelList));
 						sessionStorage.setItem("finance",JSON.stringify(data.data[0].finance));
 						sessionStorage.setItem("integrall",JSON.stringify(data.data[0].integrall));
 
-						if(roleId==1003){
+						if(roleName=="用户"){
 							window.location.href='index.html';
-						}else if(roleId==1002){
+						}else if(roleName=="推广户"){
 							window.location.href='hongli/hongli_index.html';
-						}else if(roleId==1001){
+						}else if(roleName=="商户"){
 							window.location.href='sell/sell_index.html';
-						}else if(roleId==1000){
+						}else if(roleName=="超级管理员"){
 							alert("您是管理员，请于管理员页面进行登录");
 						}
 					}else{

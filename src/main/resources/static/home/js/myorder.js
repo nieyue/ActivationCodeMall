@@ -90,7 +90,6 @@ $("#canclequestion").click(function(){
 	$("#question").toggle();
 });
 })
-var acountid = localStorage.getItem("acountId");
 function getlist(status){
 	var info;
 	if(status==7){
@@ -99,14 +98,14 @@ function getlist(status){
 		substatus:4,
 		pageNum:1,
 		pageSize:100,
-		accountId:acountid
+		accountId:business.accountId
 		};
 	}else{
 		info = {
 		status:status,
 		pageNum:1,
 		pageSize:100,
-		accountId:acountid
+		accountId:business.accountId
 		};
 	}
 	

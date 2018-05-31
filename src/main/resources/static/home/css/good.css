@@ -1,4 +1,4 @@
-.goodoldprice{color: #666666;font-size: 12px;text-decoration:line-through;width: auto;float: left;}
+﻿odoldprice{color: #666666;font-size: 12px;text-decoration:line-through;width: auto;float: left;}
 .goodnewprice{color: #666666;font-size: 14px;color: #FF7400;text-align: right;}
 .gooddetail{width: 900px;height: auto;margin-bottom: 40px;float: left;margin-top: 20px;}
 .goodbtn{margin-top:10px;text-align: center;background-color: #ff8700;width: 220px;height: 40px;margin-left: 20px;}
@@ -22,7 +22,10 @@
 .detailclickli{background-color: #FFFFFF;border: solid;border-color: #FF7400;border-width: 1px 0px 0px 0px;}
 .detailclickli>a{color: #FF7400;}
 
-.goodjieshao{height: 300px;padding: 20px;}
+.goodjieshao{height: auto;padding: 20px;}
+.goodjieshao img{
+	width:100% !important;
+}
 .pingjia{}
 .detailhomeimg{height: 300px;width: 360px;margin-left: 20px;margin-top: 20px;margin-right: 20px;float: left;}
 .goodinfodiv{width: 480px;float: left;margin-top: 20px;padding-right: 20px;}

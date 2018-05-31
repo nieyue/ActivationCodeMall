@@ -1,19 +1,12 @@
-var host = localStorage.getItem("urlHost");
-var pagenum = 1;
-var pagesize = 20;
-var articlelist;
-/*new_element=document.createElement("script");
-	new_element.setAttribute("type","text/javascript");
-	new_element.setAttribute("src","js/public.js");// 在这里引入了a.js
-	document.body.appendChild(new_element);*/
+//文章列表
 function getarticle(){
 	var info = {
-					pageNum:pagenum,
-					pageSize:pagesize
+					pageNum:1,
+					pageSize:10
 				}
 	
 	ajxget("/article/list",info,function(data){
-                   articlelist = data.data;
+                  var articlelist = data.data;
 		        	var table = $('.newsgroup');
 		        	for(var i = 0; i < articlelist.length; i++) {
 		        		var article = articlelist[i];
@@ -29,15 +22,13 @@ function getarticle(){
                 });
 		
 	}
-var url = window.location.pathname;
 
-if(url.indexOf("news.html")>-1){
+if(location.pathname.indexOf("news.html")>-1){
 	getarticle();
 }
 
 
-
-var articlecateid;
+//文章详情
 function getarticledetail(){
 	var request  = getUrlInfo(location.search);
 	var id = request["articleid"];
@@ -48,7 +39,7 @@ function getarticledetail(){
 	ajxget("/article/load",info,function(data){
 		if(data.code==200){
 			var article = data.data[0];
-			articlecateid = article.articleCateId;
+			business.articleCateId = article.articleCateId;
 			$("#articletime").text(article.createDate+"   来源："+article.resource);
 			$(".detailtitle").text(article.title);
 			var an=article.readingNumber;
@@ -59,20 +50,20 @@ function getarticledetail(){
 	});
 }
 
-if(url.indexOf("newsdetail.html")>-1){
+if(location.pathname.indexOf("newsdetail.html")>-1){
 	getarticledetail();
 }
-
+//相关新闻
 function getaboutarticle(){
 	
 	var info = {
 		pageNum:1,
 		pageSize:5,
-		articleCateId:articlecateid
+		articleCateId:business.articleCateId
 	}
 	ajxget("/article/list",info,function(data){
 		if(data.code==200){
-			articlelist = data.data;
+			var articlelist = data.data;
 		        	var table = $('.detailnews');
 		        	for(var i = 0; i < articlelist.length; i++) {
 		        		var article = articlelist[i];

@@ -14,9 +14,9 @@
 		<div class="head bg_fff">
 			<div class="loginStatus" style="display: none;" id="nologindiv">
 				<div class="width1200 font_size14 clearfix">
-					<p class="fl color_666">我是商家，<a id="sellgologin" title="" class="color_eb6100">登录</a></p>
-					<p class="fl padding_left40 color_666">我是推广人，<a id="tuiguanggologin" title="" class="color_eb6100">登录</a></p>
-					<a id="usergologin" title="" class="fr color_eb6100"><img src="img/touxiang.png" alt="" title=""/>买家登录</a>
+					<p class="fl color_666">我是商家，<a id="sellgologin" href="login.html?roletype=1" class="color_eb6100">登录</a></p>
+					<p class="fl padding_left40 color_666">我是推广人，<a id="tuiguanggologin" href="login.html?roletype=2"  class="color_eb6100">登录</a></p>
+					<a id="usergologin"  class="fr color_eb6100" href="login.html?roletype=3"><img src="img/touxiang.png" alt="" title=""/>买家登录</a>
 				</div>
 			</div>
 			
@@ -28,11 +28,11 @@
 							<li class="alreadyLogin_carli this">
 								<a href="" title=""><span>购物车<i class="alreadyLogin_i"></i></span></a>
 								<!--alreadyLogin_goodsul-->
-								<ul class="alreadyLogin_goodsul">
+								<div class="alreadyLogin_goodsul">
 									<div class="height90 lineheight90" id="nogood">
 									    	<p style="text-align: center;color: #FF7400;">暂无商品~</p>
-									    </div>
-								</ul>
+									</div>
+								</div>
 								<!--alreadyLogin_goodsul end-->
 							</li>
 							<li>
@@ -152,7 +152,7 @@
 					
 					</div>
 					<div class="margin_top10">
-					<div class=" fl" style="margin-left: 14px;">
+					<div id="merImgsWrap" class=" fl" style="margin-left: 14px;">
 						<img class=" fl" style="height: 71px;width: 85px;margin-left: 6px;" src="img/tu1_.png"/>
 						<img class=" fl" style="height: 71px;width: 85px;margin-left: 6px;" src="img/tu1_.png"/>	
 						<img class=" fl" style="height: 71px;width: 85px;margin-left: 6px;" src="img/tu1_.png"/>	
@@ -160,18 +160,20 @@
 					</div>
 						<div class="fl margin_left20 clearfix">
 							<div class="clearfix">
-								<p class="fl font_size12 color_fff lineheight30 wansellgood" class="">我要出售此商品</p>
-								<p class="fl font_size12 color_fff lineheight30 margin_left40 wansellgood" >我要推荐此商品</p>
+								<p class="fl font_size12 color_fff lineheight30 wansellgood" id="sellerMer">我要出售此商品</p>
+								<p class="fl font_size12 color_fff lineheight30 margin_left40 wansellgood" id="spreadMer">我要推荐此商品</p>
 							</div>
 							
 							<div class="margin_top20">
 								<p class="font_size12 font_blod fl">分&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;享：</p>
+								<a href="tencent://Message/?Uin=278076304&websiteName=q-zone.qq.com&Menu=yes">
 								<img class="fl" src="img/shareqqimg.png" />
+								</a>
+								<span style="display:inline-block;" >
 								<img class="fl margin_left20" src="img/sharewximg.png" />
+								</span>
 							</div>
 						</div>
-						
-						
 						
 					</div>
 				</div>
@@ -347,9 +349,9 @@
 					<!--评论-->
 					<div class="pingjia"  style="display: none;">
 						<div style="height: 40px;line-height: 40px;padding-left: 20px;padding-right: 20px;">
-							<p style="font-size: 14px;float: left;">评价数：123</p>
+							<p style="font-size: 14px;float: left;">评价数：<span id="merOrderCommentNumber">123</span></p>
 							<div style="float: left;margin-top: 3px;margin-left: 10px;">
-								<ul class="comment">
+								<ul class="comment" id="merScoreXing">
 								    <li class="commentli">☆</li>
 								    <li class="commentli">☆</li>
 								    <li class="commentli">☆</li>
@@ -357,7 +359,7 @@
 								    <li class="commentli">☆</li>
 								</ul>
 							</div>
-							<p style="float: left;margin-left: 5px;">0分</p>
+							<p style="float: left;margin-left: 5px;" id="merScore">0分</p>
 							<div style="float: right;">
 								
 								<input type="radio" name="radio" value="1" checked="checked" style="margin-left: 20px;">好评
@@ -366,7 +368,8 @@
 							</div>
 						</div>
 						<hr width="100%" size="1" color="#EBEBEB" style="margin: 0;"/>
-						<div class="clearfix" style="border: solid;border-color: #EBEBEB;border-width: 0px 0px 1px 0px;">
+						<div id="pingjialist">
+						<!-- <div class="clearfix" style="border: solid;border-color: #EBEBEB;border-width: 0px 0px 1px 0px;">
 							<img style="margin-top: 20px;margin-left: 20px;width: 60px;height: 60px;float: left;"  src="img/touxiang1.png"/>
 						
 							<div style="float: left;margin-left: 20px;margin-top: 20px;width: 780px;">
@@ -416,6 +419,7 @@
 								
 								<p style="font-size: 16px;margin-bottom: 10px;">很好，很棒，客服很细心，教我怎么操作，秒充成功。我一直在这家买暗黑的东西，信得过，速度飞一般的到了，充值神速100%的诚信！</p>
 							</div>
+						</div> -->
 						</div>
 						
 						
@@ -576,7 +580,7 @@
 		gethotseachlist();
 		getmercate();
 		getshopcarlist();
-		gettuijian();
+		
 	</script>
 
 	

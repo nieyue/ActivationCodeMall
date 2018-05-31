@@ -14,9 +14,9 @@
 		<div class="head bg_fff">
 			<div class="loginStatus"  id="nologindiv">
 				<div class="width1200 font_size14 clearfix">
-					<p class="fl color_666">我是商家，<a id="sellgologin" title="" class="color_eb6100">登录</a></p>
-					<p class="fl padding_left40 color_666">我是推广人，<a id="tuiguanggologin" title="" class="color_eb6100">登录</a></p>
-					<a id="usergologin" title="" class="fr color_eb6100"><img src="img/touxiang.png" alt="" title=""/>买家登录</a>
+					<p class="fl color_666">我是商家，<a id="sellgologin" href="login.html?roletype=1" class="color_eb6100">登录</a></p>
+					<p class="fl padding_left40 color_666">我是推广人，<a id="tuiguanggologin" href="login.html?roletype=2"  class="color_eb6100">登录</a></p>
+					<a id="usergologin"  class="fr color_eb6100" href="login.html?roletype=3"><img src="img/touxiang.png" alt="" title=""/>买家登录</a>
 				</div>
 			</div>
 			
@@ -266,7 +266,7 @@
 						<div class="index_right361 fr">
 							<p class="index_titlep">热销排行榜  TOP10</p>
 							<ul class="index_sortul">
-								<li class="sort1">
+								<!-- <li class="sort1">
 									<a href="" class="clearfix">
 										<p class="fl num_p">NO.1</p>
 										<p class="fl ellipsisp">《魔兽世界》台服周卡/月卡累计...</p>
@@ -325,7 +325,7 @@
 										<p class="fl num_p">NO.10</p>
 										<p class="fl ellipsisp">《魔兽世界》台服周卡/月卡累计...</p>
 									</a>
-								</li>
+								</li> -->
 							</ul>
 						</div>
 						<!--index_right360 end-->
@@ -486,6 +486,7 @@
 <script type="text/javascript" src="js/index.js" ></script>
 <script type="text/javascript">
 	gethotseachlist();
+	getrexiaopaihang();
     jQuery(".txtScroll_top").slide({mainCell:".bd ul",autoPage:true,effect:"top",autoPlay:true,vis:1});
 	
 </script>

@@ -1,5 +1,26 @@
-//localStorage.setItem("urlHost","http://app.jiehao9.com");
-sessionStorage.setItem("urlHost","http://localhost:9000");
+var business={
+	url:"http://localhost:9000",
+	//url:"http://app.jiehao9.com",
+	account:null,//登录账户
+	finance:null,//财务
+	integrall:null,//登录积分
+	accountLevelList:[],//等级列表
+	merId:1,
+	mer:{}
+};
+//初始化
+function init(){
+	function injection(a){
+		if(JSON.parse(sessionStorage.getItem(a))){
+			business[a]=JSON.parse(sessionStorage.getItem(a));
+		}
+	}
+	injection("account");
+	injection("finance");
+	injection("integrall");
+	injection("accountLevelList");
+}
+init();
 $(function(){
 	$(".tab_bigbox .tab_box").eq(0).show();
 	$(".tab_bigbox1 .tab_box1").eq(0).show();
@@ -233,28 +254,32 @@ function getUrlInfo(url){
 	}
 	return Request;
 }
-
-function ajxget(url,info,success){
-	var host = sessionStorage.getItem("urlHost");
+//全局封装ajax
+function ajxget(url,info,success,async){
 			$.ajax({
-				url:host+url,
+				url:business.url+url,
 				data:info,
+				async:async==false?false:true,
 				dataType:'json',//服务器返回json格式数据
-				type:'get',//HTTP请求类型
+				type:'post',//HTTP请求类型
 				timeout:10000,//超时时间设置为10秒；
 				xhrFields: {withCredentials: true},
 				success: function(data){
-		        console.log(data);
 		        success(data);
 		        if(data.code==200){
 		        	
 		        }else{
+		        	if(/^[0-9]*$/.test(data)){
+		        		return;
+		        	}
 		        	if(data.code!=30002&&data.code!=40004){
-		        		alert(data.msg);
+		        		//alert(data.msg);
+		        		console.log(data.msg)
+		        		location.href = "/";
 		        	} 
-		        	if(data.code==40004){
+		        	if(data.code==40004||data.code==70000){
 		        		//alert("您的账号登录超时,请重新登录!");
-		        		//window.location.href = "login.html";
+		        		//location.href = "login.html";
 		        	}
 		        	
 		        }
@@ -271,7 +296,7 @@ $("#seachbtn").click(function(){
 	}
 	
 });
-
+//商品类型
 function getmercate(){
 	var info = {
 		pageNum:1,
@@ -292,10 +317,10 @@ function getmercate(){
 	});
 }
 
-
+//购物车商品
 function getshopcarlist(){
 	var info = {
-		accountId:JSON.parse(sessionStorage.getItem("account")).accountId,
+		accountId:business.account.accountId,
 		pageNum:1,
 		pageSize:5
 	}
@@ -320,15 +345,19 @@ function getshopcarlist(){
 					}
 	});
 }
+//商家登录
 $("#sellgologin").click(function(){
 	window.location.href = "login.html?roletype=1";
 });
+//推广登录
 $("#tuiguanggologin").click(function(){
 	window.location.href = "login.html?roletype=2";
 });
+//用户登录
 $("#usergologin").click(function(){
 	window.location.href = "login.html?roletype=3";
 });
+//热门搜索单词
 function gethotseachlist(){
 	var info = {
 		pageNum:1,
@@ -350,22 +379,20 @@ function gethotseachlist(){
 		}
 	})
 }
-
+//判断是否登录
 function islogin(){
 	ajxget("/account/islogin",null,function(data){
 		if(data.code==200){
 			//$("#nologindiv").remove();
 			$("#nologindiv").css("display","none");
 			$("#havelogindiv").css("display","block");
-			var account = JSON.parse(sessionStorage.getItem("account"));
-			if(!account){
+			if(!business.account){
 				$("#nologindiv").css("display","block");
 				$("#havelogindiv").css("display","none");
 				return;
 			}
-			var integrall = JSON.parse(sessionStorage.getItem("integrall"));
-			$(".alreadyLogin_namep").text(account.nickname);
-			$("#userleve").text(integrall.name);
+			$(".alreadyLogin_namep").text(business.account.nickname);
+			$("#userleve").text(business.integrall.name);
 			$("#exit").click(function(){
 				ajxget("/account/loginout",null,function(data){
 					if(data.code==200){

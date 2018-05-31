@@ -10,12 +10,16 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.nieyue.bean.OrderProblem;
+import com.nieyue.bean.OrderProblemAnswer;
 import com.nieyue.dao.OrderProblemDao;
+import com.nieyue.service.OrderProblemAnswerService;
 import com.nieyue.service.OrderProblemService;
 @Service
 public class OrderProblemServiceImpl implements OrderProblemService{
 	@Resource
 	OrderProblemDao orderProblemDao;
+	@Resource
+	OrderProblemAnswerService orderProblemAnswerService;
 	@Transactional(propagation=Propagation.REQUIRED)
 	@Override
 	public boolean addOrderProblem(OrderProblem orderProblem) {
@@ -39,6 +43,8 @@ public class OrderProblemServiceImpl implements OrderProblemService{
 	@Override
 	public OrderProblem loadOrderProblem(Integer orderProblemId) {
 		OrderProblem r = orderProblemDao.loadOrderProblem(orderProblemId);
+		List<OrderProblemAnswer> orderProblemAnswerList = orderProblemAnswerService.browsePagingOrderProblemAnswer(r.getOrderProblemId(), null, 1, Integer.MAX_VALUE, "order_problem_answer_id", "asc");
+		r.setOrderProblemAnswerList(orderProblemAnswerList);
 		return r;
 	}
 
@@ -68,6 +74,11 @@ public class OrderProblemServiceImpl implements OrderProblemService{
 			pageSize=0;//没有数据
 		}
 		List<OrderProblem> l = orderProblemDao.browsePagingOrderProblem(number,merId,orderId,accountId,pageNum-1, pageSize, orderName, orderWay);
+		l.forEach((op)->{
+			List<OrderProblemAnswer> orderProblemAnswerList = orderProblemAnswerService.browsePagingOrderProblemAnswer(op.getOrderProblemId(), null, 1, Integer.MAX_VALUE, "order_problem_answer_id", "asc");
+			op.setOrderProblemAnswerList(orderProblemAnswerList);
+			
+		});
 		return l;
 	}
 

@@ -9,11 +9,15 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.nieyue.bean.Account;
 import com.nieyue.bean.MerOrderComment;
 import com.nieyue.dao.MerOrderCommentDao;
+import com.nieyue.service.AccountService;
 import com.nieyue.service.MerOrderCommentService;
 @Service
 public class MerOrderCommentServiceImpl implements MerOrderCommentService{
+	@Resource
+	AccountService accountService;
 	@Resource
 	MerOrderCommentDao merOrderCommentDao;
 	@Transactional(propagation=Propagation.REQUIRED)
@@ -39,6 +43,10 @@ public class MerOrderCommentServiceImpl implements MerOrderCommentService{
 	@Override
 	public MerOrderComment loadMerOrderComment(Integer merOrderCommentId) {
 		MerOrderComment r = merOrderCommentDao.loadMerOrderComment(merOrderCommentId);
+		if(r.getAccountId()!=null){
+			Account a = accountService.loadAccount(r.getAccountId());	
+			r.setAccount(a);
+		}
 		return r;
 	}
 
@@ -68,6 +76,13 @@ public class MerOrderCommentServiceImpl implements MerOrderCommentService{
 			pageSize=0;//没有数据
 		}
 		List<MerOrderComment> l = merOrderCommentDao.browsePagingMerOrderComment(merScore,merId,orderId,accountId,pageNum-1, pageSize, orderName, orderWay);
+		
+		l.forEach((moc)->{
+			if(moc.getAccountId()!=null){
+				Account a = accountService.loadAccount(moc.getAccountId());	
+				moc.setAccount(a);
+			}
+		});
 		return l;
 	}
 
