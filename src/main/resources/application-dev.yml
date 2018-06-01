@@ -5,7 +5,7 @@ server:
     #timeout: 1296000 #1个月  
     cookie: 
       name: SESSION
-
+  
   tomcat: 
     max-threads: 1000
     min-spare-threads: 200

@@ -5,7 +5,6 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Date;
-import java.util.Enumeration;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
@@ -14,7 +13,6 @@ import java.util.concurrent.Future;
 
 import com.nieyue.exception.AccountAlreadyAuthException;
 
-import gnu.io.CommPortIdentifier;
 
 public class Test1 {
 	/** 

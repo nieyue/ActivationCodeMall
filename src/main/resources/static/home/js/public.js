@@ -320,7 +320,7 @@ function getmercate(){
 //购物车商品
 function getshopcarlist(){
 	var info = {
-		accountId:business.account.accountId,
+		accountId:business.account?business.account.accountId:null,
 		pageNum:1,
 		pageSize:5
 	}
