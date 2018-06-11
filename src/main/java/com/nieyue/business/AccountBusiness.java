@@ -15,7 +15,10 @@ import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.redis.core.BoundValueOperations;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.util.ObjectUtils;
 
 import com.nieyue.bean.Account;
@@ -61,6 +64,10 @@ public class AccountBusiness {
     private SincerityService sincerityService;
     @Autowired
     private RolePermissionService rolePermissionService;
+    @Autowired
+    private StringRedisTemplate stringRedisTemplate;
+	@Value("${myPugin.projectName}")
+	String projectName;
     /**
      * 存储账户会话信息
      */
@@ -231,8 +238,8 @@ public class AccountBusiness {
 		}
 		}
 		//邮箱验证码
-		String vce = (String) session.getAttribute("validCodeEmailIsValid");
-		if(!"1".equals(vce)){
+		BoundValueOperations<String, String> validCodeEmailuuid = stringRedisTemplate.boundValueOps(projectName+"validCodeEmail"+email);
+		if(!"1".equals(validCodeEmailuuid.get())){
 			throw new CommonRollbackException("email没有验证");
 		}
 		//判断是否存在

@@ -6,6 +6,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 import java.util.regex.Pattern;
 
 import javax.annotation.Resource;
@@ -13,6 +14,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.redis.core.BoundValueOperations;
+import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -47,6 +51,7 @@ import com.nieyue.service.NoticeService;
 import com.nieyue.service.RoleService;
 import com.nieyue.service.SincerityService;
 import com.nieyue.thirdparty.yun.AliyunSms;
+import com.nieyue.util.DateUtil;
 import com.nieyue.util.MyDESutil;
 import com.nieyue.util.MyValidator;
 import com.nieyue.util.ResultUtil;
@@ -86,6 +91,8 @@ public class AccountController {
 	private NoticeService noticeService;
 	@Resource
 	private  AliyunSms aliyunSms;
+	@Resource
+	private  StringRedisTemplate stringRedisTemplate;
 	@Value("${myPugin.projectName}")
 	String projectName;
 	@Value("${myPugin.activationCodeMallProjectDomainUrl}")
@@ -430,18 +437,19 @@ public class AccountController {
 	@RequestMapping(value = "/validCode", method = {RequestMethod.GET,RequestMethod.POST})
 	public @ResponseBody
 	StateResultList<List<String>> validCode(
+			HttpServletRequest request,
 			HttpSession session,
 			@RequestParam("adminName")  String adminName,
 			@RequestParam(value="templateCode",required=false,defaultValue="1")  Integer templateCode//默认注册
 			) throws AccountIsExistException, RequestLimitException, CommonNotRollbackException
-					  {
+			{
 		List<String> l=new ArrayList<String>();
 		//注册，账户已经存在
-		if(accountService.loginAccount(adminName, null,null)!=null && templateCode==1){
+		if(templateCode==1 && accountService.loginAccount(adminName, null,null)!=null ){
 			throw new  AccountIsExistException();//账户已经存在异常
 		}
 		//其他，账户不存在
-		if(accountService.loginAccount(adminName, null,null)==null && templateCode!=1){
+		if(templateCode!=1 && accountService.loginAccount(adminName, null,null)==null ){
 			throw new  AccountIsNotExistException();//账户不存在
 		}
 		if(!Pattern.matches(MyValidator.REGEX_PHONE,adminName)
@@ -486,24 +494,23 @@ public class AccountController {
 				content="身份验证";
 			}
 			String uuid=UUID.randomUUID().toString();
-			String link=activationCodeMallProjectDomainUrl+"/account/validCodeEmail?validCodeEmail="+uuid;
-			//邮箱验证，发送链接到邮箱
-			boolean b = SendMailDemo.sendLinkMail(adminName, link, "激活码商城", content);
-			if(b){
-				if(session.getAttribute("validCodeEmailDate")==null){//验证时间
-					session.setAttribute("validCodeEmailDate", new Date());
-				}else{
-				Date validCodeDate= (Date) session.getAttribute("validCodeEmailDate");
-				if(validCodeDate.after(new Date(new Date().getTime()-1000*10))){
-					throw new RequestLimitException();//请求过快10s
-				}else{
-					session.setAttribute("validCodeEmailDate", new Date());
-				}
-				}
-				session.setAttribute("validCodeEmail", uuid);
-				session.setAttribute("validCodeEmailIsValid", "-1");//-1没有验证通过，1是验证通过了
-				//l.add(link);	
+			String link=activationCodeMallProjectDomainUrl+"/account/validCodeEmail?email="+adminName+"&validCodeEmail="+uuid+"&referer="+request.getHeader("Referer");
+			//限制请求速度的
+			BoundValueOperations<String, String> validCodeEmailLimit = stringRedisTemplate.boundValueOps(projectName+"validCodeEmailLimit"+adminName);
+			BoundValueOperations<String, String> validCodeEmailuuid = stringRedisTemplate.boundValueOps(projectName+"validCodeEmail"+adminName);
+			//已经验证过
+			if("1".equals(validCodeEmailuuid.get())){
+				return ResultUtil.getSlefSRList(200, "已经验证", l);
+			}else if(StringUtils.isEmpty(validCodeEmailLimit.get())){//30s
+				//邮箱验证，发送链接到邮箱
+				boolean b = SendMailDemo.sendLinkMail(adminName, link, "激活码商城", content);
+				if(b){
+				validCodeEmailLimit.set(DateUtil.getCurrentTime(), 30, TimeUnit.SECONDS);//30s
+				validCodeEmailuuid.set(uuid, 1, TimeUnit.HOURS);//先放uuid,验证成功放入1,验证码时间是1小时
 				return ResultUtil.getSlefSRSuccessList(l);
+				}
+			}else{
+				throw new RequestLimitException("请求过快，相同邮箱30秒一次");////30s
 			}
 		}
 			throw new CommonNotRollbackException("发送验证异常");
@@ -514,17 +521,23 @@ public class AccountController {
 	 */
 	@ApiOperation(value = "邮箱验证请求地址", notes = "邮箱验证请求地址")
 	@ApiImplicitParams({
+		@ApiImplicitParam(name="email",value="邮箱",dataType="string", paramType = "query",required=true),
 		  @ApiImplicitParam(name="validCodeEmail",value="验证码",dataType="string", paramType = "query",required=true),
+		  @ApiImplicitParam(name="referer",value="回跳地址",dataType="string", paramType = "query",required=true),
 		  })
 	@RequestMapping(value = "/validCodeEmail", method = {RequestMethod.GET,RequestMethod.POST})
 	public  ModelAndView validCodeEmail(
+			@RequestParam("email") String email,
 			@RequestParam("validCodeEmail") String validCodeEmail,
+			@RequestParam("referer") String referer,
 			HttpSession session,
 			HttpServletRequest request)  {
+		BoundValueOperations<String, String> validCodeEmailuuid = stringRedisTemplate.boundValueOps(projectName+"validCodeEmail"+email);
+		String uuid = validCodeEmailuuid.get();
 		//验证成功
-		if(validCodeEmail.equals((String)session.getAttribute("validCodeEmail"))){
-			session.setAttribute("validCodeEmailIsValid", "1");//-1没有验证通过，1是验证通过了
-			return new ModelAndView(new RedirectView(request.getHeader("Referer")));
+		if(validCodeEmail!=null&&uuid!=null&&uuid.equals(validCodeEmail)){
+			validCodeEmailuuid.set("1", 1, TimeUnit.HOURS);//1是验证通过了
+			return new ModelAndView(new RedirectView(referer));
 		}
 		StringBuffer url = request.getRequestURL();  
 		String redirect_url = url.delete(url.length() - request.getRequestURI().length(), url.length()).toString(); 

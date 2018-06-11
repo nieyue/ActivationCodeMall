@@ -71,6 +71,12 @@ $(function(){
 	
 	//加入购物车
 	$("#addtoshopcar").click(function(){
+		console.log(11)
+		if(!business.account||business.account.roleName!="用户"){	
+			console.log(1122)
+			alert("对不起，请注册买家账户购买")
+			return ;
+		}
 		var info = {
 			number:1,
 			accountId:business.acount!=null?business.account.accountId:null,
@@ -83,8 +89,26 @@ $(function(){
 				location.reload();
 			}
 		});
+	});
+	
+	//立即购买
+	$("#buyfast").click(function(){
+		if(!business.account||business.account.roleName!="用户"){	
+			alert("对不起，请注册买家账户购买")
+			return ;
+		}
+		var info = {
+			number:1,
+			accountId:business.acount!=null?business.account.accountId:null,
+			merId:business.merId
+		};
 		
-		
+		ajxget("/cartMer/add",info,function(data){
+			if(data.code==200){
+				alert("添加成功");
+				location.reload();
+			}
+		});
 	});
 	
 

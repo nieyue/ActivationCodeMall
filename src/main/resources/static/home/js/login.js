@@ -10,7 +10,7 @@ $(function(){
 	}else{
 		location.href="/"
 	}
-	$("#goregiest").click(function(){
+	$(".goregister").click(function(){
 		window.location.href = "register_step1.html?roletype="+business.roletype;
 	});
 	

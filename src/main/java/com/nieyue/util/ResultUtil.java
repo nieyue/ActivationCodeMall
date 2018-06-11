@@ -74,8 +74,8 @@ public class ResultUtil {
 		 * 自定义获取返回状态
 		 * @param bl 
 		 */
-		public static <Data>StateResultList<Data>  getSlefSRList(String code,String msg,Data data){
-			StateResultList<Data>  srl = new StateResultList<> (Integer.valueOf(code),msg,data);
+		public static <Data>StateResultList<Data>  getSlefSRList(Integer code,String msg,Data data){
+			StateResultList<Data>  srl = new StateResultList<> (code,msg,data);
 			return srl;
 		}
 		

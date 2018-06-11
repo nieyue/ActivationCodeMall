@@ -1,12 +1,6 @@
-var host = localStorage.getItem("urlHost");
+//var host = localStorage.getItem("urlHost");
 
 $(function(){
-	new_element=document.createElement("script");
-	new_element.setAttribute("type","text/javascript");
-	new_element.setAttribute("src","js/public.js");// 在这里引入了a.js
-	document.body.appendChild(new_element);
-	
-	
 	$("#step1_next").click(function(){
 		var email = $("#useremail").val();
 		
@@ -16,11 +10,16 @@ $(function(){
 					templateCode:1
 				}
 			ajxget("/account/validCode",info,function(data){
-                    if(data.code==200){
-		        	$("#emaildiv").toggle();
+				if(data.code==200){
+					$("#emaildiv").toggle();
 		        	$("#haveemaildiv").toggle();
 		        	$(".emailp").text(email);
-		        	alert("验证码发送成功，请注意查收");
+		        	if(data.msg=="已经验证"){
+		        		alert(data.msg);
+			        	return;
+			        }else{
+			        	alert("验证码发送成功，请注意查收");			        	
+			        }
 			        }else{
 			        	alert(data.msg);
 			        }
@@ -133,7 +132,10 @@ $(function(){
 				}
 			ajxget("/account/webregister",info,function(data){
 				if(data.code==200){
+					alert("注册成功")
 					window.location.href='login.html?roletype='+roletype;
+				}else{
+					alert(data.msg);
 				}
                     
 			        
