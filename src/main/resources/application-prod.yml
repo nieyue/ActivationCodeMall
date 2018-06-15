@@ -1,5 +1,5 @@
 server:
-  port: 9000
+  port: 1521
   session:
     timeout: 36000 #10个小时
     #timeout: 1296000 #1个月 
@@ -15,11 +15,11 @@ spring:
    datasource:
      name: master
      driver-class-name: com.mysql.jdbc.Driver
-     url: jdbc:mysql://118.190.133.146:3306/activation_code_mall_db
+     url: jdbc:mysql://59.110.221.143:3306/activation_code_mall_db
      username: root
      password: liliu
    redis:
-     host: 118.190.133.146
+     host: 59.110.221.143
      password: liliu
      port: 6379
      database: 0
@@ -30,13 +30,13 @@ spring:
        max-active: 800
 myPugin: 
   session: 
-    myDomainName: jiehao9.cn
+    myDomainName: nalu888.cn
   projectName: ActivationCodeMall
   requestAuth: requestAuthProd
-  activationCodeMallProjectDomainUrl: http://app.jiehao9.com
-  activationCodeMallClientDomainUrl: http://mall.jiehao9.com 
-  payCancelUrl: http://mall.jiehao9.com/payCancel.html
-  paySuccessUrl: http://mall.jiehao9.com/paySuccess.html
+  activationCodeMallProjectDomainUrl: http://app.nalu888.cn
+  activationCodeMallClientDomainUrl: http://admin.nalu888.cn 
+  payCancelUrl: http://app.nalu888.cn/payCancel.html
+  paySuccessUrl: http://app.nalu888.cn/paySuccess.html
   paypal: 
     #mode: live
     mode: sandbox

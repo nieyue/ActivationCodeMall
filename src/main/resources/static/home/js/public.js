@@ -1,6 +1,6 @@
 var business={
-	url:"http://localhost:9000",
-	//url:"http://app.jiehao9.com",
+	//url:"http://localhost:9000",
+	url:"http://app.lalu888.cn",
 	account:null,//登录账户
 	finance:null,//财务
 	integrall:null,//登录积分
