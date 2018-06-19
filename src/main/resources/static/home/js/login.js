@@ -15,6 +15,10 @@ $(function(){
 	});
 	
 	$(".register_button").click(function(){
+		if(!haveUnlocked){
+			alert("没有验证通过")
+			return;
+		}
 		var email = $("#useremail").val();
 		var userpassword = $("#userpassword").val();
 		

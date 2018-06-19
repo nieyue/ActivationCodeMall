@@ -144,6 +144,7 @@
 <script src="js/public.js" type="text/javascript" charset="utf-8"></script>
 <script type="text/javascript" src="js/login.js" ></script>
 <script>
+var haveUnlocked=false;//默认没解锁
 //验证
 $(function(){
     $(".inner").mousedown(function(e){
@@ -170,6 +171,7 @@ $(function(){
                 $(".outer").addClass("act");
                 $span.html("验证通过！");
                 el.html('&radic;');
+                haveUnlocked=true;
             }
             $filter.css('width',dx);
             el.css("left",dx);

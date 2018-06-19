@@ -1,6 +1,6 @@
 var business={
-	//url:"http://localhost:9000",
-	url:"http://app.lalu888.cn",
+	url:"http://localhost:9000",
+	//url:"http://app.nalu888.cn",
 	account:null,//登录账户
 	finance:null,//财务
 	integrall:null,//登录积分
@@ -171,7 +171,7 @@ function isShow(obj,toshow,myclass) {
 		$(this).removeClass(myclass);
 	})
 }
-
+//个人中心
 $(".alreadyLogin_centerul>li").click(function  () {
 	    var thistext=$(this).text();
 	    

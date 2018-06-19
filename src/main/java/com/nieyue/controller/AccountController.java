@@ -38,6 +38,7 @@ import com.nieyue.exception.AccountIsNotLoginException;
 import com.nieyue.exception.AccountMessageException;
 import com.nieyue.exception.AccountPhoneIsExistException;
 import com.nieyue.exception.CommonNotRollbackException;
+import com.nieyue.exception.CommonRollbackException;
 import com.nieyue.exception.MySessionException;
 import com.nieyue.exception.NotAnymoreException;
 import com.nieyue.exception.RequestLimitException;
@@ -183,7 +184,7 @@ public class AccountController {
 	@ApiImplicitParams({
 		  @ApiImplicitParam(name="adminName",value="手机号/电子邮箱",dataType="string", paramType = "query",required=true),
 		  @ApiImplicitParam(name="password",value="新密码",dataType="string", paramType = "query",required=true),
-		  @ApiImplicitParam(name="validCode",value="短信验证码",dataType="string", paramType = "query",required=true)
+		  @ApiImplicitParam(name="validCode",value="手机验证码",dataType="string", paramType = "query")
 		  })
 	@RequestMapping(value = "/updatePassword", method = {RequestMethod.GET,RequestMethod.POST})
 	public @ResponseBody StateResultList<List<Account>> updateAccountPassword(
@@ -198,9 +199,15 @@ public class AccountController {
 			throw new AccountIsNotExistException();//账户不存在
 		}
 		//手机验证码
-		String vc=(String) session.getAttribute("validCode");
+		/*String vc=(String) session.getAttribute("validCode");
 		if(!vc.equals(validCode)){
 			throw new VerifyCodeErrorException();//验证码错误
+		}*/
+		
+		//邮箱验证码
+		BoundValueOperations<String, String> validCodeEmailuuid = stringRedisTemplate.boundValueOps(projectName+"validCodeEmail"+adminName);
+		if(!"1".equals(validCodeEmailuuid.get())){
+			throw new CommonRollbackException("email没有验证");
 		}
 		ac.setPassword(MyDESutil.getMD5(password));
 		boolean um = accountService.updateAccount(ac);

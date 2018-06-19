@@ -1,9 +1,13 @@
 //var host = localStorage.getItem("urlHost");
 
 $(function(){
+	//发送验证码
 	$("#step1_next").click(function(){
 		var email = $("#useremail").val();
-		
+		if(!haveUnlocked){
+			alert("没有验证通过")
+			return;
+		}
 		if(checkEmail(email)){
 			var info = {
 					adminName:email,
@@ -27,8 +31,9 @@ $(function(){
 		
 		}
 	});
-	
+	//点击到第二步
 	$(".register_havejihuo").click(function(){
+		
 		var email = $("#useremail").val();
 		var request  = getUrlInfo(location.search);
 		var roletype = request["roletype"];
@@ -44,8 +49,8 @@ $(function(){
 
 	var countdown=60;  
 	var _generate_code = $(".register_yzm");
+	//获取代码
 	function getcode(){
-		  
       var phone = $("#userphone").val();
       if(phone.length != 11 ){  
         alert("请填写正确的手机号！");  
@@ -69,7 +74,7 @@ $(function(){
       	
       
 	}
-
+	//第三步
 	function gonext(){
 		var username = $("#username").val();
 		var userphone = $("#userphone").val();
@@ -80,7 +85,7 @@ $(function(){
 			window.location.href="register_step3.html?username="+username+"&userphone="+userphone+"&code="+code+"&email="+email["email"]+"&roletype="+roletype;
 		}
 	}
-
+	//验证规则
 	function nonull(username,userphone,code){
 		if(username.length<3){
 			alert("用户名不能少于3个字符");
@@ -96,7 +101,7 @@ $(function(){
 		}
 		return true;
 	}
- 	
+ 	//倒计时
 	function settime() {  
       if (countdown == 1) {  
         _generate_code.attr("disabled",false);  
@@ -113,7 +118,7 @@ $(function(){
       },1000);  
     }
 	
-
+	//注册
 	function register(){
 		var url = location.search;
 		var Request = getUrlInfo(url);
@@ -145,7 +150,7 @@ $(function(){
 			
 		}
 	}
-	
+	//验证第二次密码
 	function equalspassword(password1,password2){
 		if(password1.length>5){
 			if(password1==password2){
