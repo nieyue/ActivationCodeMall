@@ -86,7 +86,7 @@ WHERE permission_id=#{permissionId}
 			AND name like CONCAT('%','${name}','%' )
 		</if>
 		<if test="route!=null">
-			AND route=#{route}
+			AND route like CONCAT('%','${route}','%' )
 		</if>
 	AND ${orderName}
 	<if test="orderWay=='asc'">
@@ -107,7 +107,7 @@ WHERE permission_id=#{permissionId}
 			AND name like CONCAT('%','${name}','%' )
 		</if>
 		<if test="route!=null">
-			AND route=#{route}
+			AND route like CONCAT('%','${route}','%' )
 		</if>
 	  </where>
 		ORDER BY
@@ -137,7 +137,7 @@ WHERE permission_id=#{permissionId}
 			AND name like CONCAT('%','${name}','%' )
 		</if>
 		<if test="route!=null">
-			AND route=#{route}
+			AND route like CONCAT('%','${route}','%' )
 		</if>
 	</where>
 </select>

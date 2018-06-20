@@ -98,6 +98,11 @@ public class Account implements Serializable {
 	@ApiModelProperty(value="身份证反面",example="身份证反面")
 	private String identityCardsBackImg;
 	/**
+	 * 出生年月
+	 */
+	@ApiModelProperty(value="出生年月",example="出生年月")
+	private Date birthday;
+	/**
 	 * 创建时间
 	 */
 	@ApiModelProperty(value="创建时间",example="创建时间")
@@ -251,6 +256,11 @@ public class Account implements Serializable {
 	public static long getSerialversionuid() {
 		return serialVersionUID;
 	}
-	
+	public Date getBirthday() {
+		return birthday;
+	}
+	public void setBirthday(Date birthday) {
+		this.birthday = birthday;
+	}
 	
 }

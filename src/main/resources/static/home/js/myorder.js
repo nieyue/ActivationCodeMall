@@ -165,7 +165,7 @@ function getlist(status){
 	})
 }
 
-
+//商品推荐
 function gettuijian(){
 	var info = {
 		pageNum:1,

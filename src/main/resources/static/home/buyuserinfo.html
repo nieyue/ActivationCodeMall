@@ -144,25 +144,27 @@
 				
 				<!--个人资料-->
 				<div class="userinfocontent" style="display: none;">
-					<div style="margin-top: 30px;height: 120px;position:relative;">
+					<div style="margin-top: 30px;height: 120px;position:relative;" id="updateIconFileBox">
 						<p class="fl">我的头像</p>
-						<img class="userheadimg" src="img/touxiang1.png" />
+						<img class="userheadimg" style="width:120px;height:120px;border-radius:100%" id="updateIcon" src="img/touxiang1.png" />
 						<a class="updataimg" onclick="updataimg()">更改</a>
-						<input type="file" style="display: none;" id="up" accept="image/*"/>
+						<input type="file" style="display: none;" id="updateIconFile" accept="image/*"/>
 						
 					</div>
 					
 					<div class="margin_top50">
 						<p class="font_size14 fl">我的昵称: </p>
-						<p class="username">lalall</p>
+						<p  class="username" id="nicknametext"></p>
+						<input type="text" value="" id="nicknameinput" style="border:1px solid #ccc"/>
 						
-						<a class="updataname">编辑</a>
+						<a class="updataname" id="updatenickname">编辑</a>
+						<a class="updataname" id="updatenicknamesave">保存</a>
 					<div style="clear: both;"></div>
 					</div>
 					
 					<div class="margin_top20 clearfix">
 						<p  class="font_size14 fl">我的邮箱: </p>
-						<p class="useremail">892331662@163.com</p>
+						<p class="useremail"></p>
 						
 					
 					</div>
@@ -170,27 +172,22 @@
 					<div class="margin_top20 clearfix">
 						<p class="font_size14 fl">我的性别: </p>
 						<div class="sexdiv">
-								
 								<input type="radio" name="radio" value="1"  id="radioman">男
 								<input type="radio" name="radio" value="2" id="radiowoman">女
-								
-							</div>
-						
-						
+						</div>
 					</div>
 					
 					<div class="margin_top20 clearfix" style="line-height: 30px;">
 						<p class="font_size14 fl">出生日期: </p>
 						
 						<select class="sel_year birthday" rel="2000" >
-							
 						</select> 
 						<p  class="fl margin_left10">年</p>
-						<select class="sel_month birthday fl" rel="2" > </select> 
+						<select class="sel_month birthday fl" rel="1" > </select> 
 						<p class="fl margin_left10">月</p>
-						<select class="sel_day birthday fl" rel="14" > </select> 
+						<select class="sel_day birthday fl" rel="1" > </select> 
 						<p class="fl margin_left10">日</p>
-						
+						<a class="updataname" id="updatebirthdaysave">保存出生年月</a>
 					</div>
 					
 					<div class="margin_top20 clearfix">
@@ -357,11 +354,24 @@
 							<p class="fl">所在地区：</p>
 							<select class="fl countryselect">
 						  <option value ="0">中国大陆</option>
+						 <!-- 
 						  <option value ="1">台湾</option>
 						  <option value="2" >香港</option>
 						  <option value="3">澳门</option>
+						  -->
 						</select>
-							<input class="inputstyle" placeholder="至少3个字符" id="city"/>
+							 <div  id="distpicker">
+						        <div class="form-group" style="display:inline-block;border:1px solid #ccc">
+						          <select class="form-control" id="province" ></select>
+						        </div>
+						        <div class="form-group" style="display:inline-block;border:1px solid #ccc">
+						          <select class="form-control" id="city" ></select>
+						        </div>
+						        <div class="form-group" style="display:inline-block;border:1px solid #ccc">
+						          <select class="form-control" id="district" ></select>
+						        </div>
+						      </div>
+							
 						</div>
 						
 						<div  class="clearfix inputdiv">
@@ -391,7 +401,7 @@
 						<div  class="clearfix inputdiv">
 							<p class="fl">固定电话：</p>
 							
-							<input id="telphone" class="inputstyle"  placeholder="固定号码、手机号码必须填一项"/>
+							<input id="telephone" class="inputstyle"  placeholder="固定号码、手机号码必须填一项"/>
 						</div>
 						
 						<div  class="clearfix inputdiv" style="margin-left: 115px;">

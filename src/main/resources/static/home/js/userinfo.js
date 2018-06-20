@@ -1,4 +1,9 @@
+
 $(function(){
+	//没登陆就跳首页
+	if(!business.account){
+		location.href="/";
+	}
 	$.ms_DatePicker({
             YearSelector: ".sel_year",
             MonthSelector: ".sel_month",
@@ -28,9 +33,7 @@ $(function(){
 	    var showid = $(this).index()+1;
 	    window.location.href= "./buyuserinfo.html?show="+thistext+"&showid="+showid;
 });
-   var host = localStorage.getItem("hostUrl");
    function show(value){
-   	var user = JSON.parse(localStorage.getItem("user"));
    	
    	if(value=="个人资料"){
 		if($(".userinfocontent").is(":hidden")){
@@ -51,21 +54,81 @@ $(function(){
 		if(!$(".shouhuodiv").is(":hidden")){
 			$(".shouhuodiv").toggle();
 		}
+		//修改昵称
+		$("#nicknametext").text(business.account.nickname)
+		$("#nicknameinput").val(business.account.nickname);
+		$("#nicknameinput").hide();
+		$("#updatenicknamesave").hide();
+		$("#updatenickname").unbind();
+		$("#updatenickname").click(function() {
+			$("#nicknameinput").show();
+			$("#updatenicknamesave").show();
+			$("#nicknametext").hide();
+			$("#updatenickname").hide();
+		})
+		$("#updatenicknamesave").unbind();
+		$("#updatenicknamesave").click(function() {
+			var info = {
+		   			accountId:business.account.accountId,
+		   			nickname:$("#nicknameinput").val()
+		   		};
+			ajxget("/account/updateInfo",info,function(data){
+				if(data.code==200){
+					$("#nicknameinput").hide();
+					$("#updatenicknamesave").hide();
+					$("#nicknametext").show();
+					$("#updatenickname").show();
+					business.account.nickname = info.nickname;
+					sessionStorage.setItem("account",JSON.stringify(business.account));
+					$("#nicknametext").text(business.account.nickname)
+					$("#nicknameinput").val(business.account.nickname);
+				}
+			})
+		})
+		//初始化出生年月
+		var selyear=new Date(business.account.birthday).getYear()+1900;
+		$(".sel_year").find("option[value = '"+selyear+"']").attr("selected","selected");
+		var selmonth=new Date(business.account.birthday).getMonth()+1;
+		$(".sel_month").find("option[value = '"+selmonth+"']").attr("selected","selected");
+		var selday=new Date(business.account.birthday).getDate();
+		$(".sel_day").find("option[value = '"+selday+"']").attr("selected","selected");
+		//保存出生年月
+		$("#updatebirthdaysave").click(function(){
+			if($(".sel_year option:selected").val()<=0
+					||$(".sel_month option:selected").val()<=0
+					||$(".sel_day option:selected").val()<=0){
+				alert("请选择正确日期")
+				return ;
+			}
+			var nyr=$(".sel_year option:selected").val()+"/"+$(".sel_month option:selected").val()+"/"+$(".sel_day option:selected").val();
+			var birthday=business.getTime(new Date(nyr))
+			var info = {
+		   			accountId:business.account.accountId,
+		   			birthday:birthday
+		   		};
+			ajxget("/account/updateInfo",info,function(data){
+				if(data.code==200){
+					business.account.birthday = info.birthday;
+					sessionStorage.setItem("account",JSON.stringify(business.account));
+				
+				}
+			})
+			
+		});
 		
-		$(".username").text(user.nickname);
-		$(".useremail").text(user.email);
-		if(user.phone!=null&&user.phone!=""){
-			$(".userphone").text("手机号码："+user.phone);
+		$(".useremail").text(business.account.email);
+		if(business.account.phone!=null&&business.account.phone!=""){
+			$(".userphone").text("手机号码："+business.account.phone);
 			$(".bindphone").toggle();
 		}
 		
-		if(user.icon!=null&&user.icon!=""){
-			$(".userheadimg").src = user.icon;
+		if(business.account.icon!=null&&business.account.icon!=""){
+			$(".userheadimg").src = business.account.icon;
 		}
 		
-		if(user.sex==1){
+		if(business.account.sex==1){
 			$("#radioman").attr("checked","checked");;
-		}else if(user.sex==2){
+		}else if(business.account.sex==2){
 			$("#radiowoman").attr("checked","checked");
 		}
 	}else if(value=="我的优惠券"){
@@ -150,43 +213,52 @@ $(function(){
 			$(".shouhuodiv").toggle();
 		}
 		
-		$(".setkami").text("接受卡密设置："+cardSecretReceive[user.cardSecretReceive]);
-		$(".safeuseremail").text("注册邮箱："+user.email);
-		$('.kamiselect').find('option:eq('+user.cardSecretReceive+')').attr('selected','selected');
+		$(".setkami").text("接受卡密设置："+cardSecretReceive[business.account.cardSecretReceive]);
+		$(".safeuseremail").text("注册邮箱："+business.account.email);
+		$('.kamiselect').find('option:eq('+business.account.cardSecretReceive+')').attr('selected','selected');
 		$(".kamiselect").change(function(){
 				
 				var value=$(this).children('option:selected').val();
 				
 				var info = {
-					accountId:user.accountId,
+					accountId:business.account.accountId,
 					cardSecretReceive:value
 				};
 				
-				ajxget("/account/update",info,function(data){
+				ajxget("/account/updateInfo",info,function(data){
 					if(data.code==200){
-						user.cardSecretReceive = value;
+						business.account.cardSecretReceive = value;
 						$(".setkami").text("接受卡密设置："+cardSecretReceive[value]);
-						localStorage.setItem("user",JSON.stringify(user));
+						sessionStorage.setItem("account",JSON.stringify(business.account));
 					}
 				})
 		});
 		
 		
-		if(user.phone!=null&&user.phone!=""){
-			$(".safephone").text("绑定手机："+user.phone);
+		if(business.account.phone!=null&&business.account.phone!=""){
+			$(".safephone").text("绑定手机："+business.account.phone);
 			$(".safebindphone").toggle();
 		}
-		if(user.safetyGrade==1){
+		if(business.account.safetyGrade==1){
 			$("#safetyGrade").text("账号安全等级：低");
 			$(".safediv").width("20%");
-		}else if(user.safetyGrade==2){
+		}else if(business.account.safetyGrade==2){
 			$("#safetyGrade").text("账号安全等级：中");
 			$(".safediv").width("50%");
-		}else if(user.safetyGrade==3){
+		}else if(business.account.safetyGrade==3){
 			$("#safetyGrade").text("账号安全等级：高");
 			$(".safediv").width("100%");
 		}
 	}else if(value=="我的收货地址"){
+		//初始化三级联动
+		var $distpicker = $('#distpicker');
+		console.log($distpicker)
+		  $distpicker.distpicker({
+			  placeholder: false,
+		    province: '湖南省',
+		    city: '长沙市',
+		    district: '岳麓区'
+		  });
 		if(!$(".userinfocontent").is(":hidden")){
 			$(".userinfocontent").toggle();
 		}
@@ -205,24 +277,24 @@ $(function(){
 		if($(".shouhuodiv").is(":hidden")){
 			$(".shouhuodiv").toggle();
 		}
-		
+		//显示收货地址列表
 		getaddress();
+		
 		var country = "中国大陆";
+		
 		$(".kamiselect").change(function(){
 					country=$(this).children('option:selected').text();
 			});
 		$(".savebtn").click(function(){
-			var city = $("#city").val();
+			var province = $("#province option:selected").val();
+			var city = $("#city option:selected").val();
+			var area = $("#district option:selected").val();
 			var address = $("#address").val();
 			var postcode = $("#postcode").val();
 			var name = $("#addressusername").val();
 			var phone = $("#phone").val();
-			var telphone = $("#telphone").val();
+			var telephone = $("#telephone").val();
 			
-			if(city.length<3){
-				alert("请输入所在地区");
-				return false;
-			}
 			if(address==''){
 				alert("请输入详细地址");
 				return false;
@@ -235,7 +307,7 @@ $(function(){
 				alert("请输入收货人姓名");
 				return false;
 			}
-			if(phone.length!=11&&telphone==''){
+			if(phone.length!=11&&telephone==''){
 				alert("请输入正确的手机号或电话号码");
 				return false;
 			}
@@ -253,12 +325,15 @@ $(function(){
 			var info = {
 				name:name,
 				phone:phonenum,
+				telephone:telephone,
 				postcode:postcode,
 				country:country,
+				province:province,
 				city:city,
+				area:area,
 				address:address,
 				isDefault:isDefault,
-				accountId:user.accountId
+				accountId:business.account.accountId
 			};
 			ajxget("/receiptInfo/add",info,function(data){
 				if(data.code==200){
@@ -274,33 +349,39 @@ $(function(){
 		
 	}
    }
-   
+   //初始化性别
+   if(business.account&&business.account.sex==1){
+	   $("#radioman").prop("check",true);
+   }else if(business.account.sex==2){
+	   $("#radiowoman").prop("check",true);
+   }
+   //点击性别
 	$("#radioman").click(function(){
-		upsex(user.accountId,1);
+		upsex(business.account.accountId,1);
 	});
   
    $("#radiowoman").click(function(){
-		upsex(user.accountId,2);
+		upsex(business.account.accountId,2);
 	});
    
    
 // 修改用户性别
-   function upsex(userid,sex){
+   function upsex(accountId,sex){
    	var info = {
-			accountId:userid,
+			accountId:accountId,
 			sex:sex
 		};
-		ajxget("/account/update",info,function(data){
+		ajxget("/account/updateInfo",info,function(data){
 			if(data.code==200){
-				user.sex = sex;
-				localStorage.setItem("user",JSON.stringify(user));
+				business.account.sex = sex;
+				sessionStorage.setItem("account",JSON.stringify(business.account));
 			}
 		})
    }
 // 获取优惠券
    function getcoupon(){
    		var info = {
-   			accountId:user.accountId,
+   			accountId:business.account.accountId,
    			pageNum:1,
    			pageSize:100
    		};
@@ -327,7 +408,7 @@ $(function(){
 
 function getintarll(){
 	var info = {
-   			accountId:user.accountId,
+   			accountId:business.account.accountId,
    			pageNum:1,
    			pageSize:100
    		};
@@ -355,7 +436,7 @@ function getintarll(){
 
 function getorderlist(){
 	var info = {
-   			accountId:user.accountId,
+   			accountId:business.account.accountId,
    			type:1,
    			status:3,
    			pageNum:1,
@@ -385,7 +466,7 @@ function getorderlist(){
    	var table = $('#address_tb');
    	table.innerHTML = "";
    		var info = {
-   			accountId:user.accountId,
+   			accountId:business.account.accountId,
    			pageNum:1,
    			pageSize:100
    		};
@@ -401,10 +482,11 @@ function getorderlist(){
 		        		var phonenum = child.phone;
 		        		
 		        		if(child.phone==null||child.phone==''){
-		        			phonenum = child.telephone;
+		        			phonenum +="/"+ child.telephone;
 		        		}
+		        		var isD=child.isDefault==1?'默认':''
 //						tr.id = child.integralDetailId;
-						var html = '<tr class="addresstd height90" ><td >'+child.name+'</td><td  class="font_size14 padding_10">'+child.country+'  '+child.city+'</td><td class="font_size14 padding_10">'+child.address+'</td><td >000000</td><td >'+phonenum+'</td><td ><a class="fl margin_left60" style="color: #4cafe9;">修改</a><a class="fl margin_left20" style="color: #ff7400;" onclick="deletaddress('+user.accountId+','+child.receiptInfoId+')">删除</a></td></tr>';
+						var html = '<tr class="addresstd height90" ><td >'+child.name+'</td><td  class="font_size14 padding_10">'+child.country+'/'+child.province+'/'+child.city+'/'+child.area+'</td><td class="font_size14 padding_10">'+child.address+'</td><td >'+child.postcode+'</td><td >'+phonenum+'</td><td ><div>'+isD+'</div><a class="fl margin_left60" style="color: #4cafe9;">修改</a><a class="fl margin_left20" style="color: #ff7400;" onclick="deletaddress('+business.account.accountId+','+child.receiptInfoId+')">删除</a></td></tr>';
 						tr.innerHTML = html;
 
 						table.append(tr); 
@@ -417,11 +499,10 @@ function getorderlist(){
    
 })
 
-
-function deletaddress(userid,id){
+function deletaddress(accountId,id){
 	var info = {
 		receiptInfoId:id,
-		accountId:userid
+		accountId:accountId
 	};
 	
 	ajxget("/receiptInfo/delete",info,function(data){
@@ -430,13 +511,16 @@ function deletaddress(userid,id){
 		}
 	})
 }
-
-
+//初始化图像
+if(business.account.icon){
+	$("#updateIcon").attr("src",business.account.icon);	
+}
+//修改头像
 function updataimg(){
-   	$('#up').click();
+   	$('#updateIconFile').click();
    }
 
-$('#up').change(function(){
+/*$('#updateIconFile').change(function(){
     //获取input file的files文件数组;
     //$('#filed')获取的是jQuery对象，.get(0)转为原生对象;
     //这边默认只能选一个，但是存放形式仍然是数组，所以取第一个元素使用[0];
@@ -451,7 +535,26 @@ $('#up').change(function(){
         console.log(e);
     //选择所要显示图片的img，要赋值给img的src就是e中target下result里面
     //的base64编码格式的地址
-        $('.updataimg').attr("src",e.target.result);
+        $('#updateIcon').attr("src",e.target.result);
       }
-    })
+    })*/
+ //上传图像   
+business.getQiniuSimpleUploader(business,{
+	browseButton:'updateIconFile',
+	dropElement:'updateIconFileBox',
+	resource:'business.account.icon',
+	success:function(url){
+		var info = {
+	   			accountId:business.account.accountId,
+	   			icon:url
+	   		};
+		ajxget("/account/updateInfo",info,function(data){
+			if(data.code==200){
+				business.account.icon=url
+				sessionStorage.setItem("account",JSON.stringify(business.account));
+				$("#updateIcon").attr("src",business.account.icon);
+			}
+		})
+	}
+}); 
 

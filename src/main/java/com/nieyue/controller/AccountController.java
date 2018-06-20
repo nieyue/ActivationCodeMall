@@ -228,6 +228,7 @@ public class AccountController {
 		@ApiImplicitParam(name="icon",value="头像",dataType="string", paramType = "query"),
 		@ApiImplicitParam(name="nickname",value="昵称",dataType="string", paramType = "query"),
 		@ApiImplicitParam(name="sex",value="性别,默认为0未知，为1男性，为2女性",dataType="int", paramType = "query"),
+		@ApiImplicitParam(name="birthday",value="出生年月",dataType="date-time", paramType = "query"),
 		@ApiImplicitParam(name="country",value="国家",dataType="string", paramType = "query"),
 		@ApiImplicitParam(name="cardSecretReceive",value="卡密接受方式",dataType="int", paramType = "query"),
 	})
@@ -237,6 +238,7 @@ public class AccountController {
 			@RequestParam(value="icon",required=false)String icon,
 			@RequestParam(value="nickname",required=false)String nickname,
 			@RequestParam(value="sex",required=false)Integer sex,
+			@RequestParam(value="birthday",required=false)Date birthday,
 			@RequestParam(value="country",required=false)String country,
 			@RequestParam(value="cardSecretReceive",required=false)Integer cardSecretReceive,
 			HttpSession session)  {
@@ -253,6 +255,9 @@ public class AccountController {
 		}
 		if(sex!=null){
 		newa.setSex(sex);
+		}
+		if(birthday!=null){
+			newa.setBirthday(birthday);
 		}
 		if(country!=null){
 		newa.setCountry(country);
@@ -631,7 +636,8 @@ public class AccountController {
 		Account account = (Account) session.getAttribute("account");
 		List<Account> list = new ArrayList<Account>();
 		if(account!=null && !account.equals("")){
-			list.add(account);
+			Account a = accountService.loadAccount(account.getAccountId());
+			list.add(a);
 			return ResultUtil.getSlefSRSuccessList(list);
 		}
 		throw new AccountIsNotLoginException();//没有登录

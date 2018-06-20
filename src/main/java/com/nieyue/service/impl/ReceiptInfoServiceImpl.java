@@ -21,10 +21,21 @@ public class ReceiptInfoServiceImpl implements ReceiptInfoService{
 	public boolean addReceiptInfo(ReceiptInfo receiptInfo) {
 		receiptInfo.setCreateDate(new Date());
 		receiptInfo.setUpdateDate(new Date());
-		//if(receiptInfo.getIsDefault()==null||receiptInfo.getIsDefault().equals("")){
+		if(receiptInfo.getIsDefault()==null||receiptInfo.getIsDefault().equals("")){
 			receiptInfo.setIsDefault(0);
-		//}
+		}
 		boolean b = receiptInfoDao.addReceiptInfo(receiptInfo);
+		if(b&&receiptInfo.getIsDefault()==1){
+			List<ReceiptInfo> list = browsePagingReceiptInfo(receiptInfo.getAccountId(), 1, null, null, 1, Integer.MAX_VALUE, "receipt_info_id", "asc");
+			if(list.size()>0){
+				list.forEach(e->{
+					if(!e.getReceiptInfoId().equals(receiptInfo.getReceiptInfoId())){
+						e.setIsDefault(0); 
+						updateReceiptInfo(e);											
+					}
+				});
+			}
+		}
 		return b;
 	}
 	@Transactional(propagation=Propagation.REQUIRED)

@@ -48,6 +48,8 @@ $(function(){
 					}else{
 						$(".register_button").text("重新登录");
 						$(".register_button").attr("disabled", false);
+						alert(data.msg)
+						return;
 					}
 					
 					
