@@ -17,7 +17,7 @@
     margin:auto;
 }
 .cargood{width: 1200px;height: auto;margin-top: 20px;}
-.cargooddiv{cursor:pointer; margin-bottom: 10px;width: 220px;margin-left: 15px;background: #FFFFFF; float: left;box-shadow:5px 5px 5px #b1a4d0;transition:width 2s,height 2s,transform 2s;}
+.cargooddiv{cursor:pointer; margin-bottom: 10px;width: 220px;margin-left: 15px;background: #FFFFFF; float: left;box-shadow:5px 5px 5px #ccc;transition:width 2s,height 2s,transform 2s;}
 .cargooddiv:hover{
 	transform:translateY(-22px);
 }

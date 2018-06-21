@@ -49,6 +49,17 @@ public class ReceiptInfoServiceImpl implements ReceiptInfoService{
 	public boolean updateReceiptInfo(ReceiptInfo receiptInfo) {
 		receiptInfo.setUpdateDate(new Date());
 		boolean b = receiptInfoDao.updateReceiptInfo(receiptInfo);
+		if(b&&receiptInfo.getIsDefault()==1){
+			List<ReceiptInfo> list = browsePagingReceiptInfo(receiptInfo.getAccountId(), 1, null, null, 1, Integer.MAX_VALUE, "receipt_info_id", "asc");
+			if(list.size()>0){
+				list.forEach(e->{
+					if(!e.getReceiptInfoId().equals(receiptInfo.getReceiptInfoId())){
+						e.setIsDefault(0); 
+						updateReceiptInfo(e);											
+					}
+				});
+			}
+		}
 		return b;
 	}
 

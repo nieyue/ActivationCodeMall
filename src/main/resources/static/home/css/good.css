@@ -1,5 +1,5 @@
-﻿odoldprice{color: #666666;font-size: 12px;text-decoration:line-through;width: auto;float: left;}
-.goodnewprice{color: #666666;font-size: 14px;color: #FF7400;text-align: right;}
+﻿.goodoldprice{color: #666666;font-size: 12px;text-decoration:line-through;width: auto;float: left;margin:2px 0 2px 10px;}
+.goodnewprice{color: #666666;font-size: 14px;color: #FF7400;text-align: right;margin:2px 10px 2px 0;}
 .gooddetail{width: 900px;height: auto;margin-bottom: 40px;float: left;margin-top: 20px;}
 .goodbtn{margin-top:10px;text-align: center;background-color: #ff8700;width: 220px;height: 40px;margin-left: 20px;}
 .goodtuijiantext{width: 100%;height: 40px;line-height: 40px;font-size: 16px;margin-top: 20px;padding-bottom: 5px;}
@@ -27,7 +27,12 @@
 	width:100% !important;
 }
 .pingjia{}
-.detailhomeimg{height: 300px;width: 360px;margin-left: 20px;margin-top: 20px;margin-right: 20px;float: left;}
+/*商品详情*/
+.detailhomeimgwrap{height: 300px;width: 360px;margin-left: 20px;margin-top: 20px;margin-right: 20px;float: left;position:relative;left:0;top:0;}
+.detailhomeregionwrap{height: 26px;width: 78px;z-index:998;position:absolute;left:0;top:0;display:none}
+.detailhomeregionbackground{height: 26px;width: 78px;z-index:998;background-color:#000;opacity:0.3;position:absolute;left:0;top:0;}
+.detailhomeregion{height: 26px;width: 78px;z-index:999;text-align:center;line-height:26px;color:#fff;position:absolute;left:0;top:0;}
+.detailhomeimg{height: 300px;width: 360px;position:absolute;left:0;top:0;}
 .goodinfodiv{width: 480px;float: left;margin-top: 20px;padding-right: 20px;}
 .gooddetailinfop{width: 100%;height: 40px;line-height: 40px;font-size: 16px;margin-left: 20px;}
 .detailinfodiv{width: 252px;background: white;margin-top: 10px;}
@@ -35,6 +40,6 @@
 .detailhomeimg2{width: 120px;height: 40px;float: left;margin-left: 20px;}
 
 
-.tuijianbuynum{color: #666666;font-size: 14px;width: auto;float: left;}
-.tuijiancommentnum{color: #666666;font-size: 14px;text-align: right;}
-.tuijiangoodname{line-height: 20px;width: 220px;font-size: 14px;}
+.tuijianbuynum{color: #666666;font-size: 14px;width: auto;float: left;margin:2px 0 2px 10px;}
+.tuijiancommentnum{color: #666666;font-size: 14px;text-align: right;margin:2px 10px 2px 0;}
+.tuijiangoodname{width:92% !important;margin:4%;line-height: 20px;width: 220px;font-size: 14px;}

@@ -125,6 +125,8 @@ $(function(){
 		ajxget("/mer/load",info,function(data){
 			if(data.code==200){
 				var good = data.data[0];
+				business.mer=good;
+				
 				//设置全局类型
 				business.mer.type=good.type;
 				//判断用户是否有
@@ -138,6 +140,33 @@ $(function(){
 				$("#paynum").text(good.saleNumber+"人付款");
 				$(".detailhomeimg").attr("src",good.imgAddress);
 				$(".goodjieshao").html(good.details);
+				//qq分享
+				(function(){
+				var p = {
+				url:location.href, /*获取URL，可加上来自分享到QQ标识，方便统计*/
+				desc:'好的东西，共同分享', /*分享理由(风格应模拟用户对话),支持多分享语随机展现（使用|分隔）*/
+				title:business.mer.name, /*分享标题(可选)*/
+				summary:'',//||business.mer.summary, /*分享摘要(可选)*/
+				pics:business.mer.imgAddress?business.mer.imgAddress:'', /*分享图片(可选)*/
+				flash: '', /*视频地址(可选)*/
+				site:'QQ分享', /*分享来源(可选) 如：QQ分享*/
+				style:'201',
+				width:32,
+				height:32
+				};
+				var s = [];
+				for(var i in p){
+				s.push(i + '=' + encodeURIComponent(p[i]||''));
+				}
+				var qqq=['<a class="qcShareQQDiv" href="http://connect.qq.com/widget/shareqq/index.html?',s.join('&'),'" target="_blank"></a>'].join('');
+				$("#sharedQQ").append(qqq);
+				})();
+				//判断商品是否自营
+				if(good.region==1){
+					$(".detailhomeregionwrap").show();
+				}else{
+					$(".detailhomeregionwrap").hide();
+				}
 				//console.log(good.merImgList)
 				for (var int = 0; int < good.merImgList.length; int++) {
 					$("#merImgsWrap").children().get(int).setAttribute("src",good.merImgList[int].imgAddress);

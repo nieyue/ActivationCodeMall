@@ -216,6 +216,7 @@ $(function(){
 		$(".setkami").text("接受卡密设置："+cardSecretReceive[business.account.cardSecretReceive]);
 		$(".safeuseremail").text("注册邮箱："+business.account.email);
 		$('.kamiselect').find('option:eq('+business.account.cardSecretReceive+')').attr('selected','selected');
+		//修改卡密
 		$(".kamiselect").change(function(){
 				
 				var value=$(this).children('option:selected').val();
@@ -230,6 +231,7 @@ $(function(){
 						business.account.cardSecretReceive = value;
 						$(".setkami").text("接受卡密设置："+cardSecretReceive[value]);
 						sessionStorage.setItem("account",JSON.stringify(business.account));
+						alert("修改成功")
 					}
 				})
 		});
@@ -249,16 +251,95 @@ $(function(){
 			$("#safetyGrade").text("账号安全等级：高");
 			$(".safediv").width("100%");
 		}
+		//显示修改密码界面
+		$("#updatePasswordWrap").hide();
+		$(".updatapassword").unbind();
+		$(".updatapassword").click(function(){	
+			//隐藏安全设置
+			$("#setdiv").hide();
+			//显示修改密码栏
+			$("#updatePasswordWrap").show();
+			//显示修改密码栏第一步
+			$("#updatePassword1").show();
+			//显示邮箱
+			$(".updatePasswordGetEmail").text(business.account.email);
+			
+		});
+		//点击修改密码发送邮箱
+		$("#updatePassword1SendEmail").click(function(){
+			//显示修改密码栏第2步
+			if(checkEmail(business.account.email)){
+			var info = {
+					adminName:business.account.email,
+					templateCode:2//修改密码
+				}
+			ajxget("/account/validCode",info,function(data){
+				if(data.code==200){
+		        	if(data.msg=="已经验证"){
+		        		alert(data.msg);
+			        	return;
+			        }else{
+			        	alert("验证码发送成功，请注意查收");		
+			        	//显示修改密码栏第2步
+			        	$("#updatePassword1").hide();
+						$("#updatePassword2").show();
+			        }
+			        }else{
+			        	alert(data.msg);
+			        }
+                });
+			}
+		});
+		//点击进入第三步，激活
+		$("#updatePassword2ValidEmail").click(function(){
+			//显示修改密码栏第3步
+        	$("#updatePassword2").hide();
+			$("#updatePassword3").show();
+		});
+		//取消修改密码
+		$("#updatePassword3Cancel").click(function(){
+			$("#setdiv").show();
+			$("#updatePasswordWrap").hide();
+			$("#updatePassword3").hide();
+		});
+		//确认修改密码
+		$("#updatePassword3Sure").click(function(){
+			var password1 = $("#password1").val();
+			var password2 = $("#password2").val();
+			var email = Request["email"];
+			if(business.equalspassword(password1,password2)){
+				var info = {
+						adminName:business.account.email,
+						password:password1
+					}
+				ajxget("/account/updatePassword",info,function(data){
+					if(data.code==200){
+						business.account = data.data[0];
+						sessionStorage.setItem("account",JSON.stringify(business.account));
+						alert("修改成功");
+						$("#setdiv").show();
+						$("#updatePasswordWrap").hide();
+						$("#updatePassword3").hide();
+					}else{
+						alert(data.msg);
+					}
+	                    
+				        
+	                });
+				
+			}
+		});
+		
 	}else if(value=="我的收货地址"){
 		//初始化三级联动
 		var $distpicker = $('#distpicker');
-		console.log($distpicker)
 		  $distpicker.distpicker({
 			  placeholder: false,
 		    province: '湖南省',
 		    city: '长沙市',
 		    district: '岳麓区'
 		  });
+		
 		if(!$(".userinfocontent").is(":hidden")){
 			$(".userinfocontent").toggle();
 		}
@@ -285,7 +366,8 @@ $(function(){
 		$(".kamiselect").change(function(){
 					country=$(this).children('option:selected').text();
 			});
-		$(".savebtn").click(function(){
+		//新增保存
+		$("#savebtn").click(function(){
 			var province = $("#province option:selected").val();
 			var city = $("#city option:selected").val();
 			var area = $("#district option:selected").val();
@@ -341,11 +423,7 @@ $(function(){
 					location.reload();
 				}
 			})
-			
-			
-			
 		});
-		
 		
 	}
    }
@@ -481,15 +559,15 @@ function getorderlist(){
 		        		tr.className = 'addresstd height90';
 		        		var phonenum = child.phone;
 		        		
-		        		if(child.phone==null||child.phone==''){
+		        		if(child.telephone){
 		        			phonenum +="/"+ child.telephone;
 		        		}
-		        		var isD=child.isDefault==1?'默认':''
+		        		var isD=child.isDefault==1?'默认':'';
 //						tr.id = child.integralDetailId;
-						var html = '<tr class="addresstd height90" ><td >'+child.name+'</td><td  class="font_size14 padding_10">'+child.country+'/'+child.province+'/'+child.city+'/'+child.area+'</td><td class="font_size14 padding_10">'+child.address+'</td><td >'+child.postcode+'</td><td >'+phonenum+'</td><td ><div>'+isD+'</div><a class="fl margin_left60" style="color: #4cafe9;">修改</a><a class="fl margin_left20" style="color: #ff7400;" onclick="deletaddress('+business.account.accountId+','+child.receiptInfoId+')">删除</a></td></tr>';
-						tr.innerHTML = html;
-
-						table.append(tr); 
+		        		var strchild=JSON.stringify(child);
+		        		strchild=strchild.replace(/"/g, "\'");
+						var html = '<tr class="addresstd height90" ><td >'+child.name+'</td><td  class="font_size14 padding_10">'+child.country+'/'+child.province+'/'+child.city+'/'+child.area+'</td><td class="font_size14 padding_10">'+child.address+'</td><td >'+child.postcode+'</td><td >'+phonenum+'</td><td ><div>'+isD+'</div><a class="fl margin_left60" style="color: #4cafe9;" onclick="updateaddress('+strchild+')">修改</a><a class="fl margin_left20" style="color: #ff7400;" onclick="deleteaddress('+business.account.accountId+','+child.receiptInfoId+')">删除</a></td></tr>';
+						table.append(html); 
 		        	}
 			}
 		})
@@ -498,8 +576,90 @@ function getorderlist(){
 
    
 })
-
-function deletaddress(accountId,id){
+//更新收货地址显示
+function updateaddress(child){
+	console.log(child)
+	var $distpicker2 = $('#distpicker2');
+	$distpicker2.distpicker('destroy');
+		$distpicker2.distpicker({
+			placeholder: false,
+			province: child.province,
+			city: child.city,
+			district: child.district
+		});
+	//$("#province2").find("option[value = '"+child.province+"']").attr("selected","selected");
+	//$("#city2").find("option[value = '"+child.city+"']").attr("selected","selected");
+	//$("#district2").find("option[value = '"+child.district+"']").attr("selected","selected");
+	$("#address2").val(child.address);
+	$("#postcode2").val(child.postcode);
+	$("#addressusername2").val(child.name);
+	$("#phone2").val(child.phone);
+	$("#telephone2").val(child.telephone);
+	$("#isdefult2").prop("checked",child.isDefault==1?true:false)
+	//显示更新
+	$("#updateReceiptInfoWrap").show();
+	var country = "中国大陆";
+	//修改保存
+	$("#savebtn2").unbind();
+	$("#savebtn2").click(function(){
+		var province = $("#province2 option:selected").val();
+		var city = $("#city2 option:selected").val();
+		var area = $("#district2 option:selected").val();
+		var address = $("#address2").val();
+		var postcode = $("#postcode2").val();
+		var name = $("#addressusername2").val();
+		var phone = $("#phone2").val();
+		var telephone = $("#telephone2").val();
+		
+		if(address==''){
+			alert("请输入详细地址");
+			return false;
+		}
+		if(postcode==''){
+			alert("请输入邮政编码");
+			return false;
+		}
+		if(name==''){
+			alert("请输入收货人姓名");
+			return false;
+		}
+		if(phone.length!=11&&telephone==''){
+			alert("请输入正确的手机号或电话号码");
+			return false;
+		}
+		
+		var phonenum = phone;
+		if(phone==''){
+			phonenum = telphone;
+		}
+		var isDefault = 0;
+		if($("#isdefult2").is(':checked')){
+			isDefault = 1;
+		}
+		var info = {
+			receiptInfoId:child.receiptInfoId,
+			name:name,
+			phone:phonenum,
+			telephone:telephone,
+			postcode:postcode,
+			country:country,
+			province:province,
+			city:city,
+			area:area,
+			address:address,
+			isDefault:isDefault,
+			accountId:child.accountId
+		};
+		ajxget("/receiptInfo/update",info,function(data){
+			if(data.code==200){
+				alert("修改成功")
+				location.reload();
+			}
+		})
+	});
+}
+//删除收货地址
+function deleteaddress(accountId,id){
 	var info = {
 		receiptInfoId:id,
 		accountId:accountId

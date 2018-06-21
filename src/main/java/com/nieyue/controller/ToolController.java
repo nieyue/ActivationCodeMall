@@ -96,11 +96,10 @@ public class ToolController {
 	@ApiOperation(value = "二维码", notes = "二维码")
 	@RequestMapping(value = "/getBarcode", method = {RequestMethod.GET,RequestMethod.POST})
 	public void getBarcode(
-			@RequestParam("acountId")Integer acountId,
+			@RequestParam("url")String url,
 			HttpSession session,HttpServletRequest request,HttpServletResponse response) throws Exception{
 		//BoundValueOperations<String, String> bvo=stringRedisTemplate.boundValueOps(projectName+"ShareDomain");
-		String text = "http://www.laoyeshuo.cn/share.html?acountId="+acountId;
-		QRCodeUtil.encode(text, response.getOutputStream());
+		QRCodeUtil.encode(url, response.getOutputStream());
 		return ;
 	}
 	/**

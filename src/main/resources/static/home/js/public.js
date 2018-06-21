@@ -37,8 +37,10 @@ $(function(){
 		if($(this).hasClass("this")){
 			$(this).removeClass("this");
 			initHideli();
+			$(".friendslink_more img").css("transform","rotate(0deg)")
 		}else{
 			$(this).addClass("this");
+			$(".friendslink_more img").css("transform","rotate(180deg)")
 			$(".friendslink_ul li").each(function  (index) {
 				if(index>9){
 			       $(this).show();
@@ -111,8 +113,10 @@ $(function(){
 	$(".classify_p").click(function  () {
 		if($(".banner_classiul").is(":hidden")){
 			$(".banner_classiul").stop().slideDown();
+			$(".classifyi").css("transform","rotate(180deg)")
 		}else{
 			$(".banner_classiul").stop().slideUp();
+			$(".classifyi").css("transform","rotate(0deg)")
 		}
 	})
 	
@@ -425,6 +429,20 @@ business.islogin=function(){
 	})
 }
 business.islogin();
+//验证第二次密码
+	business.equalspassword=function(password1,password2){
+		if(password1.length>5){
+			if(password1==password2){
+				return true;
+			}else{
+				alert("两次密码不匹配");
+				return false;
+			}
+		}else{
+			alert("密码不能小于6位");
+			return false;
+		}
+	};
 
 //七牛云
 /*
