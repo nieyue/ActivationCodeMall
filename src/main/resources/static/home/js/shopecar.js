@@ -1,152 +1,127 @@
 $(document).ready(function(){
 	
-	
-	
-	
-	
-	
 	$(".commitbtn").click(function(){
 		window.location.href = "myordercommit.html";
 	});
 
-
+//点击所有商品
 $("#allgood").click(function(){
 	$("#allgood").css("background-color","#573c1e");
 	$("#jiangjiagood").css("background-color","");
 	$("#wantbuygood").css("background-color","");
-	getcarlist(0);
+	getcarlist();
 });
-
+//点击降价商品
 $("#jiangjiagood").click(function(){
 	$("#allgood").css("background-color","");
 	$("#jiangjiagood").css("background-color","#573c1e");
 	$("#wantbuygood").css("background-color","");
-	getjiangjialist(0);
+	getjiangjialist();
 });
-
+//点击预购商品
 $("#wantbuygood").click(function(){
 	$("#allgood").css("background-color","");
 	$("#jiangjiagood").css("background-color","");
 	$("#wantbuygood").css("background-color","#573c1e");
-	getyugoulist(0);
+	getyugoulist();
 });
 
-
-getcarlist(1);
-getjiangjialist(1);
-getyugoulist(1);
-function getjiangjialist(typeid){
-	
-	
+//获取所有购物车数据
+business.getCartMerList=function(){
 	var info = {
-		accountId:id,
-		pageNum:1,
-		pageSize:5
-	}
-	ajxget("/cartMer/list",info,function(data){
-					if(data.code==200){
-					
-					var list = data.data;
-					$("#jiangjianum").text("降价商品("+list.length+")");
-					if(typeid==0){
-						var table = $('#shopecarlist');
-						table.html("");
-			        	for(var i = 0; i < list.length; i++) {
-			        		var child = list[i];
-			        		var tr = document.createElement('tr');
-			        		tr.className = "td item";
-							tr.id = child.cartMerId;
-							var img = child.mer.imgAddress;
-							if(img==null||img==""){
-								img = "img/index_goods1.jpg";
-							}
-							var html = '<td style="position:relative;"><div style="position: absolute;top: 50%;transform:translateY(-50%);"><input name="checkbox" type="checkbox" style="margin-left: 10px;float: left;margin-top: 25px;" /><img class="caritemimg" src="'+img+'" /><p class="caritemname">'+child.mer.name+'</p></div></td><td >¥'+child.mer.unitPrice+'</td><td ><div class="gw_num"><em class="jian" onclick='+"'"+'jian("#goodsummoney'+i+'","#goodnum'+i+'",'+child.mer.unitPrice+')'+"'"+'>-</em><input type="text" value="'+child.number+'" class="num" id="goodnum'+i+'"/><em class="add" onclick='+"'"+'jia("#goodsummoney'+i+'","#goodnum'+i+'",'+child.mer.unitPrice+')'+"'"+'>+</em></div></td><td id="goodsummoney'+i+'">¥'+child.totalPrice+'</td><td><a class="commitorder">提交订单</a><a class="deletshopcar" onclick="delectcar('+child.cartMerId+')">删除</a></td>';
-							tr.innerHTML = html;
-	
-							table.append(tr); 
-			        	}
+			accountId:business.account!=null?business.account.accountId:null,
+		}
+		ajxget("/cartMer/userlist",info,function(data){
+						if(data.code==200){
+						//总数
+						business.cartMerCountAll=data.data[0].cartMerCountAll;	
+						//总列表
+						business.cartMerListAll=data.data[0].cartMerListAll;	
+						//降价总数
+						business.cartMerCount2=data.data[0].cartMerCount2;	
+						//降价列表
+						business.cartMerList2=data.data[0].cartMerList2;	
+						//预购总数
+						business.cartMerCount3=data.data[0].cartMerCount3;	
+						//预购列表
+						business.cartMerList3=data.data[0].cartMerList3;	
+						console.log(business.cartMerListAll)
+						//所有商品
+						getcarlist();
+						//降价商品
+						//getjiangjialist();
+						//预购商品
+						//getyugoulist();
 					}
-		        	
-				}
-	});
-	
+			}
+		)
 }
-	function getyugoulist(type){
-	
-	
-	var info = {
-		accountId:id,
-		pageNum:1,
-		pageSize:5
-	}
-	ajxget("/cartMer/list",info,function(data){
-					if(data.code==200){
-					
-					var list = data.data;
-					
-					$("#yugounum").text("预购商品("+list.length+")");
-					if(type==0){
-						var table = $('#shopecarlist');
-						table.html("");
-			        	for(var i = 0; i < list.length; i++) {
-			        		var child = list[i];
-			        		var tr = document.createElement('tr');
-			        		tr.className = "td shopeitem";
-							tr.id = child.cartMerId;
-							var html = '<td style="position:relative;"><div style="position: absolute;top: 50%;transform:translateY(-50%);"><input name="checkbox" type="checkbox" style="margin-left: 10px;float: left;margin-top: 25px;" /><img class="caritemimg" src="'+child.mer.imgAddress+'" /><p class="caritemname">'+child.mer.name+'</p></div></td><td >¥'+child.mer.unitPrice+'</td><td ><div class="gw_num"><em class="jian" onclick='+"'"+'jian("#goodsummoney'+i+'","#goodnum'+i+'",'+child.mer.unitPrice+')'+"'"+'>-</em><input type="text" value="'+child.number+'" class="num" id="goodnum'+i+'"/><em class="add" onclick='+"'"+'jia("#goodsummoney'+i+'","#goodnum'+i+'",'+child.mer.unitPrice+')'+"'"+'>+</em></div></td><td id="goodsummoney'+i+'">¥'+child.totalPrice+'</td><td><a class="commitorder">提交订单</a><a class="deletshopcar" onclick="delectcar('+child.cartMerId+')">删除</a></td>';
-							tr.innerHTML = html;
-	
-							table.append(tr); 
-			        	}
-					}
-					
-		        	
-				}
-	});
+business.getCartMerList();
+
+
+
+function getcarlist(){
+		var list = business.cartMerListAll;
+		$("#allcarnum").text("所有商品("+business.cartMerCountAll+")")
+			var table = $('#shopecarlist');
+			table.html("");
+        	for(var i = 0; i < list.length; i++) {
+        		var child = list[i];
+        		var tr = document.createElement('tr');
+        		tr.className = "td shopeitem";
+				tr.id = child.cartMerId;
+				var html = '<td style="position:relative;"><div style="position: absolute;top: 50%;transform:translateY(-50%);"><input name="checkbox" type="checkbox" style="margin-left: 10px;float: left;margin-top: 25px;" /><img class="caritemimg" src="'+child.mer.imgAddress+'" /><p class="caritemname">'+child.mer.name+'</p></div></td><td >¥'+child.mer.unitPrice+'</td><td ><div class="gw_num"><em class="jian" onclick='+"'"+'jian("#goodsummoney'+i+'","#goodnum'+i+'",'+child.mer.unitPrice+')'+"'"+'>-</em><input type="text" disabled="disabled" value="'+child.number+'" class="num" id="goodnum'+i+'"/><em class="add" onclick='+"'"+'jia("#goodsummoney'+i+'","#goodnum'+i+'",'+child.mer.unitPrice+')'+"'"+'>+</em></div></td><td id="goodsummoney'+i+'">¥'+child.totalPrice+'</td><td><a class="commitorder">提交订单</a><a class="deletshopcar" onclick="deleteCartMer('+child.cartMerId+')">删除</a></td>';
+				tr.innerHTML = html;
+				table.append(tr); 
+		}
+    	
 }
 
-
-
-
-function getcarlist(typeid){
-	
-	var info = {
-		accountId:id,
-		pageNum:1,
-		pageSize:5
-	}
-	ajxget("/cartMer/list",info,function(data){
-					if(data.code==200){
-					
-					var list = data.data;
-					$("#allcarnum").text("所有商品("+list.length+")")
-					
-		        	
-						var table = $('#shopecarlist');
-						table.html("");
-			        	for(var i = 0; i < list.length; i++) {
-			        		var child = list[i];
-			        		var tr = document.createElement('tr');
-			        		tr.className = "td shopeitem";
-							tr.id = child.cartMerId;
-							var html = '<td style="position:relative;"><div style="position: absolute;top: 50%;transform:translateY(-50%);"><input name="checkbox" type="checkbox" style="margin-left: 10px;float: left;margin-top: 25px;" /><img class="caritemimg" src="'+child.mer.imgAddress+'" /><p class="caritemname">'+child.mer.name+'</p></div></td><td >¥'+child.mer.unitPrice+'</td><td ><div class="gw_num"><em class="jian" onclick='+"'"+'jian("#goodsummoney'+i+'","#goodnum'+i+'",'+child.mer.unitPrice+')'+"'"+'>-</em><input type="text" value="'+child.number+'" class="num" id="goodnum'+i+'"/><em class="add" onclick='+"'"+'jia("#goodsummoney'+i+'","#goodnum'+i+'",'+child.mer.unitPrice+')'+"'"+'>+</em></div></td><td id="goodsummoney'+i+'">¥'+child.totalPrice+'</td><td><a class="commitorder">提交订单</a><a class="deletshopcar" onclick="delectcar('+child.cartMerId+')">删除</a></td>';
-							tr.innerHTML = html;
-	
-							table.append(tr); 
-			        	
+function getjiangjialist(){
+			var list = business.cartMerList2;
+			$("#jiangjianum").text("降价商品("+business.cartMerCount2+")");
+				var table = $('#shopecarlist');
+				table.html("");
+	        	for(var i = 0; i < list.length; i++) {
+	        		var child = list[i];
+	        		var tr = document.createElement('tr');
+	        		tr.className = "td item";
+					tr.id = child.cartMerId;
+					var img = child.mer.imgAddress;
+					if(img==null||img==""){
+						img = "img/index_goods1.jpg";
 					}
-		        	
-				}
-	});
+					var html = '<td style="position:relative;"><div style="position: absolute;top: 50%;transform:translateY(-50%);"><input name="checkbox" type="checkbox" style="margin-left: 10px;float: left;margin-top: 25px;" /><img class="caritemimg" src="'+img+'" /><p class="caritemname">'+child.mer.name+'</p></div></td><td >¥'+child.mer.unitPrice+'</td><td ><div class="gw_num"><em class="jian" onclick='+"'"+'jian("#goodsummoney'+i+'","#goodnum'+i+'",'+child.mer.unitPrice+')'+"'"+'>-</em><input type="text" disabled="disabled" value="'+child.number+'" class="num" id="goodnum'+i+'"/><em class="add" onclick='+"'"+'jia("#goodsummoney'+i+'","#goodnum'+i+'",'+child.mer.unitPrice+')'+"'"+'>+</em></div></td><td id="goodsummoney'+i+'">¥'+child.totalPrice+'</td><td><a class="commitorder">提交订单</a><a class="deletshopcar" onclick="deleteCartMer('+child.cartMerId+')">删除</a></td>';
+					tr.innerHTML = html;
+					table.append(tr); 
+	        	}
+        	
 }
+	
+function getyugoulist(){
+		var list = business.cartMerList3;
+		$("#yugounum").text("预购商品("+business.cartMerCount3+")");
+			var table = $('#shopecarlist');
+			table.html("");
+        	for(var i = 0; i < list.length; i++) {
+        		var child = list[i];
+        		var tr = document.createElement('tr');
+        		tr.className = "td shopeitem";
+				tr.id = child.cartMerId;
+				var html = '<td style="position:relative;"><div style="position: absolute;top: 50%;transform:translateY(-50%);"><input name="checkbox" type="checkbox" style="margin-left: 10px;float: left;margin-top: 25px;" /><img class="caritemimg" src="'+child.mer.imgAddress+'" /><p class="caritemname">'+child.mer.name+'</p></div></td><td >¥'+child.mer.unitPrice+'</td><td ><div class="gw_num"><em class="jian" onclick='+"'"+'jian("#goodsummoney'+i+'","#goodnum'+i+'",'+child.mer.unitPrice+')'+"'"+'>-</em><input type="text" disabled="disabled" value="'+child.number+'" class="num" id="goodnum'+i+'"/><em class="add" onclick='+"'"+'jia("#goodsummoney'+i+'","#goodnum'+i+'",'+child.mer.unitPrice+')'+"'"+'>+</em></div></td><td id="goodsummoney'+i+'">¥'+child.totalPrice+'</td><td><a class="commitorder">提交订单</a><a class="deletshopcar" onclick="deleteCartMer('+child.cartMerId+')">删除</a></td>';
+				tr.innerHTML = html;
+
+				table.append(tr); 
+        	}
+}
+
 
 
 })
-var acountid = localStorage.getItem("acountId");
-function delectcar(id){
+function deleteCartMer(cartMerId){
 	var info = {
-		cartMerId:id,
-		accountId:acountid
+		cartMerId:cartMerId,
+		accountId:business.account!=null?business.account.accountId:null
 	};
 	
 	ajxget("/cartMer/delete",info,function(data){
@@ -173,6 +148,7 @@ function jia(valueid,sumid,price){
 	var n=$(sumid).val();
 	var num=parseInt(n)+1;
 	if(num==0){ return}
+	if(num>5){alert("单品最大5个"); return;}
 	$(sumid).val(num);
 	var money = accMul(num,price);
 	
@@ -190,7 +166,7 @@ return Number(s1.replace(".",""))*Number(s2.replace(".",""))/Math.pow(10,m)
 function addorder(){
 	
 }
-			
+//获取推荐列表		
 function gettuijian(){
 	var info = {
 		pageNum:1,

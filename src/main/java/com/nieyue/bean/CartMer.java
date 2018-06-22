@@ -44,6 +44,11 @@ public class CartMer implements Serializable{
 	@ApiModelProperty(value="更新时间",example="更新时间")
 	private Date updateDate;
 	/**
+	 * 推广账户id
+	 */
+	@ApiModelProperty(value="推广账户id",example="推广账户id")
+	private Integer spreadAccountId;
+	/**
 	 * 商品id外键
 	 */
 	@ApiModelProperty(value="商品id外键",example="商品id外键")
@@ -108,6 +113,12 @@ public class CartMer implements Serializable{
 	}
 	public void setMer(Mer mer) {
 		this.mer = mer;
+	}
+	public Integer getSpreadAccountId() {
+		return spreadAccountId;
+	}
+	public void setSpreadAccountId(Integer spreadAccountId) {
+		this.spreadAccountId = spreadAccountId;
 	}
 	
 }

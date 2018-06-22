@@ -3,6 +3,7 @@ $(function(){
 	
 	business.request  = getUrlInfo(location.search);
 	business.merId = business.request["goodid"];
+	business.spreadAccountId = business.request["said"];
 	//我要出售此商品
 	if(business.account&&business.account.roleName=="商户"){		
 	$("#sellerMer").click(function(){
@@ -71,22 +72,22 @@ $(function(){
 	
 	//加入购物车
 	$("#addtoshopcar").click(function(){
-		console.log(11)
 		if(!business.account||business.account.roleName!="用户"){	
-			console.log(1122)
-			alert("对不起，请注册买家账户购买")
+			alert("对不起，请登录买家账户购买")
 			return ;
 		}
 		var info = {
 			number:1,
-			accountId:business.acount!=null?business.account.accountId:null,
+			spreadAccountId:business.spreadAccountId,
+			accountId:business.account!=null?business.account.accountId:null,
 			merId:business.merId
 		};
-		
 		ajxget("/cartMer/add",info,function(data){
 			if(data.code==200){
 				alert("添加成功");
 				location.reload();
+			}else{
+				alert(data.msg);
 			}
 		});
 	});
@@ -94,12 +95,13 @@ $(function(){
 	//立即购买
 	$("#buyfast").click(function(){
 		if(!business.account||business.account.roleName!="用户"){	
-			alert("对不起，请注册买家账户购买")
+			alert("对不起，请登录买家账户购买")
 			return ;
 		}
 		var info = {
 			number:1,
-			accountId:business.acount!=null?business.account.accountId:null,
+			spreadAccountId:business.spreadAccountId,
+			accountId:business.account!=null?business.account.accountId:null,
 			merId:business.merId
 		};
 		

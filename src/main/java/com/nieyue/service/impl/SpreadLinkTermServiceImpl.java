@@ -38,19 +38,21 @@ public class SpreadLinkTermServiceImpl implements SpreadLinkTermService{
 				public void run() {
 					List<Account> al = accountService.browsePagingAccount(null, null, null, null, null, null, null, null, null, 1, Integer.MAX_VALUE, "account_id", "asc");
 					al.forEach((account)->{
+						if(account.getRoleName().equals("推广户")){
 						Integer aid = account.getAccountId();
 						SpreadLink sl=new SpreadLink();
 						String link=spreadLinkTerm.getLink();
 						if(link.indexOf("?")>0||
 								link.indexOf("？")>0){
-							link+="&spreadAccountId="+aid;
+							link+="&said="+aid;
 						}else{
-							link+="?spreadAccountId="+aid;
+							link+="?said="+aid;
 						}
 						sl.setLink(link);
 						sl.setSpreadNumber(0);
 						sl.setAccountId(aid);
 						spreadLinkService.addSpreadLink(sl);
+						}
 					});
 				}
 			}).start();
@@ -69,11 +71,13 @@ public class SpreadLinkTermServiceImpl implements SpreadLinkTermService{
 				public void run() {
 					List<Account> al = accountService.browsePagingAccount(null, null, null, null, null, null, null, null, null, 1, Integer.MAX_VALUE, "account_id", "asc");
 					al.forEach((account)->{
+						if(account.getRoleName().equals("推广户")){
 						Integer aid = account.getAccountId();
 						List<SpreadLink> sll = spreadLinkService.browsePagingSpreadLink(aid, 1, Integer.MAX_VALUE, "spread_link_id", "asc");
 						if(sll.size()==1){
 						SpreadLink spreadLink=sll.get(0);
 						spreadLinkService.delSpreadLink(spreadLink.getSpreadLinkId());
+						}
 						}
 					});
 				}
@@ -93,6 +97,7 @@ public class SpreadLinkTermServiceImpl implements SpreadLinkTermService{
 				public void run() {
 					List<Account> al = accountService.browsePagingAccount(null, null, null, null, null, null, null, null, null, 1, Integer.MAX_VALUE, "account_id", "asc");
 					al.forEach((account)->{
+						if(account.getRoleName().equals("推广户")){
 						Integer aid = account.getAccountId();
 						List<SpreadLink> sll = spreadLinkService.browsePagingSpreadLink(aid, 1, Integer.MAX_VALUE, "spread_link_id", "asc");
 						if(sll.size()==1){
@@ -100,14 +105,15 @@ public class SpreadLinkTermServiceImpl implements SpreadLinkTermService{
 							String link=spreadLinkTerm.getLink();
 							if(link.indexOf("?")>0||
 									link.indexOf("？")>0){
-								link+="&spreadAccountId="+aid;
+								link+="&said="+aid;
 							}else{
-								link+="?spreadAccountId="+aid;
+								link+="?said="+aid;
 							}
 							sl.setLink(link);
 							sl.setSpreadNumber(sl.getSpreadNumber());
 							sl.setAccountId(aid);
 							spreadLinkService.updateSpreadLink(sl);
+						}
 						}
 					});
 				}

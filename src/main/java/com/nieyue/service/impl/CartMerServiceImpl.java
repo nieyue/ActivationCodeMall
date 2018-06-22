@@ -26,15 +26,7 @@ public class CartMerServiceImpl implements CartMerService{
 	@Transactional(propagation=Propagation.REQUIRED)
 	@Override
 	public boolean addCartMer(CartMer cartMer) {
-		cartMer.setCreateDate(new Date());
-		cartMer.setUpdateDate(new Date());
-		Integer number=cartMer.getNumber();
-		if(number==null||number<=0){
-			throw new CommonRollbackException("商品至少1个");
-		}
-		if(number>5){
-			throw new CommonRollbackException("商品最大数5个");
-		}
+		boolean b=false;
 		Integer merId=cartMer.getMerId();
 		if(ObjectUtils.isEmpty(merId)){
 			throw new CommonRollbackException("请选择商品");
@@ -43,9 +35,31 @@ public class CartMerServiceImpl implements CartMerService{
 		if(ObjectUtils.isEmpty(mer)){
 			throw new CommonRollbackException("请选择商品");
 		}
+		
+		List<CartMer> cartMerList = cartMerDao.browsePagingCartMer(null, cartMer.getMerId(), cartMer.getAccountId(), 0, 1, "cart_mer_id", "asc");
+		Integer number=cartMer.getNumber();
+		//如果已经存在
+		if(cartMerList.size()==1){
+			number+=cartMerList.get(0).getNumber();
+		}
+		if(number==null||number<=0){
+			throw new CommonRollbackException("商品至少1个");
+		}
+		if(number>5){
+			throw new CommonRollbackException("一个商品最大数5个");
+		}
+		
 		//设置总价
 		cartMer.setTotalPrice(Arith.mul(mer.getUnitPrice(), number));
-		boolean b = cartMerDao.addCartMer(cartMer);
+		cartMer.setNumber(number);
+		cartMer.setUpdateDate(new Date());
+		if(cartMerList.size()==1){
+			cartMer.setCartMerId(cartMerList.get(0).getCartMerId());
+			b = cartMerDao.updateCartMer(cartMer);
+		}else{
+			cartMer.setCreateDate(new Date());
+			b = cartMerDao.addCartMer(cartMer);			
+		}
 		return b;
 	}
 	@Transactional(propagation=Propagation.REQUIRED)

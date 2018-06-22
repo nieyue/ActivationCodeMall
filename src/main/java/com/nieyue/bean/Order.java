@@ -63,6 +63,11 @@ public class Order implements Serializable {
 	@ApiModelProperty(value="子状态，1(1冻结单)，2（1待支付），3（1已支付），4（1等待发货），5（1待解决（买家提问后），2解决中（卖家回复后），3申请退款，4已退款，5已解决），6（1已取消），7（1已删除）",example="子状态，1(1冻结单)，2（1待支付），3（1已支付），4（1等待发货），5（1待解决（买家提问后），2解决中（卖家回复后），3申请退款，4已退款，5已解决），6（1已取消），7（1已删除）")
 	private Integer substatus;
 	/**
+	 * 推广账户id
+	 */
+	@ApiModelProperty(value="推广账户id",example="推广账户id")
+	private Integer spreadAccountId;
+	/**
 	 * 下单人
 	 */
 	@ApiModelProperty(value="下单人",example="下单人")
@@ -139,6 +144,12 @@ public class Order implements Serializable {
 	}
 	public static long getSerialversionuid() {
 		return serialVersionUID;
+	}
+	public Integer getSpreadAccountId() {
+		return spreadAccountId;
+	}
+	public void setSpreadAccountId(Integer spreadAccountId) {
+		this.spreadAccountId = spreadAccountId;
 	}
 	
 }

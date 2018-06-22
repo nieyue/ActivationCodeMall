@@ -16,9 +16,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.nieyue.bean.CartMer;
+import com.nieyue.exception.CommonRollbackException;
 import com.nieyue.exception.NotAnymoreException;
 import com.nieyue.exception.NotIsNotExistException;
 import com.nieyue.service.CartMerService;
+import com.nieyue.util.NumberUtil;
 import com.nieyue.util.ResultUtil;
 import com.nieyue.util.StateResult;
 import com.nieyue.util.StateResultList;
@@ -150,6 +152,28 @@ public class CartMerController {
 	@RequestMapping(value = "/delete", method = {RequestMethod.GET,RequestMethod.POST})
 	public @ResponseBody StateResult delCartMer(@RequestParam("cartMerId") Integer cartMerId,HttpSession session)  {
 		boolean dm = cartMerService.delCartMer(cartMerId);
+		return ResultUtil.getSR(dm);
+	}
+	/**
+	 * 购物车商品批量删除
+	 * @return
+	 */
+	@ApiOperation(value = "购物车商品批量删除", notes = "购物车商品批量删除")
+	@ApiImplicitParams({
+		@ApiImplicitParam(name="cartMerIds",value="购物车商品ID集合数组，\"22,33,44,53,3\"",dataType="string", paramType = "query",required=true)
+	})
+	@RequestMapping(value = "/deleteBatch", method = {RequestMethod.GET,RequestMethod.POST})
+	public @ResponseBody StateResult delBatchCartMer(@RequestParam("cartMerIds") String cartMerIds,HttpSession session)  {
+		String[] ids = cartMerIds.replace(" ","").split(",");
+		boolean dm=false;
+		for (int i = 0; i < ids.length; i++) {
+			if(!NumberUtil.isNumeric(ids[i])){
+				throw new CommonRollbackException("参数错误");
+			}
+		}
+		for (int i = 0; i < ids.length; i++) {
+			dm = cartMerService.delCartMer(new Integer(ids[i]));
+		}
 		return ResultUtil.getSR(dm);
 	}
 	/**
