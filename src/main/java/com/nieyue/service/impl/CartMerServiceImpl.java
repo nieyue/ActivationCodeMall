@@ -16,13 +16,21 @@ import com.nieyue.dao.CartMerDao;
 import com.nieyue.exception.CommonRollbackException;
 import com.nieyue.service.CartMerService;
 import com.nieyue.service.MerService;
+import com.nieyue.service.OrderDetailService;
+import com.nieyue.service.OrderService;
 import com.nieyue.util.Arith;
+import com.nieyue.util.NumberUtil;
+import com.nieyue.util.ResultUtil;
 @Service
 public class CartMerServiceImpl implements CartMerService{
 	@Resource
 	CartMerDao cartMerDao;
 	@Resource
 	MerService merService;
+	@Resource
+	OrderService orderService;
+	@Resource
+	OrderDetailService orderDetailService;
 	@Transactional(propagation=Propagation.REQUIRED)
 	@Override
 	public boolean addCartMer(CartMer cartMer) {
@@ -36,10 +44,13 @@ public class CartMerServiceImpl implements CartMerService{
 			throw new CommonRollbackException("请选择商品");
 		}
 		
-		List<CartMer> cartMerList = cartMerDao.browsePagingCartMer(null, cartMer.getMerId(), cartMer.getAccountId(), 0, 1, "cart_mer_id", "asc");
+		List<CartMer> cartMerList = cartMerDao.browsePagingCartMer(null, cartMer.getMerId(), cartMer.getAccountId(), 0, 20, "cart_mer_id", "asc");
 		Integer number=cartMer.getNumber();
 		//如果已经存在
 		if(cartMerList.size()==1){
+			if(cartMerList.size()==20){
+				throw new CommonRollbackException("购物车商品最多20个");
+			}
 			number+=cartMerList.get(0).getNumber();
 		}
 		if(number==null||number<=0){
@@ -112,6 +123,22 @@ public class CartMerServiceImpl implements CartMerService{
 			cm.setMer(mer);
 		});
 		return l;
+	}
+	@Transactional(propagation=Propagation.REQUIRED)
+	@Override
+	public boolean batchCartMerTurnOrder(String cartMerIds) {
+		//分割数组
+		String[] ids = cartMerIds.replace(" ","").split(",");
+		boolean dm=false;
+		for (int i = 0; i < ids.length; i++) {
+			if(!NumberUtil.isNumeric(ids[i])){
+				throw new CommonRollbackException("参数错误");
+			}
+		}
+		for (int i = 0; i < ids.length; i++) {
+			
+		}
+		return false;
 	}
 
 	

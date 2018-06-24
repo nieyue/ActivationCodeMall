@@ -97,7 +97,7 @@ $(function(){
 			if($(".sel_year option:selected").val()<=0
 					||$(".sel_month option:selected").val()<=0
 					||$(".sel_day option:selected").val()<=0){
-				alert("请选择正确日期")
+				business.myLoadingToast("请选择正确日期");
 				return ;
 			}
 			var nyr=$(".sel_year option:selected").val()+"/"+$(".sel_month option:selected").val()+"/"+$(".sel_day option:selected").val();
@@ -110,6 +110,7 @@ $(function(){
 				if(data.code==200){
 					business.account.birthday = info.birthday;
 					sessionStorage.setItem("account",JSON.stringify(business.account));
+					business.myLoadingToast("修改成功");
 				
 				}
 			})
@@ -231,7 +232,7 @@ $(function(){
 						business.account.cardSecretReceive = value;
 						$(".setkami").text("接受卡密设置："+cardSecretReceive[value]);
 						sessionStorage.setItem("account",JSON.stringify(business.account));
-						alert("修改成功")
+						business.myLoadingToast("修改成功");
 					}
 				})
 		});
@@ -276,16 +277,19 @@ $(function(){
 			ajxget("/account/validCode",info,function(data){
 				if(data.code==200){
 		        	if(data.msg=="已经验证"){
-		        		alert(data.msg);
+		        		//alert(data.msg);
+		        		business.myLoadingToast(data.msg);
 			        	return;
 			        }else{
-			        	alert("验证码发送成功，请注意查收");		
+			        	business.myLoadingToast("验证码发送成功，请注意查收");
+			        	//alert("验证码发送成功，请注意查收");		
 			        	//显示修改密码栏第2步
 			        	$("#updatePassword1").hide();
 						$("#updatePassword2").show();
 			        }
 			        }else{
-			        	alert(data.msg);
+			        	//alert(data.msg);
+			        	business.myLoadingToast(data.msg);
 			        }
                 });
 			}
@@ -316,12 +320,14 @@ $(function(){
 					if(data.code==200){
 						business.account = data.data[0];
 						sessionStorage.setItem("account",JSON.stringify(business.account));
-						alert("修改成功");
+						//alert("修改成功");
+						business.myLoadingToast("修改成功");
 						$("#setdiv").show();
 						$("#updatePasswordWrap").hide();
 						$("#updatePassword3").hide();
 					}else{
-						alert(data.msg);
+						//alert(data.msg);
+						business.myLoadingToast(data.msg);
 					}
 	                    
 				        
@@ -378,19 +384,19 @@ $(function(){
 			var telephone = $("#telephone").val();
 			
 			if(address==''){
-				alert("请输入详细地址");
+				business.myLoadingToast("请输入详细地址");
 				return false;
 			}
 			if(postcode==''){
-				alert("请输入邮政编码");
+				business.myLoadingToast("请输入邮政编码");
 				return false;
 			}
 			if(name==''){
-				alert("请输入收货人姓名");
+				business.myLoadingToast("请输入收货人姓名");
 				return false;
 			}
 			if(phone.length!=11&&telephone==''){
-				alert("请输入正确的手机号或电话号码");
+				business.myLoadingToast("请输入正确的手机号或电话号码");
 				return false;
 			}
 			
@@ -419,7 +425,7 @@ $(function(){
 			};
 			ajxget("/receiptInfo/add",info,function(data){
 				if(data.code==200){
-					alert("添加成功")
+					business.myLoadingToast("添加成功")
 					location.reload();
 				}
 			})
@@ -612,19 +618,19 @@ function updateaddress(child){
 		var telephone = $("#telephone2").val();
 		
 		if(address==''){
-			alert("请输入详细地址");
+			business.myLoadingToast("请输入详细地址");
 			return false;
 		}
 		if(postcode==''){
-			alert("请输入邮政编码");
+			business.myLoadingToast("请输入邮政编码");
 			return false;
 		}
 		if(name==''){
-			alert("请输入收货人姓名");
+			business.myLoadingToast("请输入收货人姓名");
 			return false;
 		}
 		if(phone.length!=11&&telephone==''){
-			alert("请输入正确的手机号或电话号码");
+			business.myLoadingToast("请输入正确的手机号或电话号码");
 			return false;
 		}
 		
@@ -652,7 +658,7 @@ function updateaddress(child){
 		};
 		ajxget("/receiptInfo/update",info,function(data){
 			if(data.code==200){
-				alert("修改成功")
+				business.myLoadingToast("修改成功")
 				location.reload();
 			}
 		})

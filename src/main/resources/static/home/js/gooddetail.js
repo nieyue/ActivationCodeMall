@@ -73,7 +73,7 @@ $(function(){
 	//加入购物车
 	$("#addtoshopcar").click(function(){
 		if(!business.account||business.account.roleName!="用户"){	
-			alert("对不起，请登录买家账户购买")
+			business.myLoadingToast("对不起，请登录买家账户购买")
 			return ;
 		}
 		var info = {
@@ -84,10 +84,10 @@ $(function(){
 		};
 		ajxget("/cartMer/add",info,function(data){
 			if(data.code==200){
-				alert("添加成功");
+				business.myLoadingToast("添加成功");
 				location.reload();
 			}else{
-				alert(data.msg);
+				business.myLoadingToast(data.msg);
 			}
 		});
 	});
@@ -95,7 +95,7 @@ $(function(){
 	//立即购买
 	$("#buyfast").click(function(){
 		if(!business.account||business.account.roleName!="用户"){	
-			alert("对不起，请登录买家账户购买")
+			business.myLoadingToast("对不起，请登录买家账户购买")
 			return ;
 		}
 		var info = {
@@ -107,7 +107,7 @@ $(function(){
 		
 		ajxget("/cartMer/add",info,function(data){
 			if(data.code==200){
-				alert("添加成功");
+				business.myLoadingToast("添加成功");
 				location.reload();
 			}
 		});
@@ -203,7 +203,7 @@ $(function(){
 								getorderproblem();								
 							}
 							if(!business.orderProblemList||business.orderProblemList.length<=0){
-								$(".goodjieshao").html("<a style='display:block;text-align:center'>该商品问题反馈</a>");
+								$(".goodjieshao").html("<div style='display:block;text-align:center;'>该&nbsp;商&nbsp;品&nbsp;暂&nbsp;无&nbsp;问&nbsp;题&nbsp;反&nbsp;馈</div>");
 								return;
 							}
 							for (var int = 0; int < business.orderProblemList.length; int++) {
@@ -240,7 +240,7 @@ $(function(){
 								getmernotice();								
 							}
 							if(!business.merNoticeList||business.merNoticeList.length<=0){
-								$(".goodjieshao").html("<a style='display:block;text-align:center'>该商品暂无公告</a>");
+								$(".goodjieshao").html("<div style='display:block;text-align:center'>该&nbsp;商&nbsp;品&nbsp;暂&nbsp;无&nbsp;公&nbsp;告</div>");
 								return;
 							}
 							for (var int = 0; int < business.merNoticeList.length; int++) {
@@ -276,7 +276,7 @@ $(function(){
 							getmerordercomment();								
 						}
 						if(!business.merOrderCommentList||business.merOrderCommentList.length<=0){
-							$(".pingjia").html("<a style='display:block;text-align:center'>该商品暂无评价</a>");
+							$(".pingjia").html("<div style='display:block;text-align:center;height:60px;line-height:60px;'>该&nbsp;商&nbsp;品&nbsp;暂&nbsp;无&nbsp;评&nbsp;价</div>");
 							return;
 						}
 						//评价数

@@ -177,6 +177,19 @@ public class CartMerController {
 		return ResultUtil.getSR(dm);
 	}
 	/**
+	 * 购物车商品批量转未支付订单商品
+	 * @return
+	 */
+	@ApiOperation(value = "购物车商品批量转未支付订单商品", notes = "购物车商品批量转未支付订单商品")
+	@ApiImplicitParams({
+		@ApiImplicitParam(name="cartMerIds",value="购物车商品ID集合数组，\"22,33,44,53,3\"",dataType="string", paramType = "query",required=true)
+	})
+	@RequestMapping(value = "/turnOrderBatch", method = {RequestMethod.GET,RequestMethod.POST})
+	public @ResponseBody StateResult batchCartMerTurnOrder(@RequestParam("cartMerIds") String cartMerIds,HttpSession session)  {
+		boolean dm=cartMerService.batchCartMerTurnOrder(cartMerIds);
+		return ResultUtil.getSR(dm);
+	}
+	/**
 	 * 购物车商品浏览数量
 	 * @return
 	 */

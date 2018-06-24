@@ -13,6 +13,66 @@ var business={
 	accountLevelList:[],//等级列表
 	merId:1,
 	mer:{},
+	//点击全选
+	checkboxAll:function(parent,childs,callback){
+		//重置	
+		$(parent).prop("checked",false);
+		$(childs).prop("checked",false);
+			$(document).off();
+			//主
+			$(document).on('click',parent,function(){
+			$(childs).prop("checked",$(this).prop("checked"));
+			if(typeof callback =='function'){
+				callback();
+			}
+			});
+			//从
+			$(document).on('click',childs,function(){
+				//只要有一个不选，则没有全选
+				if(!$(this).prop("checked")){
+					$(parent).prop("checked",$(this).prop("checked"));					
+				}
+				if(typeof callback =='function'){
+					callback();
+				}
+			});
+		},
+	//快速loading
+	myLoadingToast:function(value, fn){
+		$("body")
+		.append(
+				"<div id='loadingToast' style='display:none;color:#fff;background-color:black;text-align:center;line-height:30px;border:1px solid black;border-radius:5px;min-height:30px;max-width:200px;padding:0 10px;margin:-5px -"+value.length*7+"px;top:50%;left:50%;position:fixed;z-index:999999999'>"
+				+ value + "</div>");
+			$("#loadingToast").fadeIn();
+			setTimeout(function() {
+				$("#loadingToast").fadeOut('slow');
+				$("#loadingToast").remove();
+				if(typeof fn=='function'){
+					fn();
+				}
+				}, 1000);
+	},
+	/**
+	 * 自定义confirm
+	 */
+	myConfirm : function(value,fn) {
+		$("body")
+		.append(
+				"<div id='confirmDiv' style='position:fixed;width:100%;height:100%;background-color:#ccc;opacity:0.5;left:0;top:0;'></div><div id='confirm' style='z-index:9999;color:#fff;background-color:black;text-align:center;line-height:30px;border:1px solid black;border-radius:5px;height:200px;width:200px;margin:-100px -100px;top:50%;left:50%;position:fixed;font-size:20px;'>"
+				+ "<div class='glyphicon glyphicon-exclamation-sign' style='text-align:center;width:50%;height:50%;font-size:66px;margin-top:10px;'></div><div style='position:absolute;top:100px;width:100%;text-align:center;'>"+value+"</div><div class='btn btn-primary' style='position:absolute;left:15px;bottom:15px;width:80px;' id='confirmYes'>确定</div><div class='btn btn-default' style='position:absolute;right:15px;bottom:15px;width:80px;' id='confirmNo'>取消</div></div>");
+	$('#confirmYes').click(function(){
+		$('#confirmDiv').remove();
+		$('#confirm').remove();
+		if(typeof fn=='function'){
+			fn();
+		}
+	});
+	$('#confirmNo').click(function(){
+		$('#confirmDiv').remove();
+		$('#confirm').remove();
+		
+	});
+	},
 	Qiniu:Qiniu
 };
 
@@ -245,11 +305,11 @@ function checkEmail(email){
 	
 	　　　　return true;
 	　　}else{
-	　　　　alert("邮箱格式不正确")
+	　　　　business.myLoadingToast("邮箱格式不正确")
 	　　　　return false;
 		}
  	}else{
- 		alert("请输入邮箱")
+ 		business.myLoadingToast("请输入邮箱")
 	　　return false;
  	}
 　　
@@ -435,11 +495,11 @@ business.islogin();
 			if(password1==password2){
 				return true;
 			}else{
-				alert("两次密码不匹配");
+				business.myLoadingToast("两次密码不匹配");
 				return false;
 			}
 		}else{
-			alert("密码不能小于6位");
+			business.myLoadingToast("密码不能小于6位");
 			return false;
 		}
 	};

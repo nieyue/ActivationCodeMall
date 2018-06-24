@@ -5,7 +5,7 @@ $(function(){
 	$("#step1_next").click(function(){
 		var email = $("#useremail").val();
 		if(!haveUnlocked){
-			alert("没有验证通过")
+			business.myLoadingToast("没有验证通过")
 			return;
 		}
 		if(checkEmail(email)){
@@ -19,13 +19,13 @@ $(function(){
 		        	$("#haveemaildiv").toggle();
 		        	$(".emailp").text(email);
 		        	if(data.msg=="已经验证"){
-		        		alert(data.msg);
+		        		business.myLoadingToast(data.msg);
 			        	return;
 			        }else{
-			        	alert("验证码发送成功，请注意查收");			        	
+			        	business.myLoadingToast("验证码发送成功，请注意查收");			        	
 			        }
 			        }else{
-			        	alert(data.msg);
+			        	business.myLoadingToast(data.msg);
 			        }
                 });
 		
@@ -53,7 +53,7 @@ $(function(){
 	function getcode(){
       var phone = $("#userphone").val();
       if(phone.length != 11 ){  
-        alert("请填写正确的手机号！");  
+    	  business.myLoadingToast("请填写正确的手机号！");  
         return false;  
       }
       _generate_code.attr("disabled", true);
@@ -65,7 +65,7 @@ $(function(){
       	
       	ajxget("/account/validCode",info,function(data){
                     if(data.code==200){
-                    	alert("验证码发送成功，请注意查收");
+                    	business.myLoadingToast("验证码发送成功，请注意查收");
                     }
 		        	
 			        
@@ -88,15 +88,15 @@ $(function(){
 	//验证规则
 	function nonull(username,userphone,code){
 		if(username.length<3){
-			alert("用户名不能少于3个字符");
+			business.myLoadingToast("用户名不能少于3个字符");
 			return false;
 		}
 		if(userphone.length!=11){
-			alert("请输入正确的手机号");
+			business.myLoadingToast("请输入正确的手机号");
 			return false;
 		}
 		if(code.length<0){
-			alert("请输入验证码");
+			business.myLoadingToast("请输入验证码");
 			return false;
 		}
 		return true;
@@ -137,10 +137,10 @@ $(function(){
 				}
 			ajxget("/account/webregister",info,function(data){
 				if(data.code==200){
-					alert("注册成功")
+					business.myLoadingToast("注册成功")
 					window.location.href='login.html?roletype='+roletype;
 				}else{
-					alert(data.msg);
+					business.myLoadingToast(data.msg);
 				}
                     
 			        
@@ -156,11 +156,11 @@ $(function(){
 			if(password1==password2){
 				return true;
 			}else{
-				alert("两次密码不匹配");
+				business.myLoadingToast("两次密码不匹配");
 				return false;
 			}
 		}else{
-			alert("密码不能小于6位");
+			business.myLoadingToast("密码不能小于6位");
 			return false;
 		}
 	}

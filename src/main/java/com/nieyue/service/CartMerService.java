@@ -18,6 +18,8 @@ public interface CartMerService {
 	public boolean updateCartMer(CartMer cartMer);
 	/** 装载购物车商品 */	
 	public CartMer loadCartMer(Integer cartMerId);	
+	/** 购物车商品批量转未支付订单商品 */	
+	public boolean batchCartMerTurnOrder(String cartMerIds);	
 	/** 购物车商品总共数目 */	
 	public int countAll(
 			Integer number,

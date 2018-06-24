@@ -16,7 +16,7 @@ $(function(){
 	
 	$(".register_button").click(function(){
 		if(!haveUnlocked){
-			alert("没有验证通过")
+			business.myLoadingToast("没有验证通过")
 			return;
 		}
 		var email = $("#useremail").val();
@@ -43,12 +43,12 @@ $(function(){
 						}else if(roleName=="商户"){
 							window.location.href='sell/sell_index.html';
 						}else if(roleName=="超级管理员"){
-							alert("您是管理员，请于管理员页面进行登录");
+							business.myLoadingToast("您是管理员，请于管理员页面进行登录");
 						}
 					}else{
 						$(".register_button").text("重新登录");
 						$(".register_button").attr("disabled", false);
-						alert(data.msg)
+						business.myLoadingToast(data.msg)
 						return;
 					}
 					
@@ -57,7 +57,7 @@ $(function(){
 				
 				
 			}else{
-				alert("请输入密码");
+				business.myLoadingToast("请输入密码");
 			}
 			
 		}

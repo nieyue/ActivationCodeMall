@@ -2,23 +2,12 @@ $(function(){
 	
 	var messagetype = new Array("","系统消息","商品动态","问题单反馈");
 	var messagetypeimg = new Array("","img/icon_sp.png","img/icon_wtd.png","img/icon_xx.png");
-	var user = JSON.parse(localStorage.getItem("user"));
-	
-
-
-
-
+	var account = JSON.parse(sessionStorage.getItem("account"));
 getmessagelist()
-
-
-
-
-
-
 
 function getmessagelist(){
 	var info = {
-		accountId:user.accountId,
+		accountId:account.accountId,
 		pageNum:1,
 		pageSize:100
 	};

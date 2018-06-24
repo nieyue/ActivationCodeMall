@@ -60,7 +60,7 @@ public class MyPermissionsAuthorizationFilter extends PermissionsAuthorizationFi
             } else if(!subject.isPermittedAll(perms)) {
                 isPermitted = false;
             }
-            for (RolePermission rp : rolePermissionList) {
+           loop: for (RolePermission rp : rolePermissionList) {
                 for (int i = 0; i < perms.length; i++) {
                 /*当前账户拥有的权限路径与来路路径一致，且是 自身 操作权限的情况下，
                  ** accountId必须与session中的account.getAccountId不一致，
@@ -70,6 +70,7 @@ public class MyPermissionsAuthorizationFilter extends PermissionsAuthorizationFi
                    // System.out.println(account.getAccountId());
                     //System.err.println(request.getParameter("accountId"));
                     isPermitted = false;
+                    break loop;
                     }
                 }
             }

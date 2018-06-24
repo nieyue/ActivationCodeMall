@@ -5,7 +5,7 @@ a{color: #333333;text-decoration: none;border:none;cursor:pointer;display: inlin
 a{star:expression(this.onFocus=this.blur()); /* for Ie*/} 
 i,em,b,h1,h2,h3,h4,h5{font-weight: normal;font-size: 100%;font-style: normal;}
 input,textarea,button,select{outline:none;border: none;font-family: "Microsoft Yahei";font-size: 16px;color: #333333;-webkit-tap-highlight-color: rgba(0, 0, 0, 0);}
-img{border:none;display: inline-block;}
+img{border:none;display: inline-block;vertical-align:initial;}
 textarea{resize:none;}
 button,textarea,
 input[type="button"],

@@ -5,11 +5,11 @@
 		<title>购物车</title>
 		<meta name="Description" content=""/>
 		<meta name="Keywords" content=""/>
+		<link rel="stylesheet" href="css/bootstrap.min.css" />
 		<link rel="stylesheet" type="text/css" href="css/public.css"/>
 		<link rel="stylesheet" type="text/css" href="css/style.css"/>
 		<link rel="stylesheet" type="text/css" href="css/index.css"/>
 		<link rel="stylesheet" href="css/shopcar.css" />
-		<link rel="stylesheet" href="css/bootstrap.min.css" />
 	</head>
 	<body class="bg_eeeeee">
 		<!--head-->
@@ -18,7 +18,7 @@
 				<div class="width1200 font_size14 clearfix">
 					<p class="fl color_666">我是商家，<a id="sellgologin" href="login.html?roletype=1" class="color_eb6100">登录</a></p>
 					<p class="fl padding_left40 color_666">我是推广人，<a id="tuiguanggologin" href="login.html?roletype=2"  class="color_eb6100">登录</a></p>
-					<a id="usergologin"  class="fr color_eb6100" href="login.html?roletype=3"><img src="img/touxiang.png" alt="" title=""/>买家登录</a>
+					<a id="usergologin"  class="fr color_eb6100" href="login.html?roletype=3"><img src="img/touxiang.png" style="vertical"/>买家登录</a>
 				</div>
 			</div>
 			
@@ -184,7 +184,7 @@
 						</table>
 
 						<div class="width1200 " style="background: rgba(224, 224, 224, 1);height: 50px;margin-top: 30px;line-height: 50px;">
-							<input name="checkbox" type="checkbox" style="margin-left: 10px;float: left;margin-top: 18px;" />
+							<input name="checkboxAll" type="checkbox" style="margin-left: 10px;float: left;margin-top: 18px;" />
 							
 						     <p style="margin-left: 20px;width: auto;float: left;">全选</p>
 						     <div style="width: auto;float: right;height: 50px;">
@@ -192,7 +192,7 @@
 						     		<p>已选</p>	
 						     	</div>
 						     	<div class="textdiv">
-						     		<p style="color: #bb0404;font-size: 20px;">0</p>	
+						     		<p style="color: #bb0404;font-size: 20px;" id="allMerNumber">0</p>	
 						     	</div>
 						     	<div class="textdiv">
 						     		<p >件</p>	
@@ -201,9 +201,9 @@
 						     		<p >合计：</p>	
 						     	</div>
 						     	<div class="textdiv">
-						     		<p class="summoney">0.00</p>	
+						     		<p class="summoney" id="allMerTotalPrice">0.00</p>	
 						     	</div>
-						     	<div class="delectdiv">
+						     	<div class="delectdiv" id="cartMerDeleteBatch">
 						     		<a >删除</a>				     	
 						     	</div>
 						     	
