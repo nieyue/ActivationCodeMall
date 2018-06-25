@@ -1,20 +1,33 @@
 $(document).ready(function(){
-	//购物车清零
-	business.cartMerClearZero=function(){
-		$("#allMerNumber").html(0)
-		$("#allMerTotalPrice").html(0)
-	}
+	//初始化,保障
+	sessionStorage.setItem("selectCartMerList",JSON.stringify([]));
+	sessionStorage.setItem("selectCartMerTotalPrice",JSON.stringify(0));
 	//购物车计总
 	business.cartMerSum=function(){
+		//购物车清零
+		$("#allMerNumber").html(0)
+		$("#allMerTotalPrice").html(0)
 		//计算商品数量
 		$("#allMerNumber").html($("input[name='checkbox']:checked").size())
 		//计算商品总价
 		var totalPrice=0;
+		//选中的购物车商品
+		business.selectCartMerList=[];
 		$("input[name='checkbox']:checked").each(function(){
-			totalPrice+=parseFloat($(this).parent().parent().parent().children().get(3).innerText.replace("¥",""));
 			//console.log(parseFloat($(this).parent().parent().parent().children().get(3).innerText.replace("¥","")))
+			//console.log($(this).parent().parent().parent().attr("id"))
+			for (var i = 0; i < business.cartMerListAll.length; i++) {
+				if(business.cartMerListAll[i].cartMerId==$(this).parent().parent().parent().attr("id")){
+					business.selectCartMerList.push(business.cartMerListAll[i])
+					totalPrice+=parseFloat(business.cartMerListAll[i].totalPrice);
+				}
+			}
 		});
 		$("#allMerTotalPrice").html(totalPrice.toFixed(2));
+		//总选择的列表
+		sessionStorage.setItem("selectCartMerList",JSON.stringify(business.selectCartMerList));
+		//总金额
+		sessionStorage.setItem("selectCartMerTotalPrice",JSON.stringify(totalPrice.toFixed(2)));
 	}
 	//点击全选
 	business.checkboxAll("input[name='checkboxAll']","input[name='checkbox']",
@@ -22,9 +35,13 @@ $(document).ready(function(){
 		business.cartMerSum();
 		
 	});
-	//点击提交订单
+	//点击提交订单,批量
 	$(".commitbtn").click(function(){
-		window.location.href = "myordercommit.html";
+		if(JSON.parse(sessionStorage.getItem("selectCartMerList")).length<=0){
+			business.myLoadingToast("最少选中一个");
+			return;
+		}
+		window.location.href = "mycartmerturnorder.html";
 	});
 
 //点击所有商品
@@ -33,12 +50,8 @@ $("#allgood").click(function(){
 	$("#jiangjiagood").css("background-color","");
 	$("#wantbuygood").css("background-color","");
 	getcarlist();
-	business.cartMerClearZero();
-	business.checkboxAll("input[name='checkboxAll']","input[name='checkbox']",
-			function(){
-		business.cartMerSum();
-		
-	});
+	$("input[name='checkboxAll']").prop("checked",false);
+	business.cartMerSum();
 });
 //点击降价商品
 $("#jiangjiagood").click(function(){
@@ -46,12 +59,9 @@ $("#jiangjiagood").click(function(){
 	$("#jiangjiagood").css("background-color","#573c1e");
 	$("#wantbuygood").css("background-color","");
 	getjiangjialist();
-	business.cartMerClearZero();
-	business.checkboxAll("input[name='checkboxAll']","input[name='checkbox']",
-			function(){
+	$("input[name='checkboxAll']").prop("checked",false);
 		business.cartMerSum();
 		
-	});
 });
 //点击预购商品
 $("#wantbuygood").click(function(){
@@ -59,12 +69,9 @@ $("#wantbuygood").click(function(){
 	$("#jiangjiagood").css("background-color","");
 	$("#wantbuygood").css("background-color","#573c1e");
 	getyugoulist();
-	business.cartMerClearZero();
-	business.checkboxAll("input[name='checkboxAll']","input[name='checkbox']",
-			function(){
+	$("input[name='checkboxAll']").prop("checked",false);
 		business.cartMerSum();
 		
-	});
 });
 
 //获取所有购物车数据
@@ -189,27 +196,39 @@ function getyugoulist(){
 
 
 
-})
+//购物商品提交订单
+$(document).on("click",".commitorder", function() {
+	//console.log($(this).parent().parent().children().children().children("input[name='checkbox']"))
+	$(this).parent().parent().children().children().children("input[name='checkbox']").prop("checked","checked")
+	business.cartMerSum();
+	window.location.href = "mycartmerturnorder.html";
+});
+});
 //删除购物商品
 function deleteCartMer(cartMerId){
 	var info = {
 		cartMerId:cartMerId,
 		accountId:business.account!=null?business.account.accountId:null
 	};
-	
+	business.myConfirm("确定删除？",function(){
 	ajxget("/cartMer/delete",info,function(data){
 		if(data.code==200){
 			business.myLoadingToast("删除成功");
 			location.reload();
 		}
 	});
+	});
 }
 //批量删除
 $("#cartMerDeleteBatch").on("click",function(){
 	//console.log($("input[name='checkbox']:checked").parent().parent().parent())
-	var trs=$("input[name='checkbox']:checked").parent().parent().parent();
+	/*var trs=$("input[name='checkbox']:checked").parent().parent().parent();
 	if(trs.length<=0){
 		business.myLoadingToast("最少选择一个");
+		return;
+	}*/
+	if(JSON.parse(sessionStorage.getItem("selectCartMerList")).length<=0){
+		business.myLoadingToast("最少选中一个");
 		return;
 	}
 	var cartMerIdsarray=[];
@@ -239,8 +258,16 @@ function jian(valueid,sumid,price){
 	if(num==0){ return}
 	$(sumid).val(num);
 	var money = accMul(num,price);
-	
 	$(valueid).text("¥"+money);
+	//计算business.cartMerListAll
+	for (var i = 0; i < business.cartMerListAll.length; i++) {
+		if(business.cartMerListAll[i].cartMerId==$(valueid).parent().attr("id")){
+			business.cartMerListAll[i].number=num;
+			business.cartMerListAll[i].totalPrice=money;
+		}
+	}
+	
+	business.cartMerSum();
 }
 
 function jia(valueid,sumid,price){
@@ -251,8 +278,15 @@ function jia(valueid,sumid,price){
 	if(num>5){business.myLoadingToast("单品最大5个"); return;}
 	$(sumid).val(num);
 	var money = accMul(num,price);
-	
 	$(valueid).text("¥"+money);
+	//计算business.cartMerListAll
+		for (var i = 0; i < business.cartMerListAll.length; i++) {
+			if(business.cartMerListAll[i].cartMerId==$(valueid).parent().attr("id")){
+				business.cartMerListAll[i].number=num;
+				business.cartMerListAll[i].totalPrice=money;
+			}
+		}
+	business.cartMerSum();
 }
 
 function accMul(arg1,arg2)
@@ -263,9 +297,6 @@ try{m+=s2.split(".")[1].length}catch(e){}
 return Number(s1.replace(".",""))*Number(s2.replace(".",""))/Math.pow(10,m)
 }
 
-function addorder(){
-	
-}
 //获取推荐列表		
 function gettuijian(){
 	var info = {

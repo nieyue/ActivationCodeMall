@@ -19,7 +19,7 @@ public interface CartMerService {
 	/** 装载购物车商品 */	
 	public CartMer loadCartMer(Integer cartMerId);	
 	/** 购物车商品批量转未支付订单商品 */	
-	public boolean batchCartMerTurnOrder(String cartMerIds);	
+	public boolean batchCartMerTurnOrder(String cartMerList,Integer couponId,Integer payType,Integer receiptInfoId,Integer accountId);	
 	/** 购物车商品总共数目 */	
 	public int countAll(
 			Integer number,

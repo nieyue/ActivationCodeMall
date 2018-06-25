@@ -2,15 +2,15 @@
 <html>
 	<head>
 		<meta charset="utf-8" />
-		<title>支付订单</title>
+		<title>购物车商品转订单</title>
 		<meta name="Description" content=""/>
 		<meta name="Keywords" content=""/>
+		<link rel="stylesheet" href="css/bootstrap.min.css" />
 		<link rel="stylesheet" type="text/css" href="css/public.css"/>
 		<link rel="stylesheet" type="text/css" href="css/style.css"/>
 		<link rel="stylesheet" type="text/css" href="css/index.css"/>
 		<link rel="stylesheet" href="css/shopcar.css" />
 		<link rel="stylesheet" href="css/myorder.css" />
-		<!--<link rel="stylesheet" href="css/bootstrap.min.css" />-->
 	</head>
 	<body class="bg_eeeeee">
 		<!--head-->
@@ -116,9 +116,9 @@
 					<li>
 						<a href="news.html" title="">新闻资讯</a>
 					</li>
-					<li>
+					<!-- <li>
 						<a href="" title="">平台公告</a>
-					</li>
+					</li> -->
 				</ul>
 			</div>
 		</div>
@@ -128,13 +128,21 @@
 			<div class="width1200 " >
 				<div class="width1200 " >
 				<a style="font-size: 20px;color: #1B1B1B;margin-top: 20px;float: left;">我的订单</a>
-				<p style="font-size: 20px;color: #1B1B1B;margin-top: 20px;float: left;">>支付订单</p>
+				<p style="font-size: 20px;color: #1B1B1B;margin-top: 20px;float: left;">>待支付订单</p>
 				<div style="clear: both;"></div>
+				<div style="font-size: 14px;color: #1B1B1B;background: white;width: 1200px;margin-top: 20px;">
+					<p style="font-size: 14px;color: #1B1B1B;line-height:48px;margin-left: 10px;">收货地址</p>
+					<div style="background: rgba(250, 249, 229, 1);height: auto;width: 1200px;" id="receiptInfoList">
+						
+					</div>
+				</div>
+				
+				
 				<div style="font-size: 14px;color: #1B1B1B;background: white;width: 1200px;margin-top: 20px;">
 					<p style="font-size: 14px;color: #1B1B1B;line-height:48px;margin-left: 10px;">订单详情</p>
 					
-					<div style="background: rgba(250, 249, 229, 1);height: auto;width: 1200px;">
-						<div style="width: 100%;height: 80px;">
+					<div style="background: rgba(250, 249, 229, 1);height: auto;width: 1200px;" id="cartMerList">
+						<!-- <div style="width: 100%;height: 80px;">
 							<div style="width: 50%;height: 100%;position:relative;float: left;">
 								<div style="position: absolute;top: 50%;transform: translateY(-50%);">
 									<p style="font-size: 14px;margin-left: 10px;">商品名称：暗黑破坏神3-《死靈法師的崛起》台服版本</p>
@@ -157,41 +165,20 @@
 								</div>
 								
 							</div>
-						</div>
-						<hr align="center" width="100%" color="#E6E6E6" size="1" />
-						
-						<div style="width: 100%;height: 80px;">
-							<div style="width: 50%;height: 100%;position:relative;float: left;">
-								<div style="position: absolute;top: 50%;transform: translateY(-50%);">
-									<p style="font-size: 14px;margin-left: 10px;">订单编号：121354</p>
-									<p style="font-size: 14px;margin-left: 10px;margin-top: 5px;">单价：¥80</p>
-								</div>
-								
-							</div>
-							<div style="width: 40%;height: 100%;position:relative;float: left;">
-								<div style="position: absolute;top: 50%;transform: translateY(-50%);">
-									<p style="font-size: 14px;margin-left: 10px;">下单时间：2018-04-26</p>
-									<p style="font-size: 14px;margin-left: 10px;margin-top: 5px;">收货邮箱：654654654</p>
-								</div>
-								
-							</div>
-						</div>
-						
-						
+						</div> -->
 						
 					</div>
 				</div>
 				
 					
-					
-					<div style="font-size: 14px;color: #1B1B1B;background: white;width: 1200px;margin-top: 20px;">
+				<div style="font-size: 14px;color: #1B1B1B;background: white;width: 1200px;margin-top: 20px;">
 					<p style="font-size: 14px;color: #1B1B1B;line-height:48px;margin-left: 10px;">选择使用优惠券</p>
 					
 					<div style="background: rgba(250, 249, 229, 1);height: auto;width: 1200px;">
-						<div style="width: 100%;height: 122px;">
+					<!-- 	<div style="width: 100%;height: 122px;">
 							<div style="width: 100%;height: 100%;position:relative;float: left;">
 								<div style="position: absolute;top: 50%;transform: translateY(-50%);">
-									<input name="checkbox" type="checkbox" style="margin-left: 10px;float: left;margin-top: 30px;" />
+									<input name="couponradio" type="radio" style="margin-left: 10px;float: left;margin-top: 30px;" />
 									<img style="width: 130px;height: 74px;margin-left: 20px;margin-left: 10px;float: left;" src="img/youhuiquan.png"/>
 									<div style="float: left;margin-left: 10px;">
 										<p style="color: #1b1b1b;font-size: 14px;">8.5折优惠券，任意商品均可使用</p>
@@ -200,67 +187,58 @@
 											<br />
 											2.不可叠加使用</p>
 									</div>
-								
 								</div>
-								
 							</div>
-							
-						</div>
+						</div> -->
 						<hr align="center" width="100%" color="#FFFFFF" size="1" />
 						
-						<div style="width: 100%;height: 122px;">
-							
+						<div style="width: 100%;height: 122px;" id="inputCouponWrap">
 							<div style="width: 100%;height: 100%;position:relative;float: left;">
 								<div style="position: absolute;top: 50%;transform: translateY(-50%);">
-									<input name="checkbox" type="checkbox" style="margin-left: 10px;float: left;margin-top: 10px;" />
+									<input name="couponradio" type="radio"  style="margin-left: 10px;float: left;margin-top: 10px;" />
 									<p style="color: #1b1b1b;font-size: 14px;float: left;margin-left: 10px;margin-top: 5px;">优惠券号码</p>
-									<input  type="" placeholder="请输入优惠券号码" class="inputstyle" />
-								
+									<input  type="" placeholder="请输入优惠券号码" class="inputstyle" id="inputCouponCode" />
+									<button id="checkInputCoupon" style="background-color:red;height:34px;color: #FFFFFF;text-align: center;" >检测确定</button>
 								</div>
-								
 							</div>
-							
 						</div>
-						
-						
-						
 					</div>
 					
 						<p style="font-size: 14px;color: #1B1B1B;line-height:48px;margin-left: 10px;">选择支付方式</p>
-				
 						<ul class="pay_positionul clearfix" style="padding-bottom: 20px;">
-								
-								<li class="payborder payborder7400" >
+								<li class="payborder payborder7400" id="payType1">
 									<div >
 										<img src="img/zhifubao.png" class="payimg"/>
 										<p class="paytext">支付宝</p>
 									</div>
 								</li>
-								<li class="payborder" >
+								<li class="payborder" id="payType2" >
 									<div >
 										<img src="img/weixing.png" class="payimg"/>
 										<p class="paytext">微信支付</p>
 									</div>
 								</li>
-								<li class="payborder" >
+								<!-- 
+								<li class="payborder" id="payType3">
+									<div >
+										<img src="img/baiduqianbao.png" class="payimg"/>
+										<p class="paytext">百度钱包</p>
+									</div>
+								</li> 
+								<li class="payborder" id="payType4">
 									<div >
 										<img src="img/yinglian.png" class="payimg"/>
 										<p class="paytext">网银支付</p>
 									</div>
 								</li>
-								<li class="payborder" >
+								<li class="payborder" id="payType5">
 									<div >
 										<img src="img/paypal.png" class="payimg"/>
 										<p class="paytext">Paypal支付</p>
 									</div>
 								</li>
 								
-								<li class="payborder" >
-									<div >
-										<img src="img/baiduqianbao.png" class="payimg"/>
-										<p class="paytext">百度钱包</p>
-									</div>
-								</li>
+								-->
 								
 							</ul>
 							
@@ -269,14 +247,14 @@
 						     		<p style="text-align: center;">待支付金额：</p>	
 						     	</div>
 						     	<div style="width: auto;height: 50px;margin: auto;float: left;">
-						     		<p style="text-align: center;color: #bb0404;font-size: 20px;">0</p>	
+						     		<p style="text-align: center;color: #bb0404;font-size: 20px;" id="orderTotalPrice">0</p>	
 						     	</div>
 						     	<div style="width: auto;height: 50px;margin: auto;float: left;">
 						     		<p style="text-align: center;">元</p>	
 						     	</div>
 						     	
-						     	<div style="width: auto;height: 50px;margin: auto;float: left;margin-left: 10px;">
-						     		<p style="text-align: center;color: #999999;font-size: 14px;">已享8.5折优惠</p>	
+						     	<div style="width: auto;height: 50px;margin: auto;float: left;margin-left: 10px;" >
+						     		<p style="text-align: center;color: #999999;font-size: 14px;" id="isHaveCoupon"></p>	
 						     	</div>
 						     	
 						     	
@@ -284,11 +262,11 @@
 						     <div style="width: auto;float: right;height: 50px;">
 						     	
 						     	<div style="width: 120px;height: 50px;margin: auto;background: #d3d3d3;float: left;margin-left: 20px;">
-						     		<p style="color: #bb0404;text-align: center;">取消</p>				     	
+						     		<p style="color: #bb0404;text-align: center;cursor:pointer;" id="chancelCartMerTurnOrder">取消</p>				     	
 						     	</div>
 						     	
 						     	<div style="width: 120px;height: 50px;margin: auto;background: #FF7400;float: left;">
-						     		<p style="color: #FFFFFF;text-align: center;">确定</p>				     	
+						     		<p style="color: #FFFFFF;text-align: center;cursor:pointer;" id="cartMerTurnOrder">确定</p>				     	
 						     </div>
 						     
 						</div>
@@ -400,7 +378,7 @@
 	</body>
 <script src="js/jquery-1.12.2.min.js" type="text/javascript" charset="utf-8"></script>
 <script src="js/public.js" type="text/javascript" charset="utf-8"></script>
-<script type="text/javascript" src="js/myorder.js" ></script>
+<script type="text/javascript" src="js/mycartmerturnorder.js" ></script>
 <script>
 	getshopcarlist();
 	gethotseachlist();

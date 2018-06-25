@@ -182,11 +182,21 @@ public class CartMerController {
 	 */
 	@ApiOperation(value = "购物车商品批量转未支付订单商品", notes = "购物车商品批量转未支付订单商品")
 	@ApiImplicitParams({
-		@ApiImplicitParam(name="cartMerIds",value="购物车商品ID集合数组，\"22,33,44,53,3\"",dataType="string", paramType = "query",required=true)
+		@ApiImplicitParam(name="cartMerList",value="购物车商品列表",dataType="string", paramType = "query",required=true),
+		@ApiImplicitParam(name="couponId",value="优惠券Id",dataType="int", paramType = "query",required=true),
+		@ApiImplicitParam(name="payType",value="支付方式，1支付宝，2微信,3百度钱包,4Paypal,5网银",dataType="int", paramType = "query",required=true),
+		@ApiImplicitParam(name="receiptInfoId",value="收货地址Id",dataType="int", paramType = "query",required=true),
+		@ApiImplicitParam(name="accountId",value="账户Id",dataType="int", paramType = "query",required=true)
 	})
 	@RequestMapping(value = "/turnOrderBatch", method = {RequestMethod.GET,RequestMethod.POST})
-	public @ResponseBody StateResult batchCartMerTurnOrder(@RequestParam("cartMerIds") String cartMerIds,HttpSession session)  {
-		boolean dm=cartMerService.batchCartMerTurnOrder(cartMerIds);
+	public @ResponseBody StateResult batchCartMerTurnOrder(
+			@RequestParam("cartMerList") String cartMerList,
+			@RequestParam("couponId") Integer couponId,
+			@RequestParam("payType") Integer payType,
+			@RequestParam("receiptInfoId") Integer receiptInfoId,
+			@RequestParam("accountId") Integer accountId,
+			HttpSession session)  {
+		boolean dm=cartMerService.batchCartMerTurnOrder(cartMerList,couponId,payType,receiptInfoId,accountId);
 		return ResultUtil.getSR(dm);
 	}
 	/**
