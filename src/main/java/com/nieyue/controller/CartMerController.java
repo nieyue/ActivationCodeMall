@@ -137,9 +137,16 @@ public class CartMerController {
 	 */
 	@ApiOperation(value = "购物车商品增加", notes = "购物车商品增加")
 	@RequestMapping(value = "/add", method = {RequestMethod.GET,RequestMethod.POST})
-	public @ResponseBody StateResult addCartMer(@ModelAttribute CartMer cartMer, HttpSession session) {
+	public @ResponseBody StateResultList<List<CartMer>> addCartMer(@ModelAttribute CartMer cartMer, HttpSession session) {
 		boolean am = cartMerService.addCartMer(cartMer);
-		return ResultUtil.getSR(am);
+		List<CartMer> list = new ArrayList<CartMer>();
+			if(am&&cartMer!=null &&!cartMer.equals("")){
+				CartMer c = cartMerService.loadCartMer(cartMer.getCartMerId());
+				list.add(c);
+				return ResultUtil.getSlefSRSuccessList(list);
+			}else{
+				return ResultUtil.getSlefSRFailList(list);
+			}
 	}
 	/**
 	 * 购物车商品删除

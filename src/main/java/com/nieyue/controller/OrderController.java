@@ -9,6 +9,7 @@ import java.util.Map;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpSession;
 
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -18,10 +19,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.nieyue.bean.Order;
 import com.nieyue.exception.CommonNotRollbackException;
+import com.nieyue.exception.CommonRollbackException;
 import com.nieyue.exception.NotAnymoreException;
 import com.nieyue.exception.NotIsNotExistException;
 import com.nieyue.service.OrderDetailService;
 import com.nieyue.service.OrderService;
+import com.nieyue.util.NumberUtil;
 import com.nieyue.util.ResultUtil;
 import com.nieyue.util.StateResult;
 import com.nieyue.util.StateResultList;
@@ -58,8 +61,8 @@ public class OrderController {
 	  @ApiImplicitParam(name="type",value="类型，1购买商品，2账户提现，3退款，4诚信押金",dataType="int", paramType = "query"),
 	  @ApiImplicitParam(name="payType",value="方式，1支付宝，2微信,3百度钱包,4Paypal,5网银",dataType="int", paramType = "query"), 
 	  @ApiImplicitParam(name="accountId",value="下单人id外键",dataType="int", paramType = "query"),
-	  @ApiImplicitParam(name="status",value="订单状态，1冻结单，2待支付，3已支付,4预购商品，5问题单，6已取消，7已删除",dataType="int", paramType = "query"),
-	  @ApiImplicitParam(name="substatus",value="子状态，1(1冻结单)，2（1待支付），3（1已支付），4（1等待发货），5（1待解决（买家提问后），2解决中（卖家回复后），3申请退款，4已退款，5已解决），6（1已取消），7（1已删除）",dataType="int", paramType = "query"),
+	  @ApiImplicitParam(name="status",value="订单状态，2待支付，3已支付,4预购商品，5问题单，6已取消，7已删除",dataType="int", paramType = "query"),
+	  @ApiImplicitParam(name="substatus",value="子状态，2（1待支付），3（1冻结单,2已完成），4（1等待发货），5（1待解决（买家提问后），2解决中（卖家回复后），3申请退款，4已退款，5已解决），6（1已取消），7（1已删除）",dataType="int", paramType = "query"),
 	  @ApiImplicitParam(name="createDate",value="创建时间",dataType="date-time", paramType = "query"),
 	  @ApiImplicitParam(name="updateDate",value="更新时间",dataType="date-time", paramType = "query"),
 	  @ApiImplicitParam(name="pageNum",value="页头数位",dataType="int", paramType = "query",defaultValue="1"),
@@ -101,8 +104,8 @@ public class OrderController {
 			+ "orderCount5_4已退款总数,orderList5_4已退款列表")
 	@ApiImplicitParams({
 		@ApiImplicitParam(name="accountId",value="下单人id外键",dataType="int", paramType = "query"),
-		@ApiImplicitParam(name="status",value="订单状态，1冻结单，2待支付，3已支付,4预购商品，5问题单，6已取消，7已删除",dataType="int", paramType = "query"),
-		@ApiImplicitParam(name="substatus",value="子状态，1(1冻结单)，2（1待支付），3（1已支付），4（1等待发货），5（1待解决（买家提问后），2解决中（卖家回复后），3申请退款，4已退款，5已解决），6（1已取消），7（1已删除）",dataType="int", paramType = "query"),
+		@ApiImplicitParam(name="status",value="订单状态，2待支付，3已支付,4预购商品，5问题单，6已取消，7已删除",dataType="int", paramType = "query"),
+		@ApiImplicitParam(name="substatus",value="子状态，2（1待支付），3（1冻结单,2已完成），4（1等待发货），5（1待解决（买家提问后），2解决中（卖家回复后），3申请退款，4已退款，5已解决），6（1已取消），7（1已删除）",dataType="int", paramType = "query"),
 	})
 	@RequestMapping(value = "/userlist", method = {RequestMethod.GET,RequestMethod.POST})
 	public @ResponseBody StateResultList<List<Map<String,Object>>> browseUserOrder(
@@ -125,7 +128,7 @@ public class OrderController {
 				if(o.getStatus().equals(2)&&o.getSubstatus().equals(1)){
 					orderList2.add(o);
 				}
-				if(o.getStatus().equals(3)&&o.getSubstatus().equals(1)){
+				if(o.getStatus().equals(3)){
 					orderList3.add(o);
 				}
 				if(o.getStatus().equals(4)&&o.getSubstatus().equals(1)){
@@ -166,27 +169,29 @@ public class OrderController {
 		}
 	}
 	/**
-	 * 申请订单 类型，1购买商品，2账户提现，3退款，4诚信押金
+	 * 购买商品订单支付
 	 * @return 
 	 * @throws CommonNotRollbackException 
 	 */
-	@ApiOperation(value = "申请订单", notes = "申请订单,body为业务体json数组字符串，"
-			+ "如：\"[{\"businessId\":1000,\"number\":2},{\"businessId\":1001,\"number\":3}]\""
-			+ ";类型1购买商品:businessId就是购物车商品id+,merCateId.类型3购买商品:businessId就是订单id+,orderId.")
+	@ApiOperation(value = "购买商品订单支付", notes = "购买商品订单支付,")
 	@ApiImplicitParams({
-		  @ApiImplicitParam(name="type",value="类型，1购买商品，2账户提现，3退款，4诚信押金",dataType="int", paramType = "query",required=true),
+		  @ApiImplicitParam(name="payType",value="支付方式，1支付宝，2微信,3百度钱包,4Paypal,5网银",dataType="int", paramType = "query",required=true),
 		  @ApiImplicitParam(name="accountId",value="下单人id外键",dataType="int", paramType = "query",required=true),
-		  @ApiImplicitParam(name="body",value="业务体,根据类型选填",dataType="string", paramType = "query")
+		  @ApiImplicitParam(name="orderIds",value="订单id列表如:\"101,3,44\"",dataType="string", paramType = "query")
 		  })
 	@RequestMapping(value = "/payment", method = {RequestMethod.GET,RequestMethod.POST})
-	public @ResponseBody StateResultList<List<Map<Object,Object>>> paymentOrder(
-			@RequestParam(value="type")Integer type,
+	public @ResponseBody StateResultList<List<String>> paymentOrder(
+			@RequestParam(value="payType")Integer payType,
 			@RequestParam(value="accountId")Integer accountId,
-			@RequestParam(value="body",required=false)String body,
+			@RequestParam(value="orderIds")String orderIds,
 			 HttpSession session) throws CommonNotRollbackException {
-		List<Map<Object,Object>> list=new ArrayList<>();
-		
-		return ResultUtil.getSlefSRFailList(list);
+		List<String> list=new ArrayList<>();
+		String s = orderService.thirdPartyPaymentOrder( payType, accountId, orderIds);
+		if(StringUtils.isEmpty(s)){
+			return ResultUtil.getSlefSRFailList(list);			
+		}
+		list.add(s);
+		return ResultUtil.getSlefSRSuccessList(list);			
 	}
 
 	/**
@@ -223,6 +228,31 @@ public class OrderController {
 		return ResultUtil.getSR(dm);
 	}
 	/**
+	 * 订单批量删除
+	 * @return
+	 */
+	@ApiOperation(value = "订单批量删除", notes = "订单批量删除")
+	@ApiImplicitParams({
+		@ApiImplicitParam(name="orderIds",value="订单批量删除ID集合数组，\"22,33,44,53,3\"",dataType="string", paramType = "query",required=true)
+	})
+	@RequestMapping(value = "/deleteBatch", method = {RequestMethod.GET,RequestMethod.POST})
+	public @ResponseBody StateResult delBatchOrder(@RequestParam("orderIds") String orderIds,HttpSession session)  {
+		String[] ids = orderIds.replace(" ","").split(",");
+		boolean dm=false;
+		for (int i = 0; i < ids.length; i++) {
+			if(!NumberUtil.isNumeric(ids[i])){
+				throw new CommonRollbackException("参数错误");
+			}
+		}
+		for (int i = 0; i < ids.length; i++) {
+			Order order = orderService.loadOrder(new Integer(ids[i]));
+			order.setStatus(7);//已删除
+			order.setSubstatus(1);
+			dm =orderService.updateOrder(order);
+		}
+		return ResultUtil.getSR(dm);
+	}
+	/**
 	 * 订单浏览数量
 	 * @return
 	 */
@@ -231,8 +261,8 @@ public class OrderController {
 		  @ApiImplicitParam(name="type",value="类型，1购买商品，2账户提现，3退款，4诚信押金",dataType="int", paramType = "query"),
 		  @ApiImplicitParam(name="payType",value="方式，1支付宝，2微信,3百度钱包,4Paypal,5网银",dataType="int", paramType = "query"),
 		  @ApiImplicitParam(name="accountId",value="下单人id外键",dataType="int", paramType = "query"),
-		  @ApiImplicitParam(name="status",value="订单状态，1冻结单，2待支付，3已支付,4预购商品，5问题单，6已取消，7已删除",dataType="int", paramType = "query"),
-		  @ApiImplicitParam(name="substatus",value="子状态，1(1冻结单)，2（1待支付），3（1已支付），4（1等待发货），5（1待解决（买家提问后），2解决中（卖家回复后），3申请退款，4已退款，5已解决），6（1已取消），7（1已删除）",dataType="int", paramType = "query"),
+		  @ApiImplicitParam(name="status",value="订单状态，2待支付，3已支付,4预购商品，5问题单，6已取消，7已删除",dataType="int", paramType = "query"),
+		  @ApiImplicitParam(name="substatus",value="子状态，2（1待支付），3（1冻结单,2已完成），4（1等待发货），5（1待解决（买家提问后），2解决中（卖家回复后），3申请退款，4已退款，5已解决），6（1已取消），7（1已删除）",dataType="int", paramType = "query"),
 		  @ApiImplicitParam(name="createDate",value="创建时间",dataType="date-time", paramType = "query"),
 		  @ApiImplicitParam(name="updateDate",value="更新时间",dataType="date-time", paramType = "query"),
 		  })

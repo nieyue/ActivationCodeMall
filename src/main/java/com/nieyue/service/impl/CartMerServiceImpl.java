@@ -18,6 +18,7 @@ import com.nieyue.bean.Coupon;
 import com.nieyue.bean.Mer;
 import com.nieyue.bean.Order;
 import com.nieyue.bean.OrderDetail;
+import com.nieyue.bean.OrderReceiptInfo;
 import com.nieyue.bean.ReceiptInfo;
 import com.nieyue.dao.CartMerDao;
 import com.nieyue.exception.CommonRollbackException;
@@ -26,6 +27,7 @@ import com.nieyue.service.CartMerService;
 import com.nieyue.service.CouponService;
 import com.nieyue.service.MerService;
 import com.nieyue.service.OrderDetailService;
+import com.nieyue.service.OrderReceiptInfoService;
 import com.nieyue.service.OrderService;
 import com.nieyue.service.ReceiptInfoService;
 import com.nieyue.util.Arith;
@@ -49,6 +51,8 @@ public class CartMerServiceImpl implements CartMerService{
 	CouponService couponService;
 	@Resource
 	ReceiptInfoService receiptInfoService;
+	@Resource
+	OrderReceiptInfoService orderReceiptInfoService;
 	@Transactional(propagation=Propagation.REQUIRED)
 	@Override
 	public boolean addCartMer(CartMer cartMer) {
@@ -151,6 +155,7 @@ public class CartMerServiceImpl implements CartMerService{
 		if(ObjectUtils.isEmpty(receiptInfo)){
 			throw new CommonRollbackException("缺少收货地址");
 		}
+		
 		if(payType<1||payType>5){
 			throw new CommonRollbackException("支付类型错误");
 		}
@@ -226,6 +231,26 @@ public class CartMerServiceImpl implements CartMerService{
 				if(!dm){
 					throw new CommonRollbackException("订单异常");
 				}
+				//收货地址
+				OrderReceiptInfo orderReceiptInfo=new OrderReceiptInfo();
+				orderReceiptInfo.setAccountId(accountId);
+				orderReceiptInfo.setAddress(receiptInfo.getAddress());
+				orderReceiptInfo.setArea(receiptInfo.getArea());
+				orderReceiptInfo.setCity(receiptInfo.getCity());
+				orderReceiptInfo.setCountry(receiptInfo.getCountry());
+				orderReceiptInfo.setCreateDate(new Date());
+				orderReceiptInfo.setIsDefault(receiptInfo.getIsDefault());
+				orderReceiptInfo.setName(receiptInfo.getName());
+				orderReceiptInfo.setOrderId(order.getOrderId());
+				orderReceiptInfo.setPhone(receiptInfo.getPhone());
+				orderReceiptInfo.setPostcode(receiptInfo.getPostcode());
+				orderReceiptInfo.setProvince(receiptInfo.getProvince());
+				orderReceiptInfo.setTelephone(receiptInfo.getTelephone());
+				orderReceiptInfo.setTelephoneArea(receiptInfo.getTelephoneArea());
+				orderReceiptInfo.setTelephoneExtension(receiptInfo.getTelephoneExtension());
+				orderReceiptInfo.setUpdateDate(new Date());
+				
+				orderReceiptInfoService.addOrderReceiptInfo(orderReceiptInfo);
 				dm=cartMerDao.delCartMer(e.getCartMerId());
 				if(!dm){
 					throw new CommonRollbackException("订单异常");

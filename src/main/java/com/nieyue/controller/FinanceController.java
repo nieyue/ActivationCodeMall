@@ -290,6 +290,40 @@ public class FinanceController {
 		return ResultUtil.getSlefSRFailList(list);
 	}
 	/**
+	 * 退款
+	 * @return 
+	 */
+	@ApiOperation(value = "退款", notes = "退款")
+	@ApiImplicitParams({
+		@ApiImplicitParam(name="accountId",value="账户ID",dataType="int", paramType = "query",required=true),
+		@ApiImplicitParam(name="method",value="方式，1支付宝，2微信,3百度钱包,4Paypal,5网银",dataType="int", paramType = "query",required=true),
+		@ApiImplicitParam(name="orderIds",value="订单id列表如:\"101,3,44\"",dataType="string", paramType = "query",required=true)
+	})
+	@RequestMapping(value = "/refund", method = {RequestMethod.GET,RequestMethod.POST})
+	public @ResponseBody StateResultList<List<Finance>> refundFinance(
+			@RequestParam(value="accountId")Integer accountId,
+			@RequestParam(value="method")Integer method,
+			@RequestParam(value="orderIds")String orderIds,
+			HttpSession session) {
+		Account a = accountService.loadAccount(accountId);
+		List<Finance> list=new ArrayList<Finance>();
+		if(a==null){
+			throw new AccountIsNotExistException();	//账户不存在
+		}
+		if(a.getAuth()==null||a.getAuth()==0){//没认证
+			throw new AccountNotAuthException();//账户未认证
+		}
+		if(a.getAuth()==1){//审核中
+			throw new AccountAuthAuditException();//账户审核中
+		}
+		/*Finance f=financeService.withdrawals(a, method, money);
+		if(!ObjectUtils.isEmpty(f)){	
+			list.add(f);
+			return ResultUtil.getSlefSRSuccessList(list);
+		}	*/	
+		return ResultUtil.getSlefSRFailList(list);
+	}
+	/**
 	 * 财务增加
 	 * @return 
 	 */

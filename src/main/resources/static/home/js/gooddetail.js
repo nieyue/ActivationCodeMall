@@ -1,6 +1,5 @@
 $(function(){
 	
-	
 	business.request  = getUrlInfo(location.search);
 	business.merId = business.request["goodid"];
 	business.spreadAccountId = business.request["said"];
@@ -99,18 +98,21 @@ $(function(){
 			return ;
 		}
 		var info = {
-			number:1,
-			spreadAccountId:business.spreadAccountId,
-			accountId:business.account!=null?business.account.accountId:null,
-			merId:business.merId
-		};
-		
-		ajxget("/cartMer/add",info,function(data){
-			if(data.code==200){
-				business.myLoadingToast("添加成功");
-				location.reload();
-			}
-		});
+				number:1,
+				spreadAccountId:business.spreadAccountId,
+				accountId:business.account!=null?business.account.accountId:null,
+				merId:business.merId
+			};
+			ajxget("/cartMer/add",info,function(data){
+				if(data.code==200){
+					business.cartMerList=data.data;
+					sessionStorage.setItem("selectCartMerList",JSON.stringify(business.cartMerList));
+					sessionStorage.setItem("selectCartMerTotalPrice",JSON.stringify(business.cartMerList[0].totalPrice));
+					window.location.href = "mycartmerturnorder.html";
+				}else{
+					business.myLoadingToast(data.msg);
+				}
+			});
 	});
 	
 
@@ -128,7 +130,6 @@ $(function(){
 			if(data.code==200){
 				var good = data.data[0];
 				business.mer=good;
-				
 				//设置全局类型
 				business.mer.type=good.type;
 				//判断用户是否有

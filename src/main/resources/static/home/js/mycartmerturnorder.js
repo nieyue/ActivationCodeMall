@@ -1,7 +1,7 @@
 //购物车商品转订单
 //console.log(JSON.parse(sessionStorage.getItem("selectCartMerList")))
 // 获取收货地址
-   business.getReceiptInfo=function(){
+   business.getReceiptInfoList=function(){
 	   //console.log(business.account.accountId)
    		var info = {
    			accountId:business.account.accountId,
@@ -40,7 +40,7 @@
 			}
 		})
    };
-   business.getReceiptInfo();
+   business.getReceiptInfoList();
 //购物车商品转订单商品
 business.getSelectCartMerList=function(){
 	business.selectCartMerList=JSON.parse(sessionStorage.getItem("selectCartMerList"));
@@ -177,7 +177,7 @@ $("input[name='couponradio']").on("click",function(){
 //显示金额
 $("#orderTotalPrice").text(JSON.parse(sessionStorage.getItem("selectCartMerTotalPrice")));
 //取消
-$("#chancelCartMerTurnOrder").on("click", function() {
+$("#cancelCartMerTurnOrder").on("click", function() {
 	business.myConfirm("确定取消商品订单？",function(){
 		location.href="shopcar.html";		
 	});
@@ -206,8 +206,8 @@ $("#cartMerTurnOrder").on("click", function() {
 	//购物车商品批量转未支付订单商品
 	ajxget("/cartMer/turnOrderBatch",info,function(data){
 		if(data.code==200){
-			sessionStorage.remove("selectCartMerTotalPrice");
-			sessionStorage.remove("selectCartMerList");
+			sessionStorage.removeItem("selectCartMerTotalPrice");
+			sessionStorage.removeItem("selectCartMerList");
 			location.href="myorder.html";
 		}
 	});

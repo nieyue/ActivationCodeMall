@@ -8,14 +8,19 @@ import javax.annotation.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.ObjectUtils;
 
+import com.nieyue.bean.Coupon;
 import com.nieyue.bean.OrderDetail;
 import com.nieyue.dao.OrderDetailDao;
+import com.nieyue.service.CouponService;
 import com.nieyue.service.OrderDetailService;
 @Service
 public class OrderDetailServiceImpl implements OrderDetailService{
 	@Resource
 	OrderDetailDao orderDetailDao;
+	@Resource
+	CouponService couponService;
 	@Transactional(propagation=Propagation.REQUIRED)
 	@Override
 	public boolean addOrderDetail(OrderDetail orderDetail) {
@@ -40,6 +45,12 @@ public class OrderDetailServiceImpl implements OrderDetailService{
 	@Override
 	public OrderDetail loadOrderDetail(Integer orderDetailId) {
 		OrderDetail r = orderDetailDao.loadOrderDetail(orderDetailId);
+		if(r.getCouponId()!=null){
+			Coupon c = couponService.loadCoupon(r.getCouponId());
+			if(!ObjectUtils.isEmpty(c)){
+				r.setCoupon(c);
+			}
+		}
 		return r;
 	}
 
@@ -82,6 +93,14 @@ public class OrderDetailServiceImpl implements OrderDetailService{
 				pageSize,
 				orderName,
 				orderWay);
+		l.forEach(r->{
+			if(r.getCouponId()!=null){
+				Coupon c = couponService.loadCoupon(r.getCouponId());
+				if(!ObjectUtils.isEmpty(c)){
+					r.setCoupon(c);
+				}
+			}
+		});
 		return l;
 	}
 

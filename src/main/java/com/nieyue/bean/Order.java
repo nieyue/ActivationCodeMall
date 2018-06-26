@@ -53,14 +53,14 @@ public class Order implements Serializable {
 	@ApiModelProperty(value="支付日期",example="支付日期")
 	private Date paymentDate;
 	/**
-	 * 订单状态，1冻结单，2待支付，3已支付,4预购商品，5问题单，6已取消，7已删除
+	 * 订单状态，2待支付，3已支付,4预购商品，5问题单，6已取消，7已删除
 	 */
-	@ApiModelProperty(value="订单状态，1冻结单，2待支付，3已支付,4预购商品，5问题单，6已取消，7已删除",example="订单状态，1冻结单，2待支付，3已支付,4预购商品，5问题单，6已取消，7已删除")
+	@ApiModelProperty(value="订单状态，2待支付，3已支付,4预购商品，5问题单，6已取消，7已删除",example="订单状态，2待支付，3已支付,4预购商品，5问题单，6已取消，7已删除")
 	private Integer status;
 	/**
-	 * 子状态，1(1冻结单)，2（1待支付），3（1已支付），4（1等待发货），5（1待解决（买家提问后），2解决中（卖家回复后），3申请退款，4已退款，5已解决），6（1已取消），7（1已删除）
+	 * 子状态，2（1待支付），3（1冻结单,2已完成），4（1等待发货），5（1待解决（买家提问后），2解决中（卖家回复后），3申请退款，4已退款，5已解决），6（1已取消），7（1已删除）
 	 */
-	@ApiModelProperty(value="子状态，1(1冻结单)，2（1待支付），3（1已支付），4（1等待发货），5（1待解决（买家提问后），2解决中（卖家回复后），3申请退款，4已退款，5已解决），6（1已取消），7（1已删除）",example="子状态，1(1冻结单)，2（1待支付），3（1已支付），4（1等待发货），5（1待解决（买家提问后），2解决中（卖家回复后），3申请退款，4已退款，5已解决），6（1已取消），7（1已删除）")
+	@ApiModelProperty(value="子状态，2（1待支付），3（1冻结单,2已完成），4（1等待发货），5（1待解决（买家提问后），2解决中（卖家回复后），3申请退款，4已退款，5已解决），6（1已取消），7（1已删除）",example="子状态，2（1待支付），3（1冻结单,2已完成），4（1等待发货），5（1待解决（买家提问后），2解决中（卖家回复后），3申请退款，4已退款，5已解决），6（1已取消），7（1已删除）")
 	private Integer substatus;
 	/**
 	 * 推广账户id
@@ -76,6 +76,10 @@ public class Order implements Serializable {
 	 * 订单详情列表
 	 */
 	private List<OrderDetail> orderDetailList;
+	/**
+	 * 订单收货信息
+	 */
+	private OrderReceiptInfo orderReceiptInfo;
 	public Integer getOrderId() {
 		return orderId;
 	}
@@ -150,6 +154,12 @@ public class Order implements Serializable {
 	}
 	public void setSpreadAccountId(Integer spreadAccountId) {
 		this.spreadAccountId = spreadAccountId;
+	}
+	public OrderReceiptInfo getOrderReceiptInfo() {
+		return orderReceiptInfo;
+	}
+	public void setOrderReceiptInfo(OrderReceiptInfo orderReceiptInfo) {
+		this.orderReceiptInfo = orderReceiptInfo;
 	}
 	
 }

@@ -5,12 +5,12 @@
 		<title>我的订单</title>
 		<meta name="Description" content=""/>
 		<meta name="Keywords" content=""/>
+		<link rel="stylesheet" href="css/bootstrap.min.css" />
 		<link rel="stylesheet" type="text/css" href="css/public.css"/>
 		<link rel="stylesheet" type="text/css" href="css/style.css"/>
 		<link rel="stylesheet" type="text/css" href="css/index.css"/>
 		<link rel="stylesheet" href="css/shopcar.css" />
 		<link rel="stylesheet" href="css/myorder.css" />
-		<!--<link rel="stylesheet" href="css/bootstrap.min.css" />-->
 	</head>
 	<body class="bg_eeeeee">
 		<!--head-->
@@ -144,11 +144,11 @@
 								<li class="bg_ff7400" id="quesionorder">
 									<a  title="">我的问题单(0)</a>
 								</li>
-								<li class="bg_ff7400" id="tuikuanoredr">
-									<a  title="">已退款订单(0)</a>
-								</li>
 								<li class="bg_ff7400" id="quxiaoorder">
 									<a  title="">已取消订单(0)</a>
+								</li>
+								<li class="bg_ff7400" id="tuikuanoredr">
+									<a  title="">已退款订单(0)</a>
 								</li>
 								
 							</ul>
@@ -171,7 +171,7 @@
 						  </thead>
 						  <tbody id="nopay_tb">
 						  	
-						    <tr class="td item">
+						  <!--   <tr class="td item">
 						      <td >
 						      	<div >
 						      		<input name="checkbox" type="checkbox" style="" class="ordercheck"/>
@@ -197,7 +197,7 @@
 						      	<a class="deletorderbtn">取消</a>
 						      	<a class="topaybtn">支付</a>
 						      </td>
-						    </tr>
+						    </tr> -->
 						    
 						    
 						    
@@ -205,20 +205,20 @@
 						</table>
 
 						<div class="width1200 paybottom">
-							<input name="checkbox" type="checkbox" style="" class="choseallcheck"/>
+							<input name="checkboxAll" type="checkbox" style="" class="choseallcheck"/>
 							
 						     <p class="margin_left20 fl" style="width: auto;">全选</p>
 						     <div style="width: auto;float: right;height: 50px;">
 						     	<div class="chosmoneydiv">
-						     		<p style="">已选<span style="color: #bb0404;">0</span>件&nbsp;&nbsp;合计：<span style="color: #bb0404;">0.00</span></p>	
+						     		<p style="">已选<span style="color: #bb0404;" id="allOrderNumber">0</span>件&nbsp;&nbsp;合计：<span style="color: #bb0404;" id="allOrderTotalPrice">0.00</span></p>	
 						     	</div>
 						     	
-						     	<div class="quxiaodiv">
+						     	<div class="quxiaodiv" id="deleteBatchOrderBtn21">
 						     		<a style="color: #bb0404;">删除</a>				     	
 						     	</div>
 						     	
-						     	<div class="commitorderdiv">
-						     		<a style="color: #FFFFFF;">提交订单</a>				     	
+						     	<div class="commitorderdiv" id="commitBatchOrderBtn">
+						     		<a style="color: #FFFFFF;" >提交订单</a>				     	
 						     </div>
 						     
 						</div>
@@ -280,14 +280,14 @@
 						</table>
 
 						<div class="width1200 paybottom">
-							<input name="checkbox" type="checkbox" style="" class="choseallcheck"/>
+							<input name="checkboxAll" type="checkbox" style="" class="choseallcheck"/>
 							
 						     <p class="margin_left20 fl" style="width: auto;">全选</p>
 						     <div style="width: auto;float: right;height: 50px;">
 						     	
 						     	
 						     	<div class="quxiaodiv">
-						     		<a style="color: #bb0404;">删除</a>				     	
+						     		<a style="color: #bb0404;"  id="deleteBatchOrderBtn31">删除</a>				     	
 						     	</div>
 						     	
 						     	
@@ -394,7 +394,77 @@
 						</table>
 
 			</div>
-			
+			<!--已取消订单-->
+			<div class="width1200 bg_fff" id="yiquxiao" style="display: none;">
+				<table class="width1200 bg_fff" frame="void" rules="cols">
+						  
+						  <thead>
+						    <tr class="bg_fff td" style="height: 40px;">
+						      <th class="tablecenter" style="width: 13%;">订单编号</th>
+						      <th class="tablecenter" style="width: 21%;">商品名称</th>
+						      
+						      <th class="tablecenter" style="width: 13%;">收货人</th>
+						      <th class="tablecenter" style="width: 13%;">单价*数</th>
+						      <th class="tablecenter" style="width: 13%;">总金额</th>
+						      
+						      <th class="tablecenter" style="width: 13%;">订单状态</th>
+						      <th class="tablecenter" style="width: 13%;">取消日期</th>
+						    </tr>
+						  </thead>
+						  <tbody id="quxiao_tb">
+						  	
+						    <!-- <tr class="td item">
+						      <td >
+						      	<div >
+						      		<input name="checkbox" type="checkbox" style="" class="ordercheck"/>
+						      		
+						      		<p class="ordercode">1325454</p>
+						      	</div>
+						      </td>
+						      <td style="padding-left: 10px;padding-right: 10px;">暗黑破坏神3-《死暗黑破坏神3-《死法師的崛起》台服版本</td>
+						      
+						      <td>啦啦啦</td>
+						      <td>
+						      	¥80*3
+						      </td>
+						      
+						      <td>
+						      	¥240
+						      </td>
+						      
+						      <td>
+						      	<a class="deletorderbtn">已取消</a>
+						      </td>
+						      <td >
+						      	<p class="ordertimeday">2017-09-21</p>
+						      	<p class="ordertimehour">11:34</p>
+						      </td>
+						    </tr> -->
+						    
+						    
+						    
+						  </tbody>
+						</table>
+
+						<div class="width1200 paybottom">
+							<input name="checkboxAll" type="checkbox" style="" class="choseallcheck"/>
+							
+						     <p class="margin_left20 fl" style="width: auto;">全选</p>
+						     <div style="width: auto;float: right;height: 50px;">
+						     	
+						     	
+						     	<div class="quxiaodiv">
+						     		<a style="color: #bb0404;" id="deleteBatchOrderBtn61">删除</a>				     	
+						     	</div>
+						     	
+						     	
+						     
+						</div>
+				
+				</div>
+				
+				
+			</div>
 			
 			<!--已退款订单-->
 			<div class="width1200 bg_fff" id="yituikuan" style="display: none;">
@@ -449,14 +519,14 @@
 						</table>
 
 						<div class="width1200 paybottom">
-							<input name="checkbox" type="checkbox" style="" class="choseallcheck"/>
+							<input name="checkboxAll" type="checkbox" style="" class="choseallcheck"/>
 							
 						     <p class="margin_left20 fl" style="width: auto;">全选</p>
 						     <div style="width: auto;float: right;height: 50px;">
 						     	
 						     	
 						     	<div class="quxiaodiv">
-						     		<a style="color: #bb0404;">删除</a>				     	
+						     		<a style="color: #bb0404;" id="deleteBatchOrderBtn54">删除</a>				     	
 						     	</div>
 						     	
 						     	
@@ -467,80 +537,6 @@
 				
 				
 			</div>
-			
-			<!--已取消订单-->
-			<div class="width1200 bg_fff" id="yiquxiao" style="display: none;">
-				<table class="width1200 bg_fff" frame="void" rules="cols">
-						  
-						  <thead>
-						    <tr class="bg_fff td" style="height: 40px;">
-						      <th class="tablecenter" style="width: 13%;">订单编号</th>
-						      <th class="tablecenter" style="width: 21%;">商品名称</th>
-						      
-						      <th class="tablecenter" style="width: 13%;">收货人</th>
-						      <th class="tablecenter" style="width: 13%;">单价*数</th>
-						      <th class="tablecenter" style="width: 13%;">总金额</th>
-						      
-						      <th class="tablecenter" style="width: 13%;">订单状态</th>
-						      <th class="tablecenter" style="width: 13%;">取消日期</th>
-						    </tr>
-						  </thead>
-						  <tbody id="quxiao_tb">
-						  	
-						    <tr class="td item">
-						      <td >
-						      	<div >
-						      		<input name="checkbox" type="checkbox" style="" class="ordercheck"/>
-						      		
-						      		<p class="ordercode">1325454</p>
-						      	</div>
-						      </td>
-						      <td style="padding-left: 10px;padding-right: 10px;">暗黑破坏神3-《死暗黑破坏神3-《死法師的崛起》台服版本</td>
-						      
-						      <td>啦啦啦</td>
-						      <td>
-						      	¥80*3
-						      </td>
-						      
-						      <td>
-						      	¥240
-						      </td>
-						      
-						      <td>
-						      	<a class="deletorderbtn">已取消</a>
-						      </td>
-						      <td >
-						      	<p class="ordertimeday">2017-09-21</p>
-						      	<p class="ordertimehour">11:34</p>
-						      </td>
-						    </tr>
-						    
-						    
-						    
-						  </tbody>
-						</table>
-
-						<div class="width1200 paybottom">
-							<input name="checkbox" type="checkbox" style="" class="choseallcheck"/>
-							
-						     <p class="margin_left20 fl" style="width: auto;">全选</p>
-						     <div style="width: auto;float: right;height: 50px;">
-						     	
-						     	
-						     	<div class="quxiaodiv">
-						     		<a style="color: #bb0404;">删除</a>				     	
-						     	</div>
-						     	
-						     	
-						     
-						</div>
-				
-				</div>
-				
-				
-			</div>
-			
-			
 			
 			
 			<p style="font-size: 20px;color: #1B1B1B;margin-top: 20px;">推荐商品</p>
@@ -675,12 +671,6 @@
 	getmercate();
 	getshopcarlist();
 	gethotseachlist();
-	getlist(2);
-	getlist(3);
-	getlist(4);
-	getlist(5);
-	getlist(6);
-	getlist(7);
-	gettuijian();
+
 </script>
 </html>

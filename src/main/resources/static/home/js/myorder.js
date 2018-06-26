@@ -1,30 +1,94 @@
 $(document).ready(function(){
-	//加的效果
-	$(".add").click(function(){
-	var n=$(this).prev().val();
-	var num=parseInt(n)+1;
-	if(num==0){ return;}
-	$(this).prev().val(num);
+//初始化,保障
+sessionStorage.setItem("selectOrderList",JSON.stringify([]));
+sessionStorage.setItem("selectOrderTotalPrice",JSON.stringify(0));
+//订单计总
+	business.orderSum=function(status,substatus){
+		//订单清零
+		$("#allOrderNumber").html(0);
+		$("#allOrderTotalPrice").html(0);
+		//计算订单数量
+		$("#allOrderNumber").html($("input[name='checkbox"+status+substatus+"']:checked").size())
+		//计算订单总价
+		var totalPrice=0;
+		//选中的订单商品
+		business.selectOrderList=[];
+		$("input[name='checkbox"+status+substatus+"']:checked").each(function(){
+			for (var i = 0; i < business["orderList"+status+substatus].length; i++) {
+				if(business["orderList"+status+substatus][i].orderId==$(this).parent().parent().parent().attr("id")){
+					business.selectOrderList.push(business["orderList"+status+substatus][i])
+					totalPrice+=parseFloat(business["orderList"+status+substatus][i].orderDetailList[0].totalPrice);
+				}
+			}
+		});
+		$("#allOrderTotalPrice").html(totalPrice.toFixed(2));
+		//总选择的列表
+		sessionStorage.setItem("selectOrderList",JSON.stringify(business.selectOrderList));
+		//总金额
+		sessionStorage.setItem("selectOrderTotalPrice",JSON.stringify(totalPrice.toFixed(2)));
+	}	
+	//点击全选
+	business.checkboxAll("input[name='checkboxAll']","input[name='checkbox21']",
+			function(){
+		business.orderSum(2,1);
+		//business.orderSum(3,null);
+		//business.orderSum(4,1);
+		//business.orderSum(5,null);
+		//business.orderSum(6,1);
+		//business.orderSum(5,4);
 	});
-	//减的效果
-	$(".jian").click(function(){
-	var n=$(this).next().val();
-	var num=parseInt(n)-1;
-	if(num==0){ return}
-	$(this).next().val(num);
+	//点击提交订单,批量
+	$("#commitBatchOrderBtn").click(function(){
+		if(JSON.parse(sessionStorage.getItem("selectOrderList")).length<=0){
+			business.myLoadingToast("最少选中一个");
+			return;
+		}
+		window.location.href = "myordercommit.html";
 	});
-var divarr = new Array($("#nozhifu"),$("#nozhifu"),$("#havezhifu"),$("#wantbuy"),$("#wentidan"),$("#yituikuan"),$("#yiquxiao"));
+	
+var divarr = new Array($("#nozhifu"),$("#nozhifu"),$("#havezhifu"),$("#wantbuy"),$("#wentidan"),$("#yiquxiao"),$("#yituikuan"));
 //导航点击效果
 $(".orderbanner_positionul li").click(function(){
 	$('.orderbanner_positionul li').removeClass('bg_573c1e');
 	var showid = $(this).index()+1;
 	$(".orderbanner_positionul li:nth-child("+showid+")").addClass('bg_573c1e');
 	show(showid);
-	
+	$("input[name='checkboxAll']").prop("checked",false);
+	$("input[name='checkbox']").prop("checked",false);
+	var jjjj="";
+	if(showid==2){
+		//3,null
+		jjjj="3null";
+		business.checkboxAll("input[name='checkboxAll']","input[name='checkbox"+jjjj+"']",
+				function(){
+			business.orderSum(3,null);
+		});
+	}else
+	if(showid==4){
+		//5,null
+		jjjj+="5null";
+		business.checkboxAll("input[name='checkboxAll']","input[name='checkbox"+jjjj+"']",
+				function(){
+			business.orderSum(5,null);
+		});
+	}else if(showid==6){
+		//5,4
+		jjjj+="54";
+		business.checkboxAll("input[name='checkboxAll']","input[name='checkbox"+jjjj+"']",
+				function(){
+			business.orderSum(5,4);
+		});
+	}else{
+		jjjj+=""+(showid+1)+1;
+		business.checkboxAll("input[name='checkboxAll']","input[name='checkbox"+jjjj+"']",
+				function(){
+			business.orderSum(showid+1,1);
+		});
+	}
 });
 
 
-
+//切换导航显示
 function show(id){
 	for (var i=0;i<divarr.length;i++) {
 		if(i==id){
@@ -38,81 +102,79 @@ function show(id){
 		}
 	}
 }
-
-//选择支付
-$(".pay_positionul li").click(function(){
-	
-	$('.pay_positionul li').removeClass('payborder7400');
-	$(this).addClass('payborder7400');
-	
+//订单支付
+$(document).on("click",".topaybtn", function() {
+	//console.log($(this).parent().parent().children().children().children("input[name='checkbox']"))
+	$(this).parent().parent().children().children().children("input[name='checkbox21']").prop("checked","checked")
+	business.orderSum(2,1);
+	window.location.href = "myordercommit.html";
 });
 
-			var shixin = "★";
-            var kongxin = "☆";
-            /*var flag = false;//没有点击*/
-            $(".commentli").mouseenter(function(){
-                /*$(this).text(shixin).prevAll().text(shixin);
-                $(this).nextAll().text(kongxin);*/
-                $(this).text(shixin).prevAll().text(shixin).end().nextAll().text(kongxin);
-            });
-            $(".comment").mouseleave(function(){
-               /* if(!flag){
-                    $("li").text(kongxin);
-                }*/
-                $(".commentli").text(kongxin);
-                $(".clicked").text(shixin).prevAll().text(shixin);
-            });
-            $(".commentli").on("click",function(){
-               /* $(this).text(shixin).prevAll().text(shixin);
-                $(this).nextAll().text(kongxin);
-                flag = true;*/
-                $(this).addClass("clicked").siblings().removeClass("clicked");
-            });
-//评论显示隐藏
-$(".addcommentbtn").click(function(){
-	if(!$("#question").is(":hidden")){
-       $("#question").toggle();    //如果元素为隐藏,则将它显现
+//取消购物商品
+business.cancelOrder=function(orderId){
+	var info = {
+		orderId:orderId,
+		status:6,
+		substatus:1,
+		accountId:business.account!=null?business.account.accountId:null
+	};
+	business.myConfirm("确定取消？",function(){
+	ajxget("/order/update",info,function(data){
+		if(data.code==200){
+			business.myLoadingToast("取消成功");
+			location.reload();
+		}
+	});
+	});
+}
+//批量删除
+$("#deleteBatchOrderBtn21,#deleteBatchOrderBtn31,#deleteBatchOrderBtn61,#deleteBatchOrderBtn54").on("click",function(){
+	if(JSON.parse(sessionStorage.getItem("selectOrderList")).length<=0){
+		business.myLoadingToast("最少选中一个");
+		return;
 	}
-	$("#comment").toggle();
-});
-$("#canclecomment").click(function(){
-	$("#comment").toggle();
+	var trs=JSON.parse(sessionStorage.getItem("selectOrderList"));
+	var orderIdsarray=[];
+	for (var i = 0; i < trs.length; i++) {
+		orderIdsarray.push(trs[i].orderId);
+	}
+	business.myConfirm("批量删除，确定？",function(){
+		//var cartMerIds=$("input[name='checkbox']:checked")
+		var info = {
+				orderIds:orderIdsarray.toString(),
+				accountId:business.account!=null?business.account.accountId:null
+			};
+			
+			ajxget("/order/deleteBatch",info,function(data){
+				if(data.code==200){
+					business.myLoadingToast("删除成功");
+					location.reload();
+				}
+			});
+	});
 });
 
-//问题单显示隐藏
-$(".questionbtn").click(function(){
-	if(!$("#comment").is(":hidden")){
-       $("#comment").toggle();    //如果元素为隐藏,则将它显现
-	}
-	$("#question").toggle();
 });
-$("#canclequestion").click(function(){
-	$("#question").toggle();
-});
-})
-function getlist(status){
-	var info;
-	if(status==7){
-		info = {
-		status:5,
-		substatus:4,
-		pageNum:1,
-		pageSize:100,
-		accountId:business.accountId
-		};
-	}else{
-		info = {
+//获取订单列表
+business.getOrderList=function(status,substatus){
+	//订单状态，2待支付，3已支付,4预购商品，5问题单，6已取消，7已删除
+	//子状态，2（1待支付），3（1冻结单,2已完成），4（1等待发货），
+	//5（1待解决（买家提问后），2解决中（卖家回复后），3申请退款，4已退款，5已解决），
+	//6（1已取消），7（1已删除）
+	var info = {
 		status:status,
+		substatus:substatus,
 		pageNum:1,
 		pageSize:100,
 		accountId:business.accountId
 		};
-	}
 	
 	
 	ajxget("/order/list",info,function(data){
 		if(data.code==200){
-			var list = data.data;
+			//business.orderList2,business.orderList3等等
+			business["orderList"+status+substatus]=data.data;
+			var list = data.data||[];
 			var table;
 			if(status==2){
 				var table = $('#nopay_tb');
@@ -129,11 +191,10 @@ function getlist(status){
 			}else if(status==6){
 				var table = $('#quxiao_tb');
 				$("#quxiaoorder>a").text("已取消订单("+list.length+")");
-			}else if(status==7){
+			}else if(status==5&&substatus==4){
 				var table = $('#tuikuan_tb');
 				$("#tuikuan_tb>a").text("已退款订单("+list.length+")");
 			}
-			
 			for(var i = 0; i < list.length; i++) {
 			    var child = list[i];
 			    var tr = document.createElement('tr');
@@ -141,7 +202,24 @@ function getlist(status){
 				tr.id = child.orderId;
 				var html;
 				if(status==2){
-					html = '<td ><div ><input name="checkbox" type="checkbox" style="" class="ordercheck"/><p class="ordercode">'+child.orderNumber+'</p></div></td><td style="padding-left: 10px;padding-right: 10px;">'+child.orderDetailList[0].name+'</td><td ><p class="ordertimeday">'+child.updateDate+'</p></td><td>啦啦啦</td><td>¥'+child.orderDetailList[0].unitPrice+'*'+child.orderDetailList[0].number+'</td><td>¥'+child.orderDetailList[0].totalPrice+'</td><td><a class="deletorderbtn">取消</a><a class="topaybtn">支付</a></td>';
+					//html = '<td ><div ><input name="checkbox" type="checkbox" style="" class="ordercheck"/><p class="ordercode">'+child.orderNumber+'</p></div></td><td style="padding-left: 10px;padding-right: 10px;">'+child.orderDetailList[0].name+'</td><td ><p class="ordertimeday">'+child.updateDate+'</p></td><td>啦啦啦</td><td>¥'+child.orderDetailList[0].unitPrice+'*'+child.orderDetailList[0].number+'</td><td>¥'+child.orderDetailList[0].totalPrice+'</td><td><a class="deletorderbtn">取消</a><a class="topaybtn">支付</a></td>';
+					html='<td >'
+					      	+'<div >'
+					      		+'<input name="checkbox'+status+substatus+'" type="checkbox" style="" class="ordercheck"/>'
+					      		+'<p class="ordercode" style="width:60%;word-break:break-all;">'+child.orderNumber+'</p>'
+					      	+'</div>'
+					      +'</td>'
+					      +'<td style="padding-left: 10px;padding-right: 10px;">'+child.orderDetailList[0].name+'</td>'
+					      +'<td >'
+					      	+'<p class="ordertimeday">'+child.createDate+'</p>'
+					      +'</td>'
+					      +'<td>'+child.orderReceiptInfo.name+'</td>'
+					      +'<td>¥'+child.orderDetailList[0].unitPrice+'*'+child.orderDetailList[0].number+'</td>'
+					      +'<td>¥'+child.orderDetailList[0].totalPrice+'</td>'
+					      +'<td>'
+					      	+'<a class="deletorderbtn" onclick="business.cancelOrder('+child.orderId+')">取消</a>'
+					      	+'<a class="topaybtn" >支付</a>'
+					      +'</td>'
 				}else if(status==3){
 					html = '<td ><div ><input name="checkbox" type="checkbox" style="" class="ordercheck"/><p class="ordercode">'+child.orderNumber+'</p></div></td><td style="padding-left: 10px;padding-right: 10px;">'+child.orderDetailList[0].name+'</td><td ><p class="ordertimeday">'+child.updateDate+'</p></td><td>啦啦啦</td><td>¥'+child.orderDetailList[0].unitPrice+'*'+child.orderDetailList[0].number+'</td><td>¥'+child.orderDetailList[0].totalPrice+'</td><td><a class="deletorderbtn">评价订单</a><a class="topaybtn">提取卡密</a><a class="shouhoubtn">售后服务</a></td>';
 				}else if(status==4){
@@ -149,8 +227,24 @@ function getlist(status){
 				}else if(status==5){
 					html = '<td ><div ><input name="checkbox" type="checkbox" style="" class="ordercheck"/><p class="ordercode">'+child.orderNumber+'</p></div></td><td style="padding-left: 10px;padding-right: 10px;">'+child.orderDetailList[0].name+'</td><td ><p class="ordertimeday">'+child.updateDate+'</p></td><td>'+child.content+'</td><td><a class="deletorderbtn">待解决</a></td>';
 				}else if(status==6){
-					html = '<td ><div ><input name="checkbox" type="checkbox" style="" class="ordercheck"/><p class="ordercode">'+child.orderNumber+'</p></div></td><td style="padding-left: 10px;padding-right: 10px;">'+child.orderDetailList[0].name+'</td><td>啦啦啦</td><td>¥'+child.orderDetailList[0].unitPrice+'*'+child.orderDetailList[0].number+'</td><td>¥'+child.orderDetailList[0].totalPrice+'</td><td><a class="deletorderbtn">已取消</a></td><td ><p class="ordertimeday">'+child.updateDate+'</p></td>';
-				}else if(status==7){
+					//html = '<td ><div ><input name="checkbox" type="checkbox" style="" class="ordercheck"/><p class="ordercode">'+child.orderNumber+'</p></div></td><td style="padding-left: 10px;padding-right: 10px;">'+child.orderDetailList[0].name+'</td><td>啦啦啦</td><td>¥'+child.orderDetailList[0].unitPrice+'*'+child.orderDetailList[0].number+'</td><td>¥'+child.orderDetailList[0].totalPrice+'</td><td><a class="deletorderbtn">已取消</a></td><td ><p class="ordertimeday">'+child.updateDate+'</p></td>';
+						html='<td >'
+					      		+'<div >'
+					      			+'<input name="checkbox'+status+substatus+'" type="checkbox" style="" class="ordercheck"/>'
+					      			+'<p class="ordercode" style="width:60%;word-break:break-all;">'+child.orderNumber+'</p>'
+					      		+'</div>'
+					      	+'</td>'
+					      	+'<td style="padding-left: 10px;padding-right: 10px;">'+child.orderDetailList[0].name+'</td>'
+					      	+'<td>'+child.orderReceiptInfo.name+'</td>'
+					      	+'<td>¥'+child.orderDetailList[0].unitPrice+'*'+child.orderDetailList[0].number+'</td>'
+						    +'<td>¥'+child.orderDetailList[0].totalPrice+'</td>'
+					      	+'<td>'
+					      		+'<span class="deletorderbtn">已取消</span>'
+					      	+'</td>'
+					      	+'<td >'
+					      		+'<p class="ordertimeday">'+child.createDate+'</p>'
+					      	+'</td>';
+				}else if(status==5&&substatus==4){
 					html = '<td ><div ><input name="checkbox" type="checkbox" style="" class="ordercheck"/><p class="ordercode">'+child.orderNumber+'</p></div></td><td style="padding-left: 10px;padding-right: 10px;">'+child.orderDetailList[0].name+'</td><td>啦啦啦</td><td>¥'+child.orderDetailList[0].unitPrice+'*'+child.orderDetailList[0].number+'</td><td>¥'+child.orderDetailList[0].totalPrice+'</td><td><a class="deletorderbtn">已取消</a></td><td ><p class="ordertimeday">'+child.updateDate+'</p></td>';
 				}
 				
@@ -163,8 +257,14 @@ function getlist(status){
 			
 		}
 	})
-}
-
+};
+//订单状态，2待支付，3已支付,4预购商品，5问题单，6已取消，7已删除
+business.getOrderList(2,1);
+business.getOrderList(3,null);
+business.getOrderList(4,1);
+business.getOrderList(5,null);
+business.getOrderList(6,1);
+business.getOrderList(5,4);
 //商品推荐
 function gettuijian(){
 	var info = {
@@ -198,3 +298,5 @@ function gettuijian(){
 		}
 	})
 }
+
+gettuijian();

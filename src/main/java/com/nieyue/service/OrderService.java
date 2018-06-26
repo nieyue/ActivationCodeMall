@@ -20,27 +20,12 @@ public interface OrderService {
 	public boolean updateOrder(Order order);
 	/** 装载订单 */	
 	public Order loadOrder(Integer orderId);
-	/** 余额支付订单请求 
-	 * @throws CommonNotRollbackException */	
-	public boolean balancePaymentOrder(
-			Integer type,
-			Integer payType,
-			Integer accountId,
-			Integer businessId,
-			String nickname,
-			String phone,
-			String contactPhone
-			) throws CommonNotRollbackException;
 	/** 第三方支付订单请求 
 	 * @throws CommonNotRollbackException */	
 	public String thirdPartyPaymentOrder(
-			Integer type,
 			Integer payType,
 			Integer accountId,
-			Integer businessId,
-			String nickname,
-			String phone,
-			String contactPhone
+			String orderIds
 			) throws CommonNotRollbackException;
 	/** 订单总共数目 */	
 	public int countAll(

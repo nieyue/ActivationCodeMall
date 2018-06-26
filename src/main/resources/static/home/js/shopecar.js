@@ -222,7 +222,8 @@ function deleteCartMer(cartMerId){
 //批量删除
 $("#cartMerDeleteBatch").on("click",function(){
 	//console.log($("input[name='checkbox']:checked").parent().parent().parent())
-	/*var trs=$("input[name='checkbox']:checked").parent().parent().parent();
+	/*
+	 * var trs=$("input[name='checkbox']:checked").parent().parent().parent();
 	if(trs.length<=0){
 		business.myLoadingToast("最少选择一个");
 		return;
@@ -231,9 +232,10 @@ $("#cartMerDeleteBatch").on("click",function(){
 		business.myLoadingToast("最少选中一个");
 		return;
 	}
+	var trs=JSON.parse(sessionStorage.getItem("selectCartMerList"));
 	var cartMerIdsarray=[];
 	for (var i = 0; i < trs.length; i++) {
-		cartMerIdsarray.push(trs[i].id);
+		cartMerIdsarray.push(trs[i].cartMerId);
 	}
 	business.myConfirm("批量删除，确定？",function(){
 		//var cartMerIds=$("input[name='checkbox']:checked")

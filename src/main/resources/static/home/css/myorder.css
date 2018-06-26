@@ -27,7 +27,7 @@
 .commentdiv{width: 1200px;margin-top: 20px;height: auto;background: white;padding-bottom: 20px;}
 .checkdiv{float: left;line-height: 30px;}
 .checkdiv>input{margin-left: 20px;}
-.ordercheck{margin-left: 10%;float: left;margin-top: 5px;}
+.ordercheck{margin-left: 15px !important;float: left;margin-top: 5px;}
 .ordercode{margin-left: 13%;width: auto;float: left;color: #FF7400;height: 20px;}
 .ordertimeday{width: auto;display: block;color: #000000;}
 .ordertimehour{width: auto;color: #000000;margin-top: 5px;}
@@ -35,7 +35,7 @@
 .topaybtn{width: auto;color: #FF7400;display: block;margin-top: 5px;font-size: 14px;}
 .shouhoubtn{width: auto;color: #FF7400;display: block;margin-top: 5px;font-size: 14px;}
 .paybottom{background: rgba(224, 224, 224, 1);height: 50px;margin-top: 30px;line-height: 50px;}
-.choseallcheck{margin-left: 15px;float: left;margin-top: 18px;}
+.choseallcheck{margin-left: 15px !important;;float: left;margin-top: 18px !important;}
 .quxiaodiv{text-align: center;width: 120px;height: 50px;margin: auto;background: #d3d3d3;float: left;margin-left: 20px;}
 .commitorderdiv{text-align: center;width: 120px;height: 50px;margin: auto;background: #FF7400;float: left;}
 .chosmoneydiv{width: auto;height: 50px;margin: auto;float: left;}
