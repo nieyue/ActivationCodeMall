@@ -209,6 +209,8 @@ $("#cartMerTurnOrder").on("click", function() {
 			sessionStorage.removeItem("selectCartMerTotalPrice");
 			sessionStorage.removeItem("selectCartMerList");
 			location.href="myorder.html";
+		}else{
+			business.myLoadingToast(data.msg)
 		}
 	});
 })

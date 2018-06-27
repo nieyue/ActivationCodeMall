@@ -36,7 +36,7 @@ public class NoticeBusiness {
 	
 	/**
 	 *  获取是否商品动态
-	 *  @param type 类型，1系统消息，2产品上架申请，3新增商品类型，4商品申请自营，5提现申请，6问题单反馈,7订单商品动态
+	 *  @param type 类型，1系统消息，2申请新产品销售，3新增商品类型，4商品申请自营，5提现申请，6问题单反馈,7订单商品动态
 	 *  @return isMerDynamic 是否商品动态，默认0不是，1是
 	 */
 	public Integer getIsMerDynamicByType(Integer type){
@@ -49,7 +49,7 @@ public class NoticeBusiness {
 	/**
 	 *  通知
 	 *  content 内容
-	 *  类型，1系统消息，2产品上架申请，3新增商品类型，4商品申请自营，5提现申请，6问题单反馈，7订单商品动态
+	 *  类型，1系统消息，2申请新产品销售，3新增商品类型，4商品申请自营，5提现申请，6问题单反馈，7订单商品动态
 	 *  @return content
 	 */
 	public String getContentByType(
@@ -60,15 +60,15 @@ public class NoticeBusiness {
 			case 1:
 				content.append(notice.getContent());
 				break;
-			//产品上架申请
+			//申请新产品销售
 			case 2:
 				if(ObjectUtils.isEmpty(notice.getBusinessId())
 						){
-					throw new NoticeException("产品上架申请异常");
+					throw new NoticeException("申请新产品销售异常");
 				}
 				Mer mer2=merService.loadMer(notice.getBusinessId());
 				if(ObjectUtils.isEmpty(mer2)){
-					throw new NoticeException("产品上架申请异常");
+					throw new NoticeException("申请新产品销售异常");
 				}
 				JSONObject json2=new JSONObject();
 				json2.put("merName", mer2.getName());//商品名称

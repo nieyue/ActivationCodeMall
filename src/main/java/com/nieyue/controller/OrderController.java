@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.util.StringUtils;
@@ -22,6 +23,7 @@ import com.nieyue.exception.CommonNotRollbackException;
 import com.nieyue.exception.CommonRollbackException;
 import com.nieyue.exception.NotAnymoreException;
 import com.nieyue.exception.NotIsNotExistException;
+import com.nieyue.pay.AlipayUtil;
 import com.nieyue.service.OrderDetailService;
 import com.nieyue.service.OrderService;
 import com.nieyue.util.NumberUtil;
@@ -49,6 +51,8 @@ public class OrderController {
 	
 	@Resource
 	private OrderDetailService orderDetailService;
+	@Resource
+	private AlipayUtil alipayUtil;
 	
 	/**
 	 * 订单分页浏览
@@ -167,6 +171,17 @@ public class OrderController {
 		}else{
 			throw new NotAnymoreException();//没有更多
 		}
+	}
+	/**
+	 *  购买商品订单支付支付宝充值回调
+	 * @return
+	 */
+	@ApiOperation(value = "购买商品订单支付支付宝充值回调", notes = " 购买商品订单支付支付宝充值回调")
+	@RequestMapping(value = "/alipayOrderNotifyUrl", method = {RequestMethod.GET,RequestMethod.POST})
+	public @ResponseBody String alipayRechargeNotifyUrl(
+			HttpServletRequest request,HttpSession session)  {
+		String s = alipayUtil.getRechargeNotifyUrl(request);
+		return s;
 	}
 	/**
 	 * 购买商品订单支付

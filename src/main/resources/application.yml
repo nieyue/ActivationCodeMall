@@ -37,6 +37,6 @@ spring:
   session:
     store-type: redis     
   profiles:
-    #active: dev
-    active: prod
+    active: dev
+    #active: prod
 

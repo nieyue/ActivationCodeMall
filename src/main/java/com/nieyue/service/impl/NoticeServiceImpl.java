@@ -107,6 +107,7 @@ public class NoticeServiceImpl implements NoticeService{
 						List<Notice> nl = browsePagingNotice(2, 1, null, null, aid, notice.getNoticeId(), 1, Integer.MAX_VALUE, "notice_id", "asc");
 						if(nl.size()==1){
 						Notice n = nl.get(0);
+						n.setTitle(notice.getTitle());
 						n.setContent(notice.getContent());
 						n.setUpdateDate(notice.getUpdateDate());
 						n.setImgAddress(notice.getImgAddress());

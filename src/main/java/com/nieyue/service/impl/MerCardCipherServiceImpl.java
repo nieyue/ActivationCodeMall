@@ -26,7 +26,8 @@ public class MerCardCipherServiceImpl implements MerCardCipherService{
 		merCardCipher.setCreateDate(new Date());
 		boolean b = merCardCipherDao.addMerCardCipher(merCardCipher);
 		Mer mer=merservice.loadMer(merCardCipher.getMerId());
-		mer.setStockNumber(mer.getStockNumber()+1);
+		Integer mccls = merCardCipherDao.countAll(mer.getMerId());
+		mer.setStockNumber(mccls);
 		b=merservice.updateMer(mer);
 		return b;
 	}
@@ -36,7 +37,8 @@ public class MerCardCipherServiceImpl implements MerCardCipherService{
 		MerCardCipher merCardCipher=loadMerCardCipher(merCardCipherId);
 		boolean b = merCardCipherDao.delMerCardCipher(merCardCipherId);
 		Mer mer=merservice.loadMer(merCardCipher.getMerId());
-		mer.setStockNumber(mer.getStockNumber()-1);
+		Integer mccls = merCardCipherDao.countAll(mer.getMerId());
+		mer.setStockNumber(mccls);
 		b=merservice.updateMer(mer);
 		return b;
 	}
@@ -44,6 +46,10 @@ public class MerCardCipherServiceImpl implements MerCardCipherService{
 	@Override
 	public boolean updateMerCardCipher(MerCardCipher merCardCipher) {
 		boolean b = merCardCipherDao.updateMerCardCipher(merCardCipher);
+		Mer mer=merservice.loadMer(merCardCipher.getMerId());
+		Integer mccls = merCardCipherDao.countAll(mer.getMerId());
+		mer.setStockNumber(mccls);
+		b=merservice.updateMer(mer);
 		return b;
 	}
 

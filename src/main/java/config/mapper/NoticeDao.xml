@@ -10,6 +10,7 @@
    		 (
    		 region,
    		 type,
+   		 is_mer_dynamic,
    		 title,
    		 img_address,
    		 content,
@@ -23,6 +24,7 @@
     	 (
     	 #{region},
     	 #{type},
+    	 #{isMerDynamic},
     	 #{title},
     	 #{imgAddress},
     	 #{content},
@@ -43,6 +45,9 @@
     	</if>
     	<if test="type!=null">
     	type=#{type},
+    	</if>
+    	<if test="isMerDynamic!=null">
+    	is_mer_dynamic=#{isMerDynamic},
     	</if>
     	<if test="title!=null">
     	title=#{title},
@@ -84,6 +89,7 @@ SELECT
 		 notice_id,
 	 	 region,
    		 type,
+   		 is_mer_dynamic,
    		 title,
    		 img_address,
    		 content,
@@ -102,6 +108,7 @@ WHERE notice_id=#{noticeId}
 	     notice_id,
 	 	 region,
    		 type,
+   		 is_mer_dynamic,
    		 title,
    		 img_address,
    		 content,
@@ -117,6 +124,9 @@ WHERE notice_id=#{noticeId}
 		</if>
 	<if test="type!=null">
 		AND  type=#{type}
+		</if>
+	<if test="isMerDynamic!=null">
+		AND  is_mer_dynamic=#{isMerDynamic}
 		</if>
 	<if test="status!=null">
 		AND  status=#{status}
@@ -141,6 +151,9 @@ WHERE notice_id=#{noticeId}
 		</if>
 	<if test="type!=null">
 		AND  type=#{type}
+		</if>
+	<if test="isMerDynamic!=null">
+		AND  is_mer_dynamic=#{isMerDynamic}
 		</if>
 	<if test="status!=null">
 		AND  status=#{status}
@@ -174,6 +187,9 @@ WHERE notice_id=#{noticeId}
 		</if>
 	<if test="type!=null">
 		AND  type=#{type}
+		</if>
+	<if test="isMerDynamic!=null">
+		AND  is_mer_dynamic=#{isMerDynamic}
 		</if>
 	<if test="status!=null">
 		AND  status=#{status}

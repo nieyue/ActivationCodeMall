@@ -77,7 +77,7 @@ var business={
 };
 
 //初始化
-function init(){
+business.init=function(){
 	function injection(a){
 		if(JSON.parse(sessionStorage.getItem(a))){
 			business[a]=JSON.parse(sessionStorage.getItem(a));
@@ -88,7 +88,7 @@ function init(){
 	injection("integrall");
 	injection("accountLevelList");
 }
-init();
+business.init();
 $(function(){
 	$(".tab_bigbox .tab_box").eq(0).show();
 	$(".tab_bigbox1 .tab_box1").eq(0).show();
@@ -394,7 +394,7 @@ function getshopcarlist(){
 	var info = {
 		accountId:business.account?business.account.accountId:null,
 		pageNum:1,
-		pageSize:5
+		pageSize:10
 	}
 	ajxget("/cartMer/list",info,function(data){
 					if(data.code==200){

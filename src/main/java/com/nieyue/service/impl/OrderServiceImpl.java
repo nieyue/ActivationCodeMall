@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.nieyue.bean.Mer;
 import com.nieyue.bean.Order;
 import com.nieyue.bean.OrderDetail;
 import com.nieyue.bean.OrderReceiptInfo;
@@ -24,6 +25,7 @@ import com.nieyue.exception.PayException;
 import com.nieyue.pay.AlipayUtil;
 import com.nieyue.service.AccountService;
 import com.nieyue.service.FinanceService;
+import com.nieyue.service.MerService;
 import com.nieyue.service.OrderDetailService;
 import com.nieyue.service.OrderReceiptInfoService;
 import com.nieyue.service.OrderService;
@@ -35,6 +37,8 @@ import net.sf.json.JSONObject;
 public class OrderServiceImpl implements OrderService{
 	@Resource
 	OrderDao orderDao;
+	@Resource
+	MerService merService;
 	@Resource
 	OrderDetailService orderDetailService;
 	@Resource
@@ -66,23 +70,22 @@ public class OrderServiceImpl implements OrderService{
 		Integer type=1;
 		//1.验证支付条件
 		boolean b=false;
-	//	boolean b = financeBusiness.canThirdPay(type, payType, accountId, businessId, nickname, phone, contactPhone);
-		if(!b){
-			return result;//不满足验证直接失败
-		}
 		String[] ids = orderIds.replace(" ","").split(",");
-		boolean dm=false;
 		for (int i = 0; i < ids.length; i++) {
 			if(!NumberUtil.isNumeric(ids[i])){
 				throw new CommonRollbackException("参数错误");
 			}
-		}
-		for (int i = 0; i < ids.length; i++) {
 			Order order = this.loadOrder(new Integer(ids[i]));
-			order.setStatus(7);//已删除
-			order.setSubstatus(1);
-			dm =this.updateOrder(order);
+			OrderDetail orderDetail = order.getOrderDetailList().get(0);
+			Mer mer = merService.loadMer(orderDetail.getMerId());
+			if(mer.getStockNumber()-orderDetail.getNumber()<0){
+				throw new CommonRollbackException("商品名："+mer.getName()+"库存不足");
+			}
 		}
+		if(!b){
+			return result;//不满足验证直接失败
+		}
+		
 		OrderDetail orderDetail=null;
 		//3.支付存储类
 		Payment payment=new Payment();
@@ -115,10 +118,12 @@ public class OrderServiceImpl implements OrderService{
 			}
 			return result;
 		}else if(payType==2){//微信
-			//payment.setNotifyUrl(activationCodeMallProjectDomainUrl+"/payment/wechatNotifyUrl");
 			return "暂未开通";
-		}else if(payType==4){//ios内购
-			//payment.setNotifyUrl(activationCodeMallProjectDomainUrl+"/payment/iosNotifyUrl");
+		}else if(payType==3){//百度钱包
+			return "暂未开通";
+		}else if(payType==4){//Paypay
+			return "暂未开通";
+		}else if(payType==5){//网银
 			return "暂未开通";
 		}
 		return result;

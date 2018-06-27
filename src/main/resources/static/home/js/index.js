@@ -6,11 +6,14 @@ $(function(){
 	getmernewlist();
 	getmerrenqilist();
 	getmerhotlist();
-
+//最新
 function getmernewlist(){
 		var info = {
 			pageNum:1,
-			pageSize:20
+			pageSize:9,
+			status:1,
+			orderName:"create_date",
+			orderWay:"desc"
 		};
 		ajxget("/mer/list",info,function(data){
 			if(data.code==200){
@@ -33,11 +36,14 @@ function getmernewlist(){
 
 
 
-
+//人气商品
 function getmerrenqilist(){
 		var info = {
 			pageNum:1,
-			pageSize:20
+			pageSize:9,
+			status:1,
+			orderName:"mer_score",
+			orderWay:"desc"
 		};
 		ajxget("/mer/list",info,function(data){
 			if(data.code==200){
@@ -59,11 +65,14 @@ function getmerrenqilist(){
 	}
 	
 
-
+//热销
 function getmerhotlist(){
 		var info = {
-			pageNum:1,
-			pageSize:20
+				pageNum:1,
+				pageSize:10,
+				status:1,
+				orderName:"sale_number",
+				orderWay:"desc"
 		};
 		ajxget("/mer/list",info,function(data){
 			if(data.code==200){

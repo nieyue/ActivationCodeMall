@@ -228,6 +228,7 @@ input:-ms-input-placeholder,textarea:-ms-input-placeholder{color: #c4cbcb;}
 .alreadyLogin_centerul>li{height: 28px;line-height: 28px;background-color: #ff7400;border-top: 1px solid #ffffff;}
 .alreadyLogin_centerul>li a{color: #fff;}
 /*footer*/
+.footer{height:auto;}
 .footer .friendslink{width: 100%;border-bottom: 1px solid #eeeeee;}
 .footer .friendslink .friendslink_line{width: 965px;height: 1px;background-color: #eeeeee;position: relative;top: 22px;left: 80px;}
 .footer .friendslink .friendslink_more{width: 100px;height: 26px;line-height:26px;border: 1px solid #cccccc;text-align: center;position: relative;top: 9px;font-size: 18px;color: #666666;border-radius: 3px;cursor: pointer;}
@@ -236,7 +237,7 @@ input:-ms-input-placeholder,textarea:-ms-input-placeholder{color: #c4cbcb;}
 .footer .friendslink .friendslink_ul{width: 1050px;}
 .footer .friendslink .friendslink_ul li{float: left;width: 156px;height: 57px;margin-right: 47px;margin-bottom: 10px;}
 .footer .friendslink .friendslink_ul li img{width: 156px;height: 57px;}
-.footer .footer_info{padding: 35px 0px;border-bottom: 1px solid #eeeeee;height: 160px;}
+.footer .footer_info{padding: 35px 0px;border-bottom: 1px solid #eeeeee;height: auto;}
 .footer .footer_info .left{border-right: 1px solid #eeeeee;height: 160px;width: 280px;}
 .footer .footer_info .center{border-right: 1px solid #eeeeee;height: 160px;width: 574px;padding-left: 45px;}
 .footer .footer_info .center .footer_ulbox ul li a{font-size: 12px;color: #aaaaaa;line-height: 25px;}

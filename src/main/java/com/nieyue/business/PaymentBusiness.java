@@ -11,6 +11,7 @@ import org.springframework.context.annotation.Configuration;
 
 import com.nieyue.bean.Order;
 import com.nieyue.bean.OrderDetail;
+import com.nieyue.exception.CommonRollbackException;
 import com.nieyue.service.AccountLevelService;
 import com.nieyue.service.OrderDetailService;
 import com.nieyue.service.OrderService;
@@ -28,38 +29,27 @@ public class PaymentBusiness {
 	OrderDetailService orderDetailService;
 
 	/**
-	 * 生产订单
+	 * 支付回调，订单进入冻结期
+	 * payType 支付方式，1支付宝，2微信,3百度钱包,4Paypal,5网银
+	 * accountId 下单人id外键
+	 * ids 订单id列表如:[101,3,44]
 	 */
-	public Order getOrder(
-			Integer type,
+	public void getPaymentNotify(
 			Integer payType,
 			Integer accountId,
-			String orderNumber,
+			String[] ids,
 			OrderDetail orderDetail){
 		boolean b=false;
-		Order order=new Order();
-		order.setCreateDate(new Date());
-		order.setUpdateDate(new Date());
-		order.setAccountId(accountId);
-		if(type==2){//团购
-			order.setStatus(1);//待处理									
-		}else{
-			order.setStatus(2);//已完成					
-		}
-		order.setType(type);
-		order.setPayType(payType);
-		order.setOrderNumber(orderNumber);
-		 b = orderService.addOrder(order);
-		if(b){
-			orderDetail.setOrderId(order.getOrderId());
-			b=orderDetailService.addOrderDetail(orderDetail);
-			if(b){
-				List<OrderDetail> orderDetailList=new ArrayList<>();
-				orderDetailList.add(orderDetail);
-				order.setOrderDetailList(orderDetailList);
-				return order;
+		for (int i = 0; i < ids.length; i++) {
+			Order order = orderService.loadOrder(new Integer(ids[i]));
+			if(order==null){
+				throw new CommonRollbackException("订单不存在");
 			}
+			order.setStatus(3);//已支付
+			order.setSubstatus(1);//冻结单
+			order.setUpdateDate(new Date());
+			order.setPaymentDate(new Date());
+			b =orderService.updateOrder(order);
 		}
-		return order;
 	}
 }

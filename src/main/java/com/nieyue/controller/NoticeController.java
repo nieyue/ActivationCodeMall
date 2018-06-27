@@ -48,7 +48,7 @@ public class NoticeController {
 	@ApiOperation(value = "通知列表", notes = "通知分页浏览")
 	@ApiImplicitParams({
 	  @ApiImplicitParam(name="region",value="范围，1全局，2个人",dataType="int", paramType = "query"),
-	  @ApiImplicitParam(name="type",value="类型，1系统消息，2产品上架申请，3新增商品类型，4商品申请自营，5提现申请，6问题单反馈，7订单商品动态",dataType="int", paramType = "query"),
+	  @ApiImplicitParam(name="type",value="类型，1系统消息，2申请新产品销售，3新增商品类型，4商品申请自营，5提现申请，6问题单反馈，7订单商品动态",dataType="int", paramType = "query"),
 	  @ApiImplicitParam(name="isMerDynamic",value="是否商品动态，默认0不是，1是",dataType="int", paramType = "query"),
 	  @ApiImplicitParam(name="status",value="状态，默认为1审核中，2申请成功，3申请失败",dataType="int", paramType = "query"),
 	  @ApiImplicitParam(name="accountId",value="账户id",dataType="int", paramType = "query"),
@@ -119,7 +119,7 @@ public class NoticeController {
 	@ApiOperation(value = "通知数量", notes = "通知数量查询")
 	@ApiImplicitParams({
 		@ApiImplicitParam(name="region",value="范围，1全局，2个人",dataType="int", paramType = "query"),
-		  @ApiImplicitParam(name="type",value="类型，1系统消息，2产品上架申请，3新增商品类型，4商品申请自营，5提现申请，6问题单反馈，7订单商品动态",dataType="int", paramType = "query"),
+		  @ApiImplicitParam(name="type",value="类型，1系统消息，2申请新产品销售，3新增商品类型，4商品申请自营，5提现申请，6问题单反馈，7订单商品动态",dataType="int", paramType = "query"),
 		  @ApiImplicitParam(name="isMerDynamic",value="是否商品动态，默认0不是，1是",dataType="int", paramType = "query"),
 		  @ApiImplicitParam(name="status",value="状态，默认为1审核中，2申请成功，3申请失败",dataType="int", paramType = "query"),
 		  @ApiImplicitParam(name="accountId",value="账户id",dataType="int", paramType = "query"),

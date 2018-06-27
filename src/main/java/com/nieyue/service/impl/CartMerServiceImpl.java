@@ -65,13 +65,16 @@ public class CartMerServiceImpl implements CartMerService{
 		if(ObjectUtils.isEmpty(mer)){
 			throw new CommonRollbackException("请选择商品");
 		}
+		if(mer.getStatus()==0){
+			throw new CommonRollbackException("商品"+mer.getName()+"已下架");
+		}
 		
 		List<CartMer> cartMerList = cartMerDao.browsePagingCartMer(null, cartMer.getMerId(), cartMer.getAccountId(), 0, 20, "cart_mer_id", "asc");
 		Integer number=cartMer.getNumber();
 		//如果已经存在
 		if(cartMerList.size()==1){
-			if(cartMerList.size()==20){
-				throw new CommonRollbackException("购物车商品最多20个");
+			if(cartMerList.size()==10){
+				throw new CommonRollbackException("购物车商品最多10个");
 			}
 			number+=cartMerList.get(0).getNumber();
 		}
@@ -146,6 +149,7 @@ public class CartMerServiceImpl implements CartMerService{
 		});
 		return l;
 	}
+	@SuppressWarnings({ "static-access", "rawtypes" })
 	@Transactional(propagation=Propagation.REQUIRED)
 	@Override
 	public boolean batchCartMerTurnOrder(String cartMerList, Integer couponId, Integer payType, Integer receiptInfoId,
@@ -186,6 +190,10 @@ public class CartMerServiceImpl implements CartMerService{
 				if(mer==null){
 					throw new CommonRollbackException("商品不存在");
 				}
+				if(mer.getStatus()==0){
+					throw new CommonRollbackException("商品"+mer.getName()+"已下架");
+				}
+				
 				e.setMer(mer);
 				//订单
 				Order order = new Order();
@@ -230,6 +238,10 @@ public class CartMerServiceImpl implements CartMerService{
 				dm=orderDetailService.addOrderDetail(orderDetail);
 				if(!dm){
 					throw new CommonRollbackException("订单异常");
+				}
+				//库存不足
+				if(mer.getStockNumber()-orderDetail.getNumber()<0){
+					throw new CommonRollbackException("商品名："+mer.getName()+"库存不足");
 				}
 				//收货地址
 				OrderReceiptInfo orderReceiptInfo=new OrderReceiptInfo();
