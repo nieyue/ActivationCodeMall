@@ -14,6 +14,7 @@ import org.springframework.util.ObjectUtils;
 
 import com.nieyue.bean.Account;
 import com.nieyue.bean.CartMer;
+import com.nieyue.bean.Config;
 import com.nieyue.bean.Coupon;
 import com.nieyue.bean.Mer;
 import com.nieyue.bean.Order;
@@ -24,6 +25,7 @@ import com.nieyue.dao.CartMerDao;
 import com.nieyue.exception.CommonRollbackException;
 import com.nieyue.service.AccountService;
 import com.nieyue.service.CartMerService;
+import com.nieyue.service.ConfigService;
 import com.nieyue.service.CouponService;
 import com.nieyue.service.MerService;
 import com.nieyue.service.OrderDetailService;
@@ -53,6 +55,8 @@ public class CartMerServiceImpl implements CartMerService{
 	ReceiptInfoService receiptInfoService;
 	@Resource
 	OrderReceiptInfoService orderReceiptInfoService;
+	@Resource
+	ConfigService configService;
 	@Transactional(propagation=Propagation.REQUIRED)
 	@Override
 	public boolean addCartMer(CartMer cartMer) {
@@ -73,7 +77,8 @@ public class CartMerServiceImpl implements CartMerService{
 		Integer number=cartMer.getNumber();
 		//如果已经存在
 		if(cartMerList.size()==1){
-			if(cartMerList.size()==10){
+			
+			if(cartMerList.size()>10){
 				throw new CommonRollbackException("购物车商品最多10个");
 			}
 			number+=cartMerList.get(0).getNumber();
@@ -81,8 +86,14 @@ public class CartMerServiceImpl implements CartMerService{
 		if(number==null||number<=0){
 			throw new CommonRollbackException("商品至少1个");
 		}
-		if(number>5){
-			throw new CommonRollbackException("一个商品最大数5个");
+		List<Config> cl = configService.browsePagingConfig(1, 1, "config_id", "asc");
+		Config c = cl.get(0);
+		int mn=10;
+		if(c!=null){
+			mn=c.getOrderMerMaxNumber();
+		}
+		if(number>mn){
+			throw new CommonRollbackException("一个商品最大数"+mn+"个");
 		}
 		
 		//设置总价
@@ -208,9 +219,17 @@ public class CartMerServiceImpl implements CartMerService{
 				//类型，1购买商品，2账户提现，3退款，4诚信押金
 				order.setType(1);
 				order.setUpdateDate(new Date());
+				//商户id
+				if(e.getMer().getSellerAccountId()!=null){
+					Account merchantAccount = accountService.loadAccount(e.getMer().getSellerAccountId());
+					if(merchantAccount.getAccountId()!=null&&merchantAccount.getRoleName().equals("商户")){
+						order.setMerchantAccountId(merchantAccount.getAccountId());					
+					}
+				}
+				//推广账户id
 				if(e.getSpreadAccountId()!=null){
 					Account spreadAccount = accountService.loadAccount(e.getSpreadAccountId());
-					if(spreadAccount.getAccountId()!=null){
+					if(spreadAccount.getAccountId()!=null&&spreadAccount.getRoleName().equals("推广户")){
 						order.setSpreadAccountId(spreadAccount.getAccountId());					
 					}
 				}

@@ -73,7 +73,7 @@ public class SpreadLinkTermServiceImpl implements SpreadLinkTermService{
 					al.forEach((account)->{
 						if(account.getRoleName().equals("推广户")){
 						Integer aid = account.getAccountId();
-						List<SpreadLink> sll = spreadLinkService.browsePagingSpreadLink(aid, 1, Integer.MAX_VALUE, "spread_link_id", "asc");
+						List<SpreadLink> sll = spreadLinkService.browsePagingSpreadLink(null,aid, 1, Integer.MAX_VALUE, "spread_link_id", "asc");
 						if(sll.size()==1){
 						SpreadLink spreadLink=sll.get(0);
 						spreadLinkService.delSpreadLink(spreadLink.getSpreadLinkId());
@@ -99,7 +99,7 @@ public class SpreadLinkTermServiceImpl implements SpreadLinkTermService{
 					al.forEach((account)->{
 						if(account.getRoleName().equals("推广户")){
 						Integer aid = account.getAccountId();
-						List<SpreadLink> sll = spreadLinkService.browsePagingSpreadLink(aid, 1, Integer.MAX_VALUE, "spread_link_id", "asc");
+						List<SpreadLink> sll = spreadLinkService.browsePagingSpreadLink(spreadLinkTerm.getMerId(),aid, 1, Integer.MAX_VALUE, "spread_link_id", "asc");
 						if(sll.size()==1){
 							SpreadLink sl=sll.get(0);
 							String link=spreadLinkTerm.getLink();
@@ -129,13 +129,15 @@ public class SpreadLinkTermServiceImpl implements SpreadLinkTermService{
 	}
 
 	@Override
-	public int countAll() {
-		int c = spreadLinkTermDao.countAll();
+	public int countAll(Integer merId) {
+		int c = spreadLinkTermDao.countAll( merId);
 		return c;
 	}
 
 	@Override
-	public List<SpreadLinkTerm> browsePagingSpreadLinkTerm(int pageNum, int pageSize,
+	public List<SpreadLinkTerm> browsePagingSpreadLinkTerm(
+			Integer merId,
+			int pageNum, int pageSize,
 			String orderName, String orderWay) {
 		if(pageNum<1){
 			pageNum=1;
@@ -143,7 +145,7 @@ public class SpreadLinkTermServiceImpl implements SpreadLinkTermService{
 		if(pageSize<1){
 			pageSize=0;//没有数据
 		}
-		List<SpreadLinkTerm> l = spreadLinkTermDao.browsePagingSpreadLinkTerm(pageNum-1, pageSize, orderName, orderWay);
+		List<SpreadLinkTerm> l = spreadLinkTermDao.browsePagingSpreadLinkTerm( merId,pageNum-1, pageSize, orderName, orderWay);
 		return l;
 	}
 

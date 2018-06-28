@@ -11,6 +11,7 @@
    		 order_number,
    		 type,
    		 pay_type,
+   		 merchant_account_id,
    		 spread_account_id,
    		 account_id,
    		 status,
@@ -24,6 +25,7 @@
     	 #{orderNumber},
     	 #{type},
     	 #{payType},
+    	 #{merchantAccountId},
     	 #{spreadAccountId},
     	 #{accountId},
     	 #{status},
@@ -46,6 +48,9 @@
     	</if>
     	<if test="payType!=null">
     	pay_type=#{payType},
+    	</if>
+    	<if test="merchantAccountId!=null">
+    	merchant_account_id=#{merchantAccountId},
     	</if>
     	<if test="spreadAccountId!=null">
     	spread_account_id=#{spreadAccountId},
@@ -85,6 +90,7 @@ SELECT
 	 	 order_number,
    		 type,
    		 pay_type,
+   		 merchant_account_id,
    		 spread_account_id,
    		 account_id,
    		 status,
@@ -103,6 +109,7 @@ WHERE order_id=#{orderId}
 	 	 order_number,
    		 type,
    		 pay_type,
+   		 merchant_account_id,
    		 spread_account_id,
    		 account_id,
    		 status,
@@ -117,6 +124,12 @@ WHERE order_id=#{orderId}
 		</if>
 	<if test="payType!=null">
 		AND  pay_type=#{payType}
+		</if>
+	<if test="merchantAccountId!=null">
+		AND  merchant_account_id=#{merchantAccountId}
+		</if>
+	<if test="spreadAccountId!=null">
+		AND  spread_account_id=#{spreadAccountId}
 		</if>
 	<if test="accountId!=null">
 		AND  account_id=#{accountId}
@@ -147,6 +160,12 @@ WHERE order_id=#{orderId}
 		</if>
 		<if test="payType!=null">
 		AND  pay_type=#{payType}
+		</if>
+		<if test="merchantAccountId!=null">
+		AND  merchant_account_id=#{merchantAccountId}
+		</if>
+	<if test="spreadAccountId!=null">
+		AND  spread_account_id=#{spreadAccountId}
 		</if>
 		<if test="accountId!=null">
 		AND  account_id=#{accountId}
@@ -186,6 +205,12 @@ WHERE order_id=#{orderId}
 		</if>
 	<if test="payType!=null">
 		AND  pay_type=#{payType}
+		</if>
+		<if test="merchantAccountId!=null">
+		AND  merchant_account_id=#{merchantAccountId}
+		</if>
+	<if test="spreadAccountId!=null">
+		AND  spread_account_id=#{spreadAccountId}
 		</if>
 	<if test="accountId!=null">
 		AND  account_id=#{accountId}

@@ -1,6 +1,5 @@
 package com.nieyue.service.impl;
 
-import java.io.UnsupportedEncodingException;
 import java.util.Date;
 import java.util.List;
 
@@ -21,7 +20,6 @@ import com.nieyue.business.PaymentBusiness;
 import com.nieyue.dao.OrderDao;
 import com.nieyue.exception.CommonNotRollbackException;
 import com.nieyue.exception.CommonRollbackException;
-import com.nieyue.exception.PayException;
 import com.nieyue.pay.AlipayUtil;
 import com.nieyue.service.AccountService;
 import com.nieyue.service.FinanceService;
@@ -29,10 +27,10 @@ import com.nieyue.service.MerService;
 import com.nieyue.service.OrderDetailService;
 import com.nieyue.service.OrderReceiptInfoService;
 import com.nieyue.service.OrderService;
+import com.nieyue.util.Arith;
 import com.nieyue.util.NumberUtil;
 import com.nieyue.util.SnowflakeIdWorker;
 
-import net.sf.json.JSONObject;
 @Service
 public class OrderServiceImpl implements OrderService{
 	@Resource
@@ -67,7 +65,8 @@ public class OrderServiceImpl implements OrderService{
 			String orderIds
 			) throws CommonNotRollbackException {
 		String result=null;
-		Integer type=1;
+		Integer type=1;//业务类型，1购买商品，2账户提现，3退款，4诚信押金
+		Double totalPrice=0.0;//总金额
 		//1.验证支付条件
 		boolean b=false;
 		String[] ids = orderIds.replace(" ","").split(",");
@@ -77,6 +76,7 @@ public class OrderServiceImpl implements OrderService{
 			}
 			Order order = this.loadOrder(new Integer(ids[i]));
 			OrderDetail orderDetail = order.getOrderDetailList().get(0);
+			totalPrice=Arith.add(totalPrice, orderDetail.getTotalPrice());
 			Mer mer = merService.loadMer(orderDetail.getMerId());
 			if(mer.getStockNumber()-orderDetail.getNumber()<0){
 				throw new CommonRollbackException("商品名："+mer.getName()+"库存不足");
@@ -85,37 +85,31 @@ public class OrderServiceImpl implements OrderService{
 		if(!b){
 			return result;//不满足验证直接失败
 		}
-		
-		OrderDetail orderDetail=null;
-		//3.支付存储类
+		//2.支付存储类,一个支付类对应多个订单类
 		Payment payment=new Payment();
 		payment.setAccountId(accountId);
 		payment.setBusinessType(type);
 		payment.setCreateDate(new Date());
-		payment.setMoney(orderDetail.getTotalPrice());
+		payment.setMoney(totalPrice);
+		//支付单号
 		payment.setOrderNumber(SnowflakeIdWorker.getId().toString());
 		payment.setStatus(1);//默认已下单
 		payment.setType(payType);
 		payment.setUpdateDate(new Date());
-		if(type==1){
-			payment.setSubject("VIP购买");
-			payment.setBody("VIP购买");
-		}else if(type==2){
-			payment.setSubject("团购卡团购");
-			payment.setBody("团购卡团购");
-			JSONObject jsono=new JSONObject();
-			payment.setBusinessNotifyUrl(jsono.toString());
-		}else if(type==3){
-			payment.setSubject("付费课程");
-			payment.setBody("付费课程");
-		}
+			payment.setSubject("商品购买");
+			payment.setBody("商品购买");
+			payment.setBusinessNotifyUrl(orderIds);//存放订单id集合
 		if(payType==1){//支付宝
-			payment.setNotifyUrl(activationCodeMallProjectDomainUrl+"/payment/alipayNotifyUrl");
-			try {
-				result=alipayUtil.getAppPayment(payment);
+			payment.setNotifyUrl(activationCodeMallProjectDomainUrl+"/order/alipayOrderNotifyUrl");
+			//测试环境
+			result=paymentBusiness.getPaymentNotify(payment);
+			/*
+			 //真实环境
+			  try {
+				result=alipayUtil.getPcWebPayment(payment);
 			} catch (UnsupportedEncodingException e) {
 				throw new PayException();//回滚
-			}
+			}*/
 			return result;
 		}else if(payType==2){//微信
 			return "暂未开通";
@@ -173,6 +167,8 @@ public class OrderServiceImpl implements OrderService{
 	public int countAll(
 			Integer type,
 			Integer payType,
+			Integer merchantAccountId,
+			Integer spreadAccountId,
 			Integer accountId,
 			Integer status,
 			Integer substatus,
@@ -180,7 +176,7 @@ public class OrderServiceImpl implements OrderService{
 			Date updateDate
 			) {
 		int c = orderDao.countAll(
-				type,payType,accountId,status,substatus,createDate,updateDate);
+				type,payType, merchantAccountId, spreadAccountId,accountId,status,substatus,createDate,updateDate);
 		return c;
 	}
 
@@ -188,6 +184,8 @@ public class OrderServiceImpl implements OrderService{
 	public List<Order> browsePagingOrder(
 			Integer type,
 			Integer payType,
+			Integer merchantAccountId,
+			Integer spreadAccountId,
 			Integer accountId,
 			Integer status,
 			Integer substatus,
@@ -204,6 +202,8 @@ public class OrderServiceImpl implements OrderService{
 		List<Order> l = orderDao.browsePagingOrder(
 				type,
 				payType,
+				merchantAccountId,
+				spreadAccountId,
 				accountId,
 				status,
 				substatus,

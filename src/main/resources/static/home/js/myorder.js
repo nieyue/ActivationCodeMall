@@ -34,7 +34,7 @@ sessionStorage.setItem("selectOrderTotalPrice",JSON.stringify(0));
 		//business.orderSum(3,null);
 		//business.orderSum(4,1);
 		//business.orderSum(5,null);
-		//business.orderSum(6,1);
+		//business.orderSum(6,null);
 		//business.orderSum(5,4);
 	});
 	//点击提交订单,批量
@@ -70,6 +70,13 @@ $(".orderbanner_positionul li").click(function(){
 		business.checkboxAll("input[name='checkboxAll']","input[name='checkbox"+jjjj+"']",
 				function(){
 			business.orderSum(5,null);
+		});
+	}else if(showid==5){
+		//6,null
+		jjjj+="6null";
+		business.checkboxAll("input[name='checkboxAll']","input[name='checkbox"+jjjj+"']",
+				function(){
+			business.orderSum(6,null);
 		});
 	}else if(showid==6){
 		//5,4
@@ -160,7 +167,7 @@ business.getOrderList=function(status,substatus){
 	//订单状态，2待支付，3已支付,4预购商品，5问题单，6已取消，7已删除
 	//子状态，2（1待支付），3（1冻结单,2已完成），4（1等待发货），
 	//5（1待解决（买家提问后），2解决中（卖家回复后），3申请退款，4已退款，5已解决），
-	//6（1已取消），7（1已删除）
+	//6（1正常取消,2订单商品库存不够），7（1已删除）
 	var info = {
 		status:status,
 		substatus:substatus,
@@ -228,7 +235,14 @@ business.getOrderList=function(status,substatus){
 					html = '<td ><div ><input name="checkbox" type="checkbox" style="" class="ordercheck"/><p class="ordercode">'+child.orderNumber+'</p></div></td><td style="padding-left: 10px;padding-right: 10px;">'+child.orderDetailList[0].name+'</td><td ><p class="ordertimeday">'+child.updateDate+'</p></td><td>'+child.content+'</td><td><a class="deletorderbtn">待解决</a></td>';
 				}else if(status==6){
 					//html = '<td ><div ><input name="checkbox" type="checkbox" style="" class="ordercheck"/><p class="ordercode">'+child.orderNumber+'</p></div></td><td style="padding-left: 10px;padding-right: 10px;">'+child.orderDetailList[0].name+'</td><td>啦啦啦</td><td>¥'+child.orderDetailList[0].unitPrice+'*'+child.orderDetailList[0].number+'</td><td>¥'+child.orderDetailList[0].totalPrice+'</td><td><a class="deletorderbtn">已取消</a></td><td ><p class="ordertimeday">'+child.updateDate+'</p></td>';
-						html='<td >'
+						var substatusvalue="正常取消";
+						if(child.substatus==1){
+							substatusvalue="正常取消";
+						}else if(child.substatus==2){
+							substatusvalue="订单商品库存不够取消";
+						}
+						
+					html='<td >'
 					      		+'<div >'
 					      			+'<input name="checkbox'+status+substatus+'" type="checkbox" style="" class="ordercheck"/>'
 					      			+'<p class="ordercode" style="width:60%;word-break:break-all;">'+child.orderNumber+'</p>'
@@ -239,7 +253,7 @@ business.getOrderList=function(status,substatus){
 					      	+'<td>¥'+child.orderDetailList[0].unitPrice+'*'+child.orderDetailList[0].number+'</td>'
 						    +'<td>¥'+child.orderDetailList[0].totalPrice+'</td>'
 					      	+'<td>'
-					      		+'<span class="deletorderbtn">已取消</span>'
+					      		+'<span class="deletorderbtn">'+substatusvalue+'</span>'
 					      	+'</td>'
 					      	+'<td >'
 					      		+'<p class="ordertimeday">'+child.createDate+'</p>'
@@ -263,7 +277,7 @@ business.getOrderList(2,1);
 business.getOrderList(3,null);
 business.getOrderList(4,1);
 business.getOrderList(5,null);
-business.getOrderList(6,1);
+business.getOrderList(6,null);
 business.getOrderList(5,4);
 //商品推荐
 function gettuijian(){

@@ -9,11 +9,13 @@
    		  spread_link_term_tb 
    		 (
    		 link,
+   		 mer_id,
    		 create_date
    		 )
    VALUES
     	 (
     	 #{link},
+    	 #{merId},
     	 #{createDate})  
 </insert>  
 <!-- 更新推广链接项 -->
@@ -23,6 +25,9 @@
     <set>
     <if test="link!=null">
     	link=#{link},
+    </if>
+    <if test="merId!=null">
+    	mer_id=#{merId},
     </if>
     <if test="createDate!=null">
     	create_date=#{createDate},
@@ -42,6 +47,7 @@
 SELECT 
 		 spread_link_term_id,
 	 	 link,
+	 	 mer_id,
    		 create_date
 FROM spread_link_term_tb 
 WHERE spread_link_term_id=#{spreadLinkTermId}
@@ -52,9 +58,14 @@ WHERE spread_link_term_id=#{spreadLinkTermId}
         SELECT
 	     spread_link_term_id,
 	 	 link,
+	 	 mer_id,
    		 create_date
 	FROM spread_link_term_tb
-	WHERE ${orderName} 
+	<where>
+	<if test="merId!=null">
+	AND mer_id=#{merId}
+	</if>
+	AND ${orderName} 
 	<if test="orderWay=='asc'">
 	<![CDATA[>=]]> 
 	</if>
@@ -62,10 +73,16 @@ WHERE spread_link_term_id=#{spreadLinkTermId}
 	  <![CDATA[<= ]]>
 	</if>
 	(SELECT ${orderName} FROM spread_link_term_tb 
+	<where>
+		<if test="merId!=null">
+	AND mer_id=#{merId}
+	</if>
+	</where>
 		ORDER BY 
 			${orderName}  ${orderWay}
 		LIMIT #{pageNum}, 1
 		) 
+	</where>
 	ORDER BY
 		${orderName}  ${orderWay}
 	LIMIT
@@ -77,6 +94,11 @@ WHERE spread_link_term_id=#{spreadLinkTermId}
 	SELECT
 	 	count(spread_link_term_id)
 	FROM spread_link_term_tb
+	<where>
+		<if test="merId!=null">
+		AND mer_id=#{merId}
+		</if>
+	</where>
 </select>   
    
  

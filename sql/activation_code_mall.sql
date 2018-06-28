@@ -342,13 +342,16 @@ pay_type tinyint(4) COMMENT '方式，1支付宝，2微信,3百度钱包,4Paypal
 create_date datetime  COMMENT '创建时间',
 update_date datetime  COMMENT '更新时间',
 payment_date datetime  COMMENT '支付日期',
+merchant_account_id int(11) COMMENT '商户id',
 spread_account_id int(11) COMMENT '推广账户id',
 account_id int(11) COMMENT '下单人',
 status tinyint(4) COMMENT '订单状态，2待支付，3已支付,4预购商品，5问题单，6已取消，7已删除',
-substatus tinyint(4) COMMENT '子状态，2（1待支付），3（1冻结单，2已完成），4（1等待发货），5（1待解决（买家提问后），2解决中（卖家回复后），3申请退款，4已退款，5已解决），6（1已取消），7（1已删除）',
+substatus tinyint(4) COMMENT '子状态，2（1待支付），3（1冻结单，2已完成），4（1等待发货），5（1待解决（买家提问后），2解决中（卖家回复后），3申请退款，4已退款，5已解决），6（1正常取消,2订单商品库存不够），7（1已删除）',
 PRIMARY KEY (order_id),
 INDEX INDEX_TYPE (type) USING BTREE,
 INDEX INDEX_PAYTYPE (pay_type) USING BTREE,
+INDEX INDEX_MERCHATACCOUNTID (merchant_account_id) USING BTREE,
+INDEX INDEX_SPREADACCOUNTID (spread_account_id) USING BTREE,
 INDEX INDEX_ACCOUNTID (account_id) USING BTREE,
 INDEX INDEX_STATUS (status) USING BTREE,
 INDEX INDEX_SUBSTATUS (substatus) USING BTREE,
@@ -647,7 +650,9 @@ CREATE TABLE spread_link_term_tb(
 spread_link_term_id int(11) NOT NULL AUTO_INCREMENT COMMENT '推广链接项id',
 link varchar(255)  COMMENT '链接',
 create_date datetime COMMENT '创建时间',
-PRIMARY KEY (spread_link_term_id)
+mer_id int(11) COMMENT '商品id,外键',
+PRIMARY KEY (spread_link_term_id),
+INDEX INDEX_MERID (mer_id) USING BTREE
 )ENGINE = InnoDB AUTO_INCREMENT=1000 DEFAULT CHARSET=utf8 COMMENT='推广链接项表';
 
 #创建推广链接表 
@@ -656,8 +661,10 @@ spread_link_id int(11) NOT NULL AUTO_INCREMENT COMMENT '推广链接id',
 link varchar(255)  COMMENT '链接',
 spread_number int(11)  COMMENT '推广次数',
 create_date datetime COMMENT '创建时间',
+mer_id int(11) COMMENT '商品id,外键',
 account_id int(11) COMMENT '推广账户id',
 PRIMARY KEY (spread_link_id),
+INDEX INDEX_MERID (mer_id) USING BTREE,
 INDEX INDEX_ACCOUNTID (account_id) USING BTREE
 )ENGINE = InnoDB AUTO_INCREMENT=1000 DEFAULT CHARSET=utf8 COMMENT='推广链接表';
 

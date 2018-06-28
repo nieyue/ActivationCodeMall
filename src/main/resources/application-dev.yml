@@ -36,7 +36,7 @@ myPugin:
   projectName: ActivationCodeMall
   requestAuth: requestAuthDev
   activationCodeMallProjectDomainUrl: http://localhost:9000
-  activationCodeMallClientDomainUrl: http://localhost:9000
+  activationCodeMallClientDomainUrl: http://localhost
   payCancelUrl: http://localhost:9000/payCancel.html
   paySuccessUrl: http://localhost:9000/paySuccess.html
   paypal:

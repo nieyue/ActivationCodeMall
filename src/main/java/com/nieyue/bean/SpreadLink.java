@@ -39,6 +39,11 @@ public class SpreadLink implements Serializable{
 	@ApiModelProperty(value="创建时间",example="创建时间")
 	private Date createDate;
 	/**
+	 *商品id,外键
+	 */
+	@ApiModelProperty(value="商品id,外键",example="商品id,外键")
+	private Integer merId;
+	/**
 	 *推广账户id
 	 */
 	@ApiModelProperty(value="推广账户id",example="推广账户id")
@@ -76,5 +81,10 @@ public class SpreadLink implements Serializable{
 	public static long getSerialversionuid() {
 		return serialVersionUID;
 	}
-	
+	public Integer getMerId() {
+		return merId;
+	}
+	public void setMerId(Integer merId) {
+		this.merId = merId;
+	}
 }

@@ -29,6 +29,11 @@ public class SpreadLinkTerm implements Serializable{
 	@ApiModelProperty(value="链接",example="链接")
 	private String link;
 	/**
+	 *商品id,外键
+	 */
+	@ApiModelProperty(value="商品id,外键",example="商品id,外键")
+	private Integer merId;
+	/**
 	 * 创建时间
 	 */
 	@ApiModelProperty(value="创建时间",example="创建时间")
@@ -53,6 +58,12 @@ public class SpreadLinkTerm implements Serializable{
 	}
 	public static long getSerialversionuid() {
 		return serialVersionUID;
+	}
+	public Integer getMerId() {
+		return merId;
+	}
+	public void setMerId(Integer merId) {
+		this.merId = merId;
 	}
 	
 }

@@ -43,13 +43,13 @@ public class SpreadLinkServiceImpl implements SpreadLinkService{
 	}
 
 	@Override
-	public int countAll(Integer accountId) {
-		int c = spreadLinkDao.countAll(accountId);
+	public int countAll(Integer merId,Integer accountId) {
+		int c = spreadLinkDao.countAll( merId,accountId);
 		return c;
 	}
 
 	@Override
-	public List<SpreadLink> browsePagingSpreadLink(Integer accountId,int pageNum, int pageSize,
+	public List<SpreadLink> browsePagingSpreadLink(Integer merId,Integer accountId,int pageNum, int pageSize,
 			String orderName, String orderWay) {
 		if(pageNum<1){
 			pageNum=1;
@@ -57,7 +57,7 @@ public class SpreadLinkServiceImpl implements SpreadLinkService{
 		if(pageSize<1){
 			pageSize=0;//没有数据
 		}
-		List<SpreadLink> l = spreadLinkDao.browsePagingSpreadLink(accountId,pageNum-1, pageSize, orderName, orderWay);
+		List<SpreadLink> l = spreadLinkDao.browsePagingSpreadLink( merId,accountId,pageNum-1, pageSize, orderName, orderWay);
 		return l;
 	}
 

@@ -64,9 +64,11 @@ public class OrderController {
 	@ApiImplicitParams({
 	  @ApiImplicitParam(name="type",value="类型，1购买商品，2账户提现，3退款，4诚信押金",dataType="int", paramType = "query"),
 	  @ApiImplicitParam(name="payType",value="方式，1支付宝，2微信,3百度钱包,4Paypal,5网银",dataType="int", paramType = "query"), 
+	  @ApiImplicitParam(name="merchantAccountId",value="商户id外键",dataType="int", paramType = "query"),
+	  @ApiImplicitParam(name="spreadAccountId",value="推广人id外键",dataType="int", paramType = "query"),
 	  @ApiImplicitParam(name="accountId",value="下单人id外键",dataType="int", paramType = "query"),
 	  @ApiImplicitParam(name="status",value="订单状态，2待支付，3已支付,4预购商品，5问题单，6已取消，7已删除",dataType="int", paramType = "query"),
-	  @ApiImplicitParam(name="substatus",value="子状态，2（1待支付），3（1冻结单,2已完成），4（1等待发货），5（1待解决（买家提问后），2解决中（卖家回复后），3申请退款，4已退款，5已解决），6（1已取消），7（1已删除）",dataType="int", paramType = "query"),
+	  @ApiImplicitParam(name="substatus",value="子状态，2（1待支付），3（1冻结单,2已完成），4（1等待发货），5（1待解决（买家提问后），2解决中（卖家回复后），3申请退款，4已退款，5已解决），6（1正常取消,2订单商品库存不够），7（1已删除）",dataType="int", paramType = "query"),
 	  @ApiImplicitParam(name="createDate",value="创建时间",dataType="date-time", paramType = "query"),
 	  @ApiImplicitParam(name="updateDate",value="更新时间",dataType="date-time", paramType = "query"),
 	  @ApiImplicitParam(name="pageNum",value="页头数位",dataType="int", paramType = "query",defaultValue="1"),
@@ -78,6 +80,8 @@ public class OrderController {
 	public @ResponseBody StateResultList<List<Order>> browsePagingOrder(
 			@RequestParam(value="type",required=false)Integer type,
 			@RequestParam(value="payType",required=false)Integer payType,
+			@RequestParam(value="merchantAccountId",required=false)Integer merchantAccountId,
+			@RequestParam(value="spreadAccountId",required=false)Integer spreadAccountId,
 			@RequestParam(value="accountId",required=false)Integer accountId,
 			@RequestParam(value="status",required=false)Integer status,
 			@RequestParam(value="substatus",required=false)Integer substatus,
@@ -88,7 +92,7 @@ public class OrderController {
 			@RequestParam(value="orderName",required=false,defaultValue="create_date") String orderName,
 			@RequestParam(value="orderWay",required=false,defaultValue="desc") String orderWay)  {
 			List<Order> list = new ArrayList<Order>();
-			list= orderService.browsePagingOrder(type,payType,accountId,status,substatus,createDate,updateDate,pageNum, pageSize, orderName, orderWay);
+			list= orderService.browsePagingOrder(type,payType,merchantAccountId,spreadAccountId,accountId,status,substatus,createDate,updateDate,pageNum, pageSize, orderName, orderWay);
 			if(list.size()>0){
 				return ResultUtil.getSlefSRSuccessList(list);
 			}else{
@@ -109,7 +113,7 @@ public class OrderController {
 	@ApiImplicitParams({
 		@ApiImplicitParam(name="accountId",value="下单人id外键",dataType="int", paramType = "query"),
 		@ApiImplicitParam(name="status",value="订单状态，2待支付，3已支付,4预购商品，5问题单，6已取消，7已删除",dataType="int", paramType = "query"),
-		@ApiImplicitParam(name="substatus",value="子状态，2（1待支付），3（1冻结单,2已完成），4（1等待发货），5（1待解决（买家提问后），2解决中（卖家回复后），3申请退款，4已退款，5已解决），6（1已取消），7（1已删除）",dataType="int", paramType = "query"),
+		@ApiImplicitParam(name="substatus",value="子状态，2（1待支付），3（1冻结单,2已完成），4（1等待发货），5（1待解决（买家提问后），2解决中（卖家回复后），3申请退款，4已退款，5已解决），6（1正常取消,2订单商品库存不够），7（1已删除）",dataType="int", paramType = "query"),
 	})
 	@RequestMapping(value = "/userlist", method = {RequestMethod.GET,RequestMethod.POST})
 	public @ResponseBody StateResultList<List<Map<String,Object>>> browseUserOrder(
@@ -118,7 +122,7 @@ public class OrderController {
 			@RequestParam(value="substatus",required=false)Integer substatus
 			)  {
 		//类型，1购买商品，2账户提现，3退款，4诚信押金"
-		List<Order> orderListAll= orderService.browsePagingOrder(1,null,accountId,status,substatus,null,null,1, Integer.MAX_VALUE, "order_id", "asc");
+		List<Order> orderListAll= orderService.browsePagingOrder(1,null,null,null,accountId,status,substatus,null,null,1, Integer.MAX_VALUE, "order_id", "asc");
 		if(orderListAll.size()>0){
 			List<Map<String,Object>> list=new ArrayList<Map<String,Object>>();
 			Map<String,Object> map=new HashMap<>();
@@ -150,7 +154,7 @@ public class OrderController {
 						}
 					}
 				}
-				if(o.getStatus().equals(6)&&o.getSubstatus().equals(1)){
+				if(o.getStatus().equals(6)){
 					orderList6.add(o);
 				}
 			});
@@ -180,7 +184,7 @@ public class OrderController {
 	@RequestMapping(value = "/alipayOrderNotifyUrl", method = {RequestMethod.GET,RequestMethod.POST})
 	public @ResponseBody String alipayRechargeNotifyUrl(
 			HttpServletRequest request,HttpSession session)  {
-		String s = alipayUtil.getRechargeNotifyUrl(request);
+		String s = alipayUtil.getOrderNotifyUrl(request);
 		return s;
 	}
 	/**
@@ -275,9 +279,11 @@ public class OrderController {
 	@ApiImplicitParams({
 		  @ApiImplicitParam(name="type",value="类型，1购买商品，2账户提现，3退款，4诚信押金",dataType="int", paramType = "query"),
 		  @ApiImplicitParam(name="payType",value="方式，1支付宝，2微信,3百度钱包,4Paypal,5网银",dataType="int", paramType = "query"),
+		  @ApiImplicitParam(name="merchantAccountId",value="商户id外键",dataType="int", paramType = "query"),
+		  @ApiImplicitParam(name="spreadAccountId",value="推广人id外键",dataType="int", paramType = "query"),
 		  @ApiImplicitParam(name="accountId",value="下单人id外键",dataType="int", paramType = "query"),
 		  @ApiImplicitParam(name="status",value="订单状态，2待支付，3已支付,4预购商品，5问题单，6已取消，7已删除",dataType="int", paramType = "query"),
-		  @ApiImplicitParam(name="substatus",value="子状态，2（1待支付），3（1冻结单,2已完成），4（1等待发货），5（1待解决（买家提问后），2解决中（卖家回复后），3申请退款，4已退款，5已解决），6（1已取消），7（1已删除）",dataType="int", paramType = "query"),
+		  @ApiImplicitParam(name="substatus",value="子状态，2（1待支付），3（1冻结单,2已完成），4（1等待发货），5（1待解决（买家提问后），2解决中（卖家回复后），3申请退款，4已退款，5已解决），6（1正常取消,2订单商品库存不够），7（1已删除）",dataType="int", paramType = "query"),
 		  @ApiImplicitParam(name="createDate",value="创建时间",dataType="date-time", paramType = "query"),
 		  @ApiImplicitParam(name="updateDate",value="更新时间",dataType="date-time", paramType = "query"),
 		  })
@@ -285,13 +291,15 @@ public class OrderController {
 	public @ResponseBody int countAll(
 			@RequestParam(value="type",required=false)Integer type,
 			@RequestParam(value="payType",required=false)Integer payType,
+			@RequestParam(value="merchantAccountId",required=false)Integer merchantAccountId,
+			@RequestParam(value="spreadAccountId",required=false)Integer spreadAccountId,
 			@RequestParam(value="accountId",required=false)Integer accountId,
 			@RequestParam(value="status",required=false)Integer status,
 			@RequestParam(value="substatus",required=false)Integer substatus,
 			@RequestParam(value="createDate",required=false)Date createDate,
 			@RequestParam(value="updateDate",required=false)Date updateDate,
 			HttpSession session)  {
-		int count = orderService.countAll(type,payType,accountId,status,substatus,createDate,updateDate);
+		int count = orderService.countAll(type,payType,merchantAccountId,spreadAccountId,accountId,status,substatus,createDate,updateDate);
 		return count;
 	}
 	/**

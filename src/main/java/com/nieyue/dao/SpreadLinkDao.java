@@ -23,9 +23,10 @@ public interface SpreadLinkDao {
 	/** 装载推广连接 */	
 	public SpreadLink loadSpreadLink(Integer spreadLinkId);	
 	/** 推广连接总共数目 */	
-	public int countAll(@Param("accountId") Integer accountId);	
+	public int countAll(@Param("merId")Integer merId,@Param("accountId") Integer accountId);	
 	/** 分页推广连接信息 */
 	public List<SpreadLink> browsePagingSpreadLink(
+			@Param("merId")Integer merId,
 			@Param("accountId") Integer accountId,
 			@Param("pageNum")int pageNum,@Param("pageSize")int pageSize,@Param("orderName")String orderName,@Param("orderWay")String orderWay) ;		
 }

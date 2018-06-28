@@ -47,6 +47,7 @@ public class SpreadLinkController {
 	 */
 	@ApiOperation(value = "推广链接列表", notes = "推广链接分页浏览")
 	@ApiImplicitParams({
+		@ApiImplicitParam(name="merId",value="商品id",dataType="int", paramType = "query"),
 	  @ApiImplicitParam(name="accountId",value="推广账户id",dataType="int", paramType = "query"),
 	  @ApiImplicitParam(name="pageNum",value="页头数位",dataType="int", paramType = "query",defaultValue="1"),
 	  @ApiImplicitParam(name="pageSize",value="每页数目",dataType="int", paramType = "query",defaultValue="10"),
@@ -55,13 +56,14 @@ public class SpreadLinkController {
 	  })
 	@RequestMapping(value = "/list", method = {RequestMethod.GET,RequestMethod.POST})
 	public @ResponseBody StateResultList<List<SpreadLink>> browsePagingSpreadLink(
+			@RequestParam(value="merId",required=false)Integer merId,
 			@RequestParam(value="accountId",required=false)Integer accountId,
 			@RequestParam(value="pageNum",defaultValue="1",required=false)int pageNum,
 			@RequestParam(value="pageSize",defaultValue="10",required=false) int pageSize,
 			@RequestParam(value="orderName",required=false,defaultValue="create_date") String orderName,
 			@RequestParam(value="orderWay",required=false,defaultValue="desc") String orderWay)  {
 			List<SpreadLink> list = new ArrayList<SpreadLink>();
-			list= spreadLinkService.browsePagingSpreadLink(accountId,pageNum, pageSize, orderName, orderWay);
+			list= spreadLinkService.browsePagingSpreadLink(merId,accountId,pageNum, pageSize, orderName, orderWay);
 			if(list.size()>0){
 				return ResultUtil.getSlefSRSuccessList(list);
 			}else{
@@ -107,13 +109,15 @@ public class SpreadLinkController {
 	 */
 	@ApiOperation(value = "推广链接数量", notes = "推广链接数量查询")
 	@ApiImplicitParams({
+		@ApiImplicitParam(name="merId",value="商品id",dataType="int", paramType = "query"),
 		@ApiImplicitParam(name="accountId",value="推广账户id",dataType="int", paramType = "query")
 	  })
 	@RequestMapping(value = "/count", method = {RequestMethod.GET,RequestMethod.POST})
 	public @ResponseBody int countAll(
+			@RequestParam(value="merId",required=false)Integer merId,
 			@RequestParam(value="accountId",required=false)Integer accountId,
 			HttpSession session)  {
-		int count = spreadLinkService.countAll(accountId);
+		int count = spreadLinkService.countAll(merId,accountId);
 		return count;
 	}
 	/**

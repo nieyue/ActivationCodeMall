@@ -23,7 +23,7 @@ public interface SpreadLinkTermDao {
 	/** 装载推广连接项 */	
 	public SpreadLinkTerm loadSpreadLinkTerm(Integer spreadLinkTermId);	
 	/** 推广连接项总共数目 */	
-	public int countAll();	
+	public int countAll(@Param("merId")Integer merId);	
 	/** 分页推广连接项信息 */
-	public List<SpreadLinkTerm> browsePagingSpreadLinkTerm(@Param("pageNum")int pageNum,@Param("pageSize")int pageSize,@Param("orderName")String orderName,@Param("orderWay")String orderWay) ;		
+	public List<SpreadLinkTerm> browsePagingSpreadLinkTerm(@Param("merId")Integer merId,@Param("pageNum")int pageNum,@Param("pageSize")int pageSize,@Param("orderName")String orderName,@Param("orderWay")String orderWay) ;		
 }

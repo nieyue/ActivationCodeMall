@@ -31,6 +31,8 @@ public interface OrderService {
 	public int countAll(
 			Integer type,
 			Integer payType,
+			Integer merchantAccountId,
+			Integer spreadAccountId,
 			Integer accountId,
 			Integer status,
 			Integer substatus,
@@ -41,6 +43,8 @@ public interface OrderService {
 	public List<Order> browsePagingOrder(
 			Integer type,
 			Integer payType,
+			Integer merchantAccountId,
+			Integer spreadAccountId,
 			Integer accountId,
 			Integer status,
 			Integer substatus,

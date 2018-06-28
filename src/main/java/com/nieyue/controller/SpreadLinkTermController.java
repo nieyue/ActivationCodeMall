@@ -47,6 +47,7 @@ public class SpreadLinkTermController {
 	 */
 	@ApiOperation(value = "推广链接项列表", notes = "推广链接项分页浏览")
 	@ApiImplicitParams({
+		@ApiImplicitParam(name="merId",value="商品id",dataType="int", paramType = "query"),
 	  @ApiImplicitParam(name="pageNum",value="页头数位",dataType="int", paramType = "query",defaultValue="1"),
 	  @ApiImplicitParam(name="pageSize",value="每页数目",dataType="int", paramType = "query",defaultValue="10"),
 	  @ApiImplicitParam(name="orderName",value="排序字段",dataType="string", paramType = "query",defaultValue="create_date"),
@@ -54,12 +55,13 @@ public class SpreadLinkTermController {
 	  })
 	@RequestMapping(value = "/list", method = {RequestMethod.GET,RequestMethod.POST})
 	public @ResponseBody StateResultList<List<SpreadLinkTerm>> browsePagingSpreadLinkTerm(
+			@RequestParam(value="merId",required=false)Integer merId,
 			@RequestParam(value="pageNum",defaultValue="1",required=false)int pageNum,
 			@RequestParam(value="pageSize",defaultValue="10",required=false) int pageSize,
 			@RequestParam(value="orderName",required=false,defaultValue="create_date") String orderName,
 			@RequestParam(value="orderWay",required=false,defaultValue="desc") String orderWay)  {
 			List<SpreadLinkTerm> list = new ArrayList<SpreadLinkTerm>();
-			list= spreadLinkTermService.browsePagingSpreadLinkTerm(pageNum, pageSize, orderName, orderWay);
+			list= spreadLinkTermService.browsePagingSpreadLinkTerm(merId,pageNum, pageSize, orderName, orderWay);
 			if(list.size()>0){
 				return ResultUtil.getSlefSRSuccessList(list);
 			}else{
@@ -104,9 +106,14 @@ public class SpreadLinkTermController {
 	 * @return
 	 */
 	@ApiOperation(value = "推广链接项数量", notes = "推广链接项数量查询")
+	@ApiImplicitParams({
+		@ApiImplicitParam(name="merId",value="商品id",dataType="int", paramType = "query"),
+	  })
 	@RequestMapping(value = "/count", method = {RequestMethod.GET,RequestMethod.POST})
-	public @ResponseBody int countAll(HttpSession session)  {
-		int count = spreadLinkTermService.countAll();
+	public @ResponseBody int countAll(
+			@RequestParam(value="merId",required=false)Integer merId,
+			HttpSession session)  {
+		int count = spreadLinkTermService.countAll(merId);
 		return count;
 	}
 	/**

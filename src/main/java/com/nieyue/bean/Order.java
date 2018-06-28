@@ -60,8 +60,13 @@ public class Order implements Serializable {
 	/**
 	 * 子状态，2（1待支付），3（1冻结单,2已完成），4（1等待发货），5（1待解决（买家提问后），2解决中（卖家回复后），3申请退款，4已退款，5已解决），6（1已取消），7（1已删除）
 	 */
-	@ApiModelProperty(value="子状态，2（1待支付），3（1冻结单,2已完成），4（1等待发货），5（1待解决（买家提问后），2解决中（卖家回复后），3申请退款，4已退款，5已解决），6（1已取消），7（1已删除）",example="子状态，2（1待支付），3（1冻结单,2已完成），4（1等待发货），5（1待解决（买家提问后），2解决中（卖家回复后），3申请退款，4已退款，5已解决），6（1已取消），7（1已删除）")
+	@ApiModelProperty(value="子状态，2（1待支付），3（1冻结单,2已完成），4（1等待发货），5（1待解决（买家提问后），2解决中（卖家回复后），3申请退款，4已退款，5已解决），6（1正常取消,2订单商品库存不够），7（1已删除）",example="子状态，2（1待支付），3（1冻结单,2已完成），4（1等待发货），5（1待解决（买家提问后），2解决中（卖家回复后），3申请退款，4已退款，5已解决），6（1已取消），7（1已删除）")
 	private Integer substatus;
+	/**
+	 * 商户id
+	 */
+	@ApiModelProperty(value="商户id",example="商户id")
+	private Integer merchantAccountId;
 	/**
 	 * 推广账户id
 	 */
@@ -160,6 +165,12 @@ public class Order implements Serializable {
 	}
 	public void setOrderReceiptInfo(OrderReceiptInfo orderReceiptInfo) {
 		this.orderReceiptInfo = orderReceiptInfo;
+	}
+	public Integer getMerchantAccountId() {
+		return merchantAccountId;
+	}
+	public void setMerchantAccountId(Integer merchantAccountId) {
+		this.merchantAccountId = merchantAccountId;
 	}
 	
 }

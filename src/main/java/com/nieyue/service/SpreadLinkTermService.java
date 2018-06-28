@@ -19,7 +19,7 @@ public interface SpreadLinkTermService {
 	/** 装载推广链接项 */	
 	public SpreadLinkTerm loadSpreadLinkTerm(Integer spreadLinkTermId);	
 	/** 推广链接项总共数目 */	
-	public int countAll();
+	public int countAll(Integer merId);
 	/** 分页推广链接项信息 */
-	public List<SpreadLinkTerm> browsePagingSpreadLinkTerm(int pageNum,int pageSize,String orderName,String orderWay) ;
+	public List<SpreadLinkTerm> browsePagingSpreadLinkTerm(Integer merId,int pageNum,int pageSize,String orderName,String orderWay) ;
 }

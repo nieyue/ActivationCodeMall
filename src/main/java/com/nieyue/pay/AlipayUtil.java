@@ -301,5 +301,70 @@ public class AlipayUtil {
 		 return "fail";
 		 
 	 }
+	 /**
+	  * 购买商品异步通知
+	  * @param paramsMap
+	  * @throws Exception 
+	  */
+	 public String  getOrderNotifyUrl(HttpServletRequest request){
+		 //将异步通知中收到的待验证所有参数都存放到map中
+		 boolean signVerified=true;
+		 Payment payment= null;
+		 try {
+			 //调用SDK验证签名
+			 //获取支付宝POST过来反馈信息
+			 Map<String,String> params = new HashMap<String,String>();
+			 Map<String, String[]> requestParams = request.getParameterMap();
+			 for (Iterator iter = requestParams.keySet().iterator(); iter.hasNext();) {
+				 String name = (String) iter.next();
+				 String[] values = (String[]) requestParams.get(name);
+				 String valueStr = "";
+				 for (int i = 0; i < values.length; i++) {
+					 valueStr = (i == values.length - 1) ? valueStr + values[i]
+							 : valueStr + values[i] + ",";
+				 }
+				 //乱码解决，这段代码在出现乱码时使用。
+				 //valueStr = new String(valueStr.getBytes("ISO-8859-1"), "UTF-8");
+				 params.put(name, valueStr);
+			 }
+			 //切记alipaypublickey是支付宝的公钥，请去open.alipay.com对应应用下查看。
+			 //boolean AlipaySignature.rsaCheckV1(Map<String, String> params, String publicKey, String charset, String sign_type)
+			 signVerified = AlipaySignature.rsaCheckV1(params, ALIPAY_PUBLIC_KEY, "UTF-8","RSA2");
+			 
+			 //signVerified = AlipaySignature.rsaCheckV1(paramsMap, ALIPAY_PUBLIC_KEY, "UTF-8");
+			 String paymentId = (String) params.get("passback_params");
+			 String out_trade_no = (String) params.get("out_trade_no");
+			 String total_amount = (String) params.get("total_amount");
+			 payment = paymentService.loadPayment(Integer.valueOf(paymentId));
+			 //已经处理过了
+			 if(payment.getStatus()!=1){
+				 return "success";
+			 }
+			 if(!out_trade_no.equals(payment.getOrderNumber())
+					 ||!total_amount.equals(payment.getMoney().toString())){
+				 signVerified=false;
+			 }
+			 if(signVerified &&payment!=null){
+				 // TODO 验签成功后
+				 //按照支付结果异步通知中的描述，对支付结果中的业务内容进行1\2\3\4二次校验，校验成功后在response中返回success，校验失败返回failure
+				 // boolean b = financeBusiness.rechargeFinance(payment);
+				 boolean b=false;
+				 if(b){
+					 //支付成功
+					 payment.setStatus(2);//成功
+					 paymentService.updatePayment(payment);
+					 return "success";
+				 }
+			 }else{
+				 payment.setStatus(3);//失败
+				 paymentService.updatePayment(payment);
+			 }
+		 } catch (Exception e) {
+			 payment.setStatus(4);//异常
+			 paymentService.updatePayment(payment);
+		 } 
+		 return "fail";
+		 
+	 }
 	 
 }
