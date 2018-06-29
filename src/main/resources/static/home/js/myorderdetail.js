@@ -1,11 +1,19 @@
-//购物车商品转订单
-//console.log(JSON.parse(sessionStorage.getItem("selectOrderList")))
+
 //显示金额
-$("#orderTotalPrice").text(JSON.parse(sessionStorage.getItem("selectOrderTotalPrice")));
- //订单商品支付
-   business.getSelectOrderList=function(){
-   	business.selectOrderList=JSON.parse(sessionStorage.getItem("selectOrderList"));
-   	
+$("#orderTotalPrice").text("¥"+JSON.parse(sessionStorage.getItem("selectOrderTotalPrice")));
+ //订单详情
+   business.getSelectOrderDetail=function(){
+   	business.selectOrderDetail=JSON.parse(sessionStorage.getItem("selectOrderList"));
+   	var request  = getUrlInfo(location.search);
+	var orderId = request["orderId"];
+	var info={
+			orderId:orderId,
+			accountId:business.account!=null?business.account.accountId:null
+	};
+   	ajxget("/order/load?orderId="+orderId,info,function(data){
+		if(data.code==200){
+			console.log(data)
+		}})
    	for (var i = 0; i < business.selectOrderList.length; i++) {
    		var coupon="未使用";
    		if(business.selectOrderList[i].orderDetailList[0].coupon){
@@ -45,45 +53,8 @@ $("#orderTotalPrice").text(JSON.parse(sessionStorage.getItem("selectOrderTotalPr
    			+'</div><hr/>');
    	}
    }
-   business.getSelectOrderList();  
+   business.getSelectOrderDetail();  
    
-//选择支付
-business.payType=1;//默认是1，支付宝
-$(".pay_positionul li").click(function(){
-	$('.pay_positionul li').removeClass('payborder7400');
-	$(this).addClass('payborder7400');
-	business.payType=parseInt($(this).attr("id").replace("payType", ""));
-});
-
-//取消
-$("#cancelOrder").on("click", function() {
-	business.myConfirm("取消订单支付？",function(){
-		location.href="myorder.html";		
-	});
-});
-//确定 购物车商品转订单
-$("#orderPayment").on("click", function() {
-	var orderIds=[];
-	//去掉多余的
-	for (var i = 0; i < business.selectOrderList.length; i++) {
-		orderIds.push(business.selectOrderList[i].orderId);
-	}
-	var info = {
-			accountId:business.account!=null?business.account.accountId:null,
-			orderIds:orderIds.toString(),//订单id列表
-			payType:business.payType//支付方式，1支付宝，2微信,3百度钱包,4Paypal,5网银
-		}
-	//购物车商品批量转未支付订单商品
-	ajxget("/order/payment",info,function(data){
-		if(data.code==200){
-			sessionStorage.removeItem("selectOrderTotalPrice");
-			sessionStorage.removeItem("selectOrderList");
-			location.href="myorder.html";
-		}else{
-			business.myLoadingToast(data.msg)
-		}
-	});
-});
 			var shixin = "★";
             var kongxin = "☆";
             /*var flag = false;//没有点击*/

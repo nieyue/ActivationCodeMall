@@ -9,7 +9,7 @@ var business={
 	//url:"http://app.nalu888.cn",
 	account:null,//登录账户
 	finance:null,//财务
-	integrall:null,//登录积分
+	integral:null,//登录积分
 	accountLevelList:[],//等级列表
 	merId:1,
 	mer:{},
@@ -85,7 +85,7 @@ business.init=function(){
 	}
 	injection("account");
 	injection("finance");
-	injection("integrall");
+	injection("integral");
 	injection("accountLevelList");
 }
 business.init();
@@ -453,6 +453,17 @@ function gethotseachlist(){
 }
 //判断是否登录
 business.islogin=function(){
+//只要一个不存在就没登录
+	if(!business.account
+			||!business.finance
+			||!business.integral
+			||!business.accountLevelList
+			){
+		$("#nologindiv").css("display","block");
+		$("#havelogindiv").css("display","none");
+		sessionStorage.clear();
+		return;
+	}
 	ajxget("/account/islogin",null,function(data){
 		if(data.code==200){
 			//$("#nologindiv").remove();
@@ -464,7 +475,7 @@ business.islogin=function(){
 				return;
 			}
 			$(".alreadyLogin_namep").text(business.account.nickname);
-			$("#userleve").text(business.integrall.name);
+			$("#userleve").text(business.integral.name);
 			$("#exit").click(function(){
 				ajxget("/account/loginout",null,function(data){
 					if(data.code==200){

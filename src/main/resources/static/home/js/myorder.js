@@ -109,13 +109,8 @@ function show(id){
 		}
 	}
 }
-//订单支付
-$(document).on("click",".topaybtn", function() {
-	//console.log($(this).parent().parent().children().children().children("input[name='checkbox']"))
-	$(this).parent().parent().children().children().children("input[name='checkbox21']").prop("checked","checked")
-	business.orderSum(2,1);
-	window.location.href = "myordercommit.html";
-});
+
+
 
 //取消购物商品
 business.cancelOrder=function(orderId){
@@ -173,7 +168,7 @@ business.getOrderList=function(status,substatus){
 		substatus:substatus,
 		pageNum:1,
 		pageSize:100,
-		accountId:business.accountId
+		accountId:business.account.accountId
 		};
 	
 	
@@ -225,14 +220,102 @@ business.getOrderList=function(status,substatus){
 					      +'<td>¥'+child.orderDetailList[0].totalPrice+'</td>'
 					      +'<td>'
 					      	+'<a class="deletorderbtn" onclick="business.cancelOrder('+child.orderId+')">取消</a>'
-					      	+'<a class="topaybtn" >支付</a>'
-					      +'</td>'
+					      	+'<a class="topaybtn" onclick="business.topay(this)">支付</a>'
+					      +'</td>';
+					//订单支付
+					business.topay=function(_this){
+						//console.log($(_this).parent().parent().children().children().children("input[name='checkbox21']"))
+						$(_this).parent().parent().children().children().children("input[name='checkbox21']").prop("checked","checked")
+						business.orderSum(2,1);
+						window.location.href = "myordercommit.html";
+					}
 				}else if(status==3){
-					html = '<td ><div ><input name="checkbox" type="checkbox" style="" class="ordercheck"/><p class="ordercode">'+child.orderNumber+'</p></div></td><td style="padding-left: 10px;padding-right: 10px;">'+child.orderDetailList[0].name+'</td><td ><p class="ordertimeday">'+child.updateDate+'</p></td><td>啦啦啦</td><td>¥'+child.orderDetailList[0].unitPrice+'*'+child.orderDetailList[0].number+'</td><td>¥'+child.orderDetailList[0].totalPrice+'</td><td><a class="deletorderbtn">评价订单</a><a class="topaybtn">提取卡密</a><a class="shouhoubtn">售后服务</a></td>';
+					//html = '<td ><div ><input name="checkbox" type="checkbox" style="" class="ordercheck"/><p class="ordercode">'+child.orderNumber+'</p></div></td><td style="padding-left: 10px;padding-right: 10px;">'+child.orderDetailList[0].name+'</td><td ><p class="ordertimeday">'+child.updateDate+'</p></td><td>啦啦啦</td><td>¥'+child.orderDetailList[0].unitPrice+'*'+child.orderDetailList[0].number+'</td><td>¥'+child.orderDetailList[0].totalPrice+'</td><td><a class="deletorderbtn">评价订单</a><a class="topaybtn">提取卡密</a><a class="shouhoubtn">售后服务</a></td>';
+				var oorder=JSON.stringify(child);
+				oorder=oorder.replace(/"/g, "\'");
+				html='<td >'
+				      +'<div >'
+				      	+'<input name="checkbox'+status+substatus+'" type="checkbox" style="" class="ordercheck"/>'
+				      	+'<p class="ordercode" style="width:60%;word-break:break-all;">'+child.orderNumber+'</p>'
+				      +'</div>'
+				   +'</td>'
+				   +'<td style="padding-left: 10px;padding-right: 10px;">'+child.orderDetailList[0].name+'</td>'
+				   +'<td >'
+				      +'<p class="ordertimeday">'+child.paymentDate+'</p>'
+				   +'</td>'
+				   +'<td>'+child.orderReceiptInfo.name+'</td>'
+				   +'<td>¥'+child.orderDetailList[0].unitPrice+'*'+child.orderDetailList[0].number+'</td>'
+				   +'<td>¥'+child.orderDetailList[0].totalPrice+'</td>'
+				   +'<td>'
+				      +'<a class="deletorderbtn" onclick="business.commentOrder(this,'+oorder+')">评价订单</a>'
+				      +'<a class="deletorderbtn" onclick="business.getCardChiper(this,'+oorder+')">提取卡密</a>'
+				      +'<a class="shouhoubtn">售后服务</a>'
+				   +'</td>';
+				//评价订单
+				business.commentOrder=function(_this,order){
+					//console.log(order)
+					//console.log($(_this).parent().parent().children().children().children("input[name='checkbox21']"))
+					//$(_this).parent().parent().children().children().children("input[name='checkbox"+order.status+order.substatus+"']").prop("checked","checked")
+					//business.orderSum(order.status,order.substatus);
+					$(_this).parent().parent().children().children().children("input[name='checkbox"+status+substatus+"']").prop("checked","checked")
+					business.orderSum(status,substatus);
+					window.location.href = "myorderdetail.html?orderId="+order.orderId;
+				}
+				//提取卡密
+				business.getCardChiper=function(_this,order){
+					//console.log($(_this).parent().parent().children().children().children("input[name='checkbox21']"))
+					//$(_this).parent().parent().children().children().children("input[name='checkbox"+order.status+order.substatus+"']").prop("checked","checked")
+					//business.orderSum(order.status,order.substatus);
+					$(_this).parent().parent().children().children().children("input[name='checkbox"+status+substatus+"']").prop("checked","checked")
+					business.orderSum(status,substatus);
+					window.location.href = "myorderdetail.html?orderId="+order.orderId;
+				}
 				}else if(status==4){
-					html = '<td ><div ><input name="checkbox" type="checkbox" style="" class="ordercheck"/><p class="ordercode">'+child.orderNumber+'</p></div></td><td style="padding-left: 10px;padding-right: 10px;">'+child.orderDetailList[0].name+'</td><td ><p class="ordertimeday">'+child.updateDate+'</p></td><td>啦啦啦</td><td>¥'+child.orderDetailList[0].unitPrice+'*'+child.orderDetailList[0].number+'</td><td>¥'+child.orderDetailList[0].totalPrice+'</td><td><a class="deletorderbtn">等待发货</a></td>';
+					//html = '<td ><div ><input name="checkbox" type="checkbox" style="" class="ordercheck"/><p class="ordercode">'+child.orderNumber+'</p></div></td><td style="padding-left: 10px;padding-right: 10px;">'+child.orderDetailList[0].name+'</td><td ><p class="ordertimeday">'+child.updateDate+'</p></td><td>啦啦啦</td><td>¥'+child.orderDetailList[0].unitPrice+'*'+child.orderDetailList[0].number+'</td><td>¥'+child.orderDetailList[0].totalPrice+'</td><td><a class="deletorderbtn">等待发货</a></td>';
+					html='<td >'
+					      +'<div >'
+					      	+'<input name="checkbox'+status+substatus+'" type="checkbox" style="" class="ordercheck"/>'
+					      	+'<p class="ordercode" style="width:60%;word-break:break-all;">'+child.orderNumber+'</p>'
+					      +'</div>'
+					   +'</td>'
+					   +'<td style="padding-left: 10px;padding-right: 10px;">'+child.orderDetailList[0].name+'</td>'
+					   +'<td >'
+					      +'<p class="ordertimeday">'+child.paymentDate+'</p>'
+					   +'</td>'
+					   +'<td>'+child.orderReceiptInfo.name+'</td>'
+					   +'<td>¥'+child.orderDetailList[0].unitPrice+'*'+child.orderDetailList[0].number+'</td>'
+					   +'<td>¥'+child.orderDetailList[0].totalPrice+'</td>'
+					   +'<td>'
+					      +'<p class="deletorderbtn">等待发货</p>'
+					   +'</td>';
 				}else if(status==5){
-					html = '<td ><div ><input name="checkbox" type="checkbox" style="" class="ordercheck"/><p class="ordercode">'+child.orderNumber+'</p></div></td><td style="padding-left: 10px;padding-right: 10px;">'+child.orderDetailList[0].name+'</td><td ><p class="ordertimeday">'+child.updateDate+'</p></td><td>'+child.content+'</td><td><a class="deletorderbtn">待解决</a></td>';
+					//html = '<td ><div ><input name="checkbox" type="checkbox" style="" class="ordercheck"/><p class="ordercode">'+child.orderNumber+'</p></div></td><td style="padding-left: 10px;padding-right: 10px;">'+child.orderDetailList[0].name+'</td><td ><p class="ordertimeday">'+child.updateDate+'</p></td><td>'+child.content+'</td><td><a class="deletorderbtn">待解决</a></td>';
+					var substatusvalue="待解决";
+					if(child.substatus==1){
+						substatusvalue="待解决";
+					}else if(child.substatus==2){
+						substatusvalue="解决中";
+					}else if(child.substatus==3){
+						substatusvalue="申请退款";
+					}else if(child.substatus==4){
+						substatusvalue="已退款";
+					}else if(child.substatus==5){
+						substatusvalue="已解决";
+					}
+					html='<td >'
+					      +'<div >'
+					      	+'<input name="checkbox'+status+substatus+'" type="checkbox" style="" class="ordercheck"/>'
+					      	+'<p class="ordercode" style="width:60%;word-break:break-all;">'+child.orderNumber+'</p>'
+					      +'</div>'
+					   +'</td>'
+					   +'<td style="padding-left: 10px;padding-right: 10px;">'+child.orderDetailList[0].name+'</td>'
+					   +'<td >'
+					      +'<p class="ordertimeday">'+child.paymentDate+'</p>'
+					   +'</td>'
+					   +'<td>不知道什么原因就是用不了</td>'
+					   +'<td>'
+					      +'<a class="deletorderbtn">'+substatusvalue+'</a>'
+					   +'</td>';
 				}else if(status==6){
 					//html = '<td ><div ><input name="checkbox" type="checkbox" style="" class="ordercheck"/><p class="ordercode">'+child.orderNumber+'</p></div></td><td style="padding-left: 10px;padding-right: 10px;">'+child.orderDetailList[0].name+'</td><td>啦啦啦</td><td>¥'+child.orderDetailList[0].unitPrice+'*'+child.orderDetailList[0].number+'</td><td>¥'+child.orderDetailList[0].totalPrice+'</td><td><a class="deletorderbtn">已取消</a></td><td ><p class="ordertimeday">'+child.updateDate+'</p></td>';
 						var substatusvalue="正常取消";
@@ -259,7 +342,23 @@ business.getOrderList=function(status,substatus){
 					      		+'<p class="ordertimeday">'+child.createDate+'</p>'
 					      	+'</td>';
 				}else if(status==5&&substatus==4){
-					html = '<td ><div ><input name="checkbox" type="checkbox" style="" class="ordercheck"/><p class="ordercode">'+child.orderNumber+'</p></div></td><td style="padding-left: 10px;padding-right: 10px;">'+child.orderDetailList[0].name+'</td><td>啦啦啦</td><td>¥'+child.orderDetailList[0].unitPrice+'*'+child.orderDetailList[0].number+'</td><td>¥'+child.orderDetailList[0].totalPrice+'</td><td><a class="deletorderbtn">已取消</a></td><td ><p class="ordertimeday">'+child.updateDate+'</p></td>';
+					//html = '<td ><div ><input name="checkbox" type="checkbox" style="" class="ordercheck"/><p class="ordercode">'+child.orderNumber+'</p></div></td><td style="padding-left: 10px;padding-right: 10px;">'+child.orderDetailList[0].name+'</td><td>啦啦啦</td><td>¥'+child.orderDetailList[0].unitPrice+'*'+child.orderDetailList[0].number+'</td><td>¥'+child.orderDetailList[0].totalPrice+'</td><td><a class="deletorderbtn">已取消</a></td><td ><p class="ordertimeday">'+child.updateDate+'</p></td>';
+					html='<td >'
+			      		+'<div >'
+			      			+'<input name="checkbox'+status+substatus+'" type="checkbox" style="" class="ordercheck"/>'
+			      			+'<p class="ordercode" style="width:60%;word-break:break-all;">'+child.orderNumber+'</p>'
+			      		+'</div>'
+			      	+'</td>'
+			      	+'<td style="padding-left: 10px;padding-right: 10px;">'+child.orderDetailList[0].name+'</td>'
+			      	+'<td>'+child.orderReceiptInfo.name+'</td>'
+			      	+'<td>¥'+child.orderDetailList[0].unitPrice+'*'+child.orderDetailList[0].number+'</td>'
+				    +'<td>¥'+child.orderDetailList[0].totalPrice+'</td>'
+			      	+'<td>'
+			      		+'<span class="deletorderbtn">已退款</span>'
+			      	+'</td>'
+			      	+'<td >'
+			      		+'<p class="ordertimeday">'+child.createDate+'</p>'
+			      	+'</td>';
 				}
 				
 				tr.innerHTML = html;

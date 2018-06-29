@@ -34,7 +34,7 @@ $(function(){
 						sessionStorage.setItem("account",JSON.stringify(data.data[0].account));
 						sessionStorage.setItem("accountLevelList",JSON.stringify(data.data[0].accountLevelList));
 						sessionStorage.setItem("finance",JSON.stringify(data.data[0].finance));
-						sessionStorage.setItem("integrall",JSON.stringify(data.data[0].integrall));
+						sessionStorage.setItem("integral",JSON.stringify(data.data[0].integral));
 
 						if(roleName=="用户"){
 							window.location.href='index.html';

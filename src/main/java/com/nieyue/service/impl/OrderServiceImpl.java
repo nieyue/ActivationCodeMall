@@ -68,7 +68,6 @@ public class OrderServiceImpl implements OrderService{
 		Integer type=1;//业务类型，1购买商品，2账户提现，3退款，4诚信押金
 		Double totalPrice=0.0;//总金额
 		//1.验证支付条件
-		boolean b=false;
 		String[] ids = orderIds.replace(" ","").split(",");
 		for (int i = 0; i < ids.length; i++) {
 			if(!NumberUtil.isNumeric(ids[i])){
@@ -81,9 +80,6 @@ public class OrderServiceImpl implements OrderService{
 			if(mer.getStockNumber()-orderDetail.getNumber()<0){
 				throw new CommonRollbackException("商品名："+mer.getName()+"库存不足");
 			}
-		}
-		if(!b){
-			return result;//不满足验证直接失败
 		}
 		//2.支付存储类,一个支付类对应多个订单类
 		Payment payment=new Payment();

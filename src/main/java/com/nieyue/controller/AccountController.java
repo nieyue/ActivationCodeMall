@@ -13,6 +13,8 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.BoundValueOperations;
 import org.springframework.data.redis.core.StringRedisTemplate;
@@ -651,6 +653,9 @@ public class AccountController {
 	public @ResponseBody StateResultList<List<Account>> loginoutAccount(
 			HttpSession session)  {
 		session.invalidate();
+		//shiro登录退出
+		Subject currentUser = SecurityUtils.getSubject();
+        currentUser.logout();
 		return ResultUtil.getSlefSRSuccessList(null);
 	}
 	

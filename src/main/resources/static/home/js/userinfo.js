@@ -171,7 +171,14 @@ $(function(){
 		if(!$(".shouhuodiv").is(":hidden")){
 			$(".shouhuodiv").toggle();
 		}
-		
+		//console.log(business)
+		//获取积分等级
+		$("#integralLevel").text("LV"+business.integral.level)
+		//现有积分
+		$("#integralIntegral").text(business.integral.integral)
+		//升级积分
+		$("#integralUpgradeIntegral").text(business.integral.upgradeIntegral-business.integral.integral)
+		//获取积分列表
 		getintarll();
 	
 	}else if(value=="交易账单"){
@@ -505,7 +512,7 @@ function getintarll(){
 		        		var tr = document.createElement('tr');
 		        		tr.className = 'chengzhangtd height40';
 						tr.id = child.integralDetailId;
-						var html = '<td >'+child.createDate+'></td><td >'+child.integral+'</td>';
+						var html = '<td >'+child.createDate+'</td><td >'+child.integral+'</td>';
 						tr.innerHTML = html;
 
 						table.append(tr); 

@@ -107,7 +107,7 @@ public class AccountBusiness {
 			}
 			//积分
 			List<Integral> integrall = integralService.browsePagingIntegral(account.getAccountId(), null, null, 1, 1, "integral_id", "asc");
-			map.put("integrall",  integrall.get(0));
+			map.put("integral",  integrall.get(0));
 			//诚信
 			List<Sincerity> sinceritylist = sincerityService.browsePagingSincerity(account.getAccountId(), null, null, 1, 1, "sincerity_id", "asc");
 			map.put("sincerity",  sinceritylist.get(0));

@@ -24,7 +24,9 @@ import com.nieyue.bean.Notice;
 import com.nieyue.bean.Order;
 import com.nieyue.bean.OrderDetail;
 import com.nieyue.bean.Payment;
-import com.nieyue.exception.CommonRollbackException;
+import com.nieyue.bean.SpreadLink;
+import com.nieyue.bean.SpreadOrderAccount;
+import com.nieyue.bean.SpreadRecord;
 import com.nieyue.service.AccountLevelService;
 import com.nieyue.service.AccountService;
 import com.nieyue.service.ConfigService;
@@ -104,7 +106,9 @@ public class PaymentBusiness {
 		List<Mer> listmer=new ArrayList<>();//临时存储商品
 		boolean isHaveStockNumber=true;//是否有库存，默认有
 		for (int i = 0; i < ids.length; i++) {
-			//1.判读库存是否足够
+			/**
+			 * 1.判读库存是否足够
+			 */
 			Order order = orderService.loadOrder(new Integer(ids[i]));
 			if(order==null){
 				//只要一个订单不存在.取消
@@ -141,7 +145,9 @@ public class PaymentBusiness {
 		//配置类
 		List<Config> configlist = configService.browsePagingConfig(1, 1, "config_id", "asc");
 		Config config = configlist.get(0);
-		//用户积分
+		/**
+		 * 2.用户积分
+		 */
 		List<Integral> ail=integralService.browsePagingIntegral(accountId, null, null, 1, 1, "integral_id", "asc");
 		if(ail.size()>0){
 			Integral ai = ail.get(0);
@@ -166,7 +172,9 @@ public class PaymentBusiness {
 			}
 			b=integralService.updateIntegral(ai);//更新用户积分
 		}
-		//用户金额
+		/**
+		 * 3.用户金额
+		 */
 		List<Finance> afl=financeService.browsePagingFinance(null, accountId, 1, 1, "finance_id", "asc");
 		if(afl.size()>0){
 			Finance af = afl.get(0);
@@ -175,7 +183,9 @@ public class PaymentBusiness {
 		}
 		//循环订单
 		for (int i = 0; i < ids.length; i++) {
-			//2.订单进入冻结期
+			/**
+			 * 4.订单进入冻结期
+			 */
 			Order order = listorder.get(i);//从内存中取
 			//Order order = orderService.loadOrder(new Integer(ids[i]));
 			
@@ -185,24 +195,27 @@ public class PaymentBusiness {
 			order.setPaymentDate(new Date());
 			b =orderService.updateOrder(order);
 			
-			//3.获取订单详情
+			//获取订单详情
 			OrderDetail orderDetail = order.getOrderDetailList().get(0);
-			//4.获取当前商品
+			//获取当前商品
 			Mer lm = listmer.get(i);
-			//5.获取用户
+			//获取用户
 			Account account = accountService.loadAccount(accountId);
-			//6.获取商户
+			//获取商户
 			Account merchantAccount=null;
 			if(order.getMerchantAccountId()!=null){
 				merchantAccount = accountService.loadAccount(order.getMerchantAccountId());
 			}
-			//7.获取推广户
+			//获取推广户
 			Account spreadAccount=null;
 			if(order.getSpreadAccountId()!=null){
 				spreadAccount = accountService.loadAccount(order.getSpreadAccountId());
 			}
-			//8.生产订单卡密
-			List<MerCardCipher> mccl = merCardCipherService.browsePagingMerCardCipher(lm.getMerId(), 1, Integer.MAX_VALUE, "create_date", "asc");
+			/**
+			 * 5.生产订单卡密
+			 */
+			//获取需要的订单卡密
+			List<MerCardCipher> mccl = merCardCipherService.browsePagingMerCardCipher(lm.getMerId(), 1, orderDetail.getNumber(), "create_date", "asc");
 			for (int j = 0; j < mccl.size(); j++) {
 				MerOrderCardCipher mocc=new MerOrderCardCipher();
 				MerCardCipher mcc = mccl.get(j);
@@ -212,12 +225,16 @@ public class PaymentBusiness {
 				mocc.setOrderId(order.getOrderId());
 				merOrderCardCipherService.addMerOrderCardCipher(mocc);
 			}
-			//9.删除商品卡密,自动减库存
+			/**
+			 * 6.删除商品卡密,自动减库存
+			 */
 			for (int j = 0; j < mccl.size(); j++) {
 				MerCardCipher mcc = mccl.get(j);
 				merCardCipherService.delMerCardCipher(mcc.getMerCardCipherId());
 			}
-			//10.发送通知给购买人
+			/**
+			 * 7.发送通知给购买人
+			 */
 			Notice notice=new Notice();
 			notice.setBusinessId(order.getOrderId());
 			notice.setTitle("订单商品动态");
@@ -233,15 +250,19 @@ public class PaymentBusiness {
 			notice.setContent(noticeBusiness.getContentByType(notice));
 			noticeService.addNotice(notice);
 			
-			//11.用户积分记录
+			/**
+			 * 8.用户积分记录
+			 */
 			IntegralDetail aid = new IntegralDetail();
-			//剩余积分=现有+一个订单金额*用户每消费一元钱获得积分
-			aid.setIntegral(Arith.add(aid.getIntegral(), Arith.mul(orderDetail.getTotalPrice(), config.getUserIntegralPer())));
+			//剩余积分=一个订单金额*用户每消费一元钱获得积分
+			aid.setIntegral( Arith.mul(orderDetail.getTotalPrice(), config.getUserIntegralPer()));
 			aid.setType(0);//0增长积分
 			aid.setAccountId(accountId);
 			b=integralDetailService.addIntegralDetail(aid);//新增用户积分记录
 			
-			//12.用户财务记录，购买商品
+			/**
+			 * 9.用户财务记录，购买商品
+			 */
 			FinanceRecord fr=new FinanceRecord();
 			fr.setAccountId(accountId);
 			fr.setMethod(payType);//方式，1支付宝，2微信,3百度钱包,4Paypal,5网银
@@ -265,15 +286,19 @@ public class PaymentBusiness {
 			b=financeRecordService.addFinanceRecord(fr);//新增财务记录
 			//如果存在商户
 			if(merchantAccount!=null){				
-			//13.商户积分记录
+			/**
+			 * 10.商户积分记录
+			 */
 			IntegralDetail maid = new IntegralDetail();
-			//剩余积分=现有+一个订单金额*商户每消费一元钱获得积分
-			maid.setIntegral(Arith.add(maid.getIntegral(), Arith.mul(orderDetail.getTotalPrice(), config.getSellerIntegralPer())));
+			//剩余积分=一个订单金额*商户每消费一元钱获得积分
+			maid.setIntegral(Arith.mul(orderDetail.getTotalPrice(), config.getSellerIntegralPer()));
 			maid.setType(0);//0增长积分
 			maid.setAccountId(merchantAccount.getAccountId());
 			b=integralDetailService.addIntegralDetail(maid);//新增商户积分记录
 			
-			//14.商户财务记录，进账记录
+			/**
+			 * 11.商户财务记录，进账记录
+			 */
 			FinanceRecord mafr=new FinanceRecord();
 			mafr.setAccountId(merchantAccount.getAccountId());
 			mafr.setMethod(payType);//方式，1支付宝，2微信,3百度钱包,4Paypal,5网银
@@ -290,11 +315,137 @@ public class PaymentBusiness {
 			//实际金额=总金额-总金额*当前商品平台分成比例
 			mafr.setRealMoney(Arith.sub(orderDetail.getTotalPrice(),Arith.mul(orderDetail.getTotalPrice(), lm.getPlatformProportion())));
 			b=financeRecordService.addFinanceRecord(mafr);//新增财务记录
+			/**
+			 * 12.商户积分
+			 */
+			List<Integral> mail=integralService.browsePagingIntegral(merchantAccount.getAccountId(), null, null, 1, 1, "integral_id", "asc");
+			if(mail.size()>0){
+				Integral mai = mail.get(0);
+				//剩余积分=现有+当前订单总金额*商户每消费一元钱获得积分
+				mai.setIntegral(Arith.add(mai.getIntegral(),Arith.mul(orderDetail.getTotalPrice(),config.getSellerIntegralPer())));
+				//循环一遍
+				for (int j = 0; j < all.size(); j++) {
+				AccountLevel al = all.get(j);
+				//判断现有积分在哪个等级
+				if(mai.getIntegral()>=al.getSellerUpgradeIntegral()){
+					mai.setName(al.getName());//改名称
+					mai.setLevel(al.getLevel());//改等级
+				}
+				}
+				//找到升级积分
+				for (int j = 0; j < all.size(); j++) {
+					AccountLevel al = all.get(j);
+					//当前等级+1的等级积分为升级积分
+					if(mai.getLevel()+1==al.getLevel()){
+						mai.setUpgradeIntegral(al.getSellerUpgradeIntegral());
+					}
+				}
+				b=integralService.updateIntegral(mai);//更新商户积分
+			}
+			/**
+			 * 13.商户金额
+			 */
+			List<Finance> mafl=financeService.browsePagingFinance(null, merchantAccount.getAccountId(), 1, 1, "finance_id", "asc");
+			if(mafl.size()>0){
+				Finance maf = mafl.get(0);
+				//增加冻结金额
+				maf.setFrozen(Arith.add(maf.getMoney(),orderDetail.getTotalPrice()));
+				b=financeService.updateFinance(maf);
+			}
 			}
 			//如果存在推广户（推广户没有积分记录，没有财务记录）
 			if(spreadAccount!=null){	
-			//15.推广链接推广次数增加 ,推广链接是由domainurl/home/gooddetail.html?goodid=1  ,其中goodid为商品id即merId
-			//spreadLinkService.browsePagingSpreadLink(accountId, 1, Integer.MAX_VALUE, orderName, orderWay)
+			/**
+			 * 14.推广链接推广次数增加 ,如：推广链接是由domainurl/home/gooddetail.html?goodid=1  ,其中goodid为商品id即merId
+			 */
+			List<SpreadLink> spreadLinkList = spreadLinkService.browsePagingSpreadLink(lm.getMerId(),spreadAccount.getAccountId(), 1, Integer.MAX_VALUE, "create_date", "asc");
+			if(spreadLinkList.size()>0){
+				SpreadLink spreadLink = spreadLinkList.get(0);
+				spreadLink.setSpreadNumber(spreadLink.getSpreadNumber()+1);//增加推广次数
+				b=spreadLinkService.updateSpreadLink(spreadLink);
+				}
+			/**
+			 * 15.推广订单账户记录
+			 */
+			List<SpreadOrderAccount> spreadOrderAccountList = spreadOrderAccountService.browsePagingSpreadOrderAccount(spreadAccount.getAccountId(), 1, Integer.MAX_VALUE, "create_date", "asc");
+			if(spreadOrderAccountList.size()>0){
+				SpreadOrderAccount spreadOrderAccount = spreadOrderAccountList.get(0);
+				if(!StringUtils.isEmpty(account.getRealname())){
+					spreadOrderAccount.setName(account.getRealname());				
+				}else{
+					spreadOrderAccount.setName(account.getNickname());								
+				}
+				spreadOrderAccount.setEmail(account.getEmail());
+				spreadOrderAccount.setTradeNumber(spreadOrderAccount.getTradeNumber()+1);
+				b=spreadOrderAccountService.updateSpreadOrderAccount(spreadOrderAccount);
+			}else{
+				SpreadOrderAccount spreadOrderAccount=new SpreadOrderAccount();
+				spreadOrderAccount.setAccountId(spreadAccount.getAccountId());
+				if(!StringUtils.isEmpty(account.getRealname())){
+					spreadOrderAccount.setName(account.getRealname());				
+				}else{
+					spreadOrderAccount.setName(account.getNickname());								
+				}
+				spreadOrderAccount.setEmail(account.getEmail());
+				spreadOrderAccount.setTradeNumber(1);
+				spreadOrderAccountService.addSpreadOrderAccount(spreadOrderAccount);
+			}
+			/**
+			 * 16.推广账户进账记录（推广记录）
+			 */
+				SpreadRecord spreadRecord=new SpreadRecord();
+				if(!StringUtils.isEmpty(account.getRealname())){
+					spreadRecord.setName(account.getRealname());				
+				}else{
+					spreadRecord.setName(account.getNickname());								
+				}
+				//交易金额为劵后金额
+				spreadRecord.setMoney(orderDetail.getTotalPrice());
+				spreadRecord.setSpreadProportion(config.getSpreadProportion());
+				spreadRecord.setSpreadMoney(Arith.mul(orderDetail.getTotalPrice(),config.getSpreadProportion()));
+				if(spreadLinkList.size()>0){
+				spreadRecord.setLink(spreadLinkList.get(0).getLink());
+				}
+				spreadRecord.setAccountId(spreadAccount.getAccountId());
+				spreadRecordService.addSpreadRecord(spreadRecord);
+				
+			/**
+			 * 17.推广户积分
+			 */
+				List<Integral> sail=integralService.browsePagingIntegral(spreadAccount.getAccountId(), null, null, 1, 1, "integral_id", "asc");
+				if(sail.size()>0){
+					Integral sai = sail.get(0);
+					//剩余积分=现有+当前订单总金额*商户每消费一元钱获得积分
+					sai.setIntegral(Arith.add(sai.getIntegral(),Arith.mul(orderDetail.getTotalPrice(),config.getSellerIntegralPer())));
+					//循环一遍
+					for (int j = 0; j < all.size(); j++) {
+					AccountLevel al = all.get(j);
+					//判断现有积分在哪个等级
+					if(sai.getIntegral()>=al.getSellerUpgradeIntegral()){
+						sai.setName(al.getName());//改名称
+						sai.setLevel(al.getLevel());//改等级
+					}
+					}
+					//找到升级积分
+					for (int j = 0; j < all.size(); j++) {
+						AccountLevel al = all.get(j);
+						//当前等级+1的等级积分为升级积分
+						if(sai.getLevel()+1==al.getLevel()){
+							sai.setUpgradeIntegral(al.getSellerUpgradeIntegral());
+						}
+					}
+					b=integralService.updateIntegral(sai);//更新推广户积分
+				}
+			/**
+			 * 18.推广户金额
+			 */
+				List<Finance> mafl=financeService.browsePagingFinance(null, merchantAccount.getAccountId(), 1, 1, "finance_id", "asc");
+				if(mafl.size()>0){
+					Finance maf = mafl.get(0);
+					//增加冻结金额
+					maf.setFrozen(Arith.add(maf.getMoney(),orderDetail.getTotalPrice()));
+					b=financeService.updateFinance(maf);
+				}
 			}
 			
 		}

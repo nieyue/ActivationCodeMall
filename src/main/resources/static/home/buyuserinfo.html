@@ -233,9 +233,17 @@
 				
 				<!--我的成长-->
 				<div class="chengzhangdiv" style="display: none;">
-					<img src="img/banner.png" style="width: 100%;height: 300px;" />
+					<div style="width: 100%;height: 300px;position:relative;top:0;left:0;background:url('img/banner.png') center center;background-size:cover;">
+						<div style="width: 100%;height: auto;color:white;position:absolute;bottom:80px;left:20px;font-size:30px;">
+						等级：<span style="font-size:50px;color:#ff8d00;" id="integralLevel">LV0</span>
+						</div>
+						<div style="width: 100%;height: auto;color:white;position:absolute;bottom:20px;left:20px;font-size:30px;">
+						现有积分<span style="font-size:36px;" id="integralIntegral">0</span>，
+						距离下一等级还差<span style="font-size:36px" id="integralUpgradeIntegral">0</span>积分
+						</div>
+					</div>
 					
-					<table class="bg_fff chengzhangtable" frame="void" rules="cols" >
+					<table class="bg_fff chengzhangtable"  frame="void" rules="cols" >
 						  
 						  <thead>
 						    <tr class="bg_fff chengzhangtd1" style="height: 40px;background: rgba(224, 70, 0, 1);">
