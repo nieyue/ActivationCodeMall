@@ -73,6 +73,26 @@ var business={
 		
 	});
 	},
+	/**
+	 * 自定义template
+	 */
+	myTemplate : function(value) {
+		var myTemplateWidth= 330;
+		var myTemplateHeight= '60%';
+		var myTemplateMarginWidth= 165;
+		if(document.querySelector("html").offsetWidth>640){
+			myTemplateWidth= 860;
+			myTemplateMarginWidth= 430;
+		}
+		$("body")
+		.append(
+				"<div id='myTemplateDiv' style='position:fixed;width:100%;height:100%;background-color:#ccc;opacity:0.5;left:0;top:0;z-index:9998;'></div><div id='myTemplate' style='z-index:9999;color:#000;background-color:#fff;text-align:center;line-height:30px;border:1px solid #fff;border-radius:5px;height:"+myTemplateHeight+";width:"+myTemplateWidth+"px;margin:-100px -"+myTemplateMarginWidth+"px;top:20%;left:50%;position:fixed;font-size:20px;'>"
+				+ "<div style='overflow:auto;position:absolute;width:100%;height:100%;text-align:center;'>"+value+"</div><div class='btn btn-default' style='position:absolute;right:15px;bottom:15px;width:80px;' id='myTemplateNo'>关闭</div></div>");
+	$('#myTemplateNo').click(function(){
+		$('#myTemplateDiv').remove();
+		$('#myTemplate').remove();	
+	});
+	},
 	Qiniu:Qiniu
 };
 

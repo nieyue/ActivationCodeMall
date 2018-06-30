@@ -76,6 +76,7 @@ $("#orderPayment").on("click", function() {
 	//购物车商品批量转未支付订单商品
 	ajxget("/order/payment",info,function(data){
 		if(data.code==200){
+			console.log(data)
 			sessionStorage.removeItem("selectOrderTotalPrice");
 			sessionStorage.removeItem("selectOrderList");
 			location.href="myorder.html";
@@ -83,46 +84,4 @@ $("#orderPayment").on("click", function() {
 			business.myLoadingToast(data.msg)
 		}
 	});
-});
-			var shixin = "★";
-            var kongxin = "☆";
-            /*var flag = false;//没有点击*/
-            $(".commentli").mouseenter(function(){
-                /*$(this).text(shixin).prevAll().text(shixin);
-                $(this).nextAll().text(kongxin);*/
-                $(this).text(shixin).prevAll().text(shixin).end().nextAll().text(kongxin);
-            });
-            $(".comment").mouseleave(function(){
-               /* if(!flag){
-                    $("li").text(kongxin);
-                }*/
-                $(".commentli").text(kongxin);
-                $(".clicked").text(shixin).prevAll().text(shixin);
-            });
-            $(".commentli").on("click",function(){
-               /* $(this).text(shixin).prevAll().text(shixin);
-                $(this).nextAll().text(kongxin);
-                flag = true;*/
-                $(this).addClass("clicked").siblings().removeClass("clicked");
-            });
-//评论显示隐藏
-$(".addcommentbtn").click(function(){
-	if(!$("#question").is(":hidden")){
-       $("#question").toggle();    //如果元素为隐藏,则将它显现
-	}
-	$("#comment").toggle();
-});
-$("#canclecomment").click(function(){
-	$("#comment").toggle();
-});
-
-//问题单显示隐藏
-$(".questionbtn").click(function(){
-	if(!$("#comment").is(":hidden")){
-       $("#comment").toggle();    //如果元素为隐藏,则将它显现
-	}
-	$("#question").toggle();
-});
-$("#canclequestion").click(function(){
-	$("#question").toggle();
 });

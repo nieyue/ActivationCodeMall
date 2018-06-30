@@ -13,10 +13,15 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.nieyue.bean.Account;
 import com.nieyue.bean.MerOrderCardCipher;
+import com.nieyue.bean.Order;
+import com.nieyue.bean.Role;
+import com.nieyue.exception.MySessionException;
 import com.nieyue.exception.NotAnymoreException;
 import com.nieyue.exception.NotIsNotExistException;
 import com.nieyue.service.MerOrderCardCipherService;
+import com.nieyue.service.OrderService;
 import com.nieyue.util.ResultUtil;
 import com.nieyue.util.StateResult;
 import com.nieyue.util.StateResultList;
@@ -25,6 +30,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
+import net.sf.json.JSONObject;
 
 
 /**
@@ -38,6 +44,8 @@ import io.swagger.annotations.ApiOperation;
 public class MerOrderCardCipherController {
 	@Resource
 	private MerOrderCardCipherService merOrderCardCipherService;
+	@Resource
+	private OrderService orderService;
 	
 	/**
 	 * 商品订单卡密分页浏览
@@ -59,7 +67,32 @@ public class MerOrderCardCipherController {
 			@RequestParam(value="pageNum",defaultValue="1",required=false)int pageNum,
 			@RequestParam(value="pageSize",defaultValue="10",required=false) int pageSize,
 			@RequestParam(value="orderName",required=false,defaultValue="create_date") String orderName,
-			@RequestParam(value="orderWay",required=false,defaultValue="desc") String orderWay)  {
+			@RequestParam(value="orderWay",required=false,defaultValue="desc") String orderWay
+			,HttpSession session)  {
+		Account sessionAccount = (Account)session.getAttribute("account");
+		Role sessionRole = (Role)session.getAttribute("role");
+		//用户只能获取自己的
+			if(sessionRole!=null&&sessionRole.getName().equals("用户")){
+				if(orderId==null){
+					throw new MySessionException();
+				}
+				Order order = orderService.loadOrder(orderId);
+				System.out.println(JSONObject.fromObject(order));
+				if(order==null||!order.getAccountId().equals(sessionAccount.getAccountId())){
+					throw new MySessionException();					
+				}
+				//orderService.browsePagingOrder(null, null, null, null, sessionAccount.getAccountId(), null, null, null, null, 1, Integer.MAX_VALUE, "order_id", "asc");
+			}
+			//商户只能获取自己的
+			if(sessionRole!=null&&sessionRole.getName().equals("商户")){
+				if(orderId==null){
+					throw new MySessionException();
+				}
+				Order order = orderService.loadOrder(orderId);
+				if(order==null||!order.getMerchantAccountId().equals(sessionAccount.getAccountId())){
+					throw new MySessionException();					
+				}
+			}
 			List<MerOrderCardCipher> list = new ArrayList<MerOrderCardCipher>();
 			list= merOrderCardCipherService.browsePagingMerOrderCardCipher(orderId,pageNum, pageSize, orderName, orderWay);
 			if(list.size()>0){
@@ -129,6 +162,32 @@ public class MerOrderCardCipherController {
 		List<MerOrderCardCipher> list = new ArrayList<MerOrderCardCipher>();
 		MerOrderCardCipher merOrderCardCipher = merOrderCardCipherService.loadMerOrderCardCipher(merOrderCardCipherId);
 			if(merOrderCardCipher!=null &&!merOrderCardCipher.equals("")){
+				Account sessionAccount = (Account)session.getAttribute("account");
+				Role sessionRole = (Role)session.getAttribute("role");
+				Integer orderId = merOrderCardCipher.getOrderId();
+				//用户只能获取自己的
+					if(sessionRole!=null&&sessionRole.getName().equals("用户")){
+						if(orderId==null){
+							throw new MySessionException();
+						}
+						Order order = orderService.loadOrder(orderId);
+						if(order==null||!order.getAccountId().equals(sessionAccount.getAccountId())){
+							throw new MySessionException();					
+						}
+						//orderService.browsePagingOrder(null, null, null, null, sessionAccount.getAccountId(), null, null, null, null, 1, Integer.MAX_VALUE, "order_id", "asc");
+					}
+					//商户只能获取自己的
+					if(sessionRole!=null&&sessionRole.getName().equals("商户")){
+						if(orderId==null){
+							throw new MySessionException();
+						}
+						Order order = orderService.loadOrder(orderId);
+						if(order==null||!order.getMerchantAccountId().equals(sessionAccount.getAccountId())){
+							throw new MySessionException();					
+						}
+					}
+				
+				
 				list.add(merOrderCardCipher);
 				return ResultUtil.getSlefSRSuccessList(list);
 			}else{

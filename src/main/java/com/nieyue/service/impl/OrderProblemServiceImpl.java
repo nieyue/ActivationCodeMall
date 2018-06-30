@@ -9,22 +9,41 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.nieyue.bean.Order;
 import com.nieyue.bean.OrderProblem;
 import com.nieyue.bean.OrderProblemAnswer;
 import com.nieyue.dao.OrderProblemDao;
+import com.nieyue.exception.CommonRollbackException;
 import com.nieyue.service.OrderProblemAnswerService;
 import com.nieyue.service.OrderProblemService;
+import com.nieyue.service.OrderService;
 @Service
 public class OrderProblemServiceImpl implements OrderProblemService{
 	@Resource
 	OrderProblemDao orderProblemDao;
 	@Resource
+	OrderService orderService;
+	@Resource
 	OrderProblemAnswerService orderProblemAnswerService;
 	@Transactional(propagation=Propagation.REQUIRED)
 	@Override
 	public boolean addOrderProblem(OrderProblem orderProblem) {
+		Order order = orderService.loadOrder(orderProblem.getOrderId());
+		if(order==null){
+			throw new CommonRollbackException("订单不存在");
+		}
+		orderProblem.setNumber(1);//默认为1
+		List<OrderProblem> opl = this.browsePagingOrderProblem(null, orderProblem.getMerId(), orderProblem.getOrderId(), orderProblem.getAccountId(), 1, 1, "create_date", "desc");
+		if(opl.size()==1){
+			orderProblem.setNumber(opl.get(0).getNumber()+1);
+		}
 		orderProblem.setCreateDate(new Date());
 		boolean b = orderProblemDao.addOrderProblem(orderProblem);
+		if(b){
+			order.setStatus(5);//订单状态为问题单
+			order.setSubstatus(1);//1待解决（买家提问后），2解决中（卖家回复后），3申请退款，4已退款，5已解决
+			b=orderService.updateOrder(order);
+		}
 		return b;
 	}
 	@Transactional(propagation=Propagation.REQUIRED)

@@ -77,6 +77,37 @@ public class SendMailDemo {
 		boolean b = SimpleMailSender.sendHtmlMail(mailInfo);
 		return b;
 	}
+	/**
+	 * 发送卡密
+	 * @param email 接收人邮箱 
+	 * @param subject 主题
+	 * @param content 内容
+	 */
+	public static boolean sendCardCipher(String email,String subject,String content ){
+		
+		// 设置邮件服务器信息
+		MailSenderInfo mailInfo = new MailSenderInfo();
+		mailInfo.setMailServerHost("smtp.mxhichina.com");
+		mailInfo.setMailServerPort("25");
+		mailInfo.setValidate(true);
+		
+		// 邮箱用户名
+		mailInfo.setUserName("email@tmall188.xin");
+		// 邮箱密码
+		mailInfo.setPassword("123456qqQQ");
+		// 发件人邮箱
+		mailInfo.setFromAddress("email@tmall188.xin");
+		// 收件人邮箱
+		mailInfo.setToAddress(email);
+		// 邮件标题
+		mailInfo.setSubject(subject);
+		// 邮件内容
+		StringBuffer buffer = new StringBuffer();
+		buffer.append("<strong style='font-size:24px;'>激活码商城,"+content+"</strong><br/><hr/>");
+		mailInfo.setContent(buffer.toString());
+		boolean b = SimpleMailSender.sendHtmlMail(mailInfo);
+		return b;
+	}
 	public static boolean sendSelfMail(MailSenderInfo mailInfo){
 		boolean s = SimpleMailSender.sendHtmlMail(mailInfo);
 		return s;

@@ -13,10 +13,15 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.nieyue.bean.Account;
+import com.nieyue.bean.Mer;
 import com.nieyue.bean.MerCardCipher;
+import com.nieyue.bean.Role;
+import com.nieyue.exception.MySessionException;
 import com.nieyue.exception.NotAnymoreException;
 import com.nieyue.exception.NotIsNotExistException;
 import com.nieyue.service.MerCardCipherService;
+import com.nieyue.service.MerService;
 import com.nieyue.util.ResultUtil;
 import com.nieyue.util.StateResult;
 import com.nieyue.util.StateResultList;
@@ -38,6 +43,8 @@ import io.swagger.annotations.ApiOperation;
 public class MerCardCipherController {
 	@Resource
 	private MerCardCipherService merCardCipherService;
+	@Resource
+	private MerService merService;
 	
 	/**
 	 * 商品卡密分页浏览
@@ -59,7 +66,22 @@ public class MerCardCipherController {
 			@RequestParam(value="pageNum",defaultValue="1",required=false)int pageNum,
 			@RequestParam(value="pageSize",defaultValue="10",required=false) int pageSize,
 			@RequestParam(value="orderName",required=false,defaultValue="create_date") String orderName,
-			@RequestParam(value="orderWay",required=false,defaultValue="desc") String orderWay)  {
+			@RequestParam(value="orderWay",required=false,defaultValue="desc") String orderWay
+			,HttpSession session)  {
+		Account sessionAccount = (Account)session.getAttribute("account");
+		Role sessionRole = (Role)session.getAttribute("role");
+			//商户只能获取自己的
+			if(sessionRole!=null&&sessionRole.getName().equals("商户")){
+				if(merId==null){
+					throw new MySessionException();
+				}
+				Mer mer = merService.loadMer(merId);
+				if(mer==null||!mer.getSellerAccountId().equals(sessionAccount.getAccountId())){
+					throw new MySessionException();					
+				}
+			}
+				
+		
 			List<MerCardCipher> list = new ArrayList<MerCardCipher>();
 			list= merCardCipherService.browsePagingMerCardCipher(merId,pageNum, pageSize, orderName, orderWay);
 			if(list.size()>0){
@@ -125,10 +147,24 @@ public class MerCardCipherController {
 		  @ApiImplicitParam(name="merCardCipherId",value="商品卡密ID",dataType="int", paramType = "path",required=true)
 		  })
 	@RequestMapping(value = "/load", method = {RequestMethod.GET,RequestMethod.POST})
-	public  StateResultList<List<MerCardCipher>> loadMerCardCipher(@RequestParam("merCardCipherId") Integer merCardCipherId,HttpSession session)  {
+	public  StateResultList<List<MerCardCipher	>> loadMerCardCipher(@RequestParam("merCardCipherId") Integer merCardCipherId,HttpSession session)  {
 		List<MerCardCipher> list = new ArrayList<MerCardCipher>();
 		MerCardCipher merCardCipher = merCardCipherService.loadMerCardCipher(merCardCipherId);
 			if(merCardCipher!=null &&!merCardCipher.equals("")){
+				Account sessionAccount = (Account)session.getAttribute("account");
+				Role sessionRole = (Role)session.getAttribute("role");
+				Integer merId = merCardCipher.getMerId();
+					//商户只能获取自己的
+					if(sessionRole!=null&&sessionRole.getName().equals("商户")){
+						if(merId==null){
+							throw new MySessionException();
+						}
+						Mer mer = merService.loadMer(merId);
+						if(mer==null||!mer.getSellerAccountId().equals(sessionAccount.getAccountId())){
+							throw new MySessionException();					
+						}
+					}
+				
 				list.add(merCardCipher);
 				return ResultUtil.getSlefSRSuccessList(list);
 			}else{

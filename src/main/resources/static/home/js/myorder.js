@@ -302,6 +302,12 @@ business.getOrderList=function(status,substatus){
 					}else if(child.substatus==5){
 						substatusvalue="已解决";
 					}
+					//问题内容
+					var content="";
+					if(child.orderProblemList.length>0){
+						content=child.orderProblemList[child.orderProblemList.length-1].content;
+						content=content.substr(0,100);
+					}
 					html='<td >'
 					      +'<div >'
 					      	+'<input name="checkbox'+status+substatus+'" type="checkbox" style="" class="ordercheck"/>'
@@ -312,9 +318,9 @@ business.getOrderList=function(status,substatus){
 					   +'<td >'
 					      +'<p class="ordertimeday">'+child.paymentDate+'</p>'
 					   +'</td>'
-					   +'<td>不知道什么原因就是用不了</td>'
+					   +'<td>'+content+'</td>'
 					   +'<td>'
-					      +'<a class="deletorderbtn">'+substatusvalue+'</a>'
+					      +'<a class="deletorderbtn" href="myorderdetail.html?orderId='+child.orderId+'">'+substatusvalue+'</a>'
 					   +'</td>';
 				}else if(status==6){
 					//html = '<td ><div ><input name="checkbox" type="checkbox" style="" class="ordercheck"/><p class="ordercode">'+child.orderNumber+'</p></div></td><td style="padding-left: 10px;padding-right: 10px;">'+child.orderDetailList[0].name+'</td><td>啦啦啦</td><td>¥'+child.orderDetailList[0].unitPrice+'*'+child.orderDetailList[0].number+'</td><td>¥'+child.orderDetailList[0].totalPrice+'</td><td><a class="deletorderbtn">已取消</a></td><td ><p class="ordertimeday">'+child.updateDate+'</p></td>';

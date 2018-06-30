@@ -32,7 +32,7 @@ business.getNoticeList=function(){
 							content='<div >'
 										+'<p class="color_1b1b1b">'+child.content+'</p>'
 									+'</div>';
-						}else if(type==6){
+						}else if(child.type==6){
 							//问题单反馈
 							var c=JSON.parse(child.content);
 							content='<div >'
@@ -45,9 +45,9 @@ business.getNoticeList=function(){
 							+'</div>'
 							+'<div style="margin-top: 5px;">'
 								+'<p class="messagesumbp" style="width: auto;">商家回复：'+c.content+'</p>'
-								+'<a class="golook"  href="myorder.html">去查看>></a>'
+								+'<a class="golook"  href="myorderdetail.html?orderId='+c.orderId+'">去查看>></a>'
 							+'</div>';
-						}else if(type==7){
+						}else if(child.type==7){
 							//订单商品动态
 							var c=JSON.parse(child.content);
 							content='<div >'
@@ -60,12 +60,13 @@ business.getNoticeList=function(){
 							+'</div>'
 							+'<div style="margin-top: 5px;">'
 								+'<p class="messagesumbp" style="width: auto;">商品状态：'+c.content+'</p>'
-								+'<a class="golook" href="myorder.html">去查看>></a>'
+								+'<a class="golook" href="myorderdetail.html?orderId='+c.orderId+'">去查看>></a>'
 							+'</div>';
 						}else{
 							
 							continue;
 						}
+						//架子
 		        		var html='<div class="messagediv">'
 									+'<div class="messagediv1">'
 										+'<img class="messagetitleimg" src="'+business.noticeTypeList[child.type].icon+'"  />'

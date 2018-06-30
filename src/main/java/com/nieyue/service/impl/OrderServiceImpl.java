@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.nieyue.bean.Mer;
 import com.nieyue.bean.Order;
 import com.nieyue.bean.OrderDetail;
+import com.nieyue.bean.OrderProblem;
 import com.nieyue.bean.OrderReceiptInfo;
 import com.nieyue.bean.Payment;
 import com.nieyue.business.OrderBusiness;
@@ -25,6 +26,7 @@ import com.nieyue.service.AccountService;
 import com.nieyue.service.FinanceService;
 import com.nieyue.service.MerService;
 import com.nieyue.service.OrderDetailService;
+import com.nieyue.service.OrderProblemService;
 import com.nieyue.service.OrderReceiptInfoService;
 import com.nieyue.service.OrderService;
 import com.nieyue.util.Arith;
@@ -41,6 +43,8 @@ public class OrderServiceImpl implements OrderService{
 	OrderDetailService orderDetailService;
 	@Resource
 	OrderReceiptInfoService orderReceiptInfoService;
+	@Resource
+	OrderProblemService orderProblemService;
 	@Resource
 	AccountService accountService;
 	@Resource
@@ -138,6 +142,10 @@ public class OrderServiceImpl implements OrderService{
 		if(oril.size()>0){
 			b=orderReceiptInfoService.delOrderReceiptInfo(oril.get(0).getOrderReceiptInfoId());
 		}
+		List<OrderProblem> opl = orderProblemService.browsePagingOrderProblem(null, null, orderId, null, 1, Integer.MAX_VALUE, "order_problem_id", "asc");
+		if(opl.size()>0){
+			b=orderProblemService.delOrderProblem(opl.get(0).getOrderProblemId());
+		}
 		return b;
 	}
 	@Transactional(propagation=Propagation.REQUIRED)
@@ -155,6 +163,10 @@ public class OrderServiceImpl implements OrderService{
 		List<OrderReceiptInfo> oril = orderReceiptInfoService.browsePagingOrderReceiptInfo(null, null, orderId, null, null, 1, 1, "update_date", "asc");
 		if(oril.size()>0){
 			r.setOrderReceiptInfo(oril.get(0));
+		}
+		List<OrderProblem> opl = orderProblemService.browsePagingOrderProblem(null, null, orderId, null, 1, Integer.MAX_VALUE, "order_problem_id", "asc");
+		if(opl.size()>0){
+			r.setOrderProblemList(opl);
 		}
 		return r;
 	}
@@ -216,6 +228,10 @@ public class OrderServiceImpl implements OrderService{
 			List<OrderReceiptInfo> oril = orderReceiptInfoService.browsePagingOrderReceiptInfo(null, null, o.getOrderId(), null, null, 1, 1, "update_date", "asc");
 			if(oril.size()>0){
 				o.setOrderReceiptInfo(oril.get(0));
+			}
+			List<OrderProblem> opl = orderProblemService.browsePagingOrderProblem(null, null, o.getOrderId(), null, 1, Integer.MAX_VALUE, "order_problem_id", "asc");
+			if(opl.size()>0){
+				o.setOrderProblemList(opl);
 			}
 		}
 		return l;

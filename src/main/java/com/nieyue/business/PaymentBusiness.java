@@ -10,6 +10,8 @@ import javax.annotation.Resource;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.util.StringUtils;
 
+import com.aliyuncs.dysmsapi.model.v20170525.SendSmsResponse;
+import com.aliyuncs.exceptions.ClientException;
 import com.nieyue.bean.Account;
 import com.nieyue.bean.AccountLevel;
 import com.nieyue.bean.Config;
@@ -27,6 +29,7 @@ import com.nieyue.bean.Payment;
 import com.nieyue.bean.SpreadLink;
 import com.nieyue.bean.SpreadOrderAccount;
 import com.nieyue.bean.SpreadRecord;
+import com.nieyue.mail.SendMailDemo;
 import com.nieyue.service.AccountLevelService;
 import com.nieyue.service.AccountService;
 import com.nieyue.service.ConfigService;
@@ -43,7 +46,9 @@ import com.nieyue.service.OrderService;
 import com.nieyue.service.SpreadLinkService;
 import com.nieyue.service.SpreadOrderAccountService;
 import com.nieyue.service.SpreadRecordService;
+import com.nieyue.thirdparty.yun.AliyunSms;
 import com.nieyue.util.Arith;
+import com.nieyue.util.ResultUtil;
 
 /**
  * 支付业务
@@ -54,6 +59,8 @@ public class PaymentBusiness {
 	AccountLevelService accountLevelService;
 	@Resource
 	AccountService accountService;
+	@Resource
+	AliyunSms aliyunSms;
 	@Resource
 	OrderService orderService;
 	@Resource
@@ -216,6 +223,7 @@ public class PaymentBusiness {
 			 */
 			//获取需要的订单卡密
 			List<MerCardCipher> mccl = merCardCipherService.browsePagingMerCardCipher(lm.getMerId(), 1, orderDetail.getNumber(), "create_date", "asc");
+			List<MerOrderCardCipher> moccl=new ArrayList<>();
 			for (int j = 0; j < mccl.size(); j++) {
 				MerOrderCardCipher mocc=new MerOrderCardCipher();
 				MerCardCipher mcc = mccl.get(j);
@@ -224,6 +232,7 @@ public class PaymentBusiness {
 				mocc.setImgAddress(mcc.getImgAddress());
 				mocc.setOrderId(order.getOrderId());
 				merOrderCardCipherService.addMerOrderCardCipher(mocc);
+				moccl.add(mocc);
 			}
 			/**
 			 * 6.删除商品卡密,自动减库存
@@ -249,7 +258,55 @@ public class PaymentBusiness {
 			notice.setIsMerDynamic(notice.getType());
 			notice.setContent(noticeBusiness.getContentByType(notice));
 			noticeService.addNotice(notice);
-			
+			/**
+			 * 7.2.根据卡密接受方式，发送
+			 * 卡密接受方式，0全部接收，1本账号内，2邮箱接收，3手机接收
+			 */
+			if(account.getCardSecretReceive().equals(0)
+					||account.getCardSecretReceive().equals(2)){
+				String c="";
+	   			for (int z = 0; z < moccl.size(); z++) {
+	   				MerOrderCardCipher mocc = moccl.get(z);
+	   				String ia=mocc.getImgAddress();
+	   				if(StringUtils.isEmpty(ia)){
+					c+="<div style=\"margin:10px;\">"
+	   					+"<span style=\"display:inline-block;vertical-align:middle;\">卡密码："+mocc.getCode()+"</span>"
+	   					+"</div>"
+	   					+"<br/>";
+	   				}else{
+	   				c+="<div style=\"margin:10px;\">"
+	   					+"<span style=\"display:inline-block;vertical-align:middle;\">卡密码："+mocc.getCode()+"</span>"
+	   					+"&nbsp;"
+	   					+"<span  style=\"display:inline-block;vertical-align:middle;\"><img style=\"width:300px;height:200px;\" src=\""+ia+"\"/></span>"
+	   					+"</div>"
+	   					+"<br/>";
+	   				}
+	   			}
+				 SendMailDemo.sendCardCipher(account.getEmail(), "激活码商城", c);
+				 
+			}
+			//手机号
+			if(account.getCardSecretReceive().equals(0)
+					||account.getCardSecretReceive().equals(3)){
+				String c="";
+	   			for (int z = 0; z < moccl.size(); z++) {
+	   				MerOrderCardCipher mocc = moccl.get(z);
+	   				//c+=mocc.getCode()+",";
+	   				c+=mocc.getCode();
+	   				}
+				//while(true){
+					
+				SendSmsResponse res;
+				try {
+					res = aliyunSms.sendSms(c,account.getPhone(), 5);
+					/*if(res.getCode().equals("OK")){
+						break;
+					}*/
+				} catch (ClientException e) {
+					continue;
+				}
+				//}
+			}
 			/**
 			 * 8.用户积分记录
 			 */
@@ -266,7 +323,7 @@ public class PaymentBusiness {
 			FinanceRecord fr=new FinanceRecord();
 			fr.setAccountId(accountId);
 			fr.setMethod(payType);//方式，1支付宝，2微信,3百度钱包,4Paypal,5网银
-			fr.setType(type);//类型，1购买商品，2提现记录，3退款记录（用户），4诚信押金，5进账记录，6被退款记录（商户）'
+			fr.setType(type);//类型，1购买商品，2提现记录，3退款记录（用户），4诚信押金，5进账记录，6被退款记录（商户）"
 			fr.setTransactionNumber(orderNumber);//交易单号与支付单号相同
 			fr.setBrokerage(0.0);//提现才有手续费
 			if(!StringUtils.isEmpty(account.getRealname())){
@@ -302,7 +359,7 @@ public class PaymentBusiness {
 			FinanceRecord mafr=new FinanceRecord();
 			mafr.setAccountId(merchantAccount.getAccountId());
 			mafr.setMethod(payType);//方式，1支付宝，2微信,3百度钱包,4Paypal,5网银
-			mafr.setType(5);//类型，1购买商品，2提现记录，3退款记录（用户），4诚信押金，5进账记录，6被退款记录（商户）'
+			mafr.setType(5);//类型，1购买商品，2提现记录，3退款记录（用户），4诚信押金，5进账记录，6被退款记录（商户）"
 			mafr.setTransactionNumber(orderNumber);//交易单号与支付单号相同
 			mafr.setBrokerage(0.0);//提现才有手续费
 			if(!StringUtils.isEmpty(account.getRealname())){

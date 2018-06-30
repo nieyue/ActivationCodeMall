@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.nieyue.bean.Account;
 import com.nieyue.bean.MerOrderComment;
 import com.nieyue.dao.MerOrderCommentDao;
+import com.nieyue.exception.CommonRollbackException;
 import com.nieyue.service.AccountService;
 import com.nieyue.service.MerOrderCommentService;
 @Service
@@ -23,6 +24,10 @@ public class MerOrderCommentServiceImpl implements MerOrderCommentService{
 	@Transactional(propagation=Propagation.REQUIRED)
 	@Override
 	public boolean addMerOrderComment(MerOrderComment merOrderComment) {
+		List<MerOrderComment> mocl = this.browsePagingMerOrderComment(null, null, merOrderComment.getOrderId(), merOrderComment.getAccountId(), 1, 1, "create_date", "asc");
+		if(mocl.size()>0){
+			throw new CommonRollbackException("该商品订单已经评价过了!");
+		}
 		merOrderComment.setCreateDate(new Date());
 		boolean b = merOrderCommentDao.addMerOrderComment(merOrderComment);
 		return b;

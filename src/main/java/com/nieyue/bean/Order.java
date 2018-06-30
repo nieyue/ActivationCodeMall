@@ -85,6 +85,10 @@ public class Order implements Serializable {
 	 * 订单收货信息
 	 */
 	private OrderReceiptInfo orderReceiptInfo;
+	/**
+	 * 订单问题列表
+	 */
+	private List<OrderProblem> orderProblemList;
 	public Integer getOrderId() {
 		return orderId;
 	}
@@ -171,6 +175,12 @@ public class Order implements Serializable {
 	}
 	public void setMerchantAccountId(Integer merchantAccountId) {
 		this.merchantAccountId = merchantAccountId;
+	}
+	public List<OrderProblem> getOrderProblemList() {
+		return orderProblemList;
+	}
+	public void setOrderProblemList(List<OrderProblem> orderProblemList) {
+		this.orderProblemList = orderProblemList;
 	}
 	
 }

@@ -1,5 +1,7 @@
 package com.nieyue.business;
 
+import java.util.List;
+
 import javax.annotation.Resource;
 
 import org.springframework.context.annotation.Configuration;
@@ -10,10 +12,14 @@ import com.nieyue.bean.Mer;
 import com.nieyue.bean.MerCate;
 import com.nieyue.bean.Notice;
 import com.nieyue.bean.Order;
+import com.nieyue.bean.OrderProblem;
+import com.nieyue.bean.OrderProblemAnswer;
 import com.nieyue.exception.NoticeException;
 import com.nieyue.service.AccountService;
 import com.nieyue.service.MerCateService;
 import com.nieyue.service.MerService;
+import com.nieyue.service.OrderProblemAnswerService;
+import com.nieyue.service.OrderProblemService;
 import com.nieyue.service.OrderService;
 
 import net.sf.json.JSONObject;
@@ -33,6 +39,10 @@ public class NoticeBusiness {
 	AccountService accountService;
 	@Resource
 	OrderService orderService;
+	@Resource
+	OrderProblemService orderProblemService;
+	@Resource
+	OrderProblemAnswerService orderProblemAnswerService;
 	
 	/**
 	 *  获取是否商品动态
@@ -137,9 +147,21 @@ public class NoticeBusiness {
 					throw new NoticeException("问题单反馈异常");
 				}
 				JSONObject json6=new JSONObject();
+				json6.put("orderId", order6.getOrderId());//订单Id
 				json6.put("orderNumber", order6.getOrderNumber());//订单编号
 				json6.put("merName", order6.getOrderDetailList().get(0).getName());//商品名称
-				json6.put("content", notice.getContent());//问题详情/商家回复
+				String c="";
+				//提问
+				List<OrderProblem> opl = orderProblemService.browsePagingOrderProblem(null, null, order6.getOrderId(), order6.getAccountId(), 1, 1, "number", "desc");
+				if(opl.size()==1){
+					OrderProblem op = opl.get(0);
+					//回复内容
+					List<OrderProblemAnswer> opal = orderProblemAnswerService.browsePagingOrderProblemAnswer(op.getOrderProblemId(), null, 1, 1, "create_date", "desc");
+					if(opal.size()==1){
+						c=opal.get(0).getContent();
+					}
+				}
+				json6.put("content", c);//问题详情/商家回复
 				content.append(json6.toString());
 				break;
 				//订单商品动态
@@ -153,9 +175,10 @@ public class NoticeBusiness {
 					throw new NoticeException("订单商品动态异常");
 				}
 				JSONObject json7=new JSONObject();
+				json7.put("orderId", order7.getOrderId());//订单Id
 				json7.put("orderNumber", order7.getOrderNumber());//订单编号
 				json7.put("merName", order7.getOrderDetailList().get(0).getName());//商品名称
-				json7.put("content", notice.getContent());//消息内容（商品状态进度）
+				json7.put("content", "卡号及卡密已经发送给您，请查收！");//消息内容（商品状态进度）
 				content.append(json7.toString());
 				break;
 
