@@ -1,8 +1,4 @@
-//加载七牛
-$("body").append($("<script src='js/qiniu.min.js'></script>"))
-//加载三级联动
-$("body").append($("<script src='js/distpicker.data.min.js'></script>"))
-$("body").append($("<script src='js/distpicker.min.js'></script>"))
+
 
 var business={
 	url:"http://localhost:9000",
@@ -93,7 +89,7 @@ var business={
 		$('#myTemplate').remove();	
 	});
 	},
-	Qiniu:Qiniu
+	
 };
 
 //初始化
@@ -107,8 +103,30 @@ business.init=function(){
 	injection("finance");
 	injection("integral");
 	injection("accountLevelList");
+	injection("config");
+	
+	//加载七牛
+	$("body").append($("<script src='"+business.url+"/home/js/qiniu.min.js'></script>"));
+	//加载三级联动
+	$("body").append($("<script src='"+business.url+"/home/js/distpicker.data.min.js'></script>"));
+	$("body").append($("<script src='"+business.url+"/home/js/distpicker.min.js'></script>"));
+	business.Qiniu=Qiniu;
+	 
 }
 business.init();
+//获取配置
+business.getConfig=function(){
+	var info = {
+			accountId:business.account?business.account.accountId:null,
+			pageNum:1,
+			pageSize:10
+		}
+		ajxget("/config/list",info,function(data){
+						if(data.code==200){
+							business.config=data.data[0];
+							sessionStorage.setItem("config",JSON.stringify(business.config))
+						}});
+};
 $(function(){
 	$(".tab_bigbox .tab_box").eq(0).show();
 	$(".tab_bigbox1 .tab_box1").eq(0).show();
@@ -494,6 +512,22 @@ business.islogin=function(){
 				$("#havelogindiv").css("display","none");
 				return;
 			}
+			if(business.account.roleName=="用户"){
+				$("#usernav").show();
+				$("#sellernav").remove();
+				$("#honglinav").remove();
+				
+			}else if(business.account.roleName=="商户"){
+				$("#usernav").remove();
+				$("#sellernav").show();
+				$("#honglinav").remove();
+				
+			}else if(business.account.roleName=="推广户"){
+				$("#usernav").remove();
+				$("#sellernav").remove();
+				$("#honglinav").show();
+				
+			}
 			$(".alreadyLogin_namep").text(business.account.nickname);
 			$("#userleve").text(business.integral.name);
 			$("#exit").click(function(){
@@ -504,6 +538,22 @@ business.islogin=function(){
 					}
 				});
 			});
+			//推广户
+			//点击进入红利用户
+			$("#gomayuserinfo").click(function(){
+				window.location.href =business.url+ "/home/hongli/hongli_userinfo.html";
+			});
+			//消息
+			$("#hongliMessage").click(function(){
+				console.log(1111111)
+			});
+			
+			//商户
+			//点击进入商户
+			$("#gosellerinfo").click(function(){
+				window.location.href =business.url+ "/home/sell/sell_index.html";
+			});
+			
 		}else{
 			$("#nologindiv").css("display","block");
 			$("#havelogindiv").css("display","none");
@@ -734,3 +784,79 @@ business.islogin();
    };
   }  
 
+	/**
+	 * 通用
+	 */
+	business.common=function(){
+	if(!business.account){
+		return;
+	}
+	//修改昵称
+	$("#nicknametext").text(business.account.nickname);
+	$("#nicknameinput").val(business.account.nickname);
+	$("#nicknameinput").hide();
+	$("#updatenicknamesave").hide();
+	$("#updatenickname").unbind();
+	$("#updatenickname").click(function() {
+		$("#nicknameinput").show();
+		$("#updatenicknamesave").show();
+		$("#nicknametext").hide();
+		$("#updatenickname").hide();
+	})
+	$("#updatenicknamesave").unbind();
+	$("#updatenicknamesave").click(function() {
+		var info = {
+	   			accountId:business.account.accountId,
+	   			nickname:$("#nicknameinput").val()
+	   		};
+		ajxget("/account/updateInfo",info,function(data){
+			if(data.code==200){
+				$("#nicknameinput").hide();
+				$("#updatenicknamesave").hide();
+				$("#nicknametext").show();
+				$("#updatenickname").show();
+				business.account.nickname = info.nickname;
+				sessionStorage.setItem("account",JSON.stringify(business.account));
+				$("#nicknametext").text(business.account.nickname)
+				$("#nicknameinput").val(business.account.nickname);
+			}
+		})
+	});
+	//初始化图像
+	if(business.account.icon){
+		$("#updateIcon").attr("src",business.account.icon);	
+	}
+	//修改头像
+	business.updataimg=function(){
+	   	$('#updateIconFile').click();
+	   }
+	 //上传图像   
+	if($('#updateIconFile')[0]){
+	business.getQiniuSimpleUploader(business,{
+		browseButton:'updateIconFile',
+		dropElement:'updateIconFileBox',
+		resource:'business.account.icon',
+		success:function(url){
+			var info = {
+		   			accountId:business.account.accountId,
+		   			icon:url
+		   		};
+			ajxget("/account/updateInfo",info,function(data){
+				if(data.code==200){
+					business.account.icon=url
+					sessionStorage.setItem("account",JSON.stringify(business.account));
+					$("#updateIcon").attr("src",business.account.icon);
+				}
+			})
+		}
+	});
+	}
+	//邮箱
+	$(".useremail").text(business.account.email);
+
+	if(business.account.phone!=null&&business.account.phone!=""){
+		$(".userphone").text(business.account.phone);
+		$(".bindphone").toggle();
+	}
+	}
+	business.common();

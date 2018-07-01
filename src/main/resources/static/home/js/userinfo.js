@@ -54,37 +54,7 @@ $(function(){
 		if(!$(".shouhuodiv").is(":hidden")){
 			$(".shouhuodiv").toggle();
 		}
-		//修改昵称
-		$("#nicknametext").text(business.account.nickname)
-		$("#nicknameinput").val(business.account.nickname);
-		$("#nicknameinput").hide();
-		$("#updatenicknamesave").hide();
-		$("#updatenickname").unbind();
-		$("#updatenickname").click(function() {
-			$("#nicknameinput").show();
-			$("#updatenicknamesave").show();
-			$("#nicknametext").hide();
-			$("#updatenickname").hide();
-		})
-		$("#updatenicknamesave").unbind();
-		$("#updatenicknamesave").click(function() {
-			var info = {
-		   			accountId:business.account.accountId,
-		   			nickname:$("#nicknameinput").val()
-		   		};
-			ajxget("/account/updateInfo",info,function(data){
-				if(data.code==200){
-					$("#nicknameinput").hide();
-					$("#updatenicknamesave").hide();
-					$("#nicknametext").show();
-					$("#updatenickname").show();
-					business.account.nickname = info.nickname;
-					sessionStorage.setItem("account",JSON.stringify(business.account));
-					$("#nicknametext").text(business.account.nickname)
-					$("#nicknameinput").val(business.account.nickname);
-				}
-			})
-		})
+		
 		//初始化出生年月
 		var selyear=new Date(business.account.birthday).getYear()+1900;
 		$(".sel_year").find("option[value = '"+selyear+"']").attr("selected","selected");
@@ -117,11 +87,11 @@ $(function(){
 			
 		});
 		
-		$(".useremail").text(business.account.email);
-		if(business.account.phone!=null&&business.account.phone!=""){
+		
+		/*if(business.account.phone!=null&&business.account.phone!=""){
 			$(".userphone").text("手机号码："+business.account.phone);
 			$(".bindphone").toggle();
-		}
+		}*/
 		
 		if(business.account.icon!=null&&business.account.icon!=""){
 			$(".userheadimg").src = business.account.icon;
@@ -177,7 +147,7 @@ $(function(){
 		//现有积分
 		$("#integralIntegral").text(business.integral.integral)
 		//升级积分
-		$("#integralUpgradeIntegral").text(business.integral.upgradeIntegral-business.integral.integral)
+		$("#integralUpgradeIntegral").text(parseFloat(business.integral.upgradeIntegral-business.integral.integral).toFixed(2))
 		//获取积分列表
 		getintarll();
 	
@@ -684,14 +654,7 @@ function deleteaddress(accountId,id){
 		}
 	})
 }
-//初始化图像
-if(business.account.icon){
-	$("#updateIcon").attr("src",business.account.icon);	
-}
-//修改头像
-function updataimg(){
-   	$('#updateIconFile').click();
-   }
+
 
 /*$('#updateIconFile').change(function(){
     //获取input file的files文件数组;
@@ -711,23 +674,5 @@ function updataimg(){
         $('#updateIcon').attr("src",e.target.result);
       }
     })*/
- //上传图像   
-business.getQiniuSimpleUploader(business,{
-	browseButton:'updateIconFile',
-	dropElement:'updateIconFileBox',
-	resource:'business.account.icon',
-	success:function(url){
-		var info = {
-	   			accountId:business.account.accountId,
-	   			icon:url
-	   		};
-		ajxget("/account/updateInfo",info,function(data){
-			if(data.code==200){
-				business.account.icon=url
-				sessionStorage.setItem("account",JSON.stringify(business.account));
-				$("#updateIcon").attr("src",business.account.icon);
-			}
-		})
-	}
-}); 
+
 

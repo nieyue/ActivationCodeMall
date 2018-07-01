@@ -104,46 +104,7 @@
 							<th style="width: 25%;">返利金额</th>
 						</tr>
 					</thead>
-					<tbody>
-
-						<tr class="tabletd">
-							<td>
-								<p style="width: auto;">2017-2-2</p>
-							</td>
-							<td>美美美</td>
-							<td>
-								￥200.00
-							</td>
-							<td>
-								￥200.00
-							</td>
-						</tr>
-
-						<tr class="tabletd">
-							<td>
-								<p style="width: auto;">2017-2-2</p>
-							</td>
-							<td>美美美</td>
-							<td>
-								￥200.00
-							</td>
-							<td>
-								￥200.00
-							</td>
-						</tr>
-
-						<tr class="tabletd">
-							<td>
-								<p style="width: auto;">2017-2-2</p>
-							</td>
-							<td>美美美</td>
-							<td>
-								￥200.00
-							</td>
-							<td>
-								￥200.00
-							</td>
-						</tr>
+					<tbody id="spreadRecordList">
 
 					</tbody>
 				</table>
@@ -282,9 +243,11 @@
 		<!--fixed_box-->
 	</body>
 
-</html>
 <script src="../js/jquery-1.12.2.min.js" type="text/javascript" charset="utf-8"></script>
 <script src="../js/public.js" type="text/javascript" charset="utf-8"></script>
-<script type="text/javascript" src="../js/myorder.js"></script>
 <script type="text/javascript" src="../js/JTimer_1.3.js" ></script>
 <script type="text/javascript" src="../js/hongli.js" ></script>
+<script>
+business.getSpreadRecordList(1)
+</script>
+</html>

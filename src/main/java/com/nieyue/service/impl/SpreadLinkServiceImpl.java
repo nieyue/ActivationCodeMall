@@ -19,7 +19,12 @@ public class SpreadLinkServiceImpl implements SpreadLinkService{
 	@Transactional(propagation=Propagation.REQUIRED)
 	@Override
 	public boolean addSpreadLink(SpreadLink spreadLink) {
+		List<SpreadLink> skl = this.browsePagingSpreadLink(spreadLink.getMerId(), spreadLink.getAccountId(), 1, 1, "spread_link_id", "asc");
+		if(skl.size()>0){
+			return true;
+		}
 		spreadLink.setCreateDate(new Date());
+		
 		boolean b = spreadLinkDao.addSpreadLink(spreadLink);
 		return b;
 	}

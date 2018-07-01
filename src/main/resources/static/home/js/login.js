@@ -35,7 +35,7 @@ $(function(){
 						sessionStorage.setItem("accountLevelList",JSON.stringify(data.data[0].accountLevelList));
 						sessionStorage.setItem("finance",JSON.stringify(data.data[0].finance));
 						sessionStorage.setItem("integral",JSON.stringify(data.data[0].integral));
-
+						business.getConfig();
 						if(roleName=="用户"){
 							window.location.href='index.html';
 						}else if(roleName=="推广户"){

@@ -65,12 +65,16 @@
 			<div class="padding_bot110" style="width: 980px;margin-left: 110px;">
 				<div style="width: 400px;">
 					
-					<div style="width: 200px;float: left;text-align: center;">
+					<div style="width: 200px;float: left;text-align: center;" id="updateIconFileBox">
 						
-						<img style="width: 75px;height: 75px;margin-top: 20px;" src="../img/touxiang1.png" />
-						<p style="margin-top: 5px;">啦啦啦</p>
+					<!-- 	<a class="updataimg" onclick="business.updataimg()">更改图像</a> -->
+						<img style="width: 75px;height: 75px;margin-top: 20px;" onclick="business.updataimg()" id="updateIcon" src="../img/touxiang1.png" />
+						<p style="margin-top: 5px;" id="nicknametext"></p>
+						<input type="text" value="" id="nicknameinput" style="border:1px solid #ccc"/>
+						<a class="updataname" style="color:red;" id="updatenickname">编辑</a>
+						<a class="updataname" style="color:red;" id="updatenicknamesave">保存</a>
 					</div>
-					<p style="float: right;margin-top: 100px;color: #FF7400;">修改</p>
+						<input type="file" style="display: none;" id="updateIconFile" accept="image/*"/>
 					<div style="clear: both;"></div>
 				</div>
 				
@@ -78,40 +82,40 @@
 			
 			<div  class="infoitem">
 						<img  src="../img/bangding.png" style="float: left;width: 12px;height: 12px;margin-top: 18px;"/>
-						<p style="margin-left: 10px;font-size: 14px;float: left;">绑定邮箱：89565646</p>
-						<p style="float: right;color: #FF7400;font-size: 14px;">申请更改</p>
+						<p style="margin-left: 10px;font-size: 14px;float: left;">绑定邮箱：<span class="useremail"></span></p>
+						<a style="float: right;color: #FF7400;font-size: 14px;" id="changeEmail">申请更改</a>
 					</div>
 			
 			
 			<div  class="infoitem">
 						<img  src="../img/bangding.png" style="float: left;width: 12px;height: 12px;margin-top: 18px;"/>
-						<p style="margin-left: 10px;font-size: 14px;float: left;">绑定手机：89565646</p>
-						<p style="float: right;color: #FF7400;font-size: 14px;">申请更改</p>
+						<p style="margin-left: 10px;font-size: 14px;float: left;" >绑定手机：<span class="userphone"></span></p>
+						<p style="float: right;color: #FF7400;font-size: 14px;" id="changePhone">申请更改</p>
 					</div>
 					
 					
 					<div  class="infoitem">
 						<img  src="../img/bangding.png" style="float: left;width: 12px;height: 12px;margin-top: 18px;"/>
-						<p style="margin-left: 10px;font-size: 14px;float: left;">绑定银行卡：89565646</p>
-						<p style="float: right;color: #FF7400;font-size: 14px;">查看</p>
+						<p style="margin-left: 10px;font-size: 14px;float: left;">绑定银行卡：<span id="bankCardCount"></span></p>
+						<p style="float: right;color: #FF7400;font-size: 14px;" id="showBankList">查看</p>
 					</div>
 					
 					<div  class="infoitem">
 						<img  src="../img/bangding.png" style="float: left;width: 12px;height: 12px;margin-top: 18px;"/>
-						<p style="margin-left: 10px;font-size: 14px;float: left;">登录密码：中</p>
-						<p style="float: right;color: #FF7400;font-size: 14px;">修改</p>
+						<p style="margin-left: 10px;font-size: 14px;float: left;">登录密码：<span id="safetyGrade"></span></p>
+						<p style="float: right;color: #FF7400;font-size: 14px;" id="changePassword">修改</p>
 					</div>
 					
 					<div  class="infoitem">
-						<img  src="img/bangding.png" style="float: left;width: 12px;height: 12px;margin-top: 18px;"/>
+						<img  src="../img/bangding.png" style="float: left;width: 12px;height: 12px;margin-top: 18px;"/>
 						<p style="margin-left: 10px;font-size: 14px;float: left;">提现密码</p>
-						<p style="float: right;color: #FF7400;font-size: 14px;">更改</p>
+						<p style="float: right;color: #FF7400;font-size: 14px;"id="changeFinancePassword">更改</p>
 					</div>
 					
 					<div  class="infoitem">
 						<img  src="../img/bangding.png" style="float: left;width: 12px;height: 12px;margin-top: 18px;"/>
 						<p style="margin-left: 10px;font-size: 14px;float: left;">实名认证</p>
-						<p style="float: right;color: #FF7400;font-size: 14px;">未认证</p>
+						<p style="float: right;color: #FF7400;font-size: 14px;" id="auth"></p>
 					</div>
 			</div>
 			
@@ -248,7 +252,7 @@
 		<!--fixed_box-->
 	</body>
 
-</html>
 <script src="../js/jquery-1.12.2.min.js" type="text/javascript" charset="utf-8"></script>
 <script src="../js/public.js" type="text/javascript" charset="utf-8"></script>
-<script type="text/javascript" src="../js/myorder.js"></script>
+<script type="text/javascript" src="../js/hongli.js"></script>
+</html>

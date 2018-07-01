@@ -46,13 +46,19 @@ public class MerRelation implements Serializable{
 	/**
 	 * 商家账户
 	 */
-	@ApiModelProperty(value="商家账户",example="商家账户")
 	private Account sellerAccount;
 	/**
 	 * 商家商品
 	 */
-	@ApiModelProperty(value="商家商品",example="商家商品")
 	private Mer sellerMer;
+	/**
+	 * 商家积分
+	 */
+	private Integral integral;
+	/**
+	 * 商家诚信
+	 */
+	private Sincerity  sincerity;
 	public Integer getMerRelationId() {
 		return merRelationId;
 	}
@@ -97,6 +103,18 @@ public class MerRelation implements Serializable{
 	}
 	public void setSellerMer(Mer sellerMer) {
 		this.sellerMer = sellerMer;
+	}
+	public Integral getIntegral() {
+		return integral;
+	}
+	public void setIntegral(Integral integral) {
+		this.integral = integral;
+	}
+	public Sincerity getSincerity() {
+		return sincerity;
+	}
+	public void setSincerity(Sincerity sincerity) {
+		this.sincerity = sincerity;
 	}
 
 }

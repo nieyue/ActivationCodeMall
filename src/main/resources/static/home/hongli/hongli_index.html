@@ -6,13 +6,13 @@
 		<title>首页</title>
 		<meta name="Description" content="" />
 		<meta name="Keywords" content="" />
+		<link rel="stylesheet" href="../css/bootstrap.min.css" />
 		<link rel="stylesheet" type="text/css" href="../css/public.css" />
 		<link rel="stylesheet" type="text/css" href="../css/style.css" />
 		<link rel="stylesheet" type="text/css" href="../css/index.css" />
 		<link rel="stylesheet" href="../css/popu.css" />
 		<link rel="stylesheet" href="../css/hongli_index.css" />
 		
-		<!--<link rel="stylesheet" href="css/bootstrap.min.css" />-->
 	</head>
 
 	<body class="bg_eeeeee">
@@ -20,9 +20,9 @@
 		<div class="head bg_fff">
 			<div class="loginStatus" style="display: none;" id="nologindiv">
 				<div class="width1200 font_size14 clearfix">
-					<p class="fl color_666">我是商家，<a id="hongli_sellgologin" title="" class="color_eb6100">登录</a></p>
-					<p class="fl padding_left40 color_666">我是推广人，<a id="hongli_tuiguanggologin" title="" class="color_eb6100">登录</a></p>
-					<a id="hongli_usergologin" title="" class="fr color_eb6100"><img src="../img/touxiang.png" alt="" title=""/>买家登录</a>
+					<p class="fl color_666">我是商家，<a id="hongli_sellgologin" href="#" class="color_eb6100">登录</a></p>
+					<p class="fl padding_left40 color_666">我是推广人，<a id="hongli_tuiguanggologin" href="#"  class="color_eb6100">登录</a></p>
+					<a id="hongli_usergologin"  class="fr color_eb6100" href="#"><img src="../img/touxiang.png" alt="" title=""/>买家登录</a>
 				</div>
 			</div>
 			
@@ -31,6 +31,9 @@
 					<!--alreadyLoginBox-->
 					<div class="alreadyLoginBox fr clearfix">
 						<ul class="alreadyLogin_ul clearfix fl">
+							<li>
+								<a href="/"><span>商城首页</span></a>
+							</li>
 
 							<li>
 								<a title="" id="hongliMessage"><span>我的消息</span></a>
@@ -76,9 +79,9 @@
 		</div>
 		<div class="width1200 bg_fff" style="height: 45px;margin-bottom: 20px;line-height: 45px;">
 			<p class="font_size14" style="float: left;margin-left: 20px;">商城推广链接：</p>
-			<p class="font_size14" style="float: left;margin-left: 20px;color: #FF7400;">http//www.baidu.com?from=123456</p>
+			<p class="font_size14" style="float: left;margin-left: 20px;color: #FF7400;" id="spreadLinkMost"></p>
 
-			<p style="float: right;margin-right: 20px;" class="font_size14">推广次数：51</p>
+			<p style="float: right;margin-right: 20px;" class="font_size14" id="spreadLinkMostNumber">推广次数：0</p>
 
 		</div>
 
@@ -126,9 +129,9 @@
 							<th style="width: 25%;">返利金额</th>
 						</tr>
 					</thead>
-					<tbody>
+					<tbody id="spreadRecordList">
 
-						<tr class="tabletd">
+						<!-- <tr class="tabletd">
 							<td>
 								<p style="width: auto;">2017-2-2</p>
 							</td>
@@ -165,7 +168,7 @@
 							<td>
 								￥200.00
 							</td>
-						</tr>
+						</tr> -->
 
 					</tbody>
 				</table>
@@ -364,12 +367,12 @@
 			<div class="popup" id="popup">
 				<div style="line-height: 20px;margin-left: 20px;margin-top: 20px;">
 					<p style="font-size: 20px;float: left;">可提金额</p>
-					<p style="font-size: 14px;float: left;margin-left: 10px;">（注：提现金额低于2000元，平台将收取3%的手续费）</p>
+					<p style="font-size: 14px;float: left;margin-left: 10px;">（注：提现金额低于<span id="withdrawalsMinBrokerage"></span>元，平台将收取<span id="withdrawalsProportion"></span>%的手续费）</p>
 				</div>
-				<p style="font-size: 24px;color: #FF7400;margin-top: 40px;margin-left: 150px;">￥2,001.00</p>
+				<p style="font-size: 24px;color: #FF7400;margin-top: 40px;margin-left: 150px;" id="financeMoney">￥0</p>
 				
 				<div style="margin-top: 10px;padding-bottom: 20px;">
-					<p style="float: right;font-size: 12px;margin-right: 20px;margin-left: 20px;color: #FF7400;">￥200</p>
+					<p style="float: right;font-size: 12px;margin-right: 20px;margin-left: 20px;color: #FF7400;" id="financeFrozen">￥0</p>
 					<p style="float: right;font-size: 12px;">冻结金额</p>
 					
 				</div>
@@ -377,7 +380,7 @@
 				
 				<div style="height: 36px;line-height: 36px;margin-left: 20px;">
 					<p class="font_size14" style="float: left;">输入提现金额：</p>
-					<input  type="" placeholder="输入金额必须大于500" class="inputstyle" />
+					<input  type="" placeholder="输入金额必须大于500" id="withdrawalsMoney" class="inputstyle" />
 					<p class="font_size14 color_7400" style="float: left;margin-left: 10px;">？提现规则</p>
 				</div>
 				<p style="margin-left: 20px;margin-top: 20px;">选择提现账号：</p>
@@ -386,19 +389,19 @@
 			
 			<ul class="tixian_positionul clearfix" style="padding-bottom: 20px;margin-left: 130px;">
 								
-								<li class="tixianborder tixianborder7400" >
+								<li class="tixianborder tixianborder7400" id="payType1">
 									<div >
 										<img src="../img/zhifubao.png" class="tixianimg"/>
 										<p class="tixiantext">支付宝</p>
 									</div>
 								</li>
-								<li class="tixianborder" >
+								<li class="tixianborder" id="payType2">
 									<div >
 										<img src="../img/weixing.png" class="tixianimg"/>
 										<p class="tixiantext">微信</p>
 									</div>
 								</li>
-								<li class="tixianborder" >
+								<li class="tixianborder" id="payType5">
 									<div >
 										<img src="../img/yinglian.png" class="tixianimg"/>
 										<p class="tixiantext">网银</p>
@@ -421,7 +424,7 @@
 						     	</div>
 						     	
 						     	<div style="width: 120px;height: 50px;margin: auto;background: #FF7400;float: left;text-align: center;">
-						     		<a style="color: #FFFFFF;text-align: center;">确定</a>				     	
+						     		<a style="color: #FFFFFF;text-align: center;" id="withdrawalsCommit">确定</a>				     	
 						     </div>
 						     
 						</div>
@@ -431,14 +434,12 @@
 			</div>
 	</body>
 
-</html>
 
 
 
 
 <script src="../js/jquery-1.12.2.min.js" type="text/javascript" charset="utf-8"></script>
 <script src="../js/public.js" type="text/javascript" charset="utf-8"></script>
-<script type="text/javascript" src="../js/myorder.js"></script>
 <script type="text/javascript" src="../js/hongli.js" ></script>
 <script type="text/javascript">
 	//窗口效果
@@ -496,4 +497,6 @@
 	gettuiguan(0);
 	getmyuser(0);
 	gettixian(0);
+	business.getSpreadRecordList(0);
 </script>
+</html>

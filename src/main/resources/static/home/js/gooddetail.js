@@ -14,12 +14,76 @@ $(function(){
 	//我要推荐此商品
 	if(business.account&&business.account.roleName=="推广户"){		
 		$("#spreadMer").click(function(){
-			console.log("推广")
+			var info={
+					accountId:business.account!=null?business.account.accountId:null,
+					merId:business.merId
+			};
+			ajxget("/spreadLink/add",info,function(data){
+				if(data.code==200){
+					business.myLoadingToast("生成推广链接成功！")
+				}
+			},false);
 		});
 		}else{
 			$("#spreadMer").remove();	
 		}
-	
+	//商家关系
+	business.getMerRelationList=function(platformMerId){
+		var info = {
+				platformMerId:platformMerId,//平台商品id
+				pageNum:1,
+				pageSize:5
+		};
+		ajxget("/merRelation/list",info,function(data){
+			if(data.code==200){
+				business.merRelationList=data.dada;
+				var l=business.merRelationList.length;
+				var html="";
+				for (var i = 0; i < l; i++) {
+					var child=business.merRelationList[i];
+					var icon=child.sellerAccount.icon||'img/touxiang1.png';
+					html+='<div class="sellotheritem">'
+							+'<img style="height: 80px;width: 80px;" src="'+icon+'" class="fl"/>'
+							+'<div class="fl margin_left20">'
+								+'<div>'
+									+'<p style="line-height: 26px;" class="fl">国籍：</p>'
+									+'<img src="img/guoqi.png" style="width: 36px;height: 26px;" class="fl"/>'
+								+'</div>'
+								+'<div class="fl margin_top20">'
+									+'<ul class="comment fl">'
+										+'<li class="commentli">☆</li>'
+										+'<li class="commentli">☆</li>'
+										+'<li class="commentli">☆</li>'
+										+'<li class="commentli">☆</li>'
+										+'<li class="commentli">☆</li>'
+									+'</ul>'
+									+'<p class="fl margin_left10 lineheight30">0</p>'
+									+'<p class="fl margin_left20 lineheight30">月售：'+child.sellerMer.saleNumber+'</p>'
+								+'</div>'
+							+'</div>'
+							+'<div class="fl margin_left60">'
+								+'<div >'
+									+'<p class="fl lineheight30">商家诚信：</p>'
+									/*+'<img  src="img/chengxin4.png"/>'*/
+									+child.sincerity.level
+								+'</div>'
+								+'<p class="lineheight30 margin_top20">商户等级：'+child.integral.name+'</p>'
+							+'</div>'
+							+'<div class="fr" >'
+								+'<p class="color_7400 font_size20 font_blod " style="text-align: center;">￥ '+child.sellerMer.unitPrice+'</p>'
+								+'<a class="font_size12 color_fff lineheight30 wansellgood margin_top20" >立即购买</a>'
+								+'</div>'
+						+'</div>';
+				}
+				$("#merRelationList").html(html);
+			}else{
+				$("#showALlMerRelation").hide();
+				$("#merRelationList").html("<div style='text-align:center;'>暂无</div>");
+			}
+			});
+		
+		
+	};
 	//获取商品订单评价
 	business.merOrderCommentList;
 	function getmerordercomment(){
@@ -130,6 +194,9 @@ $(function(){
 			if(data.code==200){
 				var good = data.data[0];
 				business.mer=good;
+				//获取商品关系数据
+				business.getMerRelationList(business.mer.merId);
+				
 				//设置全局类型
 				business.mer.type=good.type;
 				//判断用户是否有
@@ -313,18 +380,20 @@ $(function(){
 						$("#pingjialist").html("");
 						for (var i = 0; i < business.merOrderCommentList.length; i++) {
 							var singleMerScore=business.merOrderCommentList[i].merScore;
+							var　country=business.merOrderCommentList[i].account.country||'中国';
+							var　icon=business.merOrderCommentList[i].account.icon||'img/touxiang1.png';
 							$("#pingjialist").append('' +
 						'<div class="clearfix" style="border: solid;border-color: #EBEBEB;border-width: 0px 0px 1px 0px;">' +
-							'<img style="margin-top: 20px;margin-left: 20px;width: 60px;height: 60px;float: left;"  src="'+business.merOrderCommentList[i].account.icon+'"/>'+
+							'<img style="margin-top: 20px;margin-left: 20px;width: 60px;height: 60px;float: left;"  src="'+icon+'"/>'+
 							'<div style="float: left;margin-left: 20px;margin-top: 20px;width: 780px;">' +
 								'<div style="" class="clearfix">' +
 									'<p style="font-size: 14px;float: left;">'+business.merOrderCommentList[i].account.nickname+'</p>' +
-									'<p style="font-size: 14px;float: left;margin-left: 15px;color: #a6a6a6;">'+business.merOrderCommentList[i].account.country+'</p>' +
+									'<p style="font-size: 14px;float: left;margin-left: 15px;color: #a6a6a6;">国籍：'+country+'</p>' +
 									'<p style="font-size: 14px;float: right;color: #a6a6a6;">'+business.merOrderCommentList[i].createDate+'</p>' +
 								'</div>' +
 								'<div class=" clearfix" >' +
 									'<div style="float: left;">' +
-										'<ul class="comment" id="singleMerScore">' +
+										'<ul class="comment" id="singleMerScore'+i+'">' +
 										    '<li class="commentli">☆</li>' +
 										    '<li class="commentli">☆</li>' +
 										    '<li class="commentli">☆</li>' +
@@ -337,8 +406,8 @@ $(function(){
 								'<p style="font-size: 16px;margin-bottom: 10px;">'+business.merOrderCommentList[i].content+'</p>' +
 							'</div>' +
 						'</div>');
-							$("#singleMerScore li").css("color","#000");
-							$("#singleMerScore li").each(function(index){
+							$("#singleMerScore"+i+" li").css("color","#000");
+							$("#singleMerScore"+i+" li").each(function(index){
 								if(singleMerScore<1){
 								}else if(singleMerScore<2){
 									if(index<=0){
@@ -353,6 +422,7 @@ $(function(){
 										$(this).css("color","#FF7400")									
 									}
 								}else if(singleMerScore<5){
+									console.log(index)
 									if(index<=3){
 										$(this).css("color","#FF7400")									
 									}
@@ -372,6 +442,8 @@ $(function(){
 			
 		},false)
 	}
+
+
 //获取推荐商品
 	function gettuijian(){
 		var info = {

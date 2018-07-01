@@ -10,12 +10,16 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.nieyue.bean.Account;
+import com.nieyue.bean.Integral;
 import com.nieyue.bean.Mer;
 import com.nieyue.bean.MerRelation;
+import com.nieyue.bean.Sincerity;
 import com.nieyue.dao.MerRelationDao;
 import com.nieyue.service.AccountService;
+import com.nieyue.service.IntegralService;
 import com.nieyue.service.MerRelationService;
 import com.nieyue.service.MerService;
+import com.nieyue.service.SincerityService;
 @Service
 public class MerRelationServiceImpl implements MerRelationService{
 	@Resource
@@ -24,6 +28,10 @@ public class MerRelationServiceImpl implements MerRelationService{
 	AccountService accountService;
 	@Resource
 	MerService merService;
+	@Resource
+	IntegralService integralService;
+	@Resource
+	SincerityService sincerityService;
 	@Transactional(propagation=Propagation.REQUIRED)
 	@Override
 	public boolean addMerRelation(MerRelation merRelation) {
@@ -49,8 +57,12 @@ public class MerRelationServiceImpl implements MerRelationService{
 		MerRelation r = merRelationDao.loadMerRelation(merRelationId);
 		Mer mer=merService.loadMer(r.getSellerMerId());
 		Account a=accountService.loadAccount(r.getSellerAccountId());
+		List<Integral> il = integralService.browsePagingIntegral(a.getAccountId(), null, null, 1, 1, "integral_id", "asc");
+		List<Sincerity> sl = sincerityService.browsePagingSincerity(a.getAccountId(), null, null, 1, 1, "sincerity_id", "asc");
 		r.setSellerAccount(a);
 		r.setSellerMer(mer);
+		r.setIntegral(il.get(0));
+		r.setSincerity(sl.get(0));
 		return r;
 	}
 
@@ -80,8 +92,12 @@ public class MerRelationServiceImpl implements MerRelationService{
 		l.forEach((mr)->{
 			Mer mer=merService.loadMer(mr.getSellerMerId());
 			Account a=accountService.loadAccount(mr.getSellerAccountId());
+			List<Integral> il = integralService.browsePagingIntegral(a.getAccountId(), null, null, 1, 1, "integral_id", "asc");
+			List<Sincerity> sl = sincerityService.browsePagingSincerity(a.getAccountId(), null, null, 1, 1, "sincerity_id", "asc");
 			mr.setSellerAccount(a);
 			mr.setSellerMer(mer);
+			mr.setIntegral(il.get(0));
+			mr.setSincerity(sl.get(0));
 		});
 		return l;
 	}

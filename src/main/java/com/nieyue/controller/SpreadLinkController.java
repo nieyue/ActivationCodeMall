@@ -6,6 +6,7 @@ import java.util.List;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpSession;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.nieyue.bean.SpreadLink;
+import com.nieyue.exception.CommonRollbackException;
 import com.nieyue.exception.NotAnymoreException;
 import com.nieyue.exception.NotIsNotExistException;
 import com.nieyue.service.SpreadLinkService;
@@ -38,7 +40,8 @@ import io.swagger.annotations.ApiOperation;
 public class SpreadLinkController {
 	@Resource
 	private SpreadLinkService spreadLinkService;
-	
+	@Value("${myPugin.activationCodeMallProjectDomainUrl}")
+	String activationCodeMallProjectDomainUrl;
 	/**
 	 * 推广链接分页浏览
 	 * @param orderName 商品排序数据库字段
@@ -87,6 +90,15 @@ public class SpreadLinkController {
 	@ApiOperation(value = "推广链接增加", notes = "推广链接增加")
 	@RequestMapping(value = "/add", method = {RequestMethod.GET,RequestMethod.POST})
 	public @ResponseBody StateResult addSpreadLink(@ModelAttribute SpreadLink spreadLink, HttpSession session) {
+		Integer said = spreadLink.getAccountId();
+		Integer goodid=spreadLink.getMerId();
+		if(said==null||goodid==null){
+			throw new CommonRollbackException("缺失参数");
+		}
+		String link=activationCodeMallProjectDomainUrl+"/home/gooddetail.html?goodid="+goodid+"&said="+said;
+		spreadLink.setLink(link);
+		spreadLink.setSpreadNumber(0);
+		spreadLink.setAccountId(said);
 		boolean am = spreadLinkService.addSpreadLink(spreadLink);
 		return ResultUtil.getSR(am);
 	}

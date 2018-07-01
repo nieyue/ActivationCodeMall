@@ -253,15 +253,15 @@ business.orderProblemList=function(order){
 			$("#orderProblemBtnWrap").hide();
 			var opl=data.data;
 			var substatusvalue="待解决";
-			if(opl.substatus==1){
+			if(order.substatus==1){
 				substatusvalue="待解决";
-			}else if(opl.substatus==2){
+			}else if(order.substatus==2){
 				substatusvalue="解决中";
-			}else if(opl.substatus==3){
+			}else if(order.substatus==3){
 				substatusvalue="申请退款";
-			}else if(opl.substatus==4){
+			}else if(order.substatus==4){
 				substatusvalue="已退款";
-			}else if(opl.substatus==5){
+			}else if(order.substatus==5){
 				substatusvalue="已解决";
 			}
 			var html1='<div class="clearfix" style="line-height: 20px;">'
@@ -329,10 +329,47 @@ business.orderProblemList=function(order){
 						+'<a class="finishquestionbtn" id="alreadyResolve">已解决</a>'
 						+'</div>'
 					+'</div>';
-			$("#orderProblemListWrap").html(html1+html2+html3);
+			var html=html1+html2+html3;
+			if(order.substatus==3||order.substatus==4||order.substatus==5){
+				html=html1+html2;
+			}
+			//显示问题列表
+			$("#orderProblemListWrap").html(html);
 			//再次申请
 			$("#questionbtn2").click(function() {
 				$(".questionbtn").click();
+			});
+			//申请退款
+			$("#applyRefund").click(function() {
+				var info={
+						orderId:order.orderId,
+						status:5,
+						substatus:3,
+						accountId:business.account!=null?business.account.accountId:null
+				};
+				ajxget("/order/update",info,function(data){
+					if(data.code==200){
+						//console.log(data)
+						business.myLoadingToast("申请成功！")
+						location.reload();
+					}
+				});
+			});
+			//已解决
+			$("#alreadyResolve").click(function() {
+				var info={
+						orderId:order.orderId,
+						status:5,
+						substatus:5,
+						accountId:business.account!=null?business.account.accountId:null
+				};
+				ajxget("/order/update",info,function(data){
+					if(data.code==200){
+						//console.log(data)
+						business.myLoadingToast("提交成功！")
+						location.reload();
+					}
+				});
 			});
 			
 		}else{
