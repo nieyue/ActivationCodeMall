@@ -142,8 +142,7 @@ $(function(){
 			$(".shouhuodiv").toggle();
 		}
 		//console.log(business)
-		//获取积分等级
-		$("#integralLevel").text("LV"+business.integral.level)
+		
 		//现有积分
 		$("#integralIntegral").text(business.integral.integral)
 		//升级积分

@@ -1,5 +1,3 @@
-
-
 var business={
 	url:"http://localhost:9000",
 	//url:"http://app.nalu888.cn",
@@ -126,6 +124,19 @@ business.getConfig=function(){
 							business.config=data.data[0];
 							sessionStorage.setItem("config",JSON.stringify(business.config))
 						}});
+};
+//获取诚信等级
+business.getSincerity=function(){
+	var info = {
+			accountId:business.account?business.account.accountId:null,
+			pageNum:1,
+			pageSize:10
+	}
+	ajxget("/sincerity/list",info,function(data){
+		if(data.code==200){
+			business.sincerity=data.data[0];
+			sessionStorage.setItem("sincerity",JSON.stringify(business.sincerity))
+		}});
 };
 $(function(){
 	$(".tab_bigbox .tab_box").eq(0).show();
@@ -398,11 +409,11 @@ function ajxget(url,info,success,async){
 }
 
 
-
+//商品搜索
 $("#seachbtn").click(function(){
 	var merName = $("#searchbox_input").val();
 	if(merName.length>0){
-		window.location.href='./goodsClassify.html?merName='+merName;
+		window.location.href=business.url+'/home/goodsClassify.html?merName='+merName;
 	}
 	
 });
@@ -469,6 +480,7 @@ $("#usergologin").click(function(){
 });
 //热门搜索单词
 function gethotseachlist(){
+	
 	var info = {
 		pageNum:1,
 		pageSize:10000
@@ -482,8 +494,7 @@ function gethotseachlist(){
 		        		var a = document.createElement('a');
 						a.id = child.merSearchId;
 						a.innerText = child.name;
-						a.href = './goodsClassify.html?merName='+child.name;
-
+						a.href = business.url+'/home/goodsClassify.html?merName='+child.name;
 						table.append(a); 
 		        	}
 		}
@@ -788,6 +799,10 @@ business.islogin();
 	 * 通用
 	 */
 	business.common=function(){
+	//点击客服
+	/*$(".kefu_a").on("click", function() {
+	})*/
+		
 	if(!business.account){
 		return;
 	}
@@ -858,5 +873,16 @@ business.islogin();
 		$(".userphone").text(business.account.phone);
 		$(".bindphone").toggle();
 	}
+	//实名认证
+	var authvalue="没认证";
+	if(business.account.auth==1){
+		authvalue="审核中";
+	}else if(business.account.auth==2){
+		authvalue="已认证";
+	}
+	$("#auth").text(authvalue);
+	
+	//获取积分等级
+	$("#integralLevel").text(business.integral.name)
 	}
 	business.common();

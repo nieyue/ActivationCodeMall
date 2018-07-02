@@ -5,23 +5,22 @@
 		<title>商户信息</title>
 		<meta name="Description" content=""/>
 		<meta name="Keywords" content=""/>
+		<link href="../css/bootstrap.min.css" rel="stylesheet">
+    	<link href="../css/metisMenu.min.css" rel="stylesheet">
 		<link rel="stylesheet" type="text/css" href="../css/public.css"/>
 		<link rel="stylesheet" type="text/css" href="../css/style.css"/>
 		<link rel="stylesheet" type="text/css" href="../css/index.css"/>
-		 <link href="../css/bootstrap.min.css" rel="stylesheet">
-    <link href="../css/metisMenu.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="../css/sell_index.css" />
+    	<link rel="stylesheet" href="../css/sell_index.css" />
 		
-		<!--<link rel="stylesheet" href="css/bootstrap.min.css" />-->
 	</head>
 	<body class="bg_eeeeee">
 		<!--head-->
 		<div class="head bg_fff">
 			<div class="loginStatus" style="display: none;" id="nologindiv">
 				<div class="width1200 font_size14 clearfix">
-					<p class="fl color_666">我是商家，<a href="" title="" class="color_eb6100">登录</a></p>
-					<p class="fl padding_left40 color_666">我是推广人，<a href="" title="" class="color_eb6100">登录</a></p>
-					<a href="login.html" title="" class="fr color_eb6100"><img src="img/touxiang.png" alt="" title=""/>买家登录</a>
+					<p class="fl color_666">我是商家，<a id="sellgologin" href="../login.html?roletype=1" class="color_eb6100">登录</a></p>
+					<p class="fl padding_left40 color_666">我是推广人，<a id="tuiguanggologin" href="../login.html?roletype=2"  class="color_eb6100">登录</a></p>
+					<a id="usergologin"  class="fr color_eb6100" href="../login.html?roletype=3"><img src="../img/touxiang.png" />买家登录</a>
 				</div>
 			</div>
 			<div class="loginStatus" id="havelogindiv">
@@ -53,24 +52,24 @@
 				     		 <img src="../img/sousuo.png" alt="" title="" style="top: 0;"/>
 				     		 <input type="" name="" id="searchbox_input" value="" placeholder="输入关键字进行搜索"/>
 				     	</div>
-					     <button class="fr">搜索</button>
+					     <button class="fr" id="seachbtn">搜索</button>
 					     <div class="searchbox_alert font_size14 color_666">
-					     	<ul>
-					     		<li><i class="color_1b1b1b">剑灵</i>战神</li>
+					     	<ul id="seachlist">
+					     		<!-- <li><i class="color_1b1b1b">剑灵</i>战神</li>
 					     		<li><i class="color_1b1b1b">剑灵</i>战神台服点卡</li>
 					     		<li><i class="color_1b1b1b">剑灵</i>战神台服150点</li>
 					     		<li><i class="color_1b1b1b">剑灵</i>战神不分区点卡50点</li>
-					     		<li><i class="color_1b1b1b">剑灵</i>战神服点卡任意金额灵战神</li>
+					     		<li><i class="color_1b1b1b">剑灵</i>战神服点卡任意金额灵战神</li> -->
 					     	</ul>
 					     </div>
 				     </div>
 				     <div class="clearfix lineheight30">
-				     	<div class="fl abox clearfix">
-				     		<a href="" title="">热门关键词1</a>
+				     	<div class="fl abox clearfix" id="hotseachlist">
+				     		<!-- <a href="" title="">热门关键词1</a>
 				     		<a href="" title="">热门关键词2</a>
-				     		<a href="" title="">热门关键词3</a>
+				     		<a href="" title="">热门关键词3</a> -->
 				     	</div>
-				     	<a href="" title="" class="fr color_eb6100 font_size12 fontfamily_song">展示更多>></a>
+				     	<!-- <a href="" title="" class="fr color_eb6100 font_size12 fontfamily_song">展示更多>></a> -->
 				     </div>
 				</div>
 				<div class="fr padding_top20">
@@ -107,25 +106,25 @@
 				        </a> 
 				        <ul > 
 				            <li class="itemchilder" style=""> 
-				                <a  target="_blank" > 
+				                <a> 
 				                    <span class="sidebar-nav-item-icon fa fa-code-fork"></span> 
 				                    上架的商品 
 				                </a> 
 				            </li> 
 				            <li class="itemchilder"> 
-				                <a  target="_blank" href="sell_history.html"> 
+				                <a> 
 				                    <span class="sidebar-nav-item-icon fa fa-star"></span> 
 				                    商品销售历史 
 				                </a> 
 				            </li> 
 				            <li class="itemchilder"> 
-				                <a  target="_blank" > 
+				                <a> 
 				                    <span class="sidebar-nav-item-icon fa fa-exclamation-triangle"></span> 
 				                    销售新产品 
 				                </a> 
 				            </li> 
 				            <li class="itemchilder"> 
-				                <a  target="_blank" style="text-decoration: none;"> 
+				                <a style="text-decoration: none;"> 
 				                    <span class="sidebar-nav-item-icon fa fa-exclamation-triangle"></span> 
 				                    商品动态 
 				                </a> 
@@ -135,19 +134,19 @@
 				    <li> 
 				        <a href="#" class="item" style="text-decoration: none;">订单<span class="fa arrow"></span></a> 
 				        <ul > 
-				            <li class="itemchilder"><a href="#" href="sell_order.html">已完结订单</a></li> 
-				            <li class="itemchilder"><a href="#" href="sell_orderblocking.html">冻结单</a></li> 
-				            <li class="itemchilder"><a  target="_blank" href="sell_orderquestion.html">问题单</a></li> 
+				            <li class="itemchilder"><a href="#" >已完结订单</a></li> 
+				            <li class="itemchilder"><a href="#">冻结单</a></li> 
+				            <li class="itemchilder"><a>问题单</a></li> 
 				          
 				        </ul> 
 				    </li> 
 				    <li> 
 				        <a href="#" class="item" style="text-decoration: none;">账号<span class="glyphicon arrow"></span></a> 
 				        <ul > 
-				           <li class="itemchilder"><a href="sell_record.html" >进账记录</a></li> 
-				            <li class="itemchilder"><a  href="sell_recordtixian.html" >提现记录</a></li> 
+				           <li class="itemchilder"><a>进账记录</a></li> 
+				            <li class="itemchilder"><a>提现记录</a></li> 
 				            <li class="itemchilder"> 
-				                <a href="sell_recordtukuan.html">退款记录 </a> 
+				                <a>退款记录 </a> 
 				                
 				            </li> 
 				            
@@ -167,7 +166,7 @@
 				            <li class="itemchilder"><a style="color: #FF7400;">商户信息</a></li> 
 				            <li class="itemchilder"><a href="#">等级成长历史</a></li> 
 				            <li class="itemchilder"><a href="#">诚信等级升级</a></li> 
-				            <li class="itemchilder"><a href="sell_setinfo.html">安全设置</a></li> 
+				            <li class="itemchilder"><a>安全设置</a></li> 
 				        </ul> 
 				    </li> 
 				    
@@ -178,13 +177,15 @@
 					<div class="clearfix" style="height: 160px;padding-left: 20px;padding-right: 20px;padding-top: 20px;">
 						<div style="width: 240px;height: 120px;margin: auto;position: relative;">
 							<img style="width: 120px;height: 120px;float: left;" src="../img/touxiang1.png"/>
-							<div style="float: left;margin-left: 20px;margin-top: 80px;">
-								<p style="color: #666666;" class="font_size12">商户名</p>
-								<p style="color: #666666;" class="font_size12">国籍：Hong Kong</p>
+							<div style="float: left;margin-right: -20px;margin-top: 80px;">
+								<p style="color: #666666;" class="font_size12" id="nicknametext"></p>
+								<input type="text" value="" class="font_size12" id="nicknameinput" style="color: #666666;border:1px solid #ccc"/>
+								<p style="color: #666666;" class="font_size12">国籍：中国</p>
 							</div>
 						</div>
 						
-						<p style="color: #FF7400;float: right;">修改</p>
+						<a style="color: #FF7400;float: right;" id="updatenickname">修改</a>
+						<a style="color: #FF7400;float: right;" id="updatenicknamesave">保存</a>
 						
 						</div>
 						
@@ -192,38 +193,38 @@
 						
 						<div style="line-height: 30px;margin-left: 20px;" class="clearfix">
 							<p style="float: left;">邮      箱：</p>
-							<p style="float: left;color: #4cafe9;">8956564654</p>
+							<p style="float: left;color: #4cafe9;" class="useremail"></p>
 						</div>
 						<div style="line-height: 30px;margin-left: 20px;" >
-							<p >手  机  号：   13133626698</p>
+							<p >手  机  号：   <span class="userphone"></span></p>
 						</div>
 						<div style="line-height: 30px;margin-left: 20px;" >
-							<p >认证状态：   已实名</p>
+							<p >认证状态：   <span id="auth"></span></p>
 						</div>
 						
 						
 						<hr size="1" color="#EBEBEB" style="margin-top: 20px;margin-left: 20px;margin-right: 20px;" />
 						<div style="margin-left: 20px;" class="clearfix">
 							<div class="clearfix">
-								<p style="float: left;line-height: 20px;">商户等级：<p style="color: #FFFFFF;float: left;background: #FF7400;width: 40px;height: 20px;line-height: 20px;font-size: 12px;text-align: center;border-radius: 5px;">LV7</p></p>
+								<p style="float: left;line-height: 20px;">商户等级：<p style="color: #FFFFFF;float: left;background: #FF7400;width: 40px;height: 20px;line-height: 20px;font-size: 12px;text-align: center;border-radius: 5px;" id="integralLevel"></p></p>
 							</div>
 							<div style="margin-left: 70px;line-height: 10px;margin-top: 10px;";>
 							<p style="line-height: 30px;width: 500px;height: auto;  word-wrap:break-word;  word-break:break-all;  overflow: hidden;">
 								等级提升说明：
-									<br/>1.每交易成功一笔就会获得1积分；
+									<!-- <br/>1.每交易成功一笔就会获得1积分；
 									<br/>2.每获得一个好评就会获得1积分，相反，每获得一个差评，会扣除10积分；
 									<br/>3.每向平台申请推荐一款自营商品并申请成功将获得20积分；
 									<br/>4.用户每反映一笔问题单，经查清问题属实，将扣除10积分，之后将根据问题解决情况适当扣除积分或者补偿积分；
-									<br/>5.自从入驻本平台之日起，每在职一天，增加1积分。</p>
-							
+									<br/>5.自从入驻本平台之日起，每在职一天，增加1积分。</p> -->
+									商家在平台中每盈利一元钱会获得多少分.
 								</div>
-							<p style="color: #FF7400;float: right;margin-right: 20px;">查看成长历史</p>
+							<a style="color: #FF7400;float: right;margin-right: 20px;" href="../sell/sell_chengxinhistory.html">查看成长历史</a>
 						</div>
 						<hr size="1" color="#EBEBEB" style="margin-top: 20px;margin-left: 20px;margin-right: 20px;" />
 						
 						<div style="margin-left: 20px;" class="clearfix">
 							<div class="clearfix">
-								<p style="float: left;line-height: 20px;">商户等级：<p style="color: #ff7400;float: left;">二级</p></p>
+								<p style="float: left;line-height: 20px;">商户等级：<p style="color: #ff7400;float: left;" id="sincerityLevel">二级</p>
 							</div>
 							<div style="margin-left: 70px;line-height: 10px;margin-top: 10px;";>
 							<p style="line-height: 30px;width: 500px;height: auto;  word-wrap:break-word;  word-break:break-all;  overflow: hidden;">
@@ -233,7 +234,7 @@
 								<br/>3.等级特权：等级越高者，在商品列表中排名越靠前；拥有诚信徽章。</p>
 							
 								</div>
-							<p style="color: #FF7400;float: right;margin-right: 20px;">查看成长历史</p>
+							<a style="color: #FF7400;float: right;margin-right: 20px;" href="../sell/sell_chengxinup.html">点我升级</a>
 						</div>
 						<hr size="1" color="#EBEBEB" style="margin-top: 20px;margin-left: 20px;margin-right: 20px;" />
 						<p style="margin-left: 20px;line-height: 50px;">商户注册时间：2017-01-01</p>
@@ -346,14 +347,16 @@
 		</div>
 		<!--fixed_box-->
 	</body>
-</html>
 <script src="../js/jquery-1.12.2.min.js" type="text/javascript" charset="utf-8"></script>
-<script src="../js/public.js" type="text/javascript" charset="utf-8"></script>
 <script src="../js/bootstrap.min.js"></script>
 <script type="text/javascript" src="../js/JTimer_1.3.js" ></script>
 <script src="../js/metisMenu.min.js"></script>
+<script src="../js/public.js" type="text/javascript" charset="utf-8"></script>
+<script src="../js/sell.js"></script>
 <script>
+	gethotseachlist();
     $(function () {
         $('#menu').metisMenu();
     });
 </script>
+</html>

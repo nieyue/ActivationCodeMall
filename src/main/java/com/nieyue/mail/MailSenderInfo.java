@@ -43,6 +43,8 @@ public class MailSenderInfo {
 	  p.put("mail.smtp.host", this.mailServerHost);
 	  p.put("mail.smtp.port", this.mailServerPort);
 	  p.put("mail.smtp.auth", validate ? "true" : "false");
+	  p.put("mail.smtp.socketFactory.port", "465"); //Linux下需要设置此项，Windows默认localhost为127.0.0.1
+	  p.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
 	  return p;
 	 }
 

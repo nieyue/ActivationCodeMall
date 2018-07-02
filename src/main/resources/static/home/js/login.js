@@ -41,6 +41,7 @@ $(function(){
 						}else if(roleName=="推广户"){
 							window.location.href='hongli/hongli_index.html';
 						}else if(roleName=="商户"){
+							business.getSincerity();
 							window.location.href='sell/sell_index.html';
 						}else if(roleName=="超级管理员"){
 							business.myLoadingToast("您是管理员，请于管理员页面进行登录");

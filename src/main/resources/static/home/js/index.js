@@ -92,7 +92,31 @@ function getmerhotlist(){
 		});
 		
 	}
-
+//系统消息
+business.getSystemNoticeList=function(){
+	var info = {
+			pageNum:1,
+			pageSize:5,
+			region:1,//全局
+			type:1//系统
+	};
+	ajxget("/notice/list",info,function(data){
+		if(data.code==200){
+			var html="";
+			business.systemNoticeList=data.data;
+			for (var i = 0; i < business.systemNoticeList.length; i++) {
+				var child=business.systemNoticeList[i];
+			html+='<li>'
+					+'<a href="javascript:business.myTemplate('+"'"+child.content+"'"+');">'
+					+'<p class="ellipsisp">'+child.content+'</p>'
+					+'</a>'
+				+'</li>';
+			}
+			$("#systemNoticeList").html(html);
+			jQuery(".txtScroll_top").slide({mainCell:".bd ul",autoPage:true,effect:"top",autoPlay:true,vis:1});
+			}});
+};
+business.getSystemNoticeList();
 function getbannerlist(){
 		var info = {
 			pageNum:1,
@@ -131,8 +155,6 @@ function getbannerlist(){
 
 })
 function getrexiaopaihang(){
-//index_sortul
-//
 	var info = {
 			pageNum:1,
 			pageSize:10,

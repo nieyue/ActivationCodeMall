@@ -13,7 +13,8 @@ public class SendMailDemo {
 		// 设置邮件服务器信息
 		MailSenderInfo mailInfo = new MailSenderInfo();
 		mailInfo.setMailServerHost("smtp.mxhichina.com");
-		mailInfo.setMailServerPort("25");
+		//mailInfo.setMailServerPort("25");
+		mailInfo.setMailServerPort("465");
 		mailInfo.setValidate(true);
 		
 		// 邮箱用户名
@@ -52,7 +53,8 @@ public class SendMailDemo {
 		// 设置邮件服务器信息
 		MailSenderInfo mailInfo = new MailSenderInfo();
 		mailInfo.setMailServerHost("smtp.mxhichina.com");
-		mailInfo.setMailServerPort("25");
+		//mailInfo.setMailServerPort("25");
+		mailInfo.setMailServerPort("465");
 		mailInfo.setValidate(true);
 		
 		// 邮箱用户名
@@ -88,9 +90,9 @@ public class SendMailDemo {
 		// 设置邮件服务器信息
 		MailSenderInfo mailInfo = new MailSenderInfo();
 		mailInfo.setMailServerHost("smtp.mxhichina.com");
-		mailInfo.setMailServerPort("25");
+		//mailInfo.setMailServerPort("25");
+		mailInfo.setMailServerPort("465");
 		mailInfo.setValidate(true);
-		
 		// 邮箱用户名
 		mailInfo.setUserName("email@tmall188.xin");
 		// 邮箱密码
@@ -128,7 +130,8 @@ public class SendMailDemo {
 		// 设置邮件服务器信息
 				MailSenderInfo mailInfo = new MailSenderInfo();
 				mailInfo.setMailServerHost("smtp.mxhichina.com");
-				mailInfo.setMailServerPort("25");
+				//mailInfo.setMailServerPort("25");
+				mailInfo.setMailServerPort("465");
 				mailInfo.setValidate(true);
 				
 				// 邮箱用户名

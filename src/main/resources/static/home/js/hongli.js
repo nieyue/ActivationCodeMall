@@ -20,14 +20,7 @@ $(function(){
 	//名称
 	$("#hongli_username").text(business.account.realname||business.account.nickname);
 	$(".yuep").text("￥"+business.finance.money);
-	//实名认证
-	var authvalue="没认证";
-	if(business.account.auth==1){
-		authvalue="审核中";
-	}else if(business.account.auth==2){
-		authvalue="已认证";
-	}
-	$("#auth").text(authvalue);
+	
 	//无提现手续费最低额度
 	$("#withdrawalsMinBrokerage").text(business.config.withdrawalsMinBrokerage);
 	//提现手续费比例，单位%
