@@ -12,6 +12,10 @@ if(!business.account){
 	location.href="/"
 }
 $(function(){
+	//获取银行卡信息
+	if(business.account&&location.href.indexOf("/hongli/hongli_userinfo.html")>=0){
+		business.getBankCardList();
+	}
 	var paytype = new Array("","支付宝","微信","百度钱包","Paypal","网银");
 	//图像
 	if(business.account.icon!=null&&business.account.icon!=""){
@@ -31,6 +35,7 @@ $(function(){
 	$("#financeFrozen").text(business.finance.frozen);
 	//提现金额
 	$("#withdrawalsMoney").attr("placeholder","输入金额必须大于"+business.config.minWithdrawals);
+	
 	//选择支付
 	business.payType=1;//默认是1，支付宝
 	$(".tixian_positionul li").click(function(){

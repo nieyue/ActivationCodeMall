@@ -7,6 +7,52 @@ var business={
 	accountLevelList:[],//等级列表
 	merId:1,
 	mer:{},
+	//发送验证码
+	sendValidCode:function(clickbtn,adminName,teamplateCode){
+		var countdown=60;  
+		var cbtn = $(clickbtn);
+		//获取代码
+		function getcode(){
+	      var phone = $(adminName).val();
+	      if(!phone){
+	    	  phone=$(adminName).text().trim();
+	    	  console.log(phone)
+	      }
+	      if(phone.length != 11 ){  
+	    	  business.myLoadingToast("请填写正确的手机号！");  
+	        return false;  
+	      }
+	      cbtn.attr("disabled", true);
+	      	settime(cbtn);
+	      	var info = {
+						adminName:phone,
+						templateCode:teamplateCode
+					}
+	      	ajxget("/account/validCode",info,function(data){
+                if(data.code==200){
+                	business.myLoadingToast("验证码发送成功，请注意查收");
+                }
+	      });
+		};
+		getcode();
+		//倒计时
+		function settime() {  
+	      if (countdown == 1) {  
+	    	  cbtn.attr("disabled",false);  
+	    	  cbtn.val("获取验证码");  
+	    	  cbtn.text("获取验证码");  
+	        countdown = 60;  
+	        return false;  
+	      } else {  
+	    	  countdown--;  
+	    	  cbtn.attr("disabled", true);  
+	    	  cbtn.text(countdown + " S");  
+	      }  
+	      setTimeout(function() {  
+	        settime();  
+	      },1000);  
+	    };
+	},
 	//点击全选
 	checkboxAll:function(parent,childs,callback){
 		//重置	
@@ -125,6 +171,22 @@ business.getConfig=function(){
 							sessionStorage.setItem("config",JSON.stringify(business.config))
 						}});
 };
+//获取财务
+business.getFiance=function(callback){
+	var info = {
+			accountId:business.account?business.account.accountId:null,
+			pageNum:1,
+			pageSize:10
+	}
+	ajxget("/finance/list",info,function(data){
+		if(data.code==200){
+			business.finance=data.data[0];
+			sessionStorage.setItem("finance",JSON.stringify(business.finance));
+			if(typeof callback =='function' ){
+				callback();				
+			}
+		}});
+};
 //获取诚信等级
 business.getSincerity=function(){
 	var info = {
@@ -136,7 +198,25 @@ business.getSincerity=function(){
 		if(data.code==200){
 			business.sincerity=data.data[0];
 			sessionStorage.setItem("sincerity",JSON.stringify(business.sincerity))
-		}});
+		}},false);
+};
+//获取银行卡
+business.getBankCardList=function(){
+	var info = {
+   			accountId:business.account.accountId,
+   			pageSize:100
+   		};
+	ajxget("/bankCard/list",info,function(data){
+		if(data.code==200){
+			business.bankCardList=data.data;
+			sessionStorage.setItem("bankCardList",JSON.stringify(business.bankCardList));
+			$("#bankCardCount").text(business.bankCardList.length);
+		}else{
+			$("#bankCardCount").text(0);
+			sessionStorage.setItem("bankCardList",JSON.stringify([]));
+			
+		}
+	});
 };
 $(function(){
 	$(".tab_bigbox .tab_box").eq(0).show();
@@ -794,7 +874,30 @@ business.islogin();
      return timer;
    };
   }  
+//获取积分列表
+business.getintarll=function(){
+	var info = {
+  			accountId:business.account.accountId,
+  			pageNum:1,
+  			pageSize:100
+  		};
+  		ajxget("/integralDetail/list",info,function(data){
+			if(data.code==200){
+					var list = data.data;
+		        	var table = $('#chengzhang_tb');
+		        	for(var i = 0; i < list.length; i++) {
+		        		var child = list[i];
+		        		var tr = document.createElement('tr');
+		        		tr.className = 'chengzhangtd height40';
+						tr.id = child.integralDetailId;
+						var html = '<td >'+child.createDate+'</td><td >'+child.integral+'</td>';
+						tr.innerHTML = html;
 
+						table.append(tr); 
+		        	}
+			}
+		})
+};
 	/**
 	 * 通用
 	 */
@@ -866,6 +969,7 @@ business.islogin();
 		}
 	});
 	}
+	
 	//邮箱
 	$(".useremail").text(business.account.email);
 
@@ -881,8 +985,167 @@ business.islogin();
 		authvalue="已认证";
 	}
 	$("#auth").text(authvalue);
-	
+	//安全等级
+	if(business.account.safetyGrade==1){
+		$(".safetyGrade").text("低");
+		$(".safediv").width("20%");
+	}else if(business.account.safetyGrade==2){
+		$(".safetyGrade").text("中");
+		$(".safediv").width("50%");
+	}else if(business.account.safetyGrade==3){
+		$(".safetyGrade").text("高");
+		$(".safediv").width("100%");
+	}
+	/**
+	 * 修改密码
+	 */
+	//显示修改密码界面
+	$("#updatePasswordWrap").hide();
+	$(".updatapassword").unbind();
+	$(".updatapassword").click(function(){	
+		//隐藏安全设置
+		$("#setdiv").hide();
+		//显示修改密码栏
+		$("#updatePasswordWrap").show();
+		//显示修改密码栏第一步
+		$("#updatePassword1").show();
+		//显示邮箱
+		$(".updatePasswordGetEmail").text(business.account.email);
+		
+	});
+	//点击修改密码发送邮箱
+	$("#updatePassword1SendEmail").click(function(){
+		//显示修改密码栏第2步
+		if(checkEmail(business.account.email)){
+		var info = {
+				accountId:business.account.accountId,
+				adminName:business.account.email,
+				templateCode:2//修改密码
+			}
+		ajxget("/account/validCode",info,function(data){
+			if(data.code==200){
+	        	if(data.msg=="已经验证"){
+	        		//alert(data.msg);
+	        		business.myLoadingToast(data.msg);
+	        		//显示修改密码栏第2步
+		        	$("#updatePassword1").hide();
+					$("#updatePassword2").show();
+		        	return;
+		        }else{
+		        	business.myLoadingToast("验证码发送成功，请注意查收");
+		        	//alert("验证码发送成功，请注意查收");		
+		        	//显示修改密码栏第2步
+		        	$("#updatePassword1").hide();
+					$("#updatePassword2").show();
+		        }
+		        }else{
+		        	//alert(data.msg);
+		        	business.myLoadingToast(data.msg);
+		        }
+            });
+		}
+	});
+	//点击进入第三步，激活
+	$("#updatePassword2ValidEmail").click(function(){
+		//显示修改密码栏第3步
+    	$("#updatePassword2").hide();
+		$("#updatePassword3").show();
+	});
+	//取消修改密码
+	$("#updatePassword3Cancel").click(function(){
+		$("#setdiv").show();
+		$("#updatePasswordWrap").hide();
+		$("#updatePassword3").hide();
+	});
+	//确认修改密码
+	$("#updatePassword3Sure").click(function(){
+		var password1 = $("#password1").val();
+		var password2 = $("#password2").val();
+		var email = Request["email"];
+		if(business.equalspassword(password1,password2)){
+			var info = {
+					accountId:business.account.accountId,
+					adminName:business.account.email,
+					password:password1
+				}
+			ajxget("/account/updatePassword",info,function(data){
+				if(data.code==200){
+					business.account = data.data[0];
+					sessionStorage.setItem("account",JSON.stringify(business.account));
+					//alert("修改成功");
+					business.myLoadingToast("修改成功");
+					$("#setdiv").show();
+					$("#updatePasswordWrap").hide();
+					$("#updatePassword3").hide();
+				}else{
+					//alert(data.msg);
+					business.myLoadingToast(data.msg);
+				}
+                    
+			        
+                });
+			
+		}
+	});
+	/**
+	 * 修改提现密码
+	 */
+	if(business.account.roleName!="用户"){
+		//发送验证码
+		$(".getcodebtn").on("click", function() {
+		business.sendValidCode(".getcodebtn",".userphone",3);//修改提现密码
+		});
+		//下一步
+		$("#updatePayPasswordNext").click(function() {
+			if(!$("#validCode").val()){
+				business.myLoadingToast("请填写验证码")
+				return;
+			}
+			$("#updatePayPassword1").hide();
+			$("#updatePayPassword2").show();
+		});
+		//上一步
+		$("#updatePayPasswordPrev").click(function() {
+			$("#updatePayPassword2").hide();
+			$("#updatePayPassword1").show();
+		});
+		//提交
+		$("#updatePayPasswordCommit").click(function() {
+			var p1=$("#paypassword1").val().trim();
+			var p2=$("#paypassword2").val().trim();
+			if(p1!=p2){
+				business.myLoadingToast("两次密码不一致")
+				return;
+			}else if(p1.length!=6){
+				business.myLoadingToast("密码位数必须为6")
+				return;
+			}
+			var info = {
+					accountId:business.account.accountId,
+					password:p1,
+					validCode:$("#validCode").val().trim()
+				}
+			ajxget("/finance/updatePassword",info,function(data){
+				if(data.code==200){
+					business.myLoadingToast("修改成功");
+					business.getFiance(function(){
+						location.href="../sell/sell_setinfo.html";						
+					});
+				}else{
+					business.myLoadingToast(data.msg)
+				}
+				});
+		});
+	}
 	//获取积分等级
-	$("#integralLevel").text(business.integral.name)
+	$("#integralLevel").text(business.integral.name);
+	//现有积分
+	$("#integralIntegral").text(business.integral.integral)
+	//升级积分
+	$("#integralUpgradeIntegral").text(parseFloat(business.integral.upgradeIntegral-business.integral.integral).toFixed(2));
+	//获取积分列表
+	if($("#chengzhang_tb")[0]){
+		business.getintarll();		
+	}
 	}
 	business.common();

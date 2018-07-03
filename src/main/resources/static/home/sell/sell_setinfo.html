@@ -172,10 +172,10 @@
 				    
 				</ul>
 				
-				<div style="width: 960px;margin-left: 10px;float: left;margin-top: 10px;padding-left: 20px;padding-bottom: 100px;" class="bg_fff">
-					<p style="margin-top: 30px;">账号安全等级：中</p>
+				<div id="setdiv" style="width: 960px;margin-left: 10px;float: left;margin-top: 10px;padding-left: 20px;padding-bottom: 100px;" class="bg_fff">
+					<p style="margin-top: 30px;">账号安全等级：<span class="safetyGrade"></span></p>
 					<div style="border-radius: 15px;height: 30px;" class="bghui">
-					<div style="margin-top: 20px;width: 50%;height: 30px;background: #FF7400;border-radius: 15px;">	
+					<div class="safediv" style="margin-top: 20px;width: 50%;height: 30px;background: #FF7400;border-radius: 15px;">	
 					</div>
 					</div>
 					<div style="margin-top: 20px;">
@@ -186,64 +186,105 @@
 					
 					<div class="setitem" >
 						<img  src="../img/zhuce.png" style="float: left;width: 12px;height: 12px;margin-top: 18px;"/>
-						<p style="margin-left: 20px;font-size: 14px;float: left;">注册邮箱：112****455@qq.com</p>
-						<a style="float: right;color: #FF7400;font-size: 14px;">申请更改</a>
+						<p style="margin-left: 20px;font-size: 14px;float: left;">注册邮箱：<span class="useremail"></span></p>
+						<!-- <a style="float: right;color: #FF7400;font-size: 14px;">申请更改</a> -->
 					</div>
 					
 					
 					<div class="setitem" >
 						<img  src="../img/bangding.png" style="float: left;width: 12px;height: 12px;margin-top: 18px;"/>
-						<p style="margin-left: 10px;font-size: 14px;float: left;">绑定手机：未绑定</p>
-						<a style="float: right;color: #FF7400;font-size: 14px;">立即绑定</a>
+						<p style="margin-left: 10px;font-size: 14px;float: left;" >绑定手机：<span class="userphone"></span></p>
+						<a style="float: right;color: #FF7400;font-size: 14px;" class="bindphone">立即绑定</a>
 					</div>
 					
 					<div class="setitem" >
 						<img  src="../img/denglu.png" style="float: left;width: 12px;height: 12px;margin-top: 18px;"/>
-						<p style="margin-left: 10px;font-size: 14px;width: 200px;float: left;">绑定银行卡：2张</p>
-						<a style="float: right;color: #FF7400;font-size: 14px;">查看</a>
+						<p style="margin-left: 10px;font-size: 14px;width: 200px;float: left;">绑定银行卡：<span id="bankCardCount"></span>张</p>
+						<a style="float: right;color: #FF7400;font-size: 14px;" href="../sell/sell_userbank.html">查看</a>
 						
 					</div>
 					
 					<div class="setitem" >
 						<img  src="../img/denglu.png" style="float: left;width: 12px;height: 12px;margin-top: 18px;"/>
-						<p style="margin-left: 10px;font-size: 14px;width: 200px;float: left;">登录密码：中</p>
-						<a style="float: right;color: #FF7400;font-size: 14px;">更改</a>
+						<p style="margin-left: 10px;font-size: 14px;width: 200px;float: left;">登录密码：<span class="safetyGrade"></span></p>
+						<a style="float: right;color: #FF7400;font-size: 14px;" class="updatapassword">更改</a>
 						
 					</div>
 					
 					<div class="setitem" >
 						<img  src="../img/denglu.png" style="float: left;width: 12px;height: 12px;margin-top: 18px;"/>
 						<p style="margin-left: 10px;font-size: 14px;width: 200px;float: left;">提现密码</p>
-						<a style="float: right;color: #FF7400;font-size: 14px;">更改</a>
+						<a style="float: right;color: #FF7400;font-size: 14px;" id="updatePayPassword">更改</a>
 						
 					</div>
 					
 					<div class="setitem" >
 						<img  src="../img/denglu.png" style="float: left;width: 12px;height: 12px;margin-top: 18px;"/>
 						<p style="margin-left: 10px;font-size: 14px;width: 200px;float: left;">实名认证</p>
-						<a style="float: right;color: #FF7400;font-size: 14px;">未认证</a>
+						<a style="float: right;color: #FF7400;font-size: 14px;" id="auth"></a>
 						
 					</div>
 					
 					
 				</div>
 				
-				<div class="shouhuodiv" style="display: none;">
-					
+				<!--修改密码-->
+				<div class="setdiv"  id="updatePasswordWrap" style="display:none !important;background-color:#fff;width: 960px;margin-left: 10px;float: left;margin-top: 10px;padding-left: 20px;padding-bottom: 100px;">
+					<div id="updatePassword1" style="display:none;margin-top:20px;">
+						<div style="color:#ff7400;font-size:16px;">更改登录密码</div>
+						<br/>
+						<br/>
+						<br/>
+						<div style="text-align:center;font-size:24px;">我们将发送验证邮件至邮箱：</div>
+						<br/>
+						<div style="text-align:center;font-size:24px;" class="updatePasswordGetEmail"></div>
+						<br/>
+						<br/>
+						<div style="text-align:center;">
+						<a style="width:160px;" class="register_button" id="updatePassword1SendEmail">发送并验证</a>
+						</div>
+					</div>
+					<div id="updatePassword2" style="display:none;margin-top:20px;">
+						<div style="color:#ff7400;font-size:16px;">更改登录密码</div>
+						<br/>
+						<br/>
+						<br/>
+						<div style="text-align:center;font-size:24px;">验证邮件已送达  <span class="updatePasswordGetEmail"></span></div>
+						<br/>
+						<div style="text-align:center;font-size:14px;color:#999;">
+						请登录邮箱，点击验证链接完成验证，验证链接在24小时内有效。
+						</div>
+						<br/>
+						<br/>
+						<div style="text-align:center;">
+						<button style="width:160px;" class="register_button"  id="updatePassword2ValidEmail">我已激活</button>
+						<a href="#" title="" class="font_size12 color_eb6100 fontfamily_song lineheight30 padding_left10">前往邮箱查看>></a>
+						</div>
+					</div>
+					<div id="updatePassword3" style="display:none;margin-top:20px;">
+						<div style="color:#ff7400;font-size:16px;">更改登录密码</div>
+						<br/>
+						<div style="text-align:center;">
+							<div class="clearfix lineheight26 margin_bottom35" style="display:inline-block;">
+								<span class="font_size14 width110span fl">输入新密码：</span>
+								<input type="password" name="" id="password1" value="" class="width260input fl" placeholder="6-16位数字、字符组合"/>
+								<i class="font_size14 color_eb6100 fl margin_left20">*必填</i>
+							</div>
+						<br/>
+							<div class="clearfix lineheight26 margin_bottom100" style="display:inline-block;">
+								<span class="font_size14 width110span fl">再次确认密码：</span>
+								<input type="password" name="" id="password2" value="" class="width260input fl" placeholder="再次确认密码"/>
+								<i class="font_size14 color_eb6100 fl margin_left20">*必填</i>
+							</div>
+						<br/>
+							<div class="clearfix lineheight26 margin_bottom35" style="display:inline-block;">
+								<button class="register_button" id="updatePassword3Cancel" style="color:#fff;background-color:#ccc;width:160px">取消</button>
+								<button class="register_button" id="updatePassword3Sure" style="width:160px;">确认更改</button>
+							</div>
+						</div>
+					</div>
 				</div>
-				
-				<div style="clear: both;"></div>
-			</div>
-			</div>
-					
-					
-					
 				</div>
-				
-		</div>
-			
-			
-			
 		
 		<!--banner-->
 		<!--footer-->

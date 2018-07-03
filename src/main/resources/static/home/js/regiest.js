@@ -44,7 +44,7 @@ $(function(){
 	
 	
 	
-})
+});
 
 
 	var countdown=60;  
@@ -109,9 +109,9 @@ $(function(){
         countdown = 60;  
         return false;  
       } else {  
+    	  countdown--;  
         _generate_code.attr("disabled", true);  
         _generate_code.text(countdown + " S");  
-        countdown--;  
       }  
       setTimeout(function() {  
         settime();  

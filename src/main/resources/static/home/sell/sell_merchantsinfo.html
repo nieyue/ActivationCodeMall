@@ -175,8 +175,9 @@
 				<div style="width: 960px;margin-left: 10px;float: left;margin-top: 10px;padding-bottom: 200px;" class="bg_fff">
 					
 					<div class="clearfix" style="height: 160px;padding-left: 20px;padding-right: 20px;padding-top: 20px;">
-						<div style="width: 240px;height: 120px;margin: auto;position: relative;">
-							<img style="width: 120px;height: 120px;float: left;" src="../img/touxiang1.png"/>
+						<div style="width: 240px;height: 120px;margin: auto;position: relative;" id="updateIconFileBox">
+							<img style="width: 120px;height: 120px;float: left;" id="updateIcon" onclick="business.updataimg()" src="../img/touxiang1.png"/>
+							<input type="file" style="display: none;" id="updateIconFile" accept="image/*"/>
 							<div style="float: left;margin-right: -20px;margin-top: 80px;">
 								<p style="color: #666666;" class="font_size12" id="nicknametext"></p>
 								<input type="text" value="" class="font_size12" id="nicknameinput" style="color: #666666;border:1px solid #ccc"/>
@@ -224,7 +225,7 @@
 						
 						<div style="margin-left: 20px;" class="clearfix">
 							<div class="clearfix">
-								<p style="float: left;line-height: 20px;">商户等级：<p style="color: #ff7400;float: left;" id="sincerityLevel">二级</p>
+								<p style="float: left;line-height: 20px;">商户等级：<p style="color: #ff7400;float: left;" id="sincerityLevel">零级</p>
 							</div>
 							<div style="margin-left: 70px;line-height: 10px;margin-top: 10px;";>
 							<p style="line-height: 30px;width: 500px;height: auto;  word-wrap:break-word;  word-break:break-all;  overflow: hidden;">
@@ -237,9 +238,9 @@
 							<a style="color: #FF7400;float: right;margin-right: 20px;" href="../sell/sell_chengxinup.html">点我升级</a>
 						</div>
 						<hr size="1" color="#EBEBEB" style="margin-top: 20px;margin-left: 20px;margin-right: 20px;" />
-						<p style="margin-left: 20px;line-height: 50px;">商户注册时间：2017-01-01</p>
+						<p style="margin-left: 20px;line-height: 50px;">商户注册时间：<span id="createDate"></span></p>
 						<hr size="1" color="#EBEBEB" style="margin-top: 20px;margin-left: 20px;margin-right: 20px;" />
-						<p style="margin-left: 20px;line-height: 50px;">商户注册ID：LL12315511</p>
+						<p style="margin-left: 20px;line-height: 50px;">商户注册ID：<span id="accountId"></span></p>
 					</div>
 					
 					

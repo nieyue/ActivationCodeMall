@@ -18,9 +18,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.nieyue.bean.Account;
 import com.nieyue.bean.Order;
 import com.nieyue.exception.CommonNotRollbackException;
 import com.nieyue.exception.CommonRollbackException;
+import com.nieyue.exception.MySessionException;
 import com.nieyue.exception.NotAnymoreException;
 import com.nieyue.exception.NotIsNotExistException;
 import com.nieyue.pay.AlipayUtil;
@@ -220,6 +222,17 @@ public class OrderController {
 	@ApiOperation(value = "订单修改", notes = "订单修改")
 	@RequestMapping(value = "/update", method = {RequestMethod.GET,RequestMethod.POST})
 	public @ResponseBody StateResult updateOrder(@ModelAttribute Order order,HttpSession session)  {
+		Order o = orderService.loadOrder(order.getOrderId());
+		if(o==null){
+			return ResultUtil.getSR(false);			
+		}
+		if(!o.getStatus().equals(3)&&!o.getStatus().equals(4)&&!o.getStatus().equals(5)){
+			Account account = (Account) session.getAttribute("account");
+			if(account.getRealname().indexOf("管理员")<0
+					&&(order.getStatus().equals(3)||order.getStatus().equals(4)||order.getStatus().equals(5))){
+				throw new MySessionException();
+			}
+		}
 		boolean um = orderService.updateOrder(order);
 		return ResultUtil.getSR(um);
 	}

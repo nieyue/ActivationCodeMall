@@ -34,6 +34,7 @@ import com.nieyue.pay.AlipayUtil;
 import com.nieyue.service.AccountService;
 import com.nieyue.service.FinanceRecordService;
 import com.nieyue.service.FinanceService;
+import com.nieyue.service.OrderService;
 import com.nieyue.util.MyDESutil;
 import com.nieyue.util.ResultUtil;
 import com.nieyue.util.StateResult;
@@ -62,6 +63,8 @@ public class FinanceController {
 	private AccountService accountService;
 	@Resource
 	private OrderBusiness orderBusiness;
+	@Resource
+	private OrderService orderService;
 	@Resource
 	private AlipayUtil alipayUtil;
 	@Value("${myPugin.activationCodeMallProjectDomainUrl}")
@@ -310,12 +313,12 @@ public class FinanceController {
 		if(a==null){
 			throw new AccountIsNotExistException();	//账户不存在
 		}
-		if(a.getAuth()==null||a.getAuth()==0){//没认证
+		/*if(a.getAuth()==null||a.getAuth()==0){//没认证
 			throw new AccountNotAuthException();//账户未认证
 		}
 		if(a.getAuth()==1){//审核中
 			throw new AccountAuthAuditException();//账户审核中
-		}
+		}*/
 		/*Finance f=financeService.withdrawals(a, method, money);
 		if(!ObjectUtils.isEmpty(f)){	
 			list.add(f);

@@ -177,30 +177,34 @@
 					<div style="margin-left: 150px;margin-top: 30px;">
 						<div class="infodiv clearfix">
 							<p class="font_size14 fl">真实姓名：</p>
-							<input class="bankinput" placeholder="  输入您的真实姓名"/>
+							<input class="bankinput" id="realname"  placeholder="  输入您的真实姓名"/>
 						</div>
 						<div class="infodiv clearfix">
 							<p class="font_size14 fl">身份证号：</p>
-							<input class="bankinput" placeholder="  输入您的身份证号码"/>
+							<input class="bankinput" id="identity" placeholder="  输入您的身份证号码"/>
+						</div>
+						<div class="infodiv clearfix">
+							<p class="font_size14 fl">银行名称：</p>
+							<input class="bankinput" id="bankName" placeholder="  如：中国银行，浦发银行等" />
 						</div>
 						<div class="infodiv clearfix">
 							<p class="font_size14 fl">银行卡卡号：</p>
-							<input class="bankinput" placeholder="  您只能填写自己的银行卡卡号" style="margin-left: 25px;"/>
+							<input class="bankinput" id="number" placeholder="  您只能填写自己的银行卡卡号" style="margin-left: 25px;"/>
 						</div>
 						<div class="infodiv clearfix">
 							<p class="font_size14 fl">手&nbsp;&nbsp;机&nbsp;&nbsp;号：</p>
-							<input class="bankinput" placeholder="  请填写您在银行预留的手机号码"/>
+							<input class="bankinput" id="phone" placeholder="  请填写您在银行预留的手机号码" style="margin-left: 35px;"/>
 						</div>
 						<div class="infodiv clearfix">
 							<p class="font_size14 fl">验&nbsp;&nbsp;证&nbsp;&nbsp;码：</p>
-							<input class="bankinput" placeholder="  您收到验证码" style="width: 140px;"/>
+							<input class="bankinput" id="validCode" placeholder="  您收到验证码" style="width: 140px;margin-left: 35px;"/>
 							<a class="getcodebtn">获取验证码</a>
 						</div>
 					</div>
 					
 					<div style="width: 270px;margin-left: 220px;margin-top: 100px;">
-						<a class="bankbtn" style="background: #b5b5b5;float: left;">取消</a>
-						<a class="bankbtn" style="background: #FF7400;float: right;">提交</a>
+						<a class="bankbtn" style="background: #b5b5b5;float: left;" href="javascript:history.go(-1);">取消</a>
+						<a class="bankbtn" style="background: #FF7400;float: right;" id="addBankCardBtn">提交</a>
 					</div>
 					
 				</div>

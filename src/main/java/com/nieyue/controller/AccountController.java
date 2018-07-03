@@ -205,7 +205,6 @@ public class AccountController {
 		if(!vc.equals(validCode)){
 			throw new VerifyCodeErrorException();//验证码错误
 		}*/
-		
 		//邮箱验证码
 		BoundValueOperations<String, String> validCodeEmailuuid = stringRedisTemplate.boundValueOps(projectName+"validCodeEmail"+adminName);
 		if(!"1".equals(validCodeEmailuuid.get())){

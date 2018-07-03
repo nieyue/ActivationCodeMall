@@ -24,6 +24,7 @@ import com.nieyue.verification.VerificationCode;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import net.sf.json.JSONArray;
 
 
 
@@ -67,10 +68,10 @@ public class ToolController {
 	public String getSession(
 			HttpSession	 session
 			){
-		System.err.println(session.getAttribute("acount"));
+		System.err.println(session.getAttribute("account"));
 		System.err.println(session.getAttribute("role"));
 		System.err.println(session.getAttribute("finance"));
-		return session.getId();
+		return JSONArray.fromObject(session.getAttribute("rolePermissionList")).toString();
 		
 	}
 	/**

@@ -174,25 +174,28 @@
 				
 				<div style="width: 960px;margin-left: 10px;float: left;margin-top: 10px;padding-bottom: 200px;" class="bg_fff">
 					
-					<div class="clearfix" style="height: 160px;padding-left: 20px;padding-right: 20px;padding-top: 20px;">
-						<img style="width: 120px;height: 120px;float: left;" src="../img/touxiang1.png"/>
+					<div class="clearfix" style="height: 160px;padding-left: 20px;padding-right: 20px;padding-top: 20px;" id="updateIconFileBox">
+						<img style="width: 120px;height: 120px;float: left;" id="updateIcon" onclick="business.updataimg()" src="../img/touxiang1.png"/>
+						<input type="file" style="display: none;" id="updateIconFile" accept="image/*"/>
 						<div style="float: left;margin-left: 20px;line-height: 30px;margin-top:10px;">
 							<div class="clearfix">
-								<p style="float: left;line-height: 20px;">商户等级：<p style="color: #FFFFFF;float: left;background: #FF7400;width: 40px;height: 20px;line-height: 20px;font-size: 12px;text-align: center;">LV7</p></p>
+								<p style="float: left;line-height: 20px;">商户等级：<p style="color: #FFFFFF;float: left;background: #FF7400;width: 40px;height: 20px;line-height: 20px;font-size: 12px;text-align: center;" id="sincerityLevel">零级</p>
 							</div>
 							
-							<p >现在积分：500</p>
+							<p >现在积分：<span id="integralIntegral"></span></p>
 							<div class="clearfix">
-								<p style="float: left;">下次升级：10</p>
+								<p style="float: left;">下次升级：<span id="integralUpgradeIntegral"></span></p>
 							</div>
 						</div>
 						
 						<div style="float: left;margin-left: 50px;line-height: 10px;margin-top: 10px;";>
-							<p style="line-height: 20px;width: 500px;height: auto;  word-wrap:break-word;  word-break:break-all;  overflow: hidden;">1.每交易成功一笔就会获得1积分；
-								<br/>2.每获得一个好评就会获得1积分，相反，每获得一个差评，会扣除10积分；
-								<br/>3.每向平台申请推荐一款自营商品并申请成功将获得20积分；
-								<br/>4.用户每反映一笔问题单，经查清问题属实，将扣除10积分，之后将根据问题解决情况适当扣除积分或者补偿积分；
-								<br/>5.自从入驻本平台之日起，每在职一天，增加1积分。</p>
+							<p style="line-height: 20px;width: 500px;height: auto;  word-wrap:break-word;  word-break:break-all;  overflow: hidden;">
+								<!-- <br/>1.每交易成功一笔就会获得1积分；
+									<br/>2.每获得一个好评就会获得1积分，相反，每获得一个差评，会扣除10积分；
+									<br/>3.每向平台申请推荐一款自营商品并申请成功将获得20积分；
+									<br/>4.用户每反映一笔问题单，经查清问题属实，将扣除10积分，之后将根据问题解决情况适当扣除积分或者补偿积分；
+									<br/>5.自从入驻本平台之日起，每在职一天，增加1积分。</p> -->
+									商家在平台中每盈利一元钱会获得多少分.
 							
 						</div>
 						
@@ -201,7 +204,7 @@
 					
 					
 					<hr size="1" color="#EBEBEB" style="margin-top: 20px;margin-left: 20px;margin-right: 20px;" />
-					<input type="checkbox" name="radio" value="1" checked="checked" style="margin-left: 20px;">全选
+					<!-- <input type="checkbox" name="radio" value="1" checked="checked" style="margin-left: 20px;">全选
 					<div style="margin-left: 20px;margin-right: 20px;margin-top: 20px;padding-bottom: 40px;">
 								<input type="checkbox" name="radio" value="1" checked="checked" style="float: left;">
 								<p class="fl">增长积分</p>
@@ -214,10 +217,10 @@
 								<input type="checkbox" name="radio" value="5"  style="margin-left: 60px;float: left;">
 								<p class="fl">登录奖励</p>
 							
-					</div>
+					</div> -->
 					
 					
-					<table class="bg_fff recordtable " frame="void" rules="cols" >
+					<!-- <table class="bg_fff recordtable " frame="void" rules="cols" >
 
 					<thead>
 						<tr class="recordtabletd1" style="height: 40px;">
@@ -277,7 +280,6 @@
 							
 						</tr>
 						
-						
 						<tr class="recordtabletd">
 							<td>
 								2018-03-02
@@ -291,20 +293,29 @@
 							<td>
 								1300
 							</td>
-							
 						</tr>
-						
-
-
-						
-
 					</tbody>
-				</table>
-					
-					
-					
-					
-					
+				</table> -->
+				<table class="bg_fff recordtable " frame="void" rules="cols" >
+					<thead>
+						<tr class="recordtabletd1" style="height: 40px;">
+							<th style="width: 50%;">日期</th>
+							<th style="width: 50%;">获得积分</th>
+						</tr>
+					</thead>
+					<tbody id="chengzhang_tb">
+							<!--<tr class="chengzhangtd height40" >
+						      <td >
+						      	2017-05-12
+						      </td>
+						      <td >
+						      	25
+						      </td>
+						      
+						    </tr>-->
+					</tbody>
+				</table> 
+				
 				</div>
 				
 	</div>

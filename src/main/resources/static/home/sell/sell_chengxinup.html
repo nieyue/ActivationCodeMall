@@ -10,6 +10,7 @@
 		<link rel="stylesheet" type="text/css" href="../css/public.css"/>
 		<link rel="stylesheet" type="text/css" href="../css/style.css"/>
 		<link rel="stylesheet" type="text/css" href="../css/index.css"/>
+    	<link rel="stylesheet" href="../css/myorder.css" />
     	<link rel="stylesheet" href="../css/sell_index.css" />
 		
 	</head>
@@ -172,31 +173,34 @@
 				    
 				</ul>
 				
-				<div style="width: 960px;margin-left: 10px;float: left;margin-top: 10px;padding-bottom: 200px;" class="bg_fff">
+				<div style="width: 960px;margin-left: 10px;float: left;margin-top: 10px;" class="bg_fff">
 					
-					<div class="clearfix" style="height: 160px;padding-left: 20px;padding-right: 20px;padding-top: 20px;">
-						<img style="width: 120px;height: 120px;float: left;" src="../img/touxiang1.png"/>
+					<div class="clearfix" style="height: 160px;padding-left: 20px;padding-right: 20px;padding-top: 20px;" id="updateIconFileBox">
+						<img style="width: 120px;height: 120px;float: left;" id="updateIcon" onclick="business.updataimg()" src="../img/touxiang1.png"/>
+						<input type="file" style="display: none;" id="updateIconFile" accept="image/*"/>
 						<div style="float: left;margin-left: 20px;line-height: 30px;margin-top:10px;">
 							<div class="clearfix">
-								<p style="float: left;">诚信等级：<p style="color: #4cafe9;float: left;">二级</p></p>
+								<p style="float: left;">诚信等级：<p style="color: #4cafe9;float: left;" id="sincerityLevel">零级</p>
 							</div>
 							
-							<p >已充值金额：20,000</p>
+							<p >已充值金额：<span id="financeRecharge"></span></p>
 							<div class="clearfix">
-								<p style="float: left;">距下一等级：<p style="color: #FF7400;float: left;">10,000</p></p>
+								<p style="float: left;">距下一等级：<p style="color: #FF7400;float: left;" id="sincerityUpgradeMoney"></p>
 							</div>
 						</div>
 						
 						<div style="float: left;margin-left: 50px;line-height: 10px;margin-top: 10px;";>
-							<p >1.点击升级，向平台交付一定的押金即可成为诚信商家；</p>
-							<p >2.根据押金等级决定诚信等级；</p>
-							<p >3.等级特权：等级越高者，在商品列表中排名越靠前；拥有诚信徽章。</p>
+							<p style="line-height: 30px;width: 500px;height: auto;  word-wrap:break-word;  word-break:break-all;  overflow: hidden;">
+								诚信等级升级说明：
+								<br/>1.点击升级，向平台交付一定的押金即可成为诚信商家；
+								<br/>2.根据押金等级决定诚信等级；
+								<br/>3.等级特权：等级越高者，在商品列表中排名越靠前；拥有诚信徽章。</p>
 						</div>
 						
 						
 					</div>
 						<div style="margin-right: 40px;height: 30px;">
-							<a class="applytui fr">申请退回保证金</a>
+							<a class="applytui fr" id="financeRefund">申请退回保证金</a>
 						</div>
 					
 					<hr size="1" color="#EBEBEB" style="margin-top: 20px;margin-left: 20px;margin-right: 20px;" />
@@ -205,19 +209,54 @@
 						
 							<div style="line-height: 30px;" class="clearfix">
 								
-								<input type="radio" name="radio" value="1" checked="checked" style="margin-left: 60px;float: left;">
+								<input type="radio" name="rechargeradio" value="10000" checked="checked" style="margin-left: 60px;float: left;">
 								<p class="chosemoneytext">10000</p>
-								<input type="radio" name="radio" value="1"  style="margin-left: 30px;float: left;">
+								<input type="radio" name="rechargeradio" value="20000"  style="margin-left: 30px;float: left;">
 								<p class="chosemoneytext">20000</p>
-								<input type="radio" name="radio" value="1"  style="margin-left: 30px;float: left;">
+								<input type="radio" name="rechargeradio" value="30000"  style="margin-left: 30px;float: left;">
 								<p class="chosemoneytext">30000</p>
-								<input type="radio" name="radio" value="1"  style="margin-left: 30px;float: left;">
+								<input type="radio" name="rechargeradio" value="40000"  style="margin-left: 30px;float: left;">
 								<p class="chosemoneytext">40000</p>
 							</div>
-							<p style="margin-left: 60px;">温馨提示：再充值此金额，您将升级为三级诚信商户。</p>
-							
+							<p style="margin-left: 60px;">温馨提示：再充值此金额，您将升级为诚信商户。</p>
+							<p style="font-size: 14px;color: #1B1B1B;line-height:48px;margin-left: 10px;">选择支付方式</p>
+				
+						<ul class="pay_positionul clearfix" style="padding-bottom: 20px;">
+								<li class="payborder payborder7400" id="payType1">
+									<div >
+										<img src="../img/zhifubao.png" class="payimg"/>
+										<p class="paytext">支付宝</p>
+									</div>
+								</li>
+								<li class="payborder" id="payType2" >
+									<div >
+										<img src="../img/weixing.png" class="payimg"/>
+										<p class="paytext">微信支付</p>
+									</div>
+								</li>
+								<!-- 
+								<li class="payborder" id="payType3">
+									<div >
+										<img src="../img/baiduqianbao.png" class="payimg"/>
+										<p class="paytext">百度钱包</p>
+									</div>
+								</li> 
+								<li class="payborder" id="payType4">
+									<div >
+										<img src="../img/yinglian.png" class="payimg"/>
+										<p class="paytext">网银支付</p>
+									</div>
+								</li>
+								<li class="payborder" id="payType5">
+									<div >
+										<img src="../img/paypal.png" class="payimg"/>
+										<p class="paytext">Paypal支付</p>
+									</div>
+								</li>
+								-->
+							</ul>
 							<div style="margin: auto;position: relative;width: 206px;height: 46px;margin-bottom: 50px;">
-								<a class="rechargebtn">充值</a>
+								<a class="rechargebtn" style="margin-top:0;">充值</a>
 							</div>
 							
 					</div>

@@ -131,7 +131,7 @@ INDEX INDEX_ACCOUNTID (account_id) USING BTREE
 CREATE TABLE finance_record_tb(
 finance_record_id int(11) NOT NULL AUTO_INCREMENT COMMENT '财务记录id',
 method tinyint(4) COMMENT '方式，1支付宝，2微信,3百度钱包,4Paypal,5网银',
-type tinyint(4) COMMENT '类型，1购买商品，2提现记录，3退款记录（用户），4诚信押金，5进账记录，6被退款记录（商户）',
+type tinyint(4) COMMENT '类型，1购买商品，2提现记录，3退款记录（用户），4诚信押金，5进账记录，6被退款记录（商户），7申请退保证金',
 transaction_number varchar(255) COMMENT '交易单号',
 realname varchar(255) COMMENT '真实姓名',
 brokerage decimal(11,2) DEFAULT 0 COMMENT '手续费',

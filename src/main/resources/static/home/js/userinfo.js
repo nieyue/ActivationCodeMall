@@ -143,12 +143,6 @@ $(function(){
 		}
 		//console.log(business)
 		
-		//现有积分
-		$("#integralIntegral").text(business.integral.integral)
-		//升级积分
-		$("#integralUpgradeIntegral").text(parseFloat(business.integral.upgradeIntegral-business.integral.integral).toFixed(2))
-		//获取积分列表
-		getintarll();
 	
 	}else if(value=="交易账单"){
 		if(!$(".userinfocontent").is(":hidden")){
@@ -218,17 +212,8 @@ $(function(){
 			$(".safephone").text("绑定手机："+business.account.phone);
 			$(".safebindphone").toggle();
 		}
-		if(business.account.safetyGrade==1){
-			$("#safetyGrade").text("账号安全等级：低");
-			$(".safediv").width("20%");
-		}else if(business.account.safetyGrade==2){
-			$("#safetyGrade").text("账号安全等级：中");
-			$(".safediv").width("50%");
-		}else if(business.account.safetyGrade==3){
-			$("#safetyGrade").text("账号安全等级：高");
-			$(".safediv").width("100%");
-		}
-		//显示修改密码界面
+		
+		/*//显示修改密码界面
 		$("#updatePasswordWrap").hide();
 		$(".updatapassword").unbind();
 		$(".updatapassword").click(function(){	
@@ -310,7 +295,7 @@ $(function(){
 	                });
 				
 			}
-		});
+		});*/
 		
 	}else if(value=="我的收货地址"){
 		//初始化三级联动
@@ -464,34 +449,6 @@ $(function(){
 		})
    }
    
-// 获取积分列表
-
-function getintarll(){
-	var info = {
-   			accountId:business.account.accountId,
-   			pageNum:1,
-   			pageSize:100
-   		};
-   		ajxget("/integralDetail/list",info,function(data){
-			if(data.code==200){
-					var list = data.data;
-		        	var table = $('#chengzhang_tb');
-		        	for(var i = 0; i < list.length; i++) {
-		        		var child = list[i];
-		        		var tr = document.createElement('tr');
-		        		tr.className = 'chengzhangtd height40';
-						tr.id = child.integralDetailId;
-						var html = '<td >'+child.createDate+'</td><td >'+child.integral+'</td>';
-						tr.innerHTML = html;
-
-						table.append(tr); 
-		        	}
-			}
-		})
-   		
-}
-
-
 // 获取交易列表
 
 function getorderlist(){

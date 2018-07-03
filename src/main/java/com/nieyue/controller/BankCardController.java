@@ -6,6 +6,7 @@ import java.util.List;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpSession;
 
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.nieyue.bean.BankCard;
+import com.nieyue.exception.CommonRollbackException;
 import com.nieyue.exception.NotAnymoreException;
 import com.nieyue.exception.NotIsNotExistException;
 import com.nieyue.service.BankCardService;
@@ -86,6 +88,26 @@ public class BankCardController {
 	@RequestMapping(value = "/add", method = {RequestMethod.GET,RequestMethod.POST})
 	public @ResponseBody StateResult addBankCard(@ModelAttribute BankCard bankCard, HttpSession session) {
 		boolean am = bankCardService.addBankCard(bankCard);
+		return ResultUtil.getSR(am);
+	}
+	/**
+	 * 银行卡增加或者更新
+	 * @return 
+	 */
+	@ApiOperation(value = "银行卡增加或者更新", notes = "银行卡增加或者更新")
+	@RequestMapping(value = "/addOrUpdate", method = {RequestMethod.GET,RequestMethod.POST})
+	public @ResponseBody StateResult addOrUpdateBankCard(
+			@RequestParam("validCode") String validCode,
+			@ModelAttribute BankCard bankCard, HttpSession session) {
+		if(StringUtils.isEmpty(validCode)||!validCode.equals((String)session.getAttribute("validCode"))){
+			throw new CommonRollbackException("验证码错误");
+		}
+		boolean am=false;
+		if(bankCard.getBankCardId()==null){
+			am = bankCardService.addBankCard(bankCard);
+		}else{
+			am = bankCardService.updateBankCard(bankCard);
+		}
 		return ResultUtil.getSR(am);
 	}
 	/**

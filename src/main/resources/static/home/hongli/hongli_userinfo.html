@@ -60,9 +60,9 @@
 		
 		
 		
-		<div class="width1200 bg_fff margin_bottom30 margin_top30" >
+		<div  class="width1200 bg_fff margin_bottom30 margin_top30"  style="height:75%;">
 			
-			<div class="padding_bot110" style="width: 980px;margin-left: 110px;">
+			<div id="setdiv" class="padding_bot110" style="width: 980px;margin-left: 110px;">
 				<div style="width: 400px;">
 					
 					<div style="width: 200px;float: left;text-align: center;" id="updateIconFileBox">
@@ -83,27 +83,27 @@
 			<div  class="infoitem">
 						<img  src="../img/bangding.png" style="float: left;width: 12px;height: 12px;margin-top: 18px;"/>
 						<p style="margin-left: 10px;font-size: 14px;float: left;">绑定邮箱：<span class="useremail"></span></p>
-						<a style="float: right;color: #FF7400;font-size: 14px;" id="changeEmail">申请更改</a>
+						<!-- <a style="float: right;color: #FF7400;font-size: 14px;" id="changeEmail">申请更改</a> -->
 					</div>
 			
 			
 			<div  class="infoitem">
 						<img  src="../img/bangding.png" style="float: left;width: 12px;height: 12px;margin-top: 18px;"/>
 						<p style="margin-left: 10px;font-size: 14px;float: left;" >绑定手机：<span class="userphone"></span></p>
-						<p style="float: right;color: #FF7400;font-size: 14px;" id="changePhone">申请更改</p>
+						<!-- <p style="float: right;color: #FF7400;font-size: 14px;" id="changePhone">申请更改</p> -->
 					</div>
 					
 					
 					<div  class="infoitem">
 						<img  src="../img/bangding.png" style="float: left;width: 12px;height: 12px;margin-top: 18px;"/>
-						<p style="margin-left: 10px;font-size: 14px;float: left;">绑定银行卡：<span id="bankCardCount"></span></p>
+						<p style="margin-left: 10px;font-size: 14px;float: left;">绑定银行卡：<span id="bankCardCount"></span>张</p>
 						<p style="float: right;color: #FF7400;font-size: 14px;" id="showBankList">查看</p>
 					</div>
 					
 					<div  class="infoitem">
 						<img  src="../img/bangding.png" style="float: left;width: 12px;height: 12px;margin-top: 18px;"/>
 						<p style="margin-left: 10px;font-size: 14px;float: left;">登录密码：<span id="safetyGrade"></span></p>
-						<p style="float: right;color: #FF7400;font-size: 14px;" id="changePassword">修改</p>
+						<a style="float: right;color: #FF7400;font-size: 14px;" class="updatapassword">修改</a>
 					</div>
 					
 					<div  class="infoitem">
@@ -122,11 +122,68 @@
 
 			
 			
-
+			<!--修改密码-->
+				<div class="setdiv"  id="updatePasswordWrap" style="display:none !important;background-color:#fff;width: 960px;margin-left: 10px;float: left;margin-top: 10px;padding-left: 20px;padding-bottom: 100px;">
+					<div id="updatePassword1" style="display:none;margin-top:20px;">
+						<div style="color:#ff7400;font-size:16px;">更改登录密码</div>
+						<br/>
+						<br/>
+						<br/>
+						<div style="text-align:center;font-size:24px;">我们将发送验证邮件至邮箱：</div>
+						<br/>
+						<div style="text-align:center;font-size:24px;" class="updatePasswordGetEmail"></div>
+						<br/>
+						<br/>
+						<div style="text-align:center;">
+						<a style="width:160px;" class="register_button" id="updatePassword1SendEmail">发送并验证</a>
+						</div>
+					</div>
+					<div id="updatePassword2" style="display:none;margin-top:20px;">
+						<div style="color:#ff7400;font-size:16px;">更改登录密码</div>
+						<br/>
+						<br/>
+						<br/>
+						<div style="text-align:center;font-size:24px;">验证邮件已送达  <span class="updatePasswordGetEmail"></span></div>
+						<br/>
+						<div style="text-align:center;font-size:14px;color:#999;">
+						请登录邮箱，点击验证链接完成验证，验证链接在24小时内有效。
+						</div>
+						<br/>
+						<br/>
+						<div style="text-align:center;">
+						<button style="width:160px;" class="register_button"  id="updatePassword2ValidEmail">我已激活</button>
+						<a href="#" title="" class="font_size12 color_eb6100 fontfamily_song lineheight30 padding_left10">前往邮箱查看>></a>
+						</div>
+					</div>
+					<div id="updatePassword3" style="display:none;margin-top:20px;">
+						<div style="color:#ff7400;font-size:16px;">更改登录密码</div>
+						<br/>
+						<div style="text-align:center;">
+							<div class="clearfix lineheight26 margin_bottom35" style="display:inline-block;">
+								<span class="font_size14 width110span fl">输入新密码：</span>
+								<input type="password" name="" id="password1" value="" class="width260input fl" placeholder="6-16位数字、字符组合"/>
+								<i class="font_size14 color_eb6100 fl margin_left20">*必填</i>
+							</div>
+						<br/>
+							<div class="clearfix lineheight26 margin_bottom100" style="display:inline-block;">
+								<span class="font_size14 width110span fl">再次确认密码：</span>
+								<input type="password" name="" id="password2" value="" class="width260input fl" placeholder="再次确认密码"/>
+								<i class="font_size14 color_eb6100 fl margin_left20">*必填</i>
+							</div>
+						<br/>
+							<div class="clearfix lineheight26 margin_bottom35" style="display:inline-block;">
+								<button class="register_button" id="updatePassword3Cancel" style="color:#fff;background-color:#ccc;width:160px">取消</button>
+								<button class="register_button" id="updatePassword3Sure" style="width:160px;">确认更改</button>
+							</div>
+						</div>
+					</div>
+				</div>
+				</div>
 			<!--<div style="clear: both;"></div>-->
 		</div>
 
 		<!--content end-->
+		
 
 		<!--footer-->
 		<div class="footer bg_fff">

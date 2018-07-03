@@ -18,11 +18,14 @@ public class SendMailDemo {
 		mailInfo.setValidate(true);
 		
 		// 邮箱用户名
-		mailInfo.setUserName("email@tmall188.xin");
+		//mailInfo.setUserName("email@tmall188.xin");
+		mailInfo.setUserName("benzhenchayuan@yayao8.com");
 		// 邮箱密码
-		mailInfo.setPassword("123456qqQQ");
+		//mailInfo.setPassword("123456qqQQ");
+		mailInfo.setPassword("yayao123+++");
 		// 发件人邮箱
-		mailInfo.setFromAddress("email@tmall188.xin");
+		//mailInfo.setFromAddress("email@tmall188.xin");
+		mailInfo.setFromAddress("benzhenchayuan@yayao8.com");
 		// 收件人邮箱
 		mailInfo.setToAddress(email);
 		//mailInfo.setToAddress("278076304@qq.com");
@@ -58,11 +61,14 @@ public class SendMailDemo {
 		mailInfo.setValidate(true);
 		
 		// 邮箱用户名
-		mailInfo.setUserName("email@tmall188.xin");
+		//mailInfo.setUserName("email@tmall188.xin");
+		mailInfo.setUserName("benzhenchayuan@yayao8.com");
 		// 邮箱密码
-		mailInfo.setPassword("123456qqQQ");
+		//mailInfo.setPassword("123456qqQQ");
+		mailInfo.setPassword("yayao123+++");
 		// 发件人邮箱
-		mailInfo.setFromAddress("email@tmall188.xin");
+		//mailInfo.setFromAddress("email@tmall188.xin");
+		mailInfo.setFromAddress("benzhenchayuan@yayao8.com");
 		// 收件人邮箱
 		mailInfo.setToAddress(email);
 		// 邮件标题
@@ -94,11 +100,14 @@ public class SendMailDemo {
 		mailInfo.setMailServerPort("465");
 		mailInfo.setValidate(true);
 		// 邮箱用户名
-		mailInfo.setUserName("email@tmall188.xin");
+		//mailInfo.setUserName("email@tmall188.xin");
+		mailInfo.setUserName("benzhenchayuan@yayao8.com");
 		// 邮箱密码
-		mailInfo.setPassword("123456qqQQ");
+		//mailInfo.setPassword("123456qqQQ");
+		mailInfo.setPassword("yayao123+++");
 		// 发件人邮箱
-		mailInfo.setFromAddress("email@tmall188.xin");
+		//mailInfo.setFromAddress("email@tmall188.xin");
+		mailInfo.setFromAddress("benzhenchayuan@yayao8.com");
 		// 收件人邮箱
 		mailInfo.setToAddress(email);
 		// 邮件标题
@@ -151,8 +160,9 @@ public class SendMailDemo {
 				buffer.append("点击激活链接完成注册，激活链接在24小时内有效!<a href='http://www.baidu.com'>http://www.baidu.com</a><br/>");
 				mailInfo.setContent(buffer.toString());
 		      //boolean b = sendSelfMail(mailInfo);
-				boolean b = sendLinkMail("278076304@qq.com", "http://admin.laoyeshuo.cn", "激活码商城", "注册激活");
-		       System.out.println(b);
+				//boolean b = sendLinkMail("278076304@qq.com", "http://admin.laoyeshuo.cn", "激活码商城", "注册激活");
+				boolean b = SimpleMailSender.sendHtmlMail(mailInfo);
+				System.out.println(b);
 	}
 	
 } 
