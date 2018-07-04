@@ -76,6 +76,134 @@ $(document).ready(function(){
 	//当前页面功能
 	if(location.href.indexOf("/sell/sell_index.html")>=0){
 	//上架的商品	
+	}else if(location.href.indexOf("/sell/sell_record.html")>=0){
+	/**
+	 * 进账记录
+	 */	
+		
+		
+	}else if(location.href.indexOf("/sell/sell_message.html")>=0){
+	/**
+	 * 我的消息
+	 */
+		//1系统消息，2申请新产品销售，3新增商品类型，4商品申请自营，5提现申请，6问题单反馈，7订单商品动态
+		business.noticeTypeList=[
+			{},
+			{id:1,value:"系统消息",icon:"../img/icon_xx.png"},
+			{id:2,value:"申请新产品销售",icon:"../img/icon_sp.png"},
+			{id:3,value:"新增商品类型",icon:"../img/icon_sp.png"},
+			{id:4,value:"商品申请自营",icon:"../img/icon_sp.png"},
+			{id:5,value:"提现申请",icon:"../img/tikuan.png"},
+			{id:6,value:"问题单反馈",icon:"../img/icon_wtd.png"},
+			{id:7,value:"订单商品动态",icon:"../img/icon_sp.png"},
+			]
+		//获取消息列表
+		business.getNoticeList=function(){
+			var info = {
+				accountId:business.account.accountId,
+				pageNum:1,
+				pageSize:100
+			};
+			
+			ajxget("/notice/list",info,function(data){
+				if(data.code==200){
+							var list = data.data;
+				        	var table = $('#messageparent');
+				        	for(var i = 0; i < list.length; i++) {
+				        		var child = list[i];
+								var content="";
+								if(child.type==1){
+								//系统通知
+									content='<div >'
+												+'<p class="color_1b1b1b">'+child.content+'</p>'
+											+'</div>';
+								}else if(child.type==2){
+									//申请新产品销售
+									var c=JSON.parse(child.content);
+									content='<div style="margin-top: 5px;">'
+										+'<p class="messagesumbp">商 品 名：</p>'
+										+'<p  class="color_1b1b1b">'+c.merName+'</p>'
+									+'</div>'
+									+'<div style="margin-top: 5px;">'
+										+'<p class="messagesumbp">商 品 种类：</p>'
+										+'<p  class="color_1b1b1b">'+c.merCateName+'</p>'
+									+'</div>'
+									+'<div style="margin-top: 5px;">'
+										+'<a class="golook" href="myorderdetail.html?orderId='+c.orderId+'">'
+											+'<p class="messagesumbp" style="width: auto;">商品状态：'+child.status+'</p>'
+										+'</a>'
+									+'</div>';
+								}else if(child.type==3){
+									//3新增商品类型
+									//var c=JSON.parse(child.content);
+									content='<div>'
+												+'<p style="color: #1B1B1B;font-size: 16px;float: left;">订单编号：</p>'
+												+'<p style="color: #FF7400;font-size: 16px;">1252212</p>'
+											+'</div>'
+											+'<div style="margin-top: 5px;">'
+												+'<p style="color: #1B1B1B;font-size: 16px;float: left;">商 品 名：</p>'
+												+'<p style="color: #1B1B1B;font-size: 16px;">暗黑破坏神3-《死靈法師的崛起》台服版本</p>'
+											+'</div>'
+											+'<div style="margin-top: 5px;">'
+												+'<p style="color: #1B1B1B;font-size: 16px;float: left;width: auto;">商品状态：卡号及卡密已发送至您的个人邮箱  </p>'
+												+'<p style="color: #FF7400;font-size: 16px;margin-left: 20px;width: 80px;float: left;">去查看>></p>'
+											+'</div>';
+								}else if(child.type==6){
+									//问题单反馈
+									var c=JSON.parse(child.content);
+									content='<div >'
+										+'<p class="messagesumbp">订单编号：</p>'
+										+'<p class="color_7400 ">'+c.orderNumber+'</p>'
+									+'</div>'
+									+'<div style="margin-top: 5px;">'
+										+'<p class="messagesumbp">商 品 名：</p>'
+										+'<p  class="color_1b1b1b">'+c.merName+'</p>'
+									+'</div>'
+									+'<div style="margin-top: 5px;">'
+										+'<p class="messagesumbp" style="width: auto;">商家回复：'+c.content+'</p>'
+										+'<a class="golook"  href="myorderdetail.html?orderId='+c.orderId+'">去查看>></a>'
+									+'</div>';
+								}else if(child.type==7){
+									//订单商品动态
+									var c=JSON.parse(child.content);
+									content='<div >'
+										+'<p class="messagesumbp">订单编号：</p>'
+										+'<p class="color_7400 ">'+c.orderNumber+'</p>'
+									+'</div>'
+									+'<div style="margin-top: 5px;">'
+										+'<p class="messagesumbp">商 品 名：</p>'
+										+'<p  class="color_1b1b1b">'+c.merName+'</p>'
+									+'</div>'
+									+'<div style="margin-top: 5px;">'
+										+'<p class="messagesumbp" style="width: auto;">商品状态：'+c.content+'</p>'
+										+'<a class="golook" href="myorderdetail.html?orderId='+c.orderId+'">去查看>></a>'
+									+'</div>';
+								}else{
+									
+									continue;
+								}
+								//架子
+				        		var html='<div class="messagediv">'
+											+'<div style="padding-top: 10px;margin-left: 20px;padding-right: 20px;">'
+												+'<img style="width: 16px;height: 16px;float: left;margin-top: 2px;" src="'+business.noticeTypeList[child.type].icon+'"  />'
+												+'<p class="messagep1" style="margin-left: 18px;">'+business.noticeTypeList[child.type].value+'</p>'
+												+'<p class="messagep1" style="float: right;">'+child.updateDate+'</p>'
+												+'<div style="clear:both"></div>'
+											+'</div>'
+											+'<div class="messagediv2">'
+												+'<img style="width: 83px;height: 67px;float: left;" src="'+child.imgAddress+'"/>'
+												+'<div class="messagediv3">'
+												+content
+												+'</div>'
+											+'</div>'
+										+'</div>'
+										+'<div style="height:10px;widht:100%;background-color:#ececec"></div>';
+								table.append(html); 
+				        	}
+				}
+			});
+		}
+		business.getNoticeList();
 	}else if(location.href.indexOf("/sell/sell_merchantsinfo.html")>=0){
 	/**
 	 * 商户信息
@@ -248,12 +376,6 @@ $(document).ready(function(){
                 }
 	      });
 		});
-	}else if(location.href.indexOf("/sell/sell_updatepaypassword.html")>=0){
-	/**
-	 * 修改提现密码
-	 */
-	
-		
 	}
 	
 	

@@ -22,7 +22,6 @@ mybatis:
     useColumnLabel: true
     useGeneratedKeys: true
     
-    
 spring:
   http:
     multipart:
@@ -39,4 +38,5 @@ spring:
   profiles:
     active: dev
     #active: prod
+ 
 

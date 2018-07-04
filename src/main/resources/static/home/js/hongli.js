@@ -14,8 +14,140 @@ if(!business.account){
 $(function(){
 	//获取银行卡信息
 	if(business.account&&location.href.indexOf("/hongli/hongli_userinfo.html")>=0){
+		//获取银行卡
 		business.getBankCardList();
-	}
+		//修改提现密码
+		//修改提现密码
+		$("#updatePayPassword").on("click",function(){
+			location.href="../hongli/hongli_updatepaypassword.html";
+		});
+	}else if(location.href.indexOf("/hongli/hongli_userbank.html")>=0){
+		/**
+		 * 绑定银行卡
+		 */
+			//显示列表
+			if(sessionStorage.getItem("bankCardList")){
+				business.bankCardList=JSON.parse(sessionStorage.getItem("bankCardList"));
+				var html="";
+				for (var i = 0; i < business.bankCardList.length; i++) {
+					var child= business.bankCardList[i];
+					var number=child.number.substr(0,3)+" "+child.number.substr(3,3)+" "+child.number.substr(6,6)+" "+child.number.substr(12,3)+" "+child.number.substr(15);
+					var bankCard=JSON.stringify(child).replace(/"/g,"'");
+					html+= '<div class="bindbank">'
+								+'<div style="background-color:#ececec;height:30px;line-height:30px;">'
+									+'<h3 style="color:#f10b0b;height:30px;line-height:30px;text-align:center;">'+child.bankName+'</h3>'
+								+'</div>'
+								+'<div style="padding-top: 38px;">'
+									+'<div style="text-align:center;line-height: 25px;">'+number+'</div>'
+								+'</div>'
+								+'<div style="padding-top: 20px;">'
+									+'<div style="display:inline-block;width:50%;text-align:left;line-height: 25px;padding-left:20px;color:blue;cursor:pointer;" onclick="business.updateBankCard('+bankCard+')">修改</div>'
+									+'<div style="display:inline-block;width:50%;text-align:right;line-height: 25px;padding-right:20px;color:red;cursor:pointer;" onclick="business.deleteBankCard('+child.bankCardId+')">删除</div>'
+								+'</div>'
+							+'</div>';
+					}
+				$("#addBank").before(html);
+				//修改,跳转
+				business.updateBankCard=function(bankCard){
+					sessionStorage.setItem("selectBankCard",JSON.stringify(bankCard));
+					location.href="../hongli/hongli_bindbank.html";
+				}
+				//删除
+				business.deleteBankCard=function(bankCardId){
+					business.myConfirm("确定删除吗？",function(){
+						var info = {
+								accountId:business.account.accountId,
+								bankCardId:bankCardId
+							}
+				      	ajxget("/bankCard/delete",info,function(data){
+			                if(data.code==200){
+			                	business.myLoadingToast("删除成功");
+			                	business.getBankCardList();
+			                	location.reload();
+			                }else{
+			                	business.myLoadingToast(data.msg);
+			                }
+				      });
+					});
+				}
+			}
+			//增加
+			$("#addBank").on("click",function(){
+				sessionStorage.setItem("selectBankCard",JSON.stringify({}));
+				location.href="../hongli/hongli_bindbank.html";
+			});
+			//修改
+			
+		}else if(location.href.indexOf("/hongli/hongli_bindbank.html")>=0){
+		/**
+		 * 增加或修改银行卡
+		 */
+			if(sessionStorage.getItem("selectBankCard")){
+				//修改
+				business.selectBankCard=JSON.parse(sessionStorage.getItem("selectBankCard"));
+				$("#realname").val(business.selectBankCard.realname);
+				$("#identity").val(business.selectBankCard.identity);
+				$("#bankName").val(business.selectBankCard.bankName);
+				$("#number").val(business.selectBankCard.number);
+				$("#phone").val(business.selectBankCard.phone);
+			}else{
+				
+			}
+			//发送验证码
+			$(".getcodebtn").on("click", function() {
+			business.sendValidCode(".getcodebtn","#phone",5);
+			});
+			//增加银行卡
+			$("#addBankCardBtn").on("click", function() {
+				var realname=$("#realname").val().trim();
+				var identity=$("#identity").val().trim();
+				var bankName=$("#bankName").val().trim();
+				var number=$("#number").val().trim();
+				var phone=$("#phone").val().trim();
+				var validCode=$("#validCode").val().trim();
+				if(realname.length<0
+						||identity.length<0
+						||bankName.length<0
+						||number.length<0
+						||phone.length<0
+						||validCode.length<0
+						){
+					business.myLoadingToast("所有的必填");
+					return;
+				}
+				var info = {
+						accountId:business.account.accountId,
+						realname:realname,
+						identity:identity,
+						bankName:bankName,
+						number:number,
+						phone:phone,
+						validCode:validCode
+					}
+				//如果是更新
+				if(business.selectBankCard.bankCardId){
+					info.bankCardId=business.selectBankCard.bankCardId;
+				}
+		      	ajxget("/bankCard/addOrUpdate",info,function(data){
+	                if(data.code==200){
+	                	business.getBankCardList();
+	                	if(business.selectBankCard.bankCardId){
+	                		business.myLoadingToast("修改成功");
+	                		return;
+	                	}
+	                	business.myLoadingToast("添加成功");
+	                	$("#realname").val("");
+	        			$("#identity").val("");
+	        			$("#bankName").val("");
+	        			$("#number").val("");
+	        			$("#phone").val("");
+	        			$("#validCode").val("");
+	                }else{
+	                	business.myLoadingToast(data.msg);
+	                }
+		      });
+			});
+		}
 	var paytype = new Array("","支付宝","微信","百度钱包","Paypal","网银");
 	//图像
 	if(business.account.icon!=null&&business.account.icon!=""){
@@ -24,43 +156,6 @@ $(function(){
 	//名称
 	$("#hongli_username").text(business.account.realname||business.account.nickname);
 	$(".yuep").text("￥"+business.finance.money);
-	
-	//无提现手续费最低额度
-	$("#withdrawalsMinBrokerage").text(business.config.withdrawalsMinBrokerage);
-	//提现手续费比例，单位%
-	$("#withdrawalsProportion").text(business.config.withdrawalsProportion);
-	//余额
-	$("#financeMoney").text(business.finance.money);
-	//冻结金额
-	$("#financeFrozen").text(business.finance.frozen);
-	//提现金额
-	$("#withdrawalsMoney").attr("placeholder","输入金额必须大于"+business.config.minWithdrawals);
-	
-	//选择支付
-	business.payType=1;//默认是1，支付宝
-	$(".tixian_positionul li").click(function(){
-		$('.tixian_positionul li').removeClass('tixianborder7400');
-		$(this).addClass('tixianborder7400');
-		//console.log(parseInt($(this).attr("id").replace("payType", "")))
-		business.payType=parseInt($(this).attr("id").replace("payType", ""));
-	});
-	
-	//提现
-	$("#withdrawalsCommit").click(function(){
-		if(business.finance.money<business.config.minWithdrawals){
-			business.myLoadingToast("账户余额小于最小提现金额"+business.config.minWithdrawals)
-			return;
-		}
-		if(business.payType!=1&&business.payType!=2&&business.payType!=5){
-			business.myLoadingToast("请选择支付")
-			return;
-		}
-		var withdrawalsMoney=$("#withdrawalsMoney").val().trim();
-		if(withdrawalsMoney<business.config.minWithdrawals){
-			business.myLoadingToast("提现金额必须大于"+business.config.minWithdrawals)
-			return;
-		}
-	});
 	
 })
 //推广链接

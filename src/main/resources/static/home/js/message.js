@@ -1,4 +1,4 @@
-	//1系统消息，2申请新产品销售，3新增商品类型，4商品申请自营，5提现申请，6问题单反馈，7订单商品动态
+//1系统消息，2申请新产品销售，3新增商品类型，4商品申请自营，5提现申请，6问题单反馈，7订单商品动态
 business.noticeTypeList=[
 	{},
 	{id:1,value:"系统消息",icon:"img/icon_xx.png"},
@@ -9,11 +9,10 @@ business.noticeTypeList=[
 	{id:6,value:"问题单反馈",icon:"img/icon_wtd.png"},
 	{id:7,value:"订单商品动态",icon:"img/icon_sp.png"},
 	]
-	var account = JSON.parse(sessionStorage.getItem("account"));
 //获取消息列表
 business.getNoticeList=function(){
 	var info = {
-		accountId:account.accountId,
+		accountId:business.account.accountId,
 		pageNum:1,
 		pageSize:100
 	};

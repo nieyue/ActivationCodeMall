@@ -116,7 +116,7 @@ var business={
 	/**
 	 * 自定义template
 	 */
-	myTemplate : function(value) {
+	myTemplate : function(value,selfCloseElement) {
 		var myTemplateWidth= 330;
 		var myTemplateHeight= '60%';
 		var myTemplateMarginWidth= 165;
@@ -128,10 +128,17 @@ var business={
 		.append(
 				"<div id='myTemplateDiv' style='position:fixed;width:100%;height:100%;background-color:#ccc;opacity:0.5;left:0;top:0;z-index:9998;'></div><div id='myTemplate' style='z-index:9999;color:#000;background-color:#fff;text-align:center;line-height:30px;border:1px solid #fff;border-radius:5px;height:"+myTemplateHeight+";width:"+myTemplateWidth+"px;margin:-100px -"+myTemplateMarginWidth+"px;top:20%;left:50%;position:fixed;font-size:20px;'>"
 				+ "<div style='overflow:auto;position:absolute;width:100%;height:100%;text-align:center;'>"+value+"</div><div class='btn btn-default' style='position:absolute;right:15px;bottom:15px;width:80px;' id='myTemplateNo'>关闭</div></div>");
-	$('#myTemplateNo').click(function(){
-		$('#myTemplateDiv').remove();
-		$('#myTemplate').remove();	
-	});
+		//如果selfCloseElement是替换关闭按钮
+		var close=$('#myTemplateNo');
+		if(typeof selfCloseElement=='string'){
+			$("#myTemplateNo").remove();
+			close=$(selfCloseElement);
+		}
+		close.click(function(){
+			$('#myTemplateDiv').remove();
+			$('#myTemplate').remove();	
+		});
+		
 	},
 	
 };
@@ -858,22 +865,44 @@ business.islogin();
       })
        }
       });
-      
+  };  
+  /**
+   * 上传图片
+   * clickElementBox包裹元素
+   * clickElement点击元素
+   * fileElement 文件元素
+   * imgElement 图片元素
+   */    
+  business.qiniuUploadImg=function(clickElementBox,clickElement,fileElement,imgElement){
+	  var bb=clickElement.replace(/\#/g, "").replace(/\./g, "");
+	  var de=clickElementBox.replace(/\#/g, "").replace(/\./g, "");
+	  //上传图片  
+	  if($(fileElement)[0]){
+		  business.getQiniuSimpleUploader(business,{
+			  browseButton:bb,
+			  dropElement:de,
+			  container:de,
+			  //resource:'business.account.icon',
+			  success:function(url){
+				  $(imgElement).attr("src",url);
+			  }
+		  });
+	  }
+  };      
   /*
    *获取时间
    */
-    business.getTime=function(time) {
-     var timec = new Date(Number(time));
-     var year = timec.getFullYear();
-     var month = timec.getMonth() + 1;
-     var day = timec.getDate();
-     var hours = timec.getHours();
-     var minutes = timec.getMinutes();
-     var seconds = timec.getSeconds();
-     var timer = year + '-' + month + '-' + day + ' ' + hours + ':' + minutes + ':' + seconds;
-     return timer;
-   };
-  }  
+  business.getTime=function(time) {
+	  var timec = new Date(Number(time));
+	  var year = timec.getFullYear();
+	  var month = timec.getMonth() + 1;
+	  var day = timec.getDate();
+	  var hours = timec.getHours();
+	  var minutes = timec.getMinutes();
+	  var seconds = timec.getSeconds();
+	  var timer = year + '-' + month + '-' + day + ' ' + hours + ':' + minutes + ':' + seconds;
+	  return timer;
+  };
 //获取积分列表
 business.getintarll=function(){
 	var info = {
@@ -946,13 +975,15 @@ business.getintarll=function(){
 	}
 	//修改头像
 	business.updataimg=function(){
-	   	$('#updateIconFile').click();
+		console.log(1111)
+	   //	$('#updateIconFile').click();
 	   }
 	 //上传图像   
 	if($('#updateIconFile')[0]){
 	business.getQiniuSimpleUploader(business,{
-		browseButton:'updateIconFile',
+		browseButton:'updateIcon',
 		dropElement:'updateIconFileBox',
+		container:'updateIconFileBox',
 		resource:'business.account.icon',
 		success:function(url){
 			var info = {
@@ -969,7 +1000,6 @@ business.getintarll=function(){
 		}
 	});
 	}
-	
 	//邮箱
 	$(".useremail").text(business.account.email);
 
@@ -977,7 +1007,9 @@ business.getintarll=function(){
 		$(".userphone").text(business.account.phone);
 		$(".bindphone").toggle();
 	}
-	//实名认证
+	/**
+	 * 实名认证
+	 */
 	var authvalue="没认证";
 	if(business.account.auth==1){
 		authvalue="审核中";
@@ -985,6 +1017,92 @@ business.getintarll=function(){
 		authvalue="已认证";
 	}
 	$("#auth").text(authvalue);
+	//点击认证
+	$("#auth").on("click", function() {
+		if(business.account.auth==1){
+			business.myLoadingToast("审核中");
+			return;
+		}
+		if(business.account.auth==2){
+			business.myLoadingToast("已认证");
+			return;
+		}
+		var html='<div style="width: 830px;margin-left: 10px;float: left;margin-top: 10px;padding-bottom: 100px;" class="bg_fff">'
+					+'<p style="margin-top: 60px;font-size: 20px;">'+business.account.roleName+'实名认证</p>'
+					+'<div style="margin-left: 100px;margin-top: 30px;">'
+						+'<div class="infodiv clearfix">'
+							+'<p class="font_size14 fl">真实姓名：</p>'
+							+'<input class="bankinput" id="realname" placeholder="  输入您的真实姓名"/>'
+						+'</div>'
+						+'<div class="infodiv clearfix">'
+							+'<p class="font_size14 fl">身份证号：</p>'
+							+'<input class="bankinput" id="identityCards" placeholder="  输入您的身份证号码"/>'
+						+'</div>'
+						+'<div class="infodiv clearfix" style="margin-left: 5px;" id="identityCardsHoldImgBox">'
+							+'<p class="font_size14 fl" >手持身份证上半身照：</p>'
+							+'<input type="file" id="identityCardsHoldImgFile" accept="image/*" style="display: none;" />'
+							+'<img style="width:192px;height:122px;margin-left:-225px;" src="../img/bansheng.png" id="identityCardsHoldImg" />'
+						+'</div>'
+						+'<div class="infodiv clearfix" id="identityCardsFrontImgBox">'
+							+'<p class="font_size14 fl">身份证正面照：</p>'
+							+'<input type="file" id="identityCardsFrontImgFile" accept="image/*" style="display: none;"  />'
+							+'<img style="width:192px;height:122px;margin-left:-225px;" src="../img/zheng.png" id="identityCardsFrontImg" />'
+						+'</div>'
+					+'<div class="infodiv clearfix" id="identityCardsBackImgBox">'
+						+'<p class="font_size14 fl">身份证反面照：</p>'
+						+'<input type="file" id="identityCardsBackImgFile" accept="image/*" style="display: none;" />'
+						+'<img style="width:192px;height:122px;margin-left:-225px;" src="../img/fan.png" id="identityCardsBackImg"/>'
+					+'</div>'
+				+'</div>'
+				+'<div style="width: 270px;margin-left: 220px;margin-top: 100px;">'
+					+'<a class="bankbtn" style="background: #b5b5b5;float: left;" id="authClose">取消</a>'
+					+'<a class="bankbtn" style="background: #FF7400;float: right;" id="authCommit">提交审核</a>'
+				+'</div>'
+			+'</div>';
+		business.myTemplate(html,"#authClose");//显示模板
+		//图片上传
+		business.qiniuUploadImg("#identityCardsHoldImgBox", "#identityCardsHoldImg", "#identityCardsHoldImgFile", "#identityCardsHoldImg")
+		business.qiniuUploadImg("#identityCardsFrontImgBox", "#identityCardsFrontImg", "#identityCardsFrontImgFile", "#identityCardsFrontImg")
+		business.qiniuUploadImg("#identityCardsBackImgBox", "#identityCardsBackImg", "#identityCardsBackImgFile", "#identityCardsBackImg")
+		//提交
+		$("#authCommit").on("click", function() {
+			var realname=$("#realname").val().trim();
+			var identityCards=$("#identityCards").val().trim();
+			var identityCardsHoldImg=$("#identityCardsHoldImg").attr("src");
+			var identityCardsFrontImg=$("#identityCardsFrontImg").attr("src");
+			var identityCardsBackImg=$("#identityCardsBackImg").attr("src");
+			if(!realname||realname.length<2||realname.length>16){
+				business.myLoadingToast("请填写真实姓名");
+				return;
+			}
+			if(!identityCards||(identityCards.length!=15&&identityCards.length!=18)){
+				business.myLoadingToast("请填写正确身份证");
+				return;
+			}
+			if(identityCardsHoldImg.indexOf("http")<0||identityCardsFrontImg.indexOf("http")<0||identityCardsBackImg.indexOf("http")<0){
+				business.myLoadingToast("缺少上传图片");
+				return;
+			}
+			var info = {
+		   			accountId:business.account.accountId,
+		   			realname:realname,
+		   			identityCards:identityCards,
+		   			identityCardsHoldImg:identityCardsHoldImg,
+		   			identityCardsFrontImg:identityCardsFrontImg,
+		   			identityCardsBackImg:identityCardsBackImg,
+		   		};
+			ajxget("/account/auth",info,function(data){
+				if(data.code==200){
+					business.myLoadingToast("上传成功，请等待审核");
+					business.account=data.data[0];
+					sessionStorage.setItem("account",JSON.stringify(business.account));
+					$("#authClose").click();
+				}else{
+					business.myLoadingToast(data.msg);
+				}
+			})
+		});
+	})
 	//安全等级
 	if(business.account.safetyGrade==1){
 		$(".safetyGrade").text("低");
@@ -1129,7 +1247,13 @@ business.getintarll=function(){
 				if(data.code==200){
 					business.myLoadingToast("修改成功");
 					business.getFiance(function(){
-						location.href="../sell/sell_setinfo.html";						
+						if(business.account.roleName=='商户'){
+							location.href="../sell/sell_setinfo.html";													
+						}else if(business.account.roleName=='推广户'){
+							location.href="../hongli/hongli_userinfo.html";													
+						}else {
+							location.href="/";													
+						}
 					});
 				}else{
 					business.myLoadingToast(data.msg)
@@ -1137,6 +1261,88 @@ business.getintarll=function(){
 				});
 		});
 	}
+	/**
+	 * 提现
+	 */
+	   //窗口效果
+	    business.withdrawalsWindow=function(){
+		//点击登录class为tc 显示
+		$(".tixianbtn").click(function(){
+			$("#gray").show();
+			$("#popup").show();//查找ID为popup的DIV show()显示#gray
+			var _top=($(window).height()-$(".popup").height())/2;
+			var _left=($(window).width()-$(".popup").width())/2;
+			$(".popup").css({top:_top,left:_left});
+		});
+		//点击关闭按钮
+		$(".guanbi").click(function(){
+			$("#gray").hide();
+			$("#popup").hide();//查找ID为popup的DIV hide()隐藏
+		});
+		//窗口水平居中
+		$(window).resize(function(){
+			var _top=($(window).height()-$(".popup").height())/2;
+			var _left=($(window).width()-$(".popup").width())/2;
+			$(".popup").css({top:_top,left:_left});
+		});
+		//窗口移动
+	/*	$(".popup").mousedown(function(e){ 
+				$(this).css("cursor","move");//改变鼠标指针的形状 
+				var offset = $(this).offset();//DIV在页面的位置 
+				var x = e.pageX - offset.left;//获得鼠标指针离DIV元素左边界的距离 
+				var y = e.pageY - offset.top;//获得鼠标指针离DIV元素上边界的距离 
+				$(document).bind("mousemove",function(ev){ //绑定鼠标的移动事件，因为光标在DIV元素外面也要有效果，所以要用doucment的事件，而不用DIV元素的事件 
+					$(".popup").stop();//加上这个之后 
+					var _x = ev.pageX - x;//获得X轴方向移动的值 
+					var _y = ev.pageY - y;//获得Y轴方向移动的值 
+					$(".popup").animate({left:_x+"px",top:_y+"px"},10); 
+				}); 
+	
+			}); 
+			$(document).mouseup(function() { 
+				$(".popup").css("cursor","default"); 
+				$(this).unbind("mousemove"); 
+			});*/
+	    }
+	    business.withdrawalsWindow();//待优化
+	//无提现手续费最低额度
+	$(".withdrawalsMinBrokerage").text(business.config.withdrawalsMinBrokerage);
+	//提现手续费比例，单位%
+	$(".withdrawalsProportion").text(business.config.withdrawalsProportion);
+	//余额
+	$(".financeMoney").text(business.finance.money);
+	//冻结金额
+	$(".financeFrozen").text(business.finance.frozen);
+	//提现金额
+	$(".withdrawalsMoney").attr("placeholder","输入金额必须大于"+business.config.minWithdrawals);
+	
+	//选择支付
+	business.payType=1;//默认是1，支付宝
+	$(".tixian_positionul li").click(function(){
+		$('.tixian_positionul li').removeClass('tixianborder7400');
+		$(this).addClass('tixianborder7400');
+		//console.log(parseInt($(this).attr("id").replace("payType", "")))
+		business.payType=parseInt($(this).attr("id").replace("payType", ""));
+	});
+	//提现
+	$("#withdrawalsCommit").click(function(){
+		if(business.finance.money<business.config.minWithdrawals){
+			business.myLoadingToast("账户余额小于最小提现金额"+business.config.minWithdrawals)
+			return;
+		}
+		if(business.payType!=1&&business.payType!=2&&business.payType!=5){
+			business.myLoadingToast("请选择支付")
+			return;
+		}
+		var withdrawalsMoney=$("#withdrawalsMoney").val().trim();
+		if(withdrawalsMoney<business.config.minWithdrawals){
+			business.myLoadingToast("提现金额必须大于"+business.config.minWithdrawals)
+			return;
+		}
+	});
+	/**
+	 * 积分
+	 */
 	//获取积分等级
 	$("#integralLevel").text(business.integral.name);
 	//现有积分

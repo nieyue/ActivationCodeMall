@@ -29,6 +29,10 @@ spring:
        max-idle: 300
        max-active: 800
 myPugin: 
+  jmx:
+    rmi:
+      hostname: 59.110.221.143
+      port: 1234
   session: 
     myDomainName: nalu888.cn
   projectName: ActivationCodeMall

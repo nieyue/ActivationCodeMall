@@ -31,6 +31,10 @@ spring:
        max-idle: 300
        max-active: 800
 myPugin: 
+  jmx:
+    rmi:
+      hostname: 127.0.0.1
+      port: 1234
   session: 
     myDomainName: null
   projectName: ActivationCodeMall

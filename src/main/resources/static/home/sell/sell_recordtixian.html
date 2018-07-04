@@ -11,6 +11,7 @@
 		<link rel="stylesheet" type="text/css" href="../css/style.css"/>
 		<link rel="stylesheet" type="text/css" href="../css/index.css"/>
     	<link rel="stylesheet" href="../css/sell_index.css" />
+    	<link rel="stylesheet" href="../css/popu.css" />
 		
 	</head>
 	<body class="bg_eeeeee">
@@ -176,12 +177,12 @@
 					<div class="bg_fff" style="margin-top: 10px;padding-left: 20px;padding-right: 20px;">
 						<div style="line-height:30px;padding-top: 10px;" class="clearfix">
 							<p style="font-weight: bold;font-size: 20px;float: left;color: #666666;">账户金额</p>
-							<p style="margin-left:20px;font-size: 20px;color: #FF7400;float: left;">780</p>
-							<p class="tixianbtn" style="float: right;">提现</p>
+							<p style="margin-left:20px;font-size: 20px;color: #FF7400;float: left;"><span class="financeMoney"></span></p>
+							<a class="tixianbtn" style="float: right;">提现</a>
 						</div>
 						<div style="line-height:30px;padding-top: 10px;" class="clearfix">
 							<p style="font-weight: bold;font-size: 20px;float: left;color: #666666;">冻结金额</p>
-							<p style="margin-left:20px;font-size: 20px;color: #FF7400;float: left;">780</p>
+							<p style="margin-left:20px;font-size: 20px;color: #FF7400;float: left;"><span class="financeFrozen"></span></p>
 							<p  style="float: right;color: #FF7400;">？提现规则</p>
 						</div>
 						
@@ -401,6 +402,76 @@
 			</ul>
 		</div>
 		<!--fixed_box-->
+		
+		<div id="gray"></div>
+			<div class="popup" id="popup">
+				<div style="line-height: 20px;margin-left: 20px;margin-top: 20px;">
+					<p style="font-size: 20px;float: left;">可提金额</p>
+					<p style="font-size: 14px;float: left;margin-left: 10px;">（注：提现金额低于<span class="withdrawalsMinBrokerage"></span>元，平台将收取<span class="withdrawalsProportion"></span>%的手续费）</p>
+				</div>
+				<p style="font-size: 24px;color: #FF7400;margin-top: 40px;margin-left: 150px;" class="financeMoney">￥0</p>
+				
+				<div style="margin-top: 10px;padding-bottom: 20px;">
+					<p style="float: right;font-size: 12px;margin-right: 20px;margin-left: 20px;color: #FF7400;" class="financeFrozen">￥0</p>
+					<p style="float: right;font-size: 12px;">冻结金额</p>
+					
+				</div>
+				<hr align="center" width="980px" color="#ededed" size="1" style="margin: 20px;"/>
+				
+				<div style="height: 36px;line-height: 36px;margin-left: 20px;">
+					<p class="font_size14" style="float: left;">输入提现金额：</p>
+					<input  type="" placeholder="输入金额必须大于500"  class="inputstyle withdrawalsMoney" />
+					<p class="font_size14 color_7400" style="float: left;margin-left: 10px;">？提现规则</p>
+				</div>
+				<p style="margin-left: 20px;margin-top: 20px;">选择提现账号：</p>
+			
+			
+			
+			<ul class="tixian_positionul clearfix" style="padding-bottom: 20px;margin-left: 130px;">
+								
+								<li class="tixianborder tixianborder7400" id="payType1" >
+									<div >
+										<img src="../img/zhifubao.png" class="tixianimg"/>
+										<p class="tixiantext">支付宝</p>
+									</div>
+								</li>
+								<li class="tixianborder" id="payType2">
+									<div >
+										<img src="../img/weixing.png" class="tixianimg"/>
+										<p class="tixiantext">微信</p>
+									</div>
+								</li>
+								<li class="tixianborder" id="payType3">
+									<div >
+										<img src="../img/yinglian.png" class="tixianimg"/>
+										<p class="tixiantext">网银</p>
+									</div>
+								</li>
+								
+								
+							</ul>
+							
+							
+							<div style="background: rgba(224, 224, 224, 1);height: 50px;margin-top: 100px;line-height: 50px;">
+							
+							
+						     	
+							
+						     <div style="width: auto;float: right;height: 50px;">
+						     	
+						     	<div class="guanbi">
+						     		<a style="color: #bb0404;">取消</a>				     	
+						     	</div>
+						     	
+						     	<div style="width: 120px;height: 50px;margin: auto;background: #FF7400;float: left;text-align: center;">
+						     		<a style="color: #FFFFFF;text-align: center;" id="withdrawalsCommit">确定</a>				     	
+						     </div>
+						     
+						</div>
+				
+				</div>
+			
+			</div>
 	</body>
 <script src="../js/jquery-1.12.2.min.js" type="text/javascript" charset="utf-8"></script>
 <script src="../js/bootstrap.min.js"></script>
@@ -413,5 +484,6 @@
     $(function () {
         $('#menu').metisMenu();
     });
+ 
 </script>
 </html>
