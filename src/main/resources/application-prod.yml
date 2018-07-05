@@ -1,5 +1,5 @@
 server:
-  port: 1521
+  port: 9000
   session:
     timeout: 36000 #10个小时
     #timeout: 1296000 #1个月 
@@ -31,8 +31,8 @@ spring:
 myPugin: 
   jmx:
     rmi:
-      hostname: 59.110.221.143
-      port: 1234
+      hostname: 127.0.0.1
+      port: 1521
   uploaderPath:  
     rootPath: /home
     locationPath: /uploaderPath/img

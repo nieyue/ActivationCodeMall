@@ -1,6 +1,6 @@
 var business={
-	//url:"http://localhost:9000",
-	url:"http://app.nalu888.cn",
+	url:"http://localhost:9000",
+	//url:"http://app.nalu888.cn",
 	//验证规则
 	userVerification:{
 		username:{code:/(^[\u4E00-\u9FA5]{2,16}$)|(^[a-zA-Z\/ ]{2,16}$)/,value:'中文或英文2-16位'},//中文或英文2-16位
@@ -23,6 +23,38 @@ var business={
 	accountLevelList:[],//等级列表
 	merId:1,
 	mer:{},
+	//全局封装ajax
+	ajax:function(url,info,success,async){
+				$.ajax({
+					url:business.url+url,
+					data:info,
+					async:async==false?false:true,
+					dataType:'json',//服务器返回json格式数据
+					type:'post',//HTTP请求类型
+					timeout:10000,//超时时间设置为10秒；
+					xhrFields: {withCredentials: true},
+					success: function(data){
+			        success(data);
+			        if(data.code==200){
+			        	
+			        }else{
+			        	if(/^[0-9]*$/.test(data)){
+			        		return;
+			        	}
+			        	if(data.code!=30002&&data.code!=40004){
+			        		//alert(data.msg);
+			        		console.log(data.msg)
+			        		//location.href = "/";
+			        	} 
+			        	if(data.code==40004||data.code==70000){
+			        		//alert("您的账号登录超时,请重新登录!");
+			        		//location.href = "login.html";
+			        	}
+			        	
+			        }
+			      }
+				})
+	},
 	/**
 	 * 单文件上传组件
 	 * options:输入项
@@ -341,6 +373,7 @@ business.getConfig=function(){
 							sessionStorage.setItem("config",JSON.stringify(business.config))
 						}},false);
 };
+business.getConfig();
 //获取财务
 business.getFiance=function(callback){
 	var info = {
@@ -625,38 +658,7 @@ business.getUrlInfo=function(url){
 	}
 	return Request;
 }
-//全局封装ajax
-business.ajax=function(url,info,success,async){
-			$.ajax({
-				url:business.url+url,
-				data:info,
-				async:async==false?false:true,
-				dataType:'json',//服务器返回json格式数据
-				type:'post',//HTTP请求类型
-				timeout:10000,//超时时间设置为10秒；
-				xhrFields: {withCredentials: true},
-				success: function(data){
-		        success(data);
-		        if(data.code==200){
-		        	
-		        }else{
-		        	if(/^[0-9]*$/.test(data)){
-		        		return;
-		        	}
-		        	if(data.code!=30002&&data.code!=40004){
-		        		//alert(data.msg);
-		        		console.log(data.msg)
-		        		//location.href = "/";
-		        	} 
-		        	if(data.code==40004||data.code==70000){
-		        		//alert("您的账号登录超时,请重新登录!");
-		        		//location.href = "login.html";
-		        	}
-		        	
-		        }
-		      }
-			})
-}
+
 
 
 //商品搜索
