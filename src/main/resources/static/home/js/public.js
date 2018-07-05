@@ -1,12 +1,146 @@
 var business={
-	url:"http://localhost:9000",
-	//url:"http://app.nalu888.cn",
+	//url:"http://localhost:9000",
+	url:"http://app.nalu888.cn",
+	//验证规则
+	userVerification:{
+		username:{code:/(^[\u4E00-\u9FA5]{2,16}$)|(^[a-zA-Z\/ ]{2,16}$)/,value:'中文或英文2-16位'},//中文或英文2-16位
+		merDiscount:{code:/^(0\.(0[1-9]{1}|[1-9]\d?)|1(\.0{1,2})?)$/,value:'0.01-1.00之间'},//0.01-1.00之间
+		scale:{code:/^[0]$|^(0\.(0[1-9]{1}|[1-9]\d?)|1(\.0{1,2})?)$/,value:'0-1.00之间'},//0-1.00之间 ，比例
+		merPrice:{code:/(^[+]?[1-9]\d*(\.\d{1,2})?$)|(^[+]?[0]{1}(\.\d{1,2})?$)/,value:'大于0最多两位小数'},//商品价格正则,大于0最多两位小数
+		catNum:{code:/^\+?[1-9][0-9]*$/,value:'非零正整数'},// 非零正整数
+		postNum:{code:/^\+?[0-9][0-9]*$/,value:'含零正整数'},// 含零正整数
+		nicename:{code:/^[^\s]{1,10}$/,value:'1-10位,不包含空格'},// 1-10位,不包含空格。
+		signature:{code:/^[^\s]{1,15}$/,value:'1-15位,不包含空格'},// 1-15位,不包含空格.
+		email:{code:/^([a-zA-Z0-9]+[_|\-|\.]?)*[a-zA-Z0-9]+@([a-zA-Z0-9]+[_|\-|\.]?)*[a-zA-Z0-9]+(\.[a-zA-Z]{2,3})+$/,value:'邮箱格式错误'}, // 邮箱
+		phone:{code:/^1[0-9]{10}$/,value:'中文或英文2-16位'}, // 手机
+		identity:{code:/^(^[1-9]\d{7}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])\d{3}$)|(^[1-9]\d{5}[1-9]\d{3}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])((\d{4})|\d{3}[Xx])$)$/,value:'15位和18位身份证号码'}, // 15位和18位身份证号码
+		password:{code:/^[0-9_a-zA-Z]{6,20}$/,value:'数字、字母、下划线，6-20长度'} // 数字、字母、下划线，6-20长度
+	},
 	account:null,//登录账户
 	finance:null,//财务
 	integral:null,//登录积分
+	payType:["","支付宝","微信","百度钱包","Paypal","网银"],//方式，1支付宝，2微信,3百度钱包,4Paypal,5网银
 	accountLevelList:[],//等级列表
 	merId:1,
 	mer:{},
+	/**
+	 * 单文件上传组件
+	 * options:输入项
+	 * options.inputfile 文件元素
+	 * options.ajaxObj 数组对象1，formData{key,value} 2,url 3,success 4,error
+	 * options.dragFn 拖拽的对象
+	 */
+	fileUpload:function(options){
+		var _this=this;
+		var initPhotoExt=options.photoExt||[".jpg",".png",".gif",".apk",".xls",".xlsx"];
+		var isPhotoExt=false;
+		if(!options&&typeof options!='object' ){
+			_this.myLoadingToast("操作失败",null);
+			return;
+		}
+		var file=options.inputfile.get(0);
+		//console.log(file.files)
+		  photoExt=file.value.substr(file.value.lastIndexOf(".")).toLowerCase();// 获得文件后缀名
+		// 判断格式
+		  for (var i = 0; i < initPhotoExt.length; i++) {
+		  if(photoExt==initPhotoExt[i])	{
+			  isPhotoExt=true;
+		  }
+		  }
+		  if(!isPhotoExt){
+			  _this.myLoadingToast("请上传后缀名为"+initPhotoExt.join("").replace(/\./g,"/")+"的文件!");
+		      return false;
+		  }
+		 /* if(photoExt!='.jpg'&&photoExt!='.png'&&photoExt!='.gif'&&photoExt!='.apk'){
+			  myUtils.myLoadingToast("请上传后缀名为jpg/png/gif的照片!");
+		      return false;
+		  }*/
+		  var fileSize = 0;
+		  var isIE = /msie/i.test(navigator.userAgent) && !window.opera;            
+		  if (isIE && !file.files) {          
+		       var filePath = file.value;            
+		       var fileSystem = new ActiveXObject("Scripting.FileSystemObject");   
+		       var file = fileSystem.GetFile (filePath);               
+		       fileSize = file.Size;         
+		  }else {  
+		       fileSize = file.files[0].size;     
+		  } 
+		  fileSize=Math.round(fileSize/1024*100)/100; // 单位为KB
+		  if((photoExt=='.apk'&&fileSize>30000)||(photoExt!='.apk'&&fileSize>200)){
+			  _this.myLoadingToast("图片大小为"+fileSize+"KB，超过最大尺寸为200KB，请重新上传!");
+		      return false;
+		  }		  
+	    	if (file.files && file.files[0])  
+	    	 {
+	         var reader = new FileReader(); 
+			 reader.readAsDataURL(file.files[0]);
+	      	reader.onload = function(e){
+	      		if(typeof options.ajaxObj!='object'){
+	      			_this.myLoadingToast("上传失败",null);
+	      		return;
+		      }
+
+				
+			if(options.proportion){//是否有宽高比
+			 var img = new Image;
+            img.src = reader.result;
+            img.onload = function () {
+                var width = img.width;
+                var height = img.height;
+               if((width/height).toFixed(2)!=(options.proportion).toFixed(2)){
+            	   _this.myLoadingToast("图片宽高比"+(width/height).toFixed(2)+"，应为"+options.proportion);
+			   }else{
+				   myajax();	
+			   }
+
+            };
+		}else{
+		myajax();	
+		}
+				function myajax(){
+					_this.myPrevToast("上传中",function(){
+	      			var fd=new FormData();
+	      			if(typeof options.ajaxObj.formData=='object'){
+	      			for (var i = 0; i < options.ajaxObj.formData.length; i++) {
+	      				fd.append(options.ajaxObj.formData[i].key,options.ajaxObj.formData[i].value);
+	      			}
+	      			}
+			                $.ajax({
+			                  url:options.ajaxObj.url,
+			                  type:"POST",
+			                  data:fd,
+			                  timeout:30000,
+			                  enctype:'multipart/form-data',
+			                  processData:false,// 告诉jQuery不要去处理发送的数据
+			                  contentType:false, // 告诉jQuery不要去设置Content-Type请求头
+			                  success:function(src){// 获取最新图片更新
+			                	  if(typeof options.ajaxObj.success=='function'){
+			                		  options.ajaxObj.success(src);
+			      	      		}
+			                  },
+			                  error:function(d){
+			                	  if(typeof options.ajaxObj.error=='function'){
+			                		  options.ajaxObj.error();
+				      	      		}
+			                	  console.log(d)
+			                    _this.myPrevToast("上传失败",null,"remove");
+			                  }
+			                });
+			                },"add");
+	      				
+	      		if(typeof options.dragFn=='function'){
+	      			options.dragFn(e);
+	      		}
+				}
+	    	}
+	      
+	      }else{
+	    	  _this.myPrevToast("浏览器不支持",null,"add");
+	      	setTimeout(function(){
+	      		_this.myPrevToast("浏览器不支持",null,"remove");
+	      	},1000);
+	      }
+			},
 	//发送验证码
 	sendValidCode:function(clickbtn,adminName,teamplateCode){
 		var countdown=60;  
@@ -28,7 +162,7 @@ var business={
 						adminName:phone,
 						templateCode:teamplateCode
 					}
-	      	ajxget("/account/validCode",info,function(data){
+	      	business.ajax("/account/validCode",info,function(data){
                 if(data.code==200){
                 	business.myLoadingToast("验证码发送成功，请注意查收");
                 }
@@ -77,6 +211,35 @@ var business={
 				}
 			});
 		},
+	/**
+	 * 实现慢事件执行的toast
+	 */
+	myPrevToast : function(value,fn,motion) {
+		// 如果存在，remove
+		if(document.querySelector("#prevToastWarp")){
+			document.querySelector("#prevToastValue").innerText=value;
+			if(motion=="add"){
+				$("#prevToastWarp").fadeIn();
+				$("#prevToastWarp").attr("display","block");
+			}else if(motion=="remove"){
+				setTimeout(function() {
+					$("#prevToastWarp").fadeOut('slow');
+					$("#prevToastWarp").attr("display","none");
+					}, 1000);
+			}
+			if(typeof fn=='function'){
+				fn();
+			}
+			return;
+		}
+		$("body")
+				.append(
+						"<div id='prevToastWarp' style='display:none;position:fixed;width:100%;height:100%;top:0;left:0; z-index:999999999'><div id='prevToast' style='color:#fff;background-color:#000;text-align:center;line-height:30px;border:1px solid black;border-radius:5px;min-height:30px;margin:-15px -50px;top:50%;left:50%;position:fixed;'><canvas id='prevloading'  height='30px' width='30px' style='display:inline-block;margin-bottom:-10px;' >您的浏览器不支持html5</canvas>"
+						+"<span id='prevToastValue'>"+ value +"</span>&nbsp;&nbsp; </div></div>");
+		if(typeof fn=='function'){
+			fn();
+		}
+	},
 	//快速loading
 	myLoadingToast:function(value, fn){
 		$("body")
@@ -172,11 +335,11 @@ business.getConfig=function(){
 			pageNum:1,
 			pageSize:10
 		}
-		ajxget("/config/list",info,function(data){
+		business.ajax("/config/list",info,function(data){
 						if(data.code==200){
 							business.config=data.data[0];
 							sessionStorage.setItem("config",JSON.stringify(business.config))
-						}});
+						}},false);
 };
 //获取财务
 business.getFiance=function(callback){
@@ -185,7 +348,7 @@ business.getFiance=function(callback){
 			pageNum:1,
 			pageSize:10
 	}
-	ajxget("/finance/list",info,function(data){
+	business.ajax("/finance/list",info,function(data){
 		if(data.code==200){
 			business.finance=data.data[0];
 			sessionStorage.setItem("finance",JSON.stringify(business.finance));
@@ -201,7 +364,7 @@ business.getSincerity=function(){
 			pageNum:1,
 			pageSize:10
 	}
-	ajxget("/sincerity/list",info,function(data){
+	business.ajax("/sincerity/list",info,function(data){
 		if(data.code==200){
 			business.sincerity=data.data[0];
 			sessionStorage.setItem("sincerity",JSON.stringify(business.sincerity))
@@ -213,7 +376,7 @@ business.getBankCardList=function(){
    			accountId:business.account.accountId,
    			pageSize:100
    		};
-	ajxget("/bankCard/list",info,function(data){
+	business.ajax("/bankCard/list",info,function(data){
 		if(data.code==200){
 			business.bankCardList=data.data;
 			sessionStorage.setItem("bankCardList",JSON.stringify(business.bankCardList));
@@ -232,7 +395,7 @@ $(function(){
 	$(".friendslink_more").click(function  () {
 		if($(this).hasClass("this")){
 			$(this).removeClass("this");
-			initHideli();
+			business.getInitGameFactory();
 			$(".friendslink_more img").css("transform","rotate(0deg)")
 		}else{
 			$(this).addClass("this");
@@ -272,7 +435,7 @@ $(function(){
 				pageNum:1,
 				pageSize:20
     		};
-    		ajxget("/mer/list",info,function(data){
+    		business.ajax("/mer/list",info,function(data){
     			var table = $('#seachlist');
 		        	table.empty();
 					if(data.code==200){
@@ -325,14 +488,14 @@ $(function(){
 })
 
 //显示全部游戏厂商
-function initHideli () {
+business.getInitGameFactory=function () {
 	$(".friendslink_ul li").each(function  (index) {
 		if(index>9){
 			$(this).hide();
 		}
 	})
 }
-initHideli();
+business.getInitGameFactory();
 
 function tabs(tabTit,on,tabCon,event){
     $(tabTit).on(event,function(){
@@ -433,7 +596,7 @@ $(window).scroll(function  () {
 })
 
 
-function checkEmail(email){
+business.checkEmail=function (email){
 　　
 　　var myReg=/^[a-zA-Z0-9_-]+@([a-zA-Z0-9]+\.)+(com|cn|net|org)$/;
  	if(email.length>0){
@@ -451,7 +614,7 @@ function checkEmail(email){
 　　
 }
 
-function getUrlInfo(url){
+business.getUrlInfo=function(url){
 	var Request = new Object();
 	if(url.indexOf("?")!=-1){
 	    var str = url.substr(1)　//去掉?号
@@ -463,7 +626,7 @@ function getUrlInfo(url){
 	return Request;
 }
 //全局封装ajax
-function ajxget(url,info,success,async){
+business.ajax=function(url,info,success,async){
 			$.ajax({
 				url:business.url+url,
 				data:info,
@@ -505,12 +668,12 @@ $("#seachbtn").click(function(){
 	
 });
 //商品类型
-function getmercate(){
+business.getMerCateList=function(){
 	var info = {
 		pageNum:1,
 		pageSize:10
 	}
-	ajxget("/merCate/list",info,function(data){
+	business.ajax("/merCate/list",info,function(data){
 					var list = data.data;
 					var table = $('.banner_classiul');
 		        	for(var i = 0; i < list.length; i++) {
@@ -526,13 +689,13 @@ function getmercate(){
 }
 
 //购物车商品
-function getshopcarlist(){
+business.getCartMerList=function(){
 	var info = {
 		accountId:business.account?business.account.accountId:null,
 		pageNum:1,
 		pageSize:10
 	}
-	ajxget("/cartMer/list",info,function(data){
+	business.ajax("/cartMer/list",info,function(data){
 					if(data.code==200){
 					
 					var list = data.data;
@@ -566,13 +729,13 @@ $("#usergologin").click(function(){
 	window.location.href = "login.html?roletype=3";
 });
 //热门搜索单词
-function gethotseachlist(){
+business.getMerSearchList=function(){
 	
 	var info = {
 		pageNum:1,
 		pageSize:10000
 	};
-	ajxget("/merSearch/list",info,function(data){
+	business.ajax("/merSearch/list",info,function(data){
 		if(data.code==200){
 			var table = $('#hotseachlist');
 			var list = data.data;
@@ -600,7 +763,7 @@ business.islogin=function(){
 		sessionStorage.clear();
 		return;
 	}
-	ajxget("/account/islogin",null,function(data){
+	business.ajax("/account/islogin",null,function(data){
 		if(data.code==200){
 			//$("#nologindiv").remove();
 			$("#nologindiv").css("display","none");
@@ -629,7 +792,7 @@ business.islogin=function(){
 			$(".alreadyLogin_namep").text(business.account.nickname);
 			$("#userleve").text(business.integral.name);
 			$("#exit").click(function(){
-				ajxget("/account/loginout",null,function(data){
+				business.ajax("/account/loginout",null,function(data){
 					if(data.code==200){
 						sessionStorage.clear();
 						location.href="/";				
@@ -712,7 +875,7 @@ business.islogin();
    *p.success 回调
    */
  business.getQiniuToken=function($this,p) {
-	  ajxget(
+	  business.ajax(
 		p.url,
 		null,
       function(d){ 
@@ -910,7 +1073,7 @@ business.getintarll=function(){
   			pageNum:1,
   			pageSize:100
   		};
-  		ajxget("/integralDetail/list",info,function(data){
+  		business.ajax("/integralDetail/list",info,function(data){
 			if(data.code==200){
 					var list = data.data;
 		        	var table = $('#chengzhang_tb');
@@ -931,6 +1094,12 @@ business.getintarll=function(){
 	 * 通用
 	 */
 	business.common=function(){
+	/**
+	 * 客服
+	 */
+	//设置客服电话<span class="customerServicePhone"></span>
+	$(".customerServicePhone").text(business.config.customerServicePhone);
+		
 	//点击客服
 	/*$(".kefu_a").on("click", function() {
 	})*/
@@ -956,7 +1125,7 @@ business.getintarll=function(){
 	   			accountId:business.account.accountId,
 	   			nickname:$("#nicknameinput").val()
 	   		};
-		ajxget("/account/updateInfo",info,function(data){
+		business.ajax("/account/updateInfo",info,function(data){
 			if(data.code==200){
 				$("#nicknameinput").hide();
 				$("#updatenicknamesave").hide();
@@ -990,7 +1159,7 @@ business.getintarll=function(){
 		   			accountId:business.account.accountId,
 		   			icon:url
 		   		};
-			ajxget("/account/updateInfo",info,function(data){
+			business.ajax("/account/updateInfo",info,function(data){
 				if(data.code==200){
 					business.account.icon=url
 					sessionStorage.setItem("account",JSON.stringify(business.account));
@@ -1091,7 +1260,7 @@ business.getintarll=function(){
 		   			identityCardsFrontImg:identityCardsFrontImg,
 		   			identityCardsBackImg:identityCardsBackImg,
 		   		};
-			ajxget("/account/auth",info,function(data){
+			business.ajax("/account/auth",info,function(data){
 				if(data.code==200){
 					business.myLoadingToast("上传成功，请等待审核");
 					business.account=data.data[0];
@@ -1134,13 +1303,13 @@ business.getintarll=function(){
 	//点击修改密码发送邮箱
 	$("#updatePassword1SendEmail").click(function(){
 		//显示修改密码栏第2步
-		if(checkEmail(business.account.email)){
+		if(business.checkEmail(business.account.email)){
 		var info = {
 				accountId:business.account.accountId,
 				adminName:business.account.email,
 				templateCode:2//修改密码
 			}
-		ajxget("/account/validCode",info,function(data){
+		business.ajax("/account/validCode",info,function(data){
 			if(data.code==200){
 	        	if(data.msg=="已经验证"){
 	        		//alert(data.msg);
@@ -1186,7 +1355,7 @@ business.getintarll=function(){
 					adminName:business.account.email,
 					password:password1
 				}
-			ajxget("/account/updatePassword",info,function(data){
+			business.ajax("/account/updatePassword",info,function(data){
 				if(data.code==200){
 					business.account = data.data[0];
 					sessionStorage.setItem("account",JSON.stringify(business.account));
@@ -1243,7 +1412,7 @@ business.getintarll=function(){
 					password:p1,
 					validCode:$("#validCode").val().trim()
 				}
-			ajxget("/finance/updatePassword",info,function(data){
+			business.ajax("/finance/updatePassword",info,function(data){
 				if(data.code==200){
 					business.myLoadingToast("修改成功");
 					business.getFiance(function(){
@@ -1334,7 +1503,11 @@ business.getintarll=function(){
 			business.myLoadingToast("请选择支付")
 			return;
 		}
-		var withdrawalsMoney=$("#withdrawalsMoney").val().trim();
+		var withdrawalsMoney=$(".withdrawalsMoney").val().trim();
+		if(!business.userVerification.merPrice.code.test(withdrawalsMoney)){
+			business.myLoadingToast(business.userVerification.merPrice.value)
+			return ;
+		}
 		if(withdrawalsMoney<business.config.minWithdrawals){
 			business.myLoadingToast("提现金额必须大于"+business.config.minWithdrawals)
 			return;

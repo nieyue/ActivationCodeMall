@@ -69,6 +69,7 @@ public class ShiroConfiguration {
         filterChainDefinitionMap.put("/webjars/**", "anon");
         filterChainDefinitionMap.put("/v2/**", "anon");
         filterChainDefinitionMap.put("/home/**", "anon");
+        filterChainDefinitionMap.put("/uploaderPath/**", "anon");
         //静态资源开放
         filterChainDefinitionMap.put("/resources/**", "anon");
         //动态权限

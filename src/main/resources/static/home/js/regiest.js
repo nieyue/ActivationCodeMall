@@ -8,12 +8,12 @@ $(function(){
 			business.myLoadingToast("没有验证通过")
 			return;
 		}
-		if(checkEmail(email)){
+		if(business.checkEmail(email)){
 			var info = {
 					adminName:email,
 					templateCode:1
 				}
-			ajxget("/account/validCode",info,function(data){
+			business.ajax("/account/validCode",info,function(data){
 				if(data.code==200){
 					$("#emaildiv").toggle();
 		        	$("#haveemaildiv").toggle();
@@ -35,7 +35,7 @@ $(function(){
 	$(".register_havejihuo").click(function(){
 		
 		var email = $("#useremail").val();
-		var request  = getUrlInfo(location.search);
+		var request  = business.getUrlInfo(location.search);
 		var roletype = request["roletype"];
 		window.location.href='register_step2.html?email='+email+"&roletype="+roletype;
 	});
@@ -63,7 +63,7 @@ $(function(){
 					templateCode:1
 				}
       	
-      	ajxget("/account/validCode",info,function(data){
+      	business.ajax("/account/validCode",info,function(data){
                     if(data.code==200){
                     	business.myLoadingToast("验证码发送成功，请注意查收");
                     }
@@ -79,7 +79,7 @@ $(function(){
 		var username = $("#username").val();
 		var userphone = $("#userphone").val();
 		var code = $("#code").val();
-		var email = getUrlInfo(location.search);
+		var email = business.getUrlInfo(location.search);
 		var roletype = email["roletype"];
 		if(nonull(username,userphone,code)){
 			window.location.href="register_step3.html?username="+username+"&userphone="+userphone+"&code="+code+"&email="+email["email"]+"&roletype="+roletype;
@@ -121,7 +121,7 @@ $(function(){
 	//注册
 	function register(){
 		var url = location.search;
-		var Request = getUrlInfo(url);
+		var Request = business.getUrlInfo(url);
 		var password1 = $("#password1").val();
 		var password2 = $("#password2").val();
 		var roletype = Request["roletype"];
@@ -135,7 +135,7 @@ $(function(){
 					email:Request["email"],
 					validCode:Request["code"]
 				}
-			ajxget("/account/webregister",info,function(data){
+			business.ajax("/account/webregister",info,function(data){
 				if(data.code==200){
 					business.myLoadingToast("注册成功")
 					window.location.href='login.html?roletype='+roletype;

@@ -75,7 +75,7 @@
 				</div>
 				<div class="fr padding_top20">
 					<a href="" title="" class="kefu_a"><img src="../img/indexkefu.png" alt="" title="" style="top:0;"/>在线客服咨询</a>
-					<p class="font_size16 color_eb6100 text_center ">400-000-8888</p>
+					<p class="font_size16 color_eb6100 text_center "><span class="customerServicePhone"></span></p>
 					<p class="fontfamily_song color_666 font_size12 text_center ">( 09:00 - 12:00 )</p>
 				</div>
 			</div>
@@ -192,7 +192,7 @@
 							
 							<div class="diansearchbox clearfix" style="float: left;">
 						     	<div class="fl">
-						     		 <img src="../img/sousuo.png" alt="" title="" style="top: 0;"/>
+						     		 <img src="../img/sousuo.png" alt="" />
 						     		 <input type="" name="" id="searchbox_input" value="" placeholder="在店内搜索"/>
 						     	</div>
 							     <button class="fr diansearchboxbutton">搜索</button>
@@ -225,13 +225,14 @@
 							<th >交易单号</th>
 							<th >提现方式</th>
 							<th >账户名</th>
-							<th >手续费</th>
 							<th >提现金额</th>
+							<th >手续费</th>
+							<th >实际金额</th>
 						</tr>
 					</thead>
-					<tbody>
+					<tbody id="financeRecordList2">
 
-						<tr class="recordtabletd">
+						<!-- <tr class="recordtabletd">
 							<td>
 								2018-03-02
 							</td>
@@ -243,58 +244,17 @@
 							<td >
 								强壮的土豆
 							</td>
+							<td >
+							1000
+							</td>
 							<td>
-								5%
+								50
 							</td>
 							<td >
-							1300
+							950
 							</td>
-						</tr>
+						</tr>  -->
 
-						
-						<tr class="recordtabletd">
-							<td>
-								2018-03-02
-							</td>
-							<td style="color: #4cafe9;">5646546</td>
-							
-							<td>
-								支付宝
-							</td>
-							<td >
-								强壮的土豆
-							</td>
-							<td>
-								5%
-							</td>
-							<td >
-							1300
-							</td>
-						</tr>
-
-
-					<tr class="recordtabletd">
-							<td>
-								2018-03-02
-							</td>
-							<td style="color: #4cafe9;">5646546</td>
-							
-							<td>
-								支付宝
-							</td>
-							<td >
-								强壮的土豆
-							</td>
-							<td>
-								5%
-							</td>
-							<td >
-							1300
-							</td>
-						</tr>
-
-
-						
 
 					</tbody>
 				</table>
@@ -314,7 +274,7 @@
 				<div class="width1200">
 					<div class="left fl">
 						<p class="font_size18 color_666 lineheight70">客服咨询</p>
-						<p class="font_size16 color_aaaaaa lineheight30">客服在线时间：09:00 - 12:00 <br />客&nbsp;&nbsp;服&nbsp;&nbsp;电&nbsp;&nbsp;话：400-000-8888</p>
+						<p class="font_size16 color_aaaaaa lineheight30">客服在线时间：09:00 - 12:00 <br />客&nbsp;&nbsp;服&nbsp;&nbsp;电&nbsp;&nbsp;话：<span class="customerServicePhone"></span></p>
 					</div>
 					<div class="center fl clearfix">
 	        			<div class="footer_ulbox fl">
@@ -480,7 +440,7 @@
 <script src="../js/public.js" type="text/javascript" charset="utf-8"></script>
 <script src="../js/sell.js"></script>
 <script>
-	gethotseachlist();
+	business.getMerSearchList();
     $(function () {
         $('#menu').metisMenu();
     });

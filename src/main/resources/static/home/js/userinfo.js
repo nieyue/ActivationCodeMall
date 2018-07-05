@@ -9,7 +9,7 @@ $(function(){
             MonthSelector: ".sel_month",
             DaySelector: ".sel_day"
    });
-  	var request  = getUrlInfo(location.search);
+  	var request  = business.getUrlInfo(location.search);
 	var showtext = request["show"];
 	var showid = request["showid"];
 	console.log("showid="+showid);
@@ -76,7 +76,7 @@ $(function(){
 		   			accountId:business.account.accountId,
 		   			birthday:birthday
 		   		};
-			ajxget("/account/updateInfo",info,function(data){
+			business.ajax("/account/updateInfo",info,function(data){
 				if(data.code==200){
 					business.account.birthday = info.birthday;
 					sessionStorage.setItem("account",JSON.stringify(business.account));
@@ -197,7 +197,7 @@ $(function(){
 					cardSecretReceive:value
 				};
 				
-				ajxget("/account/updateInfo",info,function(data){
+				business.ajax("/account/updateInfo",info,function(data){
 					if(data.code==200){
 						business.account.cardSecretReceive = value;
 						$(".setkami").text("接受卡密设置："+cardSecretReceive[value]);
@@ -230,12 +230,12 @@ $(function(){
 		//点击修改密码发送邮箱
 		$("#updatePassword1SendEmail").click(function(){
 			//显示修改密码栏第2步
-			if(checkEmail(business.account.email)){
+			if(business.checkEmail(business.account.email)){
 			var info = {
 					adminName:business.account.email,
 					templateCode:2//修改密码
 				}
-			ajxget("/account/validCode",info,function(data){
+			business.ajax("/account/validCode",info,function(data){
 				if(data.code==200){
 		        	if(data.msg=="已经验证"){
 		        		//alert(data.msg);
@@ -277,7 +277,7 @@ $(function(){
 						adminName:business.account.email,
 						password:password1
 					}
-				ajxget("/account/updatePassword",info,function(data){
+				business.ajax("/account/updatePassword",info,function(data){
 					if(data.code==200){
 						business.account = data.data[0];
 						sessionStorage.setItem("account",JSON.stringify(business.account));
@@ -384,7 +384,7 @@ $(function(){
 				isDefault:isDefault,
 				accountId:business.account.accountId
 			};
-			ajxget("/receiptInfo/add",info,function(data){
+			business.ajax("/receiptInfo/add",info,function(data){
 				if(data.code==200){
 					business.myLoadingToast("添加成功")
 					location.reload();
@@ -416,7 +416,7 @@ $(function(){
 			accountId:accountId,
 			sex:sex
 		};
-		ajxget("/account/updateInfo",info,function(data){
+		business.ajax("/account/updateInfo",info,function(data){
 			if(data.code==200){
 				business.account.sex = sex;
 				sessionStorage.setItem("account",JSON.stringify(business.account));
@@ -430,7 +430,7 @@ $(function(){
    			pageNum:1,
    			pageSize:100
    		};
-   		ajxget("/coupon/list",info,function(data){
+   		business.ajax("/coupon/list",info,function(data){
 			if(data.code==200){
 					var couponlist = data.data;
 					
@@ -459,7 +459,7 @@ function getorderlist(){
    			pageNum:1,
    			pageSize:100
    		};
-   		ajxget("/order/list",info,function(data){
+   		business.ajax("/order/list",info,function(data){
 			if(data.code==200){
 					var list = data.data;
 		        	var table = $('#jiaoyi_tb');
@@ -487,7 +487,7 @@ function getorderlist(){
    			pageNum:1,
    			pageSize:100
    		};
-   		ajxget("/receiptInfo/list",info,function(data){
+   		business.ajax("/receiptInfo/list",info,function(data){
 			if(data.code==200){
 					var list = data.data;
 					$("#addressnum").html(list.length);
@@ -589,7 +589,7 @@ function updateaddress(child){
 			isDefault:isDefault,
 			accountId:child.accountId
 		};
-		ajxget("/receiptInfo/update",info,function(data){
+		business.ajax("/receiptInfo/update",info,function(data){
 			if(data.code==200){
 				business.myLoadingToast("修改成功")
 				location.reload();
@@ -604,7 +604,7 @@ function deleteaddress(accountId,id){
 		accountId:accountId
 	};
 	
-	ajxget("/receiptInfo/delete",info,function(data){
+	business.ajax("/receiptInfo/delete",info,function(data){
 		if(data.code==200){
 			location.reload();
 		}

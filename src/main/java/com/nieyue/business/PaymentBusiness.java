@@ -48,7 +48,6 @@ import com.nieyue.service.SpreadOrderAccountService;
 import com.nieyue.service.SpreadRecordService;
 import com.nieyue.thirdparty.yun.AliyunSms;
 import com.nieyue.util.Arith;
-import com.nieyue.util.ResultUtil;
 
 /**
  * 支付业务
@@ -338,7 +337,7 @@ public class PaymentBusiness {
 				fr.setRealMoney(orderDetail.getTotalPrice());
 			}else{
 				//实际金额=总金额-总金额*当前商品平台分成比例
-				fr.setRealMoney(Arith.sub(orderDetail.getTotalPrice(),Arith.mul(orderDetail.getTotalPrice(), lm.getPlatformProportion())));
+				fr.setRealMoney(Arith.sub(orderDetail.getTotalPrice(),Arith.mul(orderDetail.getTotalPrice(), Arith.div(lm.getPlatformProportion(), 100))));
 			}
 			b=financeRecordService.addFinanceRecord(fr);//新增财务记录
 			//如果存在商户
@@ -370,7 +369,7 @@ public class PaymentBusiness {
 			mafr.setMoney(orderDetail.getTotalPrice());
 			mafr.setStatus(2);//状态，默认1待处理，2成功，3已拒绝
 			//实际金额=总金额-总金额*当前商品平台分成比例
-			mafr.setRealMoney(Arith.sub(orderDetail.getTotalPrice(),Arith.mul(orderDetail.getTotalPrice(), lm.getPlatformProportion())));
+			mafr.setRealMoney(Arith.sub(orderDetail.getTotalPrice(),Arith.mul(orderDetail.getTotalPrice(), Arith.div(lm.getPlatformProportion(), 100))));
 			b=financeRecordService.addFinanceRecord(mafr);//新增财务记录
 			/**
 			 * 12.商户积分
@@ -459,7 +458,7 @@ public class PaymentBusiness {
 				//交易金额为劵后金额
 				spreadRecord.setMoney(orderDetail.getTotalPrice());
 				spreadRecord.setSpreadProportion(config.getSpreadProportion());
-				spreadRecord.setSpreadMoney(Arith.mul(orderDetail.getTotalPrice(),config.getSpreadProportion()));
+				spreadRecord.setSpreadMoney(Arith.mul(orderDetail.getTotalPrice(),Arith.div(config.getSpreadProportion(), 100)));
 				if(spreadLinkList.size()>0){
 				spreadRecord.setLink(spreadLinkList.get(0).getLink());
 				}

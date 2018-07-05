@@ -121,7 +121,7 @@ business.cancelOrder=function(orderId){
 		accountId:business.account!=null?business.account.accountId:null
 	};
 	business.myConfirm("确定取消？",function(){
-	ajxget("/order/update",info,function(data){
+	business.ajax("/order/update",info,function(data){
 		if(data.code==200){
 			business.myLoadingToast("取消成功");
 			location.reload();
@@ -147,7 +147,7 @@ $("#deleteBatchOrderBtn21,#deleteBatchOrderBtn31,#deleteBatchOrderBtn61,#deleteB
 				accountId:business.account!=null?business.account.accountId:null
 			};
 			
-			ajxget("/order/deleteBatch",info,function(data){
+			business.ajax("/order/deleteBatch",info,function(data){
 				if(data.code==200){
 					business.myLoadingToast("删除成功");
 					location.reload();
@@ -172,7 +172,7 @@ business.getOrderList=function(status,substatus){
 		};
 	
 	
-	ajxget("/order/list",info,function(data){
+	business.ajax("/order/list",info,function(data){
 		if(data.code==200){
 			//business.orderList2,business.orderList3等等
 			business["orderList"+status+substatus]=data.data;
@@ -391,7 +391,7 @@ function gettuijian(){
 		pageSize:5,
 		recommend:2//推荐，默认0不推，1封推，2推荐
 	};
-	ajxget("/mer/list",info,function(data){
+	business.ajax("/mer/list",info,function(data){
 		if(data.code==200){
 			var list = data.data;
 		        	var table = $('.cargood');

@@ -85,7 +85,7 @@ business.getCartMerList=function(){
 	var info = {
 			accountId:business.account!=null?business.account.accountId:null,
 		}
-		ajxget("/cartMer/userlist",info,function(data){
+		business.ajax("/cartMer/userlist",info,function(data){
 						if(data.code==200){
 						//总数
 						business.cartMerCountAll=data.data[0].cartMerCountAll||0;	
@@ -211,7 +211,7 @@ function deleteCartMer(cartMerId){
 		accountId:business.account!=null?business.account.accountId:null
 	};
 	business.myConfirm("确定删除？",function(){
-	ajxget("/cartMer/delete",info,function(data){
+	business.ajax("/cartMer/delete",info,function(data){
 		if(data.code==200){
 			business.myLoadingToast("删除成功");
 			location.reload();
@@ -244,7 +244,7 @@ $("#cartMerDeleteBatch").on("click",function(){
 				accountId:business.account!=null?business.account.accountId:null
 			};
 			
-			ajxget("/cartMer/deleteBatch",info,function(data){
+			business.ajax("/cartMer/deleteBatch",info,function(data){
 				if(data.code==200){
 					business.myLoadingToast("删除成功");
 					location.reload();
@@ -306,7 +306,7 @@ function gettuijian(){
 		pageSize:5,
 		recommend:2//推荐，默认0不推，1封推，2推荐
 	};
-	ajxget("/mer/list",info,function(data){
+	business.ajax("/mer/list",info,function(data){
 		if(data.code==200){
 			var list = data.data;
 		        	var table = $('.cargood');

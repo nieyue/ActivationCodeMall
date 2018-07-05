@@ -23,6 +23,8 @@ mybatis:
     useGeneratedKeys: true
     
 spring:
+  resources: 
+    static-locations:  file:${myPugin.uploaderPath.rootPath}/, classpath:/META-INF/resources/, classpath:/resources/, classpath:/static/, classpath:/public/        
   http:
     multipart:
       max-file-size: 30MB
@@ -36,7 +38,7 @@ spring:
   session:
     store-type: redis     
   profiles:
-    active: dev
-    #active: prod
+    #active: dev
+    active: prod
  
 

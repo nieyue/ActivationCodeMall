@@ -1,13 +1,13 @@
 
  //订单详情
    business.getSelectOrderDetail=function(){
-   	var request  = getUrlInfo(location.search);
+   	var request  = business.getUrlInfo(location.search);
 	var orderId = request["orderId"];
 	var info={
 			orderId:orderId,
 			accountId:business.account!=null?business.account.accountId:null
 	};
-   	ajxget("/order/load",info,function(data){
+   	business.ajax("/order/load",info,function(data){
 		if(data.code==200){
 			console.log(data)
 			var child=data.data[0];
@@ -172,7 +172,7 @@
    			orderId:order.orderId,
    			accountId:business.account!=null?business.account.accountId:null
    	};
-    	ajxget("/merOrderCardCipher/list",info,function(data){
+    	business.ajax("/merOrderCardCipher/list",info,function(data){
    		if(data.code==200){
    			var moccl=data.data;
    			console.log(moccl)
@@ -208,7 +208,7 @@ business.merOrderCommentList=function(order){
 			orderId:order.orderId,
 			accountId:business.account!=null?business.account.accountId:null
 	};
-   	ajxget("/merOrderComment/list",info,function(data){
+   	business.ajax("/merOrderComment/list",info,function(data){
 		if(data.code==200){
 			//console.log(data)
 			var content="已评价！";
@@ -232,7 +232,7 @@ business.merOrderCommentAdd=function(order,content){
 			content:content,
 			accountId:business.account!=null?business.account.accountId:null
 	};
-	ajxget("/merOrderComment/add",info,function(data){
+	business.ajax("/merOrderComment/add",info,function(data){
 		if(data.code==200){
 			//console.log(data)
 			business.myLoadingToast("评价成功！")
@@ -247,7 +247,7 @@ business.orderProblemList=function(order){
 			accountId:business.account!=null?business.account.accountId:null,
 			pageSize:100
 	};
- 	ajxget("/orderProblem/list",info,function(data){
+ 	business.ajax("/orderProblem/list",info,function(data){
 		if(data.code==200){
 			//隐藏创建按钮
 			$("#orderProblemBtnWrap").hide();
@@ -347,7 +347,7 @@ business.orderProblemList=function(order){
 						substatus:3,
 						accountId:business.account!=null?business.account.accountId:null
 				};
-				ajxget("/order/update",info,function(data){
+				business.ajax("/order/update",info,function(data){
 					if(data.code==200){
 						//console.log(data)
 						business.myLoadingToast("申请成功！")
@@ -363,7 +363,7 @@ business.orderProblemList=function(order){
 						substatus:5,
 						accountId:business.account!=null?business.account.accountId:null
 				};
-				ajxget("/order/update",info,function(data){
+				business.ajax("/order/update",info,function(data){
 					if(data.code==200){
 						//console.log(data)
 						business.myLoadingToast("提交成功！")
@@ -386,7 +386,7 @@ business.orderProblemAdd=function(order,reason,content){
 			content:content,
 			accountId:business.account!=null?business.account.accountId:null
 	};
-	ajxget("/orderProblem/add",info,function(data){
+	business.ajax("/orderProblem/add",info,function(data){
 		if(data.code==200){
 			//console.log(data)
 			business.myLoadingToast("问题提交成功！")

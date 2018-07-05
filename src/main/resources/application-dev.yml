@@ -35,6 +35,9 @@ myPugin:
     rmi:
       hostname: 127.0.0.1
       port: 1234
+  uploaderPath:
+    rootPath: D:/nieyue
+    locationPath: /uploaderPath/img
   session: 
     myDomainName: null
   projectName: ActivationCodeMall

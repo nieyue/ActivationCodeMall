@@ -1,12 +1,16 @@
 $(function(){
 	
-	business.request  = getUrlInfo(location.search);
+	business.request  = business.getUrlInfo(location.search);
 	business.merId = business.request["goodid"];
 	business.spreadAccountId = business.request["said"];
 	//我要出售此商品
 	if(business.account&&business.account.roleName=="商户"){		
 	$("#sellerMer").click(function(){
-		console.log("销售")
+		if(!business.mer||!business.mer.merId){
+			return;
+		}
+		sessionStorage.setItem("sellerMer",JSON.stringify(business.mer));
+		location.href="/home/sell/sell_newgood.html";
 	});
 	}else{
 		$("#sellerMer").remove();	
@@ -18,7 +22,7 @@ $(function(){
 					accountId:business.account!=null?business.account.accountId:null,
 					merId:business.merId
 			};
-			ajxget("/spreadLink/add",info,function(data){
+			business.ajax("/spreadLink/add",info,function(data){
 				if(data.code==200){
 					business.myLoadingToast("生成推广链接成功！")
 				}
@@ -34,7 +38,7 @@ $(function(){
 				pageNum:1,
 				pageSize:5
 		};
-		ajxget("/merRelation/list",info,function(data){
+		business.ajax("/merRelation/list",info,function(data){
 			if(data.code==200){
 				business.merRelationList=data.dada;
 				var l=business.merRelationList.length;
@@ -90,7 +94,7 @@ $(function(){
 			var info={
 					merId:business.merId
 			};
-			ajxget("/merOrderComment/list",info,function(data){
+			business.ajax("/merOrderComment/list",info,function(data){
 				if(data.code==200){
 					business.merOrderCommentList=data.data;
 				}
@@ -102,7 +106,7 @@ $(function(){
 		var info={
 				merId:business.merId
 		};
-		ajxget("/orderProblem/list",info,function(data){
+		business.ajax("/orderProblem/list",info,function(data){
 			if(data.code==200){
 				business.orderProblemList=data.data;
 			}
@@ -111,7 +115,7 @@ $(function(){
 	//获取商品公共
 	business.merCommon;
 	function getmercommon(){
-			ajxget("/merCommon/list",null,function(data){
+			business.ajax("/merCommon/list",null,function(data){
 				if(data.code==200){
 					business.merCommon=data.data[0];
 				}
@@ -123,7 +127,7 @@ $(function(){
 		var info={
 				merId:business.merId
 		};
-		ajxget("/merNotice/list",info,function(data){
+		business.ajax("/merNotice/list",info,function(data){
 			if(data.code==200){
 				business.merNoticeList=data.data;
 			}
@@ -145,7 +149,7 @@ $(function(){
 			accountId:business.account!=null?business.account.accountId:null,
 			merId:business.merId
 		};
-		ajxget("/cartMer/add",info,function(data){
+		business.ajax("/cartMer/add",info,function(data){
 			if(data.code==200){
 				business.myLoadingToast("添加成功");
 				location.reload();
@@ -167,7 +171,7 @@ $(function(){
 				accountId:business.account!=null?business.account.accountId:null,
 				merId:business.merId
 			};
-			ajxget("/cartMer/add",info,function(data){
+			business.ajax("/cartMer/add",info,function(data){
 				if(data.code==200){
 					business.cartMerList=data.data;
 					sessionStorage.setItem("selectCartMerList",JSON.stringify(business.cartMerList));
@@ -190,7 +194,7 @@ $(function(){
 			merId:business.merId,
 		
 		};
-		ajxget("/mer/load",info,function(data){
+		business.ajax("/mer/load",info,function(data){
 			if(data.code==200){
 				var good = data.data[0];
 				business.mer=good;
@@ -451,7 +455,7 @@ $(function(){
 				pageNum:1,
 				pageSize:5
 		};
-		ajxget("/mer/list",info,function(data){
+		business.ajax("/mer/list",info,function(data){
 			if(data.code==200){
 				var list = data.data;
 				var table = $('.detailgood');

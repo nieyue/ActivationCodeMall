@@ -59,7 +59,7 @@ $(function(){
 								accountId:business.account.accountId,
 								bankCardId:bankCardId
 							}
-				      	ajxget("/bankCard/delete",info,function(data){
+				      	business.ajax("/bankCard/delete",info,function(data){
 			                if(data.code==200){
 			                	business.myLoadingToast("删除成功");
 			                	business.getBankCardList();
@@ -128,7 +128,7 @@ $(function(){
 				if(business.selectBankCard.bankCardId){
 					info.bankCardId=business.selectBankCard.bankCardId;
 				}
-		      	ajxget("/bankCard/addOrUpdate",info,function(data){
+		      	business.ajax("/bankCard/addOrUpdate",info,function(data){
 	                if(data.code==200){
 	                	business.getBankCardList();
 	                	if(business.selectBankCard.bankCardId){
@@ -170,7 +170,7 @@ function gettuiguan(type){
 			pageSize:pagesize
 		};
 		
-		ajxget("/spreadLink/list",info,function(data){
+		business.ajax("/spreadLink/list",info,function(data){
 			if(data.code==200){
 				var list = data.data;
 				business.spreadLinkList=data.data;
@@ -211,7 +211,7 @@ function getmyuser(type){
 			pageSize:pagesize
 		};
 		
-		ajxget("/spreadOrderAccount/list",info,function(data){
+		business.ajax("/spreadOrderAccount/list",info,function(data){
 			if(data.code==200){
 					var list = data.data;
 		        	var table = $('#myuser_tb');
@@ -239,7 +239,7 @@ business.getSpreadRecordList=function(type){
 				pageNum:1,
 				pageSize:pagesize
 			};
- 	ajxget("/spreadRecord/list",info,function(data){
+ 	business.ajax("/spreadRecord/list",info,function(data){
 		if(data.code==200){
 			business.spreadRecordList=data.data;
 			var html="";
@@ -271,7 +271,7 @@ function gettixian(status){
 			pageSize:pagesize
 		};
 		
-		ajxget("/financeRecord/list",info,function(data){
+		business.ajax("/financeRecord/list",info,function(data){
 			if(data.code==200){
 					var list = data.data;
 		        	var table = $('#tixian_tb');

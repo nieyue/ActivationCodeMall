@@ -17,7 +17,7 @@ business.getNoticeList=function(){
 		pageSize:100
 	};
 	
-	ajxget("/notice/list",info,function(data){
+	business.ajax("/notice/list",info,function(data){
 		if(data.code==200){
 					var list = data.data;
 		        	var table = $('#messageparent');

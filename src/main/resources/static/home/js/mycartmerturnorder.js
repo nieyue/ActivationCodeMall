@@ -8,7 +8,7 @@
    			pageNum:1,
    			pageSize:100
    		};
-   		ajxget("/receiptInfo/list",info,function(data){
+   		business.ajax("/receiptInfo/list",info,function(data){
 			if(data.code==200){
 					var list = data.data;
 		        	for(var i = 0; i < list.length; i++) {
@@ -81,7 +81,7 @@ business.getOrderCouponList=function(){
 			accountId:business.account!=null?business.account.accountId:null,
 			status:1//状态，默认1可用，2已用，3已失效
 		}
-		ajxget("/coupon/list",info,function(data){
+		business.ajax("/coupon/list",info,function(data){
 						if(data.code==200){
 							business.orderCouponList=data.data;
 	for (var i = 0; i < business.orderCouponList.length; i++) {
@@ -143,7 +143,7 @@ $("input[name='couponradio']").on("click",function(){
 					code:$("#inputCouponCode").val(),
 					status:1//状态，默认1可用，2已用，3已失效
 				}
-			ajxget("/coupon/list",info,function(data){
+			business.ajax("/coupon/list",info,function(data){
 				if(data.code==200){
 					//选中的优惠券
 					business.selectOrderCoupon=data.data[0];
@@ -204,7 +204,7 @@ $("#cartMerTurnOrder").on("click", function() {
 			receiptInfoId:parseInt($("input[name='receiptInfoRadio']:checked").attr("id").replace("receiptInfo",""))//收货地址Id
 		}
 	//购物车商品批量转未支付订单商品
-	ajxget("/cartMer/turnOrderBatch",info,function(data){
+	business.ajax("/cartMer/turnOrderBatch",info,function(data){
 		if(data.code==200){
 			sessionStorage.removeItem("selectCartMerTotalPrice");
 			sessionStorage.removeItem("selectCartMerList");

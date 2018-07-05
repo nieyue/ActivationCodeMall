@@ -195,8 +195,12 @@ public class CartMerServiceImpl implements CartMerService{
 			}
 			list.add((CartMer)json.toBean(json, CartMer.class));
 		}
+		
 		for (int i = 0; i < list.size(); i++) {
 				CartMer e = list.get(i);
+				if(e.getNumber()==null||e.getNumber()<=0||e.getNumber()>5){
+					throw new CommonRollbackException("商品数1-5个");
+				}
 				Mer mer = merService.loadMer(e.getMerId());
 				if(mer==null){
 					throw new CommonRollbackException("商品不存在");

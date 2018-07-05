@@ -1,8 +1,8 @@
 $(function(){
 	
 	getbannerlist();
-	getshopcarlist()
-	getmercate();
+	business.getCartMerList()
+	business.getMerCateList();
 	getmernewlist();
 	getmerrenqilist();
 	getmerhotlist();
@@ -15,7 +15,7 @@ function getmernewlist(){
 			orderName:"create_date",
 			orderWay:"desc"
 		};
-		ajxget("/mer/list",info,function(data){
+		business.ajax("/mer/list",info,function(data){
 			if(data.code==200){
 				var list = data.data;
 		        	var table = $('#newlist');
@@ -45,7 +45,7 @@ function getmerrenqilist(){
 			orderName:"mer_score",
 			orderWay:"desc"
 		};
-		ajxget("/mer/list",info,function(data){
+		business.ajax("/mer/list",info,function(data){
 			if(data.code==200){
 				var list = data.data;
 		        	var table = $('#renqilist');
@@ -74,7 +74,7 @@ function getmerhotlist(){
 				orderName:"sale_number",
 				orderWay:"desc"
 		};
-		ajxget("/mer/list",info,function(data){
+		business.ajax("/mer/list",info,function(data){
 			if(data.code==200){
 				var list = data.data;
 		        	var table = $('#hotlist');
@@ -100,7 +100,7 @@ business.getSystemNoticeList=function(){
 			region:1,//全局
 			type:1//系统
 	};
-	ajxget("/notice/list",info,function(data){
+	business.ajax("/notice/list",info,function(data){
 		if(data.code==200){
 			var html="";
 			business.systemNoticeList=data.data;
@@ -122,7 +122,7 @@ function getbannerlist(){
 			pageNum:1,
 			pageSize:20
 		};
-		ajxget("/banner/list",info,function(data){
+		business.ajax("/banner/list",info,function(data){
 			if(data.code==200){
 				var list = data.data;
 		        	var table = $('#indexbanner');
@@ -161,7 +161,7 @@ function getrexiaopaihang(){
 			orderName:'sale_number',
 			orderWay:'desc'
 		};
-		ajxget("/mer/list",info,function(data){
+		business.ajax("/mer/list",info,function(data){
 			if(data.code==200){
 				var list = data.data;
 		        	var ul = $('.index_sortul');

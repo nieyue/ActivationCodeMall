@@ -5,7 +5,7 @@ function getarticle(){
 					pageSize:10
 				}
 	
-	ajxget("/article/list",info,function(data){
+	business.ajax("/article/list",info,function(data){
                   var articlelist = data.data;
 		        	var table = $('.newsgroup');
 		        	for(var i = 0; i < articlelist.length; i++) {
@@ -30,13 +30,13 @@ if(location.pathname.indexOf("news.html")>-1){
 
 //文章详情
 function getarticledetail(){
-	var request  = getUrlInfo(location.search);
+	var request  = business.getUrlInfo(location.search);
 	var id = request["articleid"];
 	console.log(id);
 	var info = {
 		articleId:id
 	}
-	ajxget("/article/load",info,function(data){
+	business.ajax("/article/load",info,function(data){
 		if(data.code==200){
 			var article = data.data[0];
 			business.articleCateId = article.articleCateId;
@@ -61,7 +61,7 @@ function getaboutarticle(){
 		pageSize:5,
 		articleCateId:business.articleCateId
 	}
-	ajxget("/article/list",info,function(data){
+	business.ajax("/article/list",info,function(data){
 		if(data.code==200){
 			var articlelist = data.data;
 		        	var table = $('.detailnews');

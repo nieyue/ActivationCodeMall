@@ -74,7 +74,7 @@ $("#orderPayment").on("click", function() {
 			payType:business.payType//支付方式，1支付宝，2微信,3百度钱包,4Paypal,5网银
 		}
 	//购物车商品批量转未支付订单商品
-	ajxget("/order/payment",info,function(data){
+	business.ajax("/order/payment",info,function(data){
 		if(data.code==200){
 			console.log(data)
 			sessionStorage.removeItem("selectOrderTotalPrice");

@@ -201,7 +201,7 @@ public class AlipayUtil {
 						 return "success";
 					 }
 					 if(!out_trade_no.equals(payment.getOrderNumber())
-							 ||!total_amount.equals(payment.getMoney().toString())){
+							 ||!new Double(total_amount).equals(payment.getMoney())){
 						 signVerified=false;
 					 }
 					 if(signVerified &&payment!=null){
@@ -276,7 +276,7 @@ public class AlipayUtil {
 				 return "success";
 			 }
 			 if(!out_trade_no.equals(payment.getOrderNumber())
-					 ||!total_amount.equals(payment.getMoney().toString())){
+					 ||!new Double(total_amount).equals(payment.getMoney())){
 				 signVerified=false;
 			 }
 			 if(signVerified &&payment!=null){
@@ -341,7 +341,7 @@ public class AlipayUtil {
 				 return "success";
 			 }
 			 if(!out_trade_no.equals(payment.getOrderNumber())
-					 ||!total_amount.equals(payment.getMoney().toString())){
+					 ||!new Double(total_amount).equals(payment.getMoney())){
 				 signVerified=false;
 			 }
 			 if(signVerified &&payment!=null){

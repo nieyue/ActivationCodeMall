@@ -76,12 +76,304 @@ $(document).ready(function(){
 	//当前页面功能
 	if(location.href.indexOf("/sell/sell_index.html")>=0){
 	//上架的商品	
+	}else if(location.href.indexOf("/sell/sell_newgood.html")>=0){
+	/**
+	 * 销售新产品
+	 */	
+		if(!sessionStorage.getItem("sellerMer")){
+			location.href="/";
+		}
+		business.mer=JSON.parse(sessionStorage.getItem("sellerMer"));
+		//显示商品图片
+		business.imgAddressList=[];
+		if(!business.mer.merImgList||business.mer.merImgList.length<=0){
+			business.imgAddressList=[{imgAddress:business.mer.imgAddress}]
+		}else{
+			business.imgAddressList=business.mer.merImgList;
+		}
+		var imghtml="";
+		for (var i = 0; i < business.imgAddressList.length; i++) {
+			imghtml='<img class="detailimg" src="'+business.imgAddressList[i].imgAddress+'" />';
+			$("#imgAddressList").append(imghtml);
+		}
+		//商品名称
+		$("#merName").text(business.mer.name);
+		//商品种类名称
+		$("#merCateName").text(business.mer.merCate.name);
+		//商品手续费收取
+		$("#platformProportion").text(business.mer.platformProportion);
+		//默认可以切换，不锁定
+		business.addMerCardCipherIsClock=false;
+		//卡密类型
+		business.merCardCipherType=1;//默认是1上传文件的字符串文字，2字符串文字，3字符串图片
+		//上传文件
+		$("#addMerCardCipherFileUpload").click(function(){
+			$("#addMerCardCipherFile").click();
+		});
+		//商品卡密
+		business.merCardCipherCodes=[];
+		$("#addMerCardCipherFile").change(function(){
+			//
+			business.fileUpload(
+ 				    {inputfile:$("#addMerCardCipherFile"),
+ 				    	photoExt:[".xls",".xlsx"],
+ 				    ajaxObj:{
+ 				        formData:[
+ 				            {key:"excel",value:$("#addMerCardCipherFile").get(0).files[0]}
+ 				            ],
+ 				        url:business.url+"/tool/importExcel",
+ 				        success:function(data){
+ 				            if(data.code==200){
+ 				            	console.log(data.data)
+ 				            //成功后锁
+ 				            	business.addMerCardCipherIsClock=true;
+ 				            for (var i = 0; i < data.data.length; i++) {
+ 				            	business.merCardCipherCodes.push(data.data[i])
+ 				            	}
+ 				            $("#addMerCardCipherFileCodes").html(business.merCardCipherCodes.toString());	
+ 				            business.myPrevToast("上传成功",null,"remove");
+ 				            }
+ 				        }
+ 				    }
+ 				}
+ 				);
+		});
+		//上传图片
+		$("#addMerCardCipherImgUpload").click(function(){
+			$("#addMerCardCipherImg").click();
+		});
+		$("#addMerCardCipherImg").change(function(){
+			//
+			business.fileUpload(
+ 				    {inputfile:$("#addMerCardCipherImg"),
+ 				    	photoExt:[".jpg",".png"],
+ 				    ajaxObj:{
+ 				        formData:[
+ 				            {key:"editorUpload",value:$("#addMerCardCipherImg").get(0).files[0]}
+ 				            ],
+ 				        url:business.url+"/tool/file/add",
+ 				        success:function(data){
+ 				            if(data.code==200){
+ 				            	console.log(data.data)
+ 				            //成功后锁
+ 				            business.addMerCardCipherIsClock=true;
+ 				            var imghtml="";
+ 				            for (var i = 0; i < data.data.length; i++) {
+ 				            	business.merCardCipherCodes.push(data.data[i]);
+ 				            	imghtml='<img class="detailimg" style="float:none;" src="'+data.data[i]+'" />'
+ 				            	$("#merCardCipherImgList").append(imghtml);	
+ 				            }
+ 				            business.myPrevToast("上传成功",null,"remove");
+ 				            }
+ 				        }
+ 				    }
+ 				}
+ 				);
+		});
+		
+		$(".sellnew_positionul li").click(function(){
+			if(business.addMerCardCipherIsClock){
+				business.myLoadingToast("不能选多个种类上传");
+				return;
+			}
+			$('.sellnew_positionul li').removeClass('clicknewli');
+			$(this).addClass('clicknewli');
+			if($(this).attr("id")=='addMerCardCipherType1'){
+				$("#addMerCardCipherWrap1").show();
+				$("#addMerCardCipherWrap2").hide();
+				$("#addMerCardCipherWrap3").hide();
+				business.merCardCipherType=1;
+			}else if($(this).attr("id")=='addMerCardCipherType2'){
+				$("#addMerCardCipherWrap1").hide();
+				$("#addMerCardCipherWrap2").show();
+				$("#addMerCardCipherWrap3").hide();
+				business.merCardCipherType=2;
+			}else if($(this).attr("id")=='addMerCardCipherType3'){
+				$("#addMerCardCipherWrap1").hide();
+				$("#addMerCardCipherWrap2").hide();
+				$("#addMerCardCipherWrap3").show();
+				business.merCardCipherType=3;
+			}
+			
+		});
+		//提交商品申请
+		$("#addSellerMer").click(function(){
+			//单价格
+			var merUnitPrice=$("#merUnitPrice").val().trim();
+			//折扣
+			var merDiscount=$("#merDiscount").val().trim();
+			if(business.userVerification.merPrice.code.test(merUnitPrice)){
+				business.myLoadingToast(business.userVerification.merPrice.value);
+				return;
+			}
+			if(business.userVerification.merDiscount.code.test(merDiscount)){
+				business.myLoadingToast(business.userVerification.merDiscount.value);
+				return;
+			}
+			if(business.merCardCipherType!=1&&business.merCardCipherType!=2&&business.merCardCipherType!=3){
+				business.myLoadingToast("卡密必填");
+				return;
+			}
+			if(business.merCardCipherType==2){
+				business.merCardCipherCodes=[];//制空
+				var addMerCardCipherText=$("#addMerCardCipherText").val();
+				var amcctarray=addMerCardCipherText.split(",");
+				for (var i=0;i< amcctarray.length;i++) {
+					if(amcctarray[i]){
+						business.merCardCipherCodes.push(amcctarray[i]);						
+					}
+				}
+			}
+			console.log(business.merCardCipherCodes)
+			if(business.merCardCipherCodes.length<=0){
+				business.myLoadingToast("缺少卡密");
+				return;
+			}
+			
+		});
+		
+	}else if(location.href.indexOf("/sell/sell_order.html")>=0){
+	/**
+	 * 已完成订单
+	 */	
+		//订单数量
+		$(".orderCount32").text(0);
+		//获取已完成订单列表
+		business.getOrderList32=function(){
+			var info = {
+				merchantAccountId:business.account.accountId,//商户id
+				status:3,//订单状态，2待支付，3已支付,4预购商品，5问题单，6已取消，7已删除
+				substatus:2,//子状态，2（1待支付），3（1冻结单，2已完成），4（1等待发货），5（1待解决（买家提问后），2解决中（卖家回复后），3申请退款，4已退款，5已解决），6（1正常取消,2订单商品库存不够），7（1已删除）
+				pageNum:1,
+				pageSize:100
+			};
+			
+			business.ajax("/order/list",info,function(data){
+				if(data.code==200){
+					var html="";
+						business.orderList32=data.data;
+					for (var i = 0; i < business.orderList32.length; i++) {
+						var child=business.orderList32[i];
+							html='<tr class="ordertabletd">'
+									+'<td>'+child.orderNumber+'</td>'
+									+'<td>'+child.orderDetail[0].merCateName+'</td>'
+									+'<td>'+child.orderDetail[0].number+'</td>'
+									+'<td style="color: #e04600;">￥'+child.orderDetail[0].totalPrice+'</td>'
+									+'<td>'+child.paymentDate+'</td>'
+									+'<td >'
+										+'<a style="text-decoration: none;color: #4cafe9;" href="../sell/sell_orderdetail.html?orderId='+child.orderId+'">详情</a>'	
+									+'</td>'
+								+'</tr>';
+							$("#orderList32").append(html);
+						}
+					}
+				});
+				
+		};
+		business.getOrderList32();
 	}else if(location.href.indexOf("/sell/sell_record.html")>=0){
 	/**
 	 * 进账记录
 	 */	
+		//获取进账记录列表
+		business.getFinanceRecordList5=function(){
+			var info = {
+				accountId:business.account.accountId,
+				type:5,//类型，1购买商品，2提现记录，3退款记录（用户），4诚信押金，5进账记录，6被退款记录（商户），7申请退保证金
+				pageNum:1,
+				pageSize:100
+			};
+			
+			business.ajax("/financeRecord/list",info,function(data){
+				if(data.code==200){
+					var html="";
+						business.financeRecordList5=data.data;
+					for (var i = 0; i < business.financeRecordList5.length; i++) {
+						var child=business.financeRecordList5[i];
+							html='<tr class="recordtabletd">'
+										+'<td>'+child.createDate+'</td>'
+										+'<td style="color: #4cafe9;">'+child.transactionNumber+'</td>'
+										+'<td>'+business.payType[child.method]+'</td>'
+										+'<td>'+child.realname+'</td>'
+										+'<td>'+child.money+'</td>'
+										+'<td>'+parseInt(Math.round((child.money-child.realMoney)/child.money))+'%</td>'
+										+'<td>'+child.realMoney+'</td>'
+									+'</tr>';
+							$("#financeRecordList5").append(html);
+						}
+					}
+				});
+				
+		};
+		business.getFinanceRecordList5();	
+	}else if(location.href.indexOf("/sell/sell_recordtixian.html")>=0){
+	/**
+	 * 提现记录
+	 */	
+		//获取提现记录列表
+		business.getFinanceRecordList2=function(){
+			var info = {
+				accountId:business.account.accountId,
+				type:2,//类型，1购买商品，2提现记录，3退款记录（用户），4诚信押金，5进账记录，6被退款记录（商户），7申请退保证金
+				pageNum:1,
+				pageSize:100
+			};
+			
+			business.ajax("/financeRecord/list",info,function(data){
+				if(data.code==200){
+					var html="";
+						business.financeRecordList2=data.data;
+					for (var i = 0; i < business.financeRecordList2.length; i++) {
+						var child=business.financeRecordList2[i];
+							html='<tr class="recordtabletd">'
+										+'<td>'+child.createDate+'</td>'
+										+'<td style="color: #4cafe9;">'+child.transactionNumber+'</td>'
+										+'<td>'+business.payType[child.method]+'</td>'
+										+'<td>'+child.realname+'</td>'
+										+'<td>'+child.money+'</td>'
+										+'<td>'+parseFloat(child.money-child.realMoney).toFixed(2)+'</td>'
+										+'<td>'+child.realMoney+'</td>'
+									+'</tr>';
+							$("#financeRecordList2").append(html);
+						}
+					}
+				});
+				
+		};
+		business.getFinanceRecordList2();
+	}else if(location.href.indexOf("/sell/sell_recordtuikuan.html")>=0){
+	/**
+	 * 退款记录
+	 */	
+	//获取退款记录列表
+	business.getFinanceRecordList6=function(){
+		var info = {
+			accountId:business.account.accountId,
+			type:6,//类型，1购买商品，2提现记录，3退款记录（用户），4诚信押金，5进账记录，6被退款记录（商户），7申请退保证金
+			pageNum:1,
+			pageSize:100
+		};
 		
-		
+		business.ajax("/financeRecord/list",info,function(data){
+			if(data.code==200){
+				var html="";
+					business.financeRecordList6=data.data;
+				for (var i = 0; i < business.financeRecordList6.length; i++) {
+					var child=business.financeRecordList6[i];
+						html='<tr class="recordtabletd">'
+									+'<td>'+child.createDate+'</td>'
+									+'<td style="color: #4cafe9;">'+child.transactionNumber+'</td>'
+									+'<td>'+business.payType[child.method]+'</td>'
+									+'<td>'+child.realname+'</td>'
+									+'<td>'+child.money+'</td>'
+								+'</tr>';
+						$("#financeRecordList6").append(html);
+					}
+				}
+			});
+			
+	};
+	business.getFinanceRecordList6();
 	}else if(location.href.indexOf("/sell/sell_message.html")>=0){
 	/**
 	 * 我的消息
@@ -105,7 +397,7 @@ $(document).ready(function(){
 				pageSize:100
 			};
 			
-			ajxget("/notice/list",info,function(data){
+			business.ajax("/notice/list",info,function(data){
 				if(data.code==200){
 							var list = data.data;
 				        	var table = $('#messageparent');
@@ -288,7 +580,7 @@ $(document).ready(function(){
 							accountId:business.account.accountId,
 							bankCardId:bankCardId
 						}
-			      	ajxget("/bankCard/delete",info,function(data){
+			      	business.ajax("/bankCard/delete",info,function(data){
 		                if(data.code==200){
 		                	business.myLoadingToast("删除成功");
 		                	business.getBankCardList();
@@ -357,7 +649,7 @@ $(document).ready(function(){
 			if(business.selectBankCard.bankCardId){
 				info.bankCardId=business.selectBankCard.bankCardId;
 			}
-	      	ajxget("/bankCard/addOrUpdate",info,function(data){
+	      	business.ajax("/bankCard/addOrUpdate",info,function(data){
                 if(data.code==200){
                 	business.getBankCardList();
                 	if(business.selectBankCard.bankCardId){
@@ -384,7 +676,7 @@ $(document).ready(function(){
 		$('.detail_positionul li').removeClass('clickli');
 		$(this).addClass('clickli');
 		var value1 = $(this).text();
-		var value = removeAllSpace(value1);
+		var value = value1.replace(/\s+/g, "");
 		
 		console.log(value);
 		if(value=="商品介绍"){
@@ -409,18 +701,5 @@ $(document).ready(function(){
 	});
 	
 	
-	$(".sellnew_positionul li").click(function(){
-		$('.sellnew_positionul li').removeClass('clicknewli');
-		$(this).addClass('clicknewli');
-		var value1 = $(this).text();
-		var value = removeAllSpace(value1);
-		
-		console.log(value);
-		
-	});
-
-
-		function removeAllSpace(str) {
-		return str.replace(/\s+/g, "");
-		}
+	
 })

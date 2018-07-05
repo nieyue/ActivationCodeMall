@@ -1,6 +1,8 @@
 package com.nieyue.controller;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,10 +16,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.nieyue.comments.RequestToMethdoItemUtils;
+import com.nieyue.poi.MyExcel;
 import com.nieyue.thirdparty.qiniu.QiniuUtil;
+import com.nieyue.util.DateUtil;
+import com.nieyue.util.FileUploadUtil;
 import com.nieyue.util.ResultUtil;
+import com.nieyue.util.SnowflakeIdWorker;
 import com.nieyue.util.StateResultList;
 import com.nieyue.util.barcode.QRCodeUtil;
 import com.nieyue.verification.VerificationCode;
@@ -45,6 +52,10 @@ public class ToolController {
 	QiniuUtil qiniuUtil;
 	@Value("${myPugin.projectName}")
 	String projectName;
+	@Value("${myPugin.uploaderPath.rootPath}")
+	String rootPath;
+	@Value("${myPugin.uploaderPath.locationPath}")
+	String locationPath;
 	/**
 	 * 验证码
 	 * @param date
@@ -120,6 +131,51 @@ public class ToolController {
 		list.add(text);
 		return ResultUtil.getSlefSRSuccessList(list);
 	}
-	
-	
+	/**
+	 * 文件增加、修改
+	 * @param editorUpload 上传参数
+	 * @param width 固定图片宽度
+	 * @param height 固定图片高度
+	 * @return
+	 * @throws IOException 
+	 */
+	@ApiOperation(value = "上传文件", notes = "上传文件")
+	@RequestMapping(value = "/file/add", method = {RequestMethod.GET,RequestMethod.POST})
+	public StateResultList<List<String>> addFile(
+			@RequestParam("editorUpload") MultipartFile file,
+			HttpServletRequest request,HttpSession session ) throws IOException  {
+		String fileUrl = null;
+		String filedir=DateUtil.getImgDir();
+		try{
+			fileUrl = FileUploadUtil.FormDataMerImgFileUpload(file, session,rootPath,locationPath,filedir);
+		}catch (IOException e) {
+			throw new IOException();
+		}
+		StringBuffer url=request.getRequestURL();
+		String redirect_url = url.delete(url.length() - request.getRequestURI().length(), url.length()).toString(); 
+		List<String> list=new ArrayList<>();
+		list.add(redirect_url+fileUrl);
+		return ResultUtil.getSlefSRSuccessList(list);
+		
+	}
+
+	/**
+	 * 导入Excel
+	 * @return
+	 * @throws IOException 
+	 * @throws IllegalStateException 
+	 */
+	@RequestMapping(value = "/importExcel", method = {RequestMethod.GET,RequestMethod.POST})
+	public StateResultList<List<String>> importExcel(
+			@RequestParam("excel") MultipartFile multipartFile,
+			HttpSession	 session
+			) throws IllegalStateException, IOException{
+		String name="";
+		name=rootPath+locationPath+"/"+SnowflakeIdWorker.getId().toString()+multipartFile.getOriginalFilename();
+		File file = new File(name);
+		multipartFile.transferTo(file);
+		List<String> list = MyExcel.importData(file);
+		
+		return ResultUtil.getSlefSRSuccessList(list);
+	}
 }

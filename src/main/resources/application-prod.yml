@@ -33,6 +33,9 @@ myPugin:
     rmi:
       hostname: 59.110.221.143
       port: 1234
+  uploaderPath:  
+    rootPath: /home
+    locationPath: /uploaderPath/img
   session: 
     myDomainName: nalu888.cn
   projectName: ActivationCodeMall

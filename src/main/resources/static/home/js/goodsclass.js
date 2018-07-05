@@ -1,6 +1,6 @@
 $(function(){
 	
-	business.request  = getUrlInfo(location.search);
+	business.request  = business.getUrlInfo(location.search);
 	//根据商品类型id查询
 	business.merCateId = business.request["merCateId"];
 	//根据商品名称查询
@@ -38,7 +38,7 @@ $(function(){
 				};
 			}
 		
-		ajxget("/mer/list",info,function(data){
+		business.ajax("/mer/list",info,function(data){
 			if(data.code==200){
 				var list = data.data;
 		        	var table = $('#shoplist');

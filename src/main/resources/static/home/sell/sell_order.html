@@ -74,7 +74,7 @@
 				</div>
 				<div class="fr padding_top20">
 					<a href="" title="" class="kefu_a"><img src="../img/indexkefu.png" alt="" title="" style="top:0;"/>在线客服咨询</a>
-					<p class="font_size16 color_eb6100 text_center ">400-000-8888</p>
+					<p class="font_size16 color_eb6100 text_center "><span class="customerServicePhone"></span></p>
 					<p class="fontfamily_song color_666 font_size12 text_center ">( 09:00 - 12:00 )</p>
 				</div>
 			</div>
@@ -176,7 +176,7 @@
 					<div class="bg_fff" style="height: 160px;margin-top: 10px;padding-left: 20px;padding-right: 20px;">
 						<div style="line-height:79px;">
 							<p style="font-weight: bold;font-size: 20px;color: #FF7400;float: left;">订单数量</p>
-							<p style="margin-left:20px;font-size: 20px;color: #FF7400;float: left;">780</p>
+							<p style="margin-left:20px;font-size: 20px;color: #FF7400;float: left;"><span class="orderCount32"></span></p>
 							
 						</div>
 						
@@ -185,7 +185,7 @@
 							
 							<div class="diansearchbox clearfix">
 				     	<div class="fl">
-				     		 <img src="../img/sousuo.png" alt="" title="" style="top: 0;"/>
+				     		 <img src="../img/sousuo.png" alt="" />
 				     		 <input type="" name="" id="searchbox_input" value="" placeholder="在店内搜索"/>
 				     	</div>
 					     <button class="fr diansearchboxbutton">搜索</button>
@@ -208,9 +208,9 @@
 							<th style="width: 12%;"></th>
 						</tr>
 					</thead>
-					<tbody>
+					<tbody id="orderList32">
 
-						<tr class="ordertabletd">
+						<!-- <tr class="ordertabletd">
 							<td>
 								15614561
 							</td>
@@ -230,71 +230,7 @@
 							<a style="text-decoration: none;color: #4cafe9;" href="sell_orderdetail.html">详情</a>	
 							</td>
 						</tr>
-
-						<tr class="ordertabletd">
-							<td>
-								15614561
-							</td>
-							<td>暗黑破坏神</td>
-							
-							<td>
-								1
-							</td>
-							<td style="color: #e04600;">
-								￥80
-							</td>
-							<td>
-								2018-03-25
-							</td>
-							
-							<td >
-							<a style="text-decoration: none;color: #4cafe9;" href="sell_orderdetail.html">详情</a>	
-							</td>
-						</tr>
-						
-						<tr class="ordertabletd">
-							<td>
-								15614561
-							</td>
-							<td>暗黑破坏神</td>
-							
-							<td>
-								1
-							</td>
-							<td style="color: #e04600;">
-								￥80
-							</td>
-							<td>
-								2018-03-25
-							</td>
-							
-							<td >
-							<a style="text-decoration: none;color: #4cafe9;" href="sell_orderdetail.html">详情</a>	
-							</td>
-						</tr>
-						
-						<tr class="ordertabletd">
-							<td>
-								15614561
-							</td>
-							<td>暗黑破坏神</td>
-							
-							<td>
-								1
-							</td>
-							<td style="color: #e04600;">
-								￥80
-							</td>
-							<td>
-								2018-03-25
-							</td>
-							
-							<td >
-							<a style="text-decoration: none;color: #4cafe9;" href="sell_orderdetail.html">详情</a>	
-							</td>
-						</tr>
-
-						
+ -->
 
 					</tbody>
 				</table>
@@ -314,7 +250,7 @@
 				<div class="width1200">
 					<div class="left fl">
 						<p class="font_size18 color_666 lineheight70">客服咨询</p>
-						<p class="font_size16 color_aaaaaa lineheight30">客服在线时间：09:00 - 12:00 <br />客&nbsp;&nbsp;服&nbsp;&nbsp;电&nbsp;&nbsp;话：400-000-8888</p>
+						<p class="font_size16 color_aaaaaa lineheight30">客服在线时间：09:00 - 12:00 <br />客&nbsp;&nbsp;服&nbsp;&nbsp;电&nbsp;&nbsp;话：<span class="customerServicePhone"></span></p>
 					</div>
 					<div class="center fl clearfix">
 	        			<div class="footer_ulbox fl">
@@ -409,7 +345,7 @@
 <script src="../js/public.js" type="text/javascript" charset="utf-8"></script>
 <script src="../js/sell.js"></script>
 <script>
-	gethotseachlist();
+	business.getMerSearchList();
     $(function () {
         $('#menu').metisMenu();
     });

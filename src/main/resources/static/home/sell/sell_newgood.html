@@ -45,7 +45,7 @@
 			</div>
 			<div class="width1200 clearfix height102box">
 				<div class="padding_top27 clearfix fl">
-					<a href="" class="fl imgbox"><img src="../img/logo.jpg" alt="" title="" class="logoimg" /></a>
+					<a href="/" class="fl imgbox"><img src="../img/logo.jpg" alt="" title="" class="logoimg" /></a>
 					<p class="lineheight50 fl padding_left20 font_size14 color_666">大型交易点卡平台</p>
 				</div>
 				<div class="padding_top27 fl padding_left130">
@@ -76,7 +76,7 @@
 				</div>
 				<div class="fr padding_top20">
 					<a href="" title="" class="kefu_a"><img src="../img/indexkefu.png" alt="" title="" style="top:0;" />在线客服咨询</a>
-					<p class="font_size16 color_eb6100 text_center ">400-000-8888</p>
+					<p class="font_size16 color_eb6100 text_center "><span class="customerServicePhone"></span></p>
 					<p class="fontfamily_song color_666 font_size12 text_center ">( 09:00 - 12:00 )</p>
 				</div>
 			</div>
@@ -199,20 +199,20 @@
 				<div style="width: 960px;padding-left: 20px;padding-right: 20px;background: #FFFFFF;">
 					<div class="detailitem clearfix" style="height: 120px;line-height: 120px;">
 						<p style="font-size: 14px;float: left;">商品图片</p>
-						<div style="float: left;margin-left: 50px;margin-top: 10px;">
+						<div style="float: left;margin-left: 50px;margin-top: 10px;" id="imgAddressList">
+							<!-- <img class="detailimg" src="../img/tu1_.png" />
 							<img class="detailimg" src="../img/tu1_.png" />
-							<img class="detailimg" src="../img/tu1_.png" />
-							<img class="detailimg" src="../img/tu1_.png" />
+							<img class="detailimg" src="../img/tu1_.png" /> -->
 						</div>
 					</div>
 
 					<div class="detailitem clearfix">
 						<p>商品名称</p>
-						<p style="margin-left: 50px;">暗黑破坏神3-《死靈法師的崛起》台服版本</p>
+						<p style="margin-left: 50px;" ><span id="merName"></span></p>
 					</div>
 					<div class="detailitem clearfix">
 						<p>商品种类</p>
-						<p style="margin-left: 50px;">暗黑破坏神</p>
+						<p style="margin-left: 50px;"><span id="merCateName"></span></p>
 					</div>
 
 				</div>
@@ -222,40 +222,81 @@
 				<div style="width: 960px;padding-left: 20px;padding-right: 20px;background: #FFFFFF;">
 					<div class="detailitem clearfix">
 						<p>商品价格</p>
-						<input placeholder="输入商品价格" style="margin-left: 50px;" />
+						<input placeholder="输入商品价格" id="merUnitPrice" style="margin-left: 50px;height:100%;" />元
 					</div>
 
 					<div class="detailitem clearfix">
 						<p>折扣优惠</p>
-						<input placeholder="请输入优惠折扣（不输入则默认为未优惠）" style="margin-left: 50px;" />
+						<input placeholder="请输入优惠折扣（不输入则默认为未优惠）" id="merDiscount" style="margin-left: 50px;height:100%;width:50%" />
+
+					</div>
+					<div class="detailitem clearfix">
+						<p>手续费收取</p>
+						<span style="margin-left: 50px;height:100%;width:50%;color:#999;"><span id="platformProportion"></span>% （平台规定，不可更改）</span>
 
 					</div>
 
 				</div>
 
 				<p style="color: #FF7400;margin-left: 20px;margin-top: 20px;font-weight: bold;">商品卡密</p>
-				<div style="margin-top: 10px;background: white;">
+				<div style="margin-top: 10px;background: white;padding-bottom:20px;">
 					<div style="height: 40px;background: white;">
 						<ul class="sellnew_positionul clearfix">
 
-							<li class="clicknewli">
-								<a title="">上传文件</a>
+							<li class="clicknewli" id="addMerCardCipherType1">
+								<a>上传文件</a>
 							</li>
-							<li>
-								<a title="">上传文字卡密</a>
+							<li id="addMerCardCipherType2">
+								<a>上传文字卡密</a>
 							</li>
-							<li>
-								<a title="">上传图片</a>
+							<li id="addMerCardCipherType3">
+								<a>上传图片</a>
 							</li>
 
 						</ul>
 					</div>
 
-					<div style="height: 200px;"></div>
+					<div id="addMerCardCipherWrap1">
+						<div style="margin:8px;">
+							备注：上传文件为excel格式，以第一列为单位，依次向下。点击上传回显后，必须点击 “提交申请”按钮后，才算成功。
+						</div>
+						<div style="color:red;">
+							已经上传的卡密：
+						</div>
+						<div id="addMerCardCipherFileCodes">
+						
+						</div>
+						<div id="addMerCardCipherFileUpload" style="height: 80px;width:80px;margin:20px;border:1px solid #ececec;">
+							<div style="display:inline-block;width:80px;height:80px;text-align:center;font-size:5rem;line-height:4rem;cursor:pointer">+</div>
+						</div>
+						<input type="file" style="display:none;" id="addMerCardCipherFile"/>
+					</div>
+					<div id="addMerCardCipherWrap2" style="display:none;">
+						<div style="margin:8px;">
+							备注：多个文字卡密以英文逗号隔开“,”。
+						</div>
+						<textarea id="addMerCardCipherText" placeholder="请输入文字卡密，如：abcd32,cdbd34,ccccdd2"  style="margin-left: 50px;border:1px solid #ececec;cursor:text;overflow-y:auto;width:500px;height:200px;" /></textarea>
+					</div>
+					<div id="addMerCardCipherWrap3" style="display:none;">
+						<div style="margin:8px;">
+							备注：上传文件为jpg,png格式。
+						</div>
+						<div style="margin-left: 50px;" id="merCardCipherImgList">
+							<!-- <img class="detailimg" style="float:none;" src="../img/tu1_.png" />
+							<img class="detailimg" style="float:none;"  src="../img/tu1_.png" />
+							<img class="detailimg" style="float:none;"  src="../img/tu1_.png" /> -->
+						</div>
+						<div id="addMerCardCipherImgUpload" style="height: 80px;width:80px;margin:20px;border:1px solid #ececec;">
+							<div style="display:inline-block;width:80px;height:80px;text-align:center;font-size:5rem;line-height:4rem;cursor:pointer">+</div>
+						</div>
+						<input type="file" style="display:none;" id="addMerCardCipherImg"/>
+					</div>
+					
+					
 				</div>
 
 				<div style="margin-top: 30px;text-align: center;">
-					<a style="line-height: 30px;border-radius: 8px;background: #FF7400;width: 150px;color: white;">提交申请</a>
+					<a style="line-height: 30px;border-radius: 8px;background: #FF7400;width: 150px;color: white;" id="addSellerMer">提交申请</a>
 				</div>
 				
 				
@@ -269,7 +310,7 @@
 					<div class="width1200">
 						<div class="left fl">
 							<p class="font_size18 color_666 lineheight70">客服咨询</p>
-							<p class="font_size16 color_aaaaaa lineheight30">客服在线时间：09:00 - 12:00 <br />客&nbsp;&nbsp;服&nbsp;&nbsp;电&nbsp;&nbsp;话：400-000-8888</p>
+							<p class="font_size16 color_aaaaaa lineheight30">客服在线时间：09:00 - 12:00 <br />客&nbsp;&nbsp;服&nbsp;&nbsp;电&nbsp;&nbsp;话：<span class="customerServicePhone"></span></p>
 						</div>
 						<div class="center fl clearfix">
 							<div class="footer_ulbox fl">
@@ -393,7 +434,7 @@
 <script src="../js/public.js" type="text/javascript" charset="utf-8"></script>
 <script type="text/javascript" src="../js/sell.js"></script>
 <script>
-gethotseachlist();
+business.getMerSearchList();
 	$(function() {
 		$('#menu').metisMenu();
 	});
