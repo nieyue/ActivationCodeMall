@@ -100,6 +100,20 @@ $(document).ready(function(){
 		$("#merName").text(business.mer.name);
 		//商品种类名称
 		$("#merCateName").text(business.mer.merCate.name);
+		//商品原始单价
+		$("#merOldUnitPrice").val(business.mer.oldUnitPrice);
+		//优惠折扣
+		$("#merDiscount").val(business.mer.discount);
+		//商品单价
+		$("#merUnitPrice").text(parseFloat($("#merOldUnitPrice").val()*$("#merDiscount").val()).toFixed(2));
+		$("#merOldUnitPrice").change(function(){
+			//商品单价
+			$("#merUnitPrice").text(parseFloat($("#merOldUnitPrice").val()*$("#merDiscount").val()).toFixed(2));
+		});
+		$("#merDiscount").change(function(){
+			//商品单价
+			$("#merUnitPrice").text(parseFloat($("#merOldUnitPrice").val()*$("#merDiscount").val()).toFixed(2));
+		});
 		//商品手续费收取
 		$("#platformProportion").text(business.mer.platformProportion);
 		//默认可以切换，不锁定
@@ -138,8 +152,8 @@ $(document).ready(function(){
  				}
  				);
 		});
-		//上传图片
-		$("#addMerCardCipherImgUpload").click(function(){
+		//上传图片 ,自己服务器上传
+	/*	$("#addMerCardCipherImgUpload").click(function(){
 			$("#addMerCardCipherImg").click();
 		});
 		$("#addMerCardCipherImg").change(function(){
@@ -169,8 +183,18 @@ $(document).ready(function(){
  				    }
  				}
  				);
+		});*/
+		//七牛云上传图片
+		business.qiniuUploadImg("#addMerCardCipherWrap3", "#addMerCardCipherImgUpload", "#addMerCardCipherImg",null,function(url){
+			//成功后锁
+            business.addMerCardCipherIsClock=true;
+            var imghtml="";
+            	business.merCardCipherCodes.push(url);
+            	imghtml='<img class="detailimg" style="float:none;" src="'+url+'" />'
+            	$("#merCardCipherImgList").append(imghtml);	
+            	business.myPrevToast("上传成功",null,"remove");
 		});
-		
+		//点击选择商品卡卡密上传类型
 		$(".sellnew_positionul li").click(function(){
 			if(business.addMerCardCipherIsClock){
 				business.myLoadingToast("不能选多个种类上传");
@@ -198,15 +222,15 @@ $(document).ready(function(){
 		});
 		//提交商品申请
 		$("#addSellerMer").click(function(){
-			//单价格
-			var merUnitPrice=$("#merUnitPrice").val().trim();
+			//价格
+			var merUnitPrice=$("#merUnitPrice").text().trim();
 			//折扣
 			var merDiscount=$("#merDiscount").val().trim();
-			if(business.userVerification.merPrice.code.test(merUnitPrice)){
+			if(!business.userVerification.merPrice.code.test(merUnitPrice)){
 				business.myLoadingToast(business.userVerification.merPrice.value);
 				return;
 			}
-			if(business.userVerification.merDiscount.code.test(merDiscount)){
+			if(!business.userVerification.merDiscount.code.test(merDiscount)){
 				business.myLoadingToast(business.userVerification.merDiscount.value);
 				return;
 			}
@@ -224,14 +248,60 @@ $(document).ready(function(){
 					}
 				}
 			}
-			console.log(business.merCardCipherCodes)
 			if(business.merCardCipherCodes.length<=0){
 				business.myLoadingToast("缺少卡密");
 				return;
 			}
+			var info = {
+					accountId:business.account.accountId,//商户id
+					merId:business.mer.merId,
+					unitPrice:merUnitPrice,
+					discount:merDiscount,
+					merCardCipherType:business.merCardCipherType,
+					merCardCiphers:business.merCardCipherCodes.toString()
+				};
+				business.ajax("/mer/addSellerMer",info,function(data){
+					if(data.code==200){
+						business.myLoadingToast("添加成功")
+						sessionStorage.removeItem("sellerMer")
+					}else{
+						business.myLoadingToast(data.msg)
+					}
+					});
 			
 		});
 		
+	}else if(location.href.indexOf("/sell/sell_applynewgood.html")>=0){
+	/**
+	 * 商品类型申请
+	 */	
+		//提交商品类型申请
+		$("#addMerCateCommit").off().on("click",function(){
+			var merCateName=$("#merCateName").val().trim();
+			var merCateSummary=$("#merCateSummary").val().trim();
+			if(!merCateName||merCateName.length<2){
+				business.myLoadingToast("商品类型字数最少2个");
+				return ;
+			}
+			if(!merCateSummary||merCateSummary.length<2||merCateSummary.length>200){
+				business.myLoadingToast("商品类型介绍字数2-200");
+				return ;
+			}
+			var info = {
+					accountId:business.account.accountId,//商户id
+					type:3,//新增商品类型
+					content:'{"merCateName":"'+merCateName+'","merCateSummary":"'+merCateSummary+'"}'
+				};
+				business.ajax("/notice/add",info,function(data){
+					if(data.code==200){
+						business.myLoadingToast("添加成功");
+						sessionStorage.removeItem("sellerMer");
+					}else{
+						business.myLoadingToast(data.msg)
+					}
+					});
+			
+		});
 	}else if(location.href.indexOf("/sell/sell_order.html")>=0){
 	/**
 	 * 已完成订单
@@ -389,6 +459,8 @@ $(document).ready(function(){
 			{id:6,value:"问题单反馈",icon:"../img/icon_wtd.png"},
 			{id:7,value:"订单商品动态",icon:"../img/icon_sp.png"},
 			]
+		//1审核中，2申请成功，3申请失败,个人为0，代表正常
+		business.noticeStatusList=["正常","审核中","申请成功","申请失败"],
 		//获取消息列表
 		business.getNoticeList=function(){
 			var info = {
@@ -413,32 +485,29 @@ $(document).ready(function(){
 									//申请新产品销售
 									var c=JSON.parse(child.content);
 									content='<div style="margin-top: 5px;">'
-										+'<p class="messagesumbp">商 品 名：</p>'
-										+'<p  class="color_1b1b1b">'+c.merName+'</p>'
+										+'<span class="messagesumbp">商 品 名：</span>'
+										+'<span class="color_1b1b1b">'+c.merName+'</span>'
 									+'</div>'
 									+'<div style="margin-top: 5px;">'
-										+'<p class="messagesumbp">商 品 种类：</p>'
-										+'<p  class="color_1b1b1b">'+c.merCateName+'</p>'
+										+'<span class="messagesumbp">商 品 种类：</span>'
+										+'<span  class="color_1b1b1b">'+c.merCateName+'</span>'
 									+'</div>'
 									+'<div style="margin-top: 5px;">'
-										+'<a class="golook" href="myorderdetail.html?orderId='+c.orderId+'">'
-											+'<p class="messagesumbp" style="width: auto;">商品状态：'+child.status+'</p>'
-										+'</a>'
+										+'<p class="messagesumbp" style="width: auto;">商品状态：'+business.noticeStatusList[child.status]+'</p>'
 									+'</div>';
 								}else if(child.type==3){
 									//3新增商品类型
-									//var c=JSON.parse(child.content);
-									content='<div>'
-												+'<p style="color: #1B1B1B;font-size: 16px;float: left;">订单编号：</p>'
-												+'<p style="color: #FF7400;font-size: 16px;">1252212</p>'
+									var c=JSON.parse(child.content);
+									content='<div style="margin-top: 5px;">'
+												+'<span class="messagesumbp">商 品 类型名：</span>'
+												+'<span class="color_1b1b1b">'+c.merCateName+'</span>'
 											+'</div>'
 											+'<div style="margin-top: 5px;">'
-												+'<p style="color: #1B1B1B;font-size: 16px;float: left;">商 品 名：</p>'
-												+'<p style="color: #1B1B1B;font-size: 16px;">暗黑破坏神3-《死靈法師的崛起》台服版本</p>'
+												+'<span class="messagesumbp">商 品 类型介绍：</span>'
+												+'<span  class="color_1b1b1b">'+c.merCateSummary+'</span>'
 											+'</div>'
 											+'<div style="margin-top: 5px;">'
-												+'<p style="color: #1B1B1B;font-size: 16px;float: left;width: auto;">商品状态：卡号及卡密已发送至您的个人邮箱  </p>'
-												+'<p style="color: #FF7400;font-size: 16px;margin-left: 20px;width: 80px;float: left;">去查看>></p>'
+												+'<p class="messagesumbp" style="width: auto;">申请状态：'+business.noticeStatusList[child.status]+'</p>'
 											+'</div>';
 								}else if(child.type==6){
 									//问题单反馈
@@ -474,6 +543,7 @@ $(document).ready(function(){
 									
 									continue;
 								}
+								var childImgAddress=child.imgAddress||business.noticeTypeList[child.type].icon;
 								//架子
 				        		var html='<div class="messagediv">'
 											+'<div style="padding-top: 10px;margin-left: 20px;padding-right: 20px;">'
@@ -483,7 +553,7 @@ $(document).ready(function(){
 												+'<div style="clear:both"></div>'
 											+'</div>'
 											+'<div class="messagediv2">'
-												+'<img style="width: 83px;height: 67px;float: left;" src="'+child.imgAddress+'"/>'
+												+'<img style="width: 83px;height: 67px;float: left;" src="'+childImgAddress+'"/>'
 												+'<div class="messagediv3">'
 												+content
 												+'</div>'

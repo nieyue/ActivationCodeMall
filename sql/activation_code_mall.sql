@@ -231,7 +231,7 @@ PRIMARY KEY (mer_cate_id)
 #创建商品表 
 CREATE TABLE mer_tb(
 mer_id int(11) NOT NULL AUTO_INCREMENT COMMENT '商品id',
-region tinyint(4) COMMENT '范围，1官网自营，2商家自营',
+region tinyint(4) COMMENT '范围，1官网自营，2商户非自营，3商户自营',
 platform_proportion decimal(11,2) DEFAULT 5  COMMENT '平台分成比例，单位%',
 type tinyint(4) COMMENT '类型，1普通商品，2降价商品，3预购商品',
 deliver_end_date datetime  COMMENT '最迟发货时间，预购商品可选',

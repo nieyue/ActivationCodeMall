@@ -25,9 +25,9 @@ public class Mer implements Serializable{
 	@ApiModelProperty(value="商品id",example="商品id")
 	private Integer merId;
 	/**
-	 * 范围，1官网自营，2商家自营
+	 * 范围，1官网自营，2商户非自营，3商户自营
 	 */
-	@ApiModelProperty(value="范围，1官网自营，2商家自营",example="范围，1官网自营，2商家自营")
+	@ApiModelProperty(value="范围，1官网自营，2商户非自营，3商户自营",example="范围，1官网自营，2商户非自营，3商户自营")
 	private Integer region;
 	/**
 	 * 平台分成比例，单位%

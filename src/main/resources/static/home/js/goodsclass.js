@@ -37,7 +37,7 @@ $(function(){
 					orderWay:"desc"
 				};
 			}
-		
+		info.region=1;
 		business.ajax("/mer/list",info,function(data){
 			if(data.code==200){
 				var list = data.data;

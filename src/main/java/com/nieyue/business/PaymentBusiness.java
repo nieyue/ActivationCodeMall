@@ -245,17 +245,11 @@ public class PaymentBusiness {
 			 */
 			Notice notice=new Notice();
 			notice.setBusinessId(order.getOrderId());
-			notice.setTitle("订单商品动态");
 			notice.setCreateDate(new Date());
 			notice.setUpdateDate(new Date());
 			notice.setImgAddress(order.getOrderDetailList().get(0).getImgAddress());
 			notice.setAccountId(order.getAccountId());
-			notice.setRegion(2);//1全局，2是个人
-			notice.setStatus(0);//1审核中，2申请成功，3申请失败,个人为0，代表正常
-			notice.setType(7);
-			//类型，1系统消息，2申请新产品销售，3新增商品类型，4商品申请自营，5提现申请，6问题单反馈,7订单商品动态
-			notice.setIsMerDynamic(notice.getType());
-			notice.setContent(noticeBusiness.getContentByType(notice));
+			notice.setType(7);//类型，1系统消息，2申请新产品销售，3新增商品类型，4商品申请自营，5提现申请，6问题单反馈,7订单商品动态
 			noticeService.addNotice(notice);
 			/**
 			 * 7.2.根据卡密接受方式，发送

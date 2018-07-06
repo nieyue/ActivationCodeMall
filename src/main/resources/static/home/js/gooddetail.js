@@ -4,7 +4,8 @@ $(function(){
 	business.merId = business.request["goodid"];
 	business.spreadAccountId = business.request["said"];
 	//我要出售此商品
-	if(business.account&&business.account.roleName=="商户"){		
+	if(business.account&&business.account.roleName=="商户"){
+		
 	$("#sellerMer").click(function(){
 		if(!business.mer||!business.mer.merId){
 			return;
@@ -32,21 +33,21 @@ $(function(){
 			$("#spreadMer").remove();	
 		}
 	//商家关系
-	business.getMerRelationList=function(platformMerId){
+	business.getMerRelationList=function(platformMerId,pn,ps){
 		var info = {
 				platformMerId:platformMerId,//平台商品id
-				pageNum:1,
-				pageSize:5
+				pageNum:pn||1,
+				pageSize:ps||5
 		};
 		business.ajax("/merRelation/list",info,function(data){
 			if(data.code==200){
-				business.merRelationList=data.dada;
+				business.merRelationList=data.data;
 				var l=business.merRelationList.length;
 				var html="";
 				for (var i = 0; i < l; i++) {
 					var child=business.merRelationList[i];
 					var icon=child.sellerAccount.icon||'img/touxiang1.png';
-					html+='<div class="sellotheritem">'
+					html='<div class="sellotheritem">'
 							+'<img style="height: 80px;width: 80px;" src="'+icon+'" class="fl"/>'
 							+'<div class="fl margin_left20">'
 								+'<div>'
@@ -75,11 +76,18 @@ $(function(){
 							+'</div>'
 							+'<div class="fr" >'
 								+'<p class="color_7400 font_size20 font_blod " style="text-align: center;">￥ '+child.sellerMer.unitPrice+'</p>'
-								+'<a class="font_size12 color_fff lineheight30 wansellgood margin_top20" >立即购买</a>'
+								+'<a class="font_size12 color_fff lineheight30 wansellgood margin_top20" href="gooddetail.html?goodid='+child.sellerMerId+'" >立即购买</a>'
 								+'</div>'
 						+'</div>';
+					$("#merRelationList").append(html);
 				}
-				$("#merRelationList").html(html);
+				if(l<=info.pageSize){
+					$("#showALlMerRelation").hide();
+				}else{
+					$("#showALlMerRelation").off().click(function(){
+						business.getMerRelationList(platformMerId,info.pageNum,info.pageSize);
+					});
+				}
 			}else{
 				$("#showALlMerRelation").hide();
 				$("#merRelationList").html("<div style='text-align:center;'>暂无</div>");
@@ -198,6 +206,19 @@ $(function(){
 			if(data.code==200){
 				var good = data.data[0];
 				business.mer=good;
+				//判断商品是否自营
+				if(good.region==1){
+					$(".detailhomeregionwrap").show();
+				}else{
+					$(".detailhomeregionwrap").hide();
+					//不显示“我要出售此商品”
+					$("#sellerMer").remove();
+					//设置logo
+					$("#accountIcon").attr("src",business.account.icon);
+					//设置昵称
+					$("#accountNickname").text(business.account.nickname);
+					$("#accountNickname").css("margin-top","20px");
+				}
 				//获取商品关系数据
 				business.getMerRelationList(business.mer.merId);
 				
@@ -235,12 +256,7 @@ $(function(){
 				var qqq=['<a class="qcShareQQDiv" href="http://connect.qq.com/widget/shareqq/index.html?',s.join('&'),'" target="_blank"></a>'].join('');
 				$("#sharedQQ").append(qqq);
 				})();
-				//判断商品是否自营
-				if(good.region==1){
-					$(".detailhomeregionwrap").show();
-				}else{
-					$(".detailhomeregionwrap").hide();
-				}
+				
 				//console.log(good.merImgList)
 				for (var int = 0; int < good.merImgList.length; int++) {
 					$("#merImgsWrap").children().get(int).setAttribute("src",good.merImgList[int].imgAddress);
@@ -452,6 +468,7 @@ $(function(){
 	function gettuijian(){
 		var info = {
 				type:business.mer.type,
+				region:1,
 				pageNum:1,
 				pageSize:5
 		};

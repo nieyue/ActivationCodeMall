@@ -9,6 +9,7 @@ $(function(){
 //最新
 function getmernewlist(){
 		var info = {
+			region:1,
 			pageNum:1,
 			pageSize:9,
 			status:1,
@@ -39,6 +40,7 @@ function getmernewlist(){
 //人气商品
 function getmerrenqilist(){
 		var info = {
+			region:1,
 			pageNum:1,
 			pageSize:9,
 			status:1,
@@ -68,6 +70,7 @@ function getmerrenqilist(){
 //热销
 function getmerhotlist(){
 		var info = {
+				region:1,
 				pageNum:1,
 				pageSize:10,
 				status:1,

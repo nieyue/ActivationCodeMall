@@ -1038,7 +1038,7 @@ business.islogin();
    * fileElement 文件元素
    * imgElement 图片元素
    */    
-  business.qiniuUploadImg=function(clickElementBox,clickElement,fileElement,imgElement){
+  business.qiniuUploadImg=function(clickElementBox,clickElement,fileElement,imgElement,callback){
 	  var bb=clickElement.replace(/\#/g, "").replace(/\./g, "");
 	  var de=clickElementBox.replace(/\#/g, "").replace(/\./g, "");
 	  //上传图片  
@@ -1049,7 +1049,12 @@ business.islogin();
 			  container:de,
 			  //resource:'business.account.icon',
 			  success:function(url){
-				  $(imgElement).attr("src",url);
+				  if(imgElement){
+					  $(imgElement).attr("src",url);					  
+				  }
+				  if(typeof callback=='function'){
+					  callback(url);
+				  }
 			  }
 		  });
 	  }

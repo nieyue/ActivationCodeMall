@@ -13,7 +13,6 @@
 		<link rel="stylesheet" type="text/css" href="../css/index.css" />
 		<link rel="stylesheet" href="../css/sell_index.css" />
 
-		<!--<link rel="stylesheet" href="css/bootstrap.min.css" />-->
 	</head>
 
 	<body class="bg_eeeeee">
@@ -203,22 +202,16 @@
 					
 					<div class="detailitem clearfix">
 						<p>商品种类</p>
-						<input placeholder="点击输入新的商品种类" style="margin-left: 75px;" />
+						<input placeholder="点击输入新的商品种类" id="merCateName" style="margin-left: 75px;height:100%;" />
 					</div>
-					<div class="detailitem clearfix" style="height: 240px;">
-						<p>商品种类介绍</p>
-						<div  type="text" style="width: 750px;background: #EBEBEB;margin-left: 50px;margin-top: 30px;height: 160px;float: left;" >
-						
-						</div>
+					<div class="detailitem clearfix" style="height: 240px;line-height: 100%;">
+						<p style="line-height: 100px;">商品种类介绍</p>
+						<textarea  id="merCateSummary" style="width: 750px;background: #EBEBEB;margin-left: 50px;margin-top: 30px;height: 160px;cursor:text;" placeholder="1-200字" ></textarea>
 					</div>
 				</div>
 
-				
-
-				
-
 				<div style="margin-top: 30px;text-align: center;">
-					<a style="line-height: 30px;border-radius: 8px;background: #FF7400;width: 150px;color: white;">提交申请</a>
+					<a style="line-height: 30px;border-radius: 8px;background: #FF7400;width: 150px;color: white;" id="addMerCateCommit">提交申请</a>
 				</div>
 				
 				

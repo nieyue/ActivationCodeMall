@@ -33,6 +33,9 @@ public class NoticeServiceImpl implements NoticeService{
 		if(notice.getType().equals(1)){
 			notice.setRegion(1);//系统通知为全局
 		}
+		notice.setTitle(noticeBusiness.getTitleByType(notice.getType()));
+		//1审核中，2申请成功，3申请失败,个人为0，代表正常
+		notice.setStatus(noticeBusiness.getStatusByType(notice.getType()));
 		notice.setIsMerDynamic(noticeBusiness.getIsMerDynamicByType(notice.getType()));
 		notice.setContent(noticeBusiness.getContentByType(notice));//json数据
 		b = noticeDao.addNotice(notice);
@@ -73,7 +76,6 @@ public class NoticeServiceImpl implements NoticeService{
 		if(b&&notice.getType().equals(1)){
 			//通知到所有人
 			new Thread(new Runnable() {
-				
 				@Override
 				public void run() {
 					List<Account> al = accountService.browsePagingAccount(null, null, null, null, null, null, null, null, null, 1, Integer.MAX_VALUE, "account_id", "asc");

@@ -387,6 +387,7 @@ business.getOrderList(5,4);
 //商品推荐
 function gettuijian(){
 	var info = {
+		region:1,
 		pageNum:1,
 		pageSize:5,
 		recommend:2//推荐，默认0不推，1封推，2推荐

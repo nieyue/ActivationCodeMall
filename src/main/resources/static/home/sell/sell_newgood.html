@@ -221,17 +221,22 @@
 
 				<div style="width: 960px;padding-left: 20px;padding-right: 20px;background: #FFFFFF;">
 					<div class="detailitem clearfix">
-						<p>商品价格</p>
-						<input placeholder="输入商品价格" id="merUnitPrice" style="margin-left: 50px;height:100%;" />元
+						<p>商品原始价格</p>
+						<input placeholder="输入原始商品价格" id="merOldUnitPrice" style="margin-left: 50px;height:100%;width:500px;" />元  (可以更改)
 					</div>
 
 					<div class="detailitem clearfix">
-						<p>折扣优惠</p>
-						<input placeholder="请输入优惠折扣（不输入则默认为未优惠）" id="merDiscount" style="margin-left: 50px;height:100%;width:50%" />
+						<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;折扣优惠</p>
+						<input placeholder="请输入优惠折扣（不输入则默认为未优惠）" id="merDiscount" style="margin-left: 50px;height:100%;width:500px;" />折  (可以更改)
+					</div>
+					
+					<div class="detailitem clearfix">
+						<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;商品价格</p>
+						<span style="margin-left: 50px;height:100%;width:500px;display:inline-block;"><span id="merUnitPrice"></span>&nbsp;</span>元  (不能更改，自动计算)
 
 					</div>
 					<div class="detailitem clearfix">
-						<p>手续费收取</p>
+						<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;手续费收取</p>
 						<span style="margin-left: 50px;height:100%;width:50%;color:#999;"><span id="platformProportion"></span>% （平台规定，不可更改）</span>
 
 					</div>
@@ -258,7 +263,7 @@
 
 					<div id="addMerCardCipherWrap1">
 						<div style="margin:8px;">
-							备注：上传文件为excel格式，以第一列为单位，依次向下。点击上传回显后，必须点击 “提交申请”按钮后，才算成功。
+							备注：上传文件为xls和xlsx的excel格式，以第一列为单位，依次向下。点击上传回显后，必须点击 “提交申请”按钮后，才算成功。
 						</div>
 						<div style="color:red;">
 							已经上传的卡密：

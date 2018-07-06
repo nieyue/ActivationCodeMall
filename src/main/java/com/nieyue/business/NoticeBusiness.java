@@ -14,6 +14,7 @@ import com.nieyue.bean.Notice;
 import com.nieyue.bean.Order;
 import com.nieyue.bean.OrderProblem;
 import com.nieyue.bean.OrderProblemAnswer;
+import com.nieyue.exception.CommonRollbackException;
 import com.nieyue.exception.NoticeException;
 import com.nieyue.service.AccountService;
 import com.nieyue.service.MerCateService;
@@ -57,6 +58,42 @@ public class NoticeBusiness {
 		return isMerDynamic;
 	}
 	/**
+	 *  获取状态
+	 *  @param type 类型，1系统消息，2申请新产品销售，3新增商品类型，4商品申请自营，5提现申请，6问题单反馈,7订单商品动态
+	 *  @return status 1审核中，2申请成功，3申请失败,个人为0，代表正常
+	 */
+	public Integer getStatusByType(Integer type){
+		Integer status=0;//默认为0
+		if(type==2||type==3||type==4||type==5){
+			status=1;//是审核中
+		}
+		return status;
+	}
+	/**
+	 *  获取标题
+	 *  @param type 类型，1系统消息，2申请新产品销售，3新增商品类型，4商品申请自营，5提现申请，6问题单反馈,7订单商品动态
+	 *  @return title 系统消息，申请新产品销售，新增商品类型，商品申请自营，提现申请，问题单反馈,订单商品动态
+	 */
+	public String getTitleByType(Integer type){
+		String title="";//默认为空
+		if(type==1){
+			title="系统消息";
+		}else if(type==2){
+			title="申请新产品销售";
+		}else if(type==3){
+			title="新增商品类型";
+		}else if(type==4){
+			title="商品申请自营";
+		}else if(type==5){
+			title="提现申请";
+		}else if(type==6){
+			title="问题单反馈";
+		}else if(type==7){
+			title="订单商品动态";
+		}
+		return title;
+	}
+	/**
 	 *  通知
 	 *  content 内容
 	 *  类型，1系统消息，2申请新产品销售，3新增商品类型，4商品申请自营，5提现申请，6问题单反馈，7订单商品动态
@@ -89,7 +126,16 @@ public class NoticeBusiness {
 				break;
 			//新增商品类型
 			case 3:
-				if(ObjectUtils.isEmpty(notice.getBusinessId())
+				List<MerCate> merCate3List=merCateService.browsePagingMerCate(1, Integer.MAX_VALUE, "mer_cate_id", "asc");
+				JSONObject json = JSONObject.fromObject(notice.getContent());
+				merCate3List.forEach(e->{
+					if(e.getName().equals(json.get("merCateName"))){
+						//已经存在的商品类型名称
+						throw new CommonRollbackException("商品类型名称已经存在");
+					}
+				});
+				content.append(notice.getContent());
+				/*if(ObjectUtils.isEmpty(notice.getBusinessId())
 						){
 					throw new NoticeException("新增商品类型异常");
 				}
@@ -100,9 +146,9 @@ public class NoticeBusiness {
 				JSONObject json3=new JSONObject();
 				json3.put("merCateName", merCate3.getName());//商品类型名称
 				json3.put("merCateSummary", merCate3.getSummary());//商品类型介绍
-				content.append(json3.toString());
+				content.append(json3.toString());*/
 				break;
-				//商品申请自营
+			//商品申请自营
 			case 4:
 				if(ObjectUtils.isEmpty(notice.getBusinessId())
 						){
@@ -119,7 +165,7 @@ public class NoticeBusiness {
 				json4.put("merPlatformProportion", mer4.getPlatformProportion());//平台技术服务费
 				content.append(json4.toString());
 				break;
-				//提现申请
+			//提现申请
 			case 5:
 				if(ObjectUtils.isEmpty(notice.getBusinessId())
 						){
@@ -136,7 +182,7 @@ public class NoticeBusiness {
 				json5.put("money", order5.getOrderDetailList().get(0).getTotalPrice());//提现金额
 				content.append(json5.toString());
 				break;
-				//问题单反馈
+			//问题单反馈
 			case 6:
 				if(ObjectUtils.isEmpty(notice.getBusinessId())
 						){
@@ -164,7 +210,7 @@ public class NoticeBusiness {
 				json6.put("content", c);//问题详情/商家回复
 				content.append(json6.toString());
 				break;
-				//订单商品动态
+			//订单商品动态
 			case 7:
 				if(ObjectUtils.isEmpty(notice.getBusinessId())
 						){
