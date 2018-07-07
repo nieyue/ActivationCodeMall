@@ -176,20 +176,20 @@
 					<div class="bg_fff" style="margin-top: 10px;padding-left: 20px;padding-right: 20px;">
 						<div style="padding-top: 20px;">
 							<p class="titlep">订单收入</p>
-							<p style="margin-left: 20px;float: left;">订单收入：<p style="color: #e04600;float: left;">￥79.84</p></p>
+							<p style="margin-left: 20px;float: left;">订单收入：<p style="color: #e04600;float: left;">￥<span id="sellerOrderPrice">0</span></p>
 						</div>
 						
 						<hr color="#EBEBEB" width="100%" size="1" style="margin-top: 0px;margin-bottom: 0px;"/>
 						<div style="height: 40px;line-height: 40px;" class="clearfix">
 							
 							<div style="width: 33%;float: left;">
-								<p style="margin-left: 20px;float: left;">总金额：<p style="color: #e04600;float: left;">￥80</p></p>
+								<p style="margin-left: 20px;float: left;">总金额：<p style="color: #e04600;float: left;">￥<span class="totalPrice">0</span></p>
 							</div>
 							<div style="width: 33%;float: left;">
-								<p style="margin-left: 20px;float: left;">平台提成：<p style="color: #e04600;float: left;">￥80</p></p>
+								<p style="margin-left: 20px;float: left;">平台提成：<p style="color: #e04600;float: left;">￥<span id="platformPrice">0</span></p>
 							</div>
 							<div style="width: 33%;float: left;">
-								<p style="margin-left: 20px;float: left;">提成比例：<p style="color: #e04600;float: left;">20%</p></p>
+								<p style="margin-left: 20px;float: left;">提成比例：<p style="color: #e04600;float: left;"><span id="platformProportion">0</span>%</p>
 							</div>
 						</div>
 						
@@ -200,25 +200,25 @@
 							<p class="titlep">订单详情</p>
 							<div>
 								<div style="width: 50%;float: left;">
-									<p style="margin-left: 20px;float: left;">商品名称：暗黑破坏神3-《死靈法師的崛起》台服版本</p>
+									<p style="margin-left: 20px;float: left;">商品名称：<span id="merName"></span></p>
 								</div>
 								<div style="width: 50%;float: left;">
-									<p style="margin-left: 20px;float: left;">商品种类：暗黑破坏神</p>
+									<p style="margin-left: 20px;float: left;">商品种类：<span id="merCateName"></span></p>
 								</div>
 							</div>
 							
 							<div>
 								<div style="width: 25%;float: left;">
-									<p style="margin-left: 20px;float: left;">单价：￥80</p>
+									<p style="margin-left: 20px;float: left;">单价：￥<span id="unitPrice">0</span></p>
 								</div>
 								<div style="width: 25%;float: left;">
-									<p style="margin-left: 20px;float: left;">数量：3</p>
+									<p style="margin-left: 20px;float: left;">数量：<span id="number">0</span></p>
 								</div>
 								<div style="width: 25%;float: left;">
-									<p style="margin-left: 20px;float: left;">折扣券：未使用</p>
+									<p style="margin-left: 20px;float: left;">折扣券：<span id="coupon">未使用</span></p>
 								</div>
 								<div style="width: 25%;float: left;">
-									<p style="margin-left: 20px;float: left;">总金额：<p style="color: #e04600;float: left;">￥80</p></p>
+									<p style="margin-left: 20px;float: left;">总金额：<p style="color: #e04600;float: left;">￥<span class="totalPrice">0</span></p>
 								</div>
 							</div>
 						</div>
@@ -227,44 +227,44 @@
 						<div style="height: 40px;line-height: 40px;" class="clearfix">
 							
 							<div style="width: 33%;float: left;height: 40px;">
-								<p style="margin-left: 20px;float: left;">订单编号：<p style="color: #FF7400;float: left;">31312455667</p></p>
+								<p style="margin-left: 20px;float: left;">订单编号：<p style="color: #FF7400;float: left;"><span id="orderNumber"></span></p>
 							</div>
 							<div style="width: 33%;float: left;height: 40px;">
-								<p style="margin-left: 20px;float: left;">下单时间：2017-09-21   11:34</p>
+								<p style="margin-left: 20px;float: left;">下单时间：<span id="createDate"></span></p>
 							</div>
 							<div style="width: 33%;float: left;height: 40px;">
-								<p style="margin-left: 20px;float: left;">支付日期：2017-09-21   11:34</p>
+								<p style="margin-left: 20px;float: left;">支付日期：<span id="paymentDate"></span></p>
 							</div>
 						</div>
 						<div style="height: 50px;line-height: 40px;" class="clearfix">
 							
 							<div style="width: 33%;float: left;height: 40px;">
-								<p style="margin-left: 20px;float: left;">卡密：iasf5*******2345  </p>
+								<p style="margin-left: 20px;float: left;">卡密：<span id="merOrderCardCipherList"></span> </p>
 							</div>
 							<div style="width: 33%;float: left;height: 40px;">
-								<p style="margin-left: 20px;float: left;">收货人：强****</p>
+								<p style="margin-left: 20px;float: left;">收货人：<span id="orderReceiptInfoName"></span></p>
 							</div>
 							<div style="width: 33%;float: left;height: 40px;">
-								<p style="margin-left: 20px;float: left;">收货邮箱：**********@qq.com</p>
+								<p style="margin-left: 20px;float: left;">收货邮箱：<span id="orderReceiptInfoEmail"></span></p>
 							</div>
 						</div>
 					</div>
 					
-					<div class="bg_fff" style="margin-top: 10px;padding-left: 20px;padding-right: 20px;padding-bottom: 20px;">
+					<!-- <div class="bg_fff" style="margin-top: 10px;padding-left: 20px;padding-right: 20px;padding-bottom: 20px;">
 						<div style="padding-top: 20px;">
 							<p class="titlep">TA的评价</p>
 							<div style="height: 40px;line-height: 40px;padding-left: 20px;padding-right: 20px;">
 								<p style="float: left;">商品打分</p>
 								<div style="float: left;margin-top: 4px;margin-left: 10px;">
-								<ul class="comment">
-								    <li class="commentli">☆</li>
-								    <li class="commentli">☆</li>
-								    <li class="commentli">☆</li>
-								    <li class="commentli">☆</li>
-								    <li class="commentli">☆</li>
-								</ul>
-							</div>
-							<p style="float: right;color: #a6a6a6;">2018-09-09     13:40</p>
+									<ul class="comment">
+									    <li class="commentli">☆</li>
+									    <li class="commentli">☆</li>
+									    <li class="commentli">☆</li>
+									    <li class="commentli">☆</li>
+									    <li class="commentli">☆</li>
+									</ul>
+								</div>
+								<p style="float: right;color: #a6a6a6;">2018-09-09     13:40</p>
 							</div>
 							
 							<div style="margin-left: 20px;background: #EBEBEB;padding: 20px;">
@@ -273,7 +273,7 @@
 							
 						</div>
 						
-					</div>
+					</div> -->
 					
 					
 				</div>

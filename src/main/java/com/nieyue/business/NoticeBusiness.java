@@ -19,6 +19,7 @@ import com.nieyue.exception.NoticeException;
 import com.nieyue.service.AccountService;
 import com.nieyue.service.MerCateService;
 import com.nieyue.service.MerService;
+import com.nieyue.service.NoticeService;
 import com.nieyue.service.OrderProblemAnswerService;
 import com.nieyue.service.OrderProblemService;
 import com.nieyue.service.OrderService;
@@ -41,6 +42,8 @@ public class NoticeBusiness {
 	@Resource
 	OrderService orderService;
 	@Resource
+	NoticeService noticeService;
+	@Resource
 	OrderProblemService orderProblemService;
 	@Resource
 	OrderProblemAnswerService orderProblemAnswerService;
@@ -52,7 +55,7 @@ public class NoticeBusiness {
 	 */
 	public Integer getIsMerDynamicByType(Integer type){
 		Integer isMerDynamic=0;//默认为0
-		if(type==2||type==3||type==4||type==7){
+		if(type==2||type==3||type==4){
 			isMerDynamic=1;//是商品动态
 		}
 		return isMerDynamic;
@@ -154,16 +157,21 @@ public class NoticeBusiness {
 						){
 					throw new NoticeException("商品申请自营异常");
 				}
+				List<Notice> nl = noticeService.browsePagingNotice(2, 4, null, 1, notice.getAccountId(), notice.getBusinessId(), 1, 1, "notice_id", "asc");
+				if(nl.size()>0){
+					throw new NoticeException("商品申请自营已经存在，待审核后才能再次申请");
+				}
 				Mer mer4=merService.loadMer(notice.getBusinessId());
 				if(ObjectUtils.isEmpty(mer4)){
 					throw new NoticeException("商品申请自营异常");
 				}
-				JSONObject json4=new JSONObject();
+				/*JSONObject json4=new JSONObject();
 				json4.put("merName", mer4.getName());//商品名称
 				json4.put("merCateName", mer4.getMerCate().getName());//商品种类
 				json4.put("merPrice", mer4.getUnitPrice());//商品价格
 				json4.put("merPlatformProportion", mer4.getPlatformProportion());//平台技术服务费
-				content.append(json4.toString());
+				content.append(json4.toString());*/
+				content.append(notice.getContent());
 				break;
 			//提现申请
 			case 5:

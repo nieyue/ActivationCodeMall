@@ -175,9 +175,9 @@
 				<div style="width: 960px;margin-left: 10px;float: left;">
 					<div class="bg_fff" style="height: 160px;margin-top: 10px;padding-left: 20px;padding-right: 20px;">
 						<div style="line-height:79px;">
-							<p style="font-family: ﻿MicrosoftYaHei-Bold;font-size: 20px;color: #FF7400;float: left;">销售总收入</p>
-							<p style="margin-left:50px;font-size: 20px;color: #FF7400;float: left;">￥ 30000.00</p>
-							<a class="xiaoshoubtn">销售新商品</a>
+							<p style="font-family: ﻿MicrosoftYaHei-Bold;font-size: 20px;color: #FF7400;float: left;">商户总收入</p>
+							<p style="margin-left:50px;font-size: 20px;color: #FF7400;float: left;">￥ <span id="sellerTotalPrice">0</span></p>
+							<a class="xiaoshoubtn" href="/">销售新商品</a>
 						</div>
 						
 						<hr color="#EBEBEB" width="100%" size="1" />
@@ -185,7 +185,7 @@
 							
 							<div class="diansearchbox clearfix">
 				     	<div class="fl">
-				     		 <img src="../img/sousuo.png" alt="" title="" style="top: 0;"/>
+				     		 <img src="../img/sousuo.png" alt=""/>
 				     		 <input type="" name="" id="searchbox_input" value="" placeholder="在店内搜索"/>
 				     	</div>
 					     <button class="fr diansearchboxbutton">搜索</button>
@@ -212,14 +212,14 @@
 							<th style="width: 23%;">商品名</th>
 							<th style="width: 12%;">商品价格</th>
 							<th style="width: 12%;">库存</th>
-							<th style="width: 12%;">月销量</th>
-							<th style="width: 12%;"></th>
-							<th style="width: 12%;"></th>
+							<th style="width: 12%;">销量</th>
+							<th style="width: 12%;">状态</th>
+							<th style="width: 12%;">操作</th>
 						</tr>
 					</thead>
-					<tbody>
+					<tbody id="sellerMerList">
 
-						<tr class="tabletd">
+						<!-- <tr class="tabletd">
 							<td>
 								<p style="width: auto;">
 									<img class="itemimg" src="../img/tu1_.png"/>
@@ -241,81 +241,7 @@
 							<td >
 							<a style="text-decoration: none;color: #4cafe9;" href="sell_gooddetail.html">详情</a>	
 							</td>
-						</tr>
-
-						<tr class="tabletd">
-							<td>
-								<p style="width: auto;">
-									<img class="itemimg" src="../img/tu1_.png"/>
-								</p>
-							</td>
-							<td>台服战网点数450点战网币450-战网卡</td>
-							<td style="color: #e04600;">
-								￥80
-							</td>
-							<td>
-								20
-							</td>
-							<td>
-								100
-							</td>
-							<td style="color: #e04600;">
-								下架
-							</td>
-							<td >
-							<a style="text-decoration: none;color: #4cafe9;" href="sell_gooddetail.html">详情</a>	
-							</td>
-						</tr>
-						
-						<tr class="tabletd">
-							<td>
-								<p style="width: auto;">
-									<img class="itemimg" src="../img/tu1_.png"/>
-								</p>
-							</td>
-							<td>台服战网点数450点战网币450-战网卡</td>
-							<td style="color: #e04600;">
-								￥80
-							</td>
-							<td>
-								20
-							</td>
-							<td>
-								100
-							</td>
-							<td style="color: #e04600;">
-								下架
-							</td>
-							<td >
-							<a style="text-decoration: none;color: #4cafe9;" href="sell_gooddetail.html">详情</a>	
-							</td>
-						</tr>
-						
-						<tr class="tabletd">
-							<td>
-								<p style="width: auto;">
-									<img class="itemimg" src="../img/tu1_.png"/>
-								</p>
-							</td>
-							<td>台服战网点数450点战网币450-战网卡</td>
-							<td style="color: #e04600;">
-								￥80
-							</td>
-							<td>
-								20
-							</td>
-							<td>
-								100
-							</td>
-							<td style="color: #e04600;">
-								下架
-							</td>
-							<td >
-							<a style="text-decoration: none;color: #4cafe9;" href="sell_gooddetail.html">详情</a>	
-							</td>
-						</tr>
-
-						
+						</tr> -->
 
 					</tbody>
 				</table>

@@ -20,6 +20,18 @@ input::-webkit-input-placeholder,textarea::-webkit-input-placeholder{color: #c4c
 input:-moz-placeholder,textarea:-moz-placeholder{color: #c4cbcb;}
 input:-ms-input-placeholder,textarea:-ms-input-placeholder{color: #c4cbcb;}
 
+/**
+**两行省略号
+*/
+.line2{
+	white-space:normal; 
+	text-overflow:ellipsis;
+	overflow:hidden;
+	display: box;
+	display:-webkit-box;
+	-webkit-box-orient:vertical;
+	-webkit-line-clamp:2;
+}
 .imgbox{font-size: 0;}
 .imgbox img{max-width: 100%;}
 *{outline: none;*border:0;*outline: 0;}

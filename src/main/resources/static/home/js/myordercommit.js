@@ -61,8 +61,13 @@ $("#cancelOrder").on("click", function() {
 		location.href="myorder.html";		
 	});
 });
-//确定 购物车商品转订单
+//确定 订单支付
+business.isorderpaying=false;//是否在支付
 $("#orderPayment").on("click", function() {
+	if(business.isorderpaying){
+		business.myLoadingToast("正在支付中");
+		return ;
+	}
 	var orderIds=[];
 	//去掉多余的
 	for (var i = 0; i < business.selectOrderList.length; i++) {
@@ -73,9 +78,11 @@ $("#orderPayment").on("click", function() {
 			orderIds:orderIds.toString(),//订单id列表
 			payType:business.payType//支付方式，1支付宝，2微信,3百度钱包,4Paypal,5网银
 		}
-	//购物车商品批量转未支付订单商品
+	business.isorderpaying=true;
+	//订单支付
 	business.ajax("/order/payment",info,function(data){
 		if(data.code==200){
+			business.isorderpaying=false;
 			console.log(data)
 			sessionStorage.removeItem("selectOrderTotalPrice");
 			sessionStorage.removeItem("selectOrderList");

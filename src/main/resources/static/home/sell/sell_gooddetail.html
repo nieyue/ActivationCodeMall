@@ -193,19 +193,19 @@
 					<div style="float: left;width: 500px;">
 						<div class="clearfix margin_top30">
 							<p style="font-family: ﻿MicrosoftYaHei-Bold;font-size: 20px;color: #FF7400;float: left;">销售总收入</p>
-							<p style="margin-left:50px;font-size: 20px;color: #FF7400;float: left;">￥ 30000.00</p>
+							<p style="margin-left:50px;font-size: 20px;color: #FF7400;float: left;">￥ <span id="merSalePrice">0</span></p>
 						</div>
 
 						<div style="margin-top: 10px;">
-							<p style="font-family: ﻿MicrosoftYaHei-Bold;font-size: 16px;float: left;">销量：80</p>
-							<p style="margin-left:50px;font-size: 20px;float: left;font-size: 16px;">库存：50</p>
+							<p style="font-family: ﻿MicrosoftYaHei-Bold;font-size: 16px;float: left;">销量：<span id="merSaleNumber">0</span></p>
+							<p style="margin-left:50px;font-size: 20px;float: left;font-size: 16px;">库存：<span id="merStockNumber">0</span></p>
 						</div>
 					</div>
 
 					<div style="float: left;">
 						<a class="otherbtn" style="">补货</a>
-						<a class="otherbtn" style="">申请自营</a>
-						<a class="otherbtn1" style="">下架该商品</a>
+						<a class="otherbtn" style="" id="applyRegion3">申请自营</a>
+						<a class="otherbtn1" style="" id="undercarriage">下架该商品</a>
 					</div>
 
 				</div>
@@ -215,24 +215,24 @@
 				<div style="width: 960px;padding-left: 20px;padding-right: 20px;background: #FFFFFF;">
 					<div class="detailitem clearfix" style="height: 120px;line-height: 120px;">
 						<p style="font-size: 14px;float: left;">商品图片</p>
-						<div style="float: left;margin-left: 50px;margin-top: 10px;">
+						<div style="float: left;margin-left: 50px;margin-top: 10px;" id="merImgsWrap">
+					<!-- 		<img class="detailimg" src="../img/tu1_.png" />
 							<img class="detailimg" src="../img/tu1_.png" />
-							<img class="detailimg" src="../img/tu1_.png" />
-							<img class="detailimg" src="../img/tu1_.png" />
+							<img class="detailimg" src="../img/tu1_.png" /> -->
 						</div>
 					</div>
 
 					<div class="detailitem clearfix">
 						<p>商品名称</p>
-						<p style="margin-left: 50px;">暗黑破坏神3-《死靈法師的崛起》台服版本</p>
+						<p style="margin-left: 50px;" id="detailname"></p>
 					</div>
 					<div class="detailitem clearfix">
 						<p>商品种类</p>
-						<p style="margin-left: 50px;">暗黑破坏神</p>
+						<p style="margin-left: 50px;" id="merCateName"></p>
 					</div>
 					<div class="detailitem clearfix">
-						<p>商品价格</p>
-						<p style="color: #FF7400;margin-left: 50px;">￥80</p>
+						<p>商品原始价格</p>
+						<p style="color: #FF7400;margin-left: 50px;"><span id="oldprice"></span></p>
 						<div style="float: right;height: 100px;">
 							<img style="float: left;margin-top: 40px;" src="../img/xiugai.png" />
 							<p style="color: #4cafe9;float: left;margin-left: 10px;">更改</p>
@@ -240,17 +240,21 @@
 					</div>
 
 					<div class="detailitem clearfix">
-						<p>折扣优惠</p>
-						<p style="color: #FF7400;margin-left: 50px;">未优惠</p>
+						<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;折扣优惠</p>
+						<p style="color: #FF7400;margin-left: 50px;"><span id="zhekou"></span></p>
 						<div style="float: right;">
 							<img style="float: left;margin-top: 40px;" src="../img/xiugai.png" />
 							<p style="color: #4cafe9;float: left;margin-left: 10px;">更改</p>
 						</div>
 					</div>
+					<div class="detailitem clearfix">
+						<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;商品价格</p>
+						<p style="color: #FF7400;margin-left: 50px;"><span id="nowprice"></span></p>
+					</div>
 
 					<div class="detailitem clearfix">
 						<p>上架时间</p>
-						<p style="margin-left: 50px;">2017-02-02</p>
+						<p style="margin-left: 50px;"><span id="updateDate"></span></p>
 
 					</div>
 
@@ -288,7 +292,7 @@
 						</ul>
 					</div>
 					<!--商品介绍-->
-					<div class="goodjieshao">
+					<div class="goodjieshao" style="height:auto;padding:10px;">
 						<p>商品介绍</p>
 					</div>
 					
@@ -525,6 +529,7 @@
 			</ul>
 		</div>
 		<!--fixed_box-->
+		
 	</body>
 
 <script src="../js/jquery-1.12.2.min.js" type="text/javascript" charset="utf-8"></script>

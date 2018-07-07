@@ -90,7 +90,10 @@ public class PaymentBusiness {
 	SpreadLinkService spreadLinkService;
 	@Resource
 	ConfigService configService;
-
+	
+	public String emailString;
+	public String smsString;
+	public SendSmsResponse res;
 	/**
 	 * 支付回调，订单进入冻结期
 	 * payType 支付方式，1支付宝，2微信,3百度钱包,4Paypal,5网银
@@ -275,7 +278,15 @@ public class PaymentBusiness {
 	   					+"<br/>";
 	   				}
 	   			}
-				 SendMailDemo.sendCardCipher(account.getEmail(), "激活码商城", c);
+	   			emailString=c;
+	   			new Thread(new Runnable() {
+					
+					@Override
+					public void run() {
+						 SendMailDemo.sendCardCipher(account.getEmail(), "激活码商城", emailString);
+					}
+				}).start();
+				// SendMailDemo.sendCardCipher(account.getEmail(), "激活码商城", c);
 				 
 			}
 			//手机号
@@ -287,18 +298,25 @@ public class PaymentBusiness {
 	   				//c+=mocc.getCode()+",";
 	   				c+=mocc.getCode();
 	   				}
-				//while(true){
-					
-				SendSmsResponse res;
-				try {
-					res = aliyunSms.sendSms(c,account.getPhone(), 5);
-					/*if(res.getCode().equals("OK")){
+	   			smsString=c;
+	   			new Thread(new Runnable() {
+	   				
+	   				@Override
+	   				public void run() {
+	   					//while(true){
+	   					
+	   					try {
+	   						res = aliyunSms.sendSms(smsString,account.getPhone(), 5);
+	   						//res = aliyunSms.sendSms(c,account.getPhone(), 5);
+	   						/*if(res.getCode().equals("OK")){
 						break;
 					}*/
-				} catch (ClientException e) {
-					continue;
-				}
-				//}
+	   					} catch (ClientException e) {
+	   						
+	   					}
+	   					//}
+	   				}
+	   			}).start();
 			}
 			/**
 			 * 8.用户积分记录
@@ -311,7 +329,7 @@ public class PaymentBusiness {
 			b=integralDetailService.addIntegralDetail(aid);//新增用户积分记录
 			
 			/**
-			 * 9.用户财务记录，购买商品
+			 * 9.用户财务记录，购买商品 
 			 */
 			FinanceRecord fr=new FinanceRecord();
 			fr.setAccountId(accountId);
@@ -399,7 +417,9 @@ public class PaymentBusiness {
 			if(mafl.size()>0){
 				Finance maf = mafl.get(0);
 				//增加冻结金额
-				maf.setFrozen(Arith.add(maf.getMoney(),orderDetail.getTotalPrice()));
+				//maf.setFrozen(Arith.add(maf.getMoney(),orderDetail.getTotalPrice()));
+				//冻结金额=已有冻结金额+实际金额
+				maf.setFrozen(Arith.add(maf.getMoney(),Arith.sub(orderDetail.getTotalPrice(),Arith.mul(orderDetail.getTotalPrice(), Arith.div(lm.getPlatformProportion(), 100)))));
 				b=financeService.updateFinance(maf);
 			}
 			}
@@ -452,6 +472,7 @@ public class PaymentBusiness {
 				//交易金额为劵后金额
 				spreadRecord.setMoney(orderDetail.getTotalPrice());
 				spreadRecord.setSpreadProportion(config.getSpreadProportion());
+				//推广金额=订单总金额*推广百分比
 				spreadRecord.setSpreadMoney(Arith.mul(orderDetail.getTotalPrice(),Arith.div(config.getSpreadProportion(), 100)));
 				if(spreadLinkList.size()>0){
 				spreadRecord.setLink(spreadLinkList.get(0).getLink());
@@ -493,7 +514,8 @@ public class PaymentBusiness {
 				if(mafl.size()>0){
 					Finance maf = mafl.get(0);
 					//增加冻结金额
-					maf.setFrozen(Arith.add(maf.getMoney(),orderDetail.getTotalPrice()));
+					//冻结金额=已有冻结金额+推广金额
+					maf.setFrozen(Arith.add(maf.getMoney(),Arith.mul(orderDetail.getTotalPrice(),Arith.div(config.getSpreadProportion(), 100))));
 					b=financeService.updateFinance(maf);
 				}
 			}

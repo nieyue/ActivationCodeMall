@@ -19,7 +19,7 @@ var business={
 	account:null,//登录账户
 	finance:null,//财务
 	integral:null,//登录积分
-	payType:["","支付宝","微信","百度钱包","Paypal","网银"],//方式，1支付宝，2微信,3百度钱包,4Paypal,5网银
+	payTypeList:["","支付宝","微信","百度钱包","Paypal","网银"],//方式，1支付宝，2微信,3百度钱包,4Paypal,5网银
 	accountLevelList:[],//等级列表
 	merId:1,
 	mer:{},
@@ -54,6 +54,43 @@ var business={
 			        }
 			      }
 				})
+	},
+	/**
+	   * 获取n天后的最后23:59:59的时间
+	   * 
+	   */
+	  todayToNDayEndTime:function(n){  
+			var date=new Date();
+			date.setHours(23);
+			date.setMinutes(59);
+			date.setSeconds(59);
+			if(isNaN(n)||n<=0){
+				n=0;
+			}
+			var ndate=date.getTime()+1000*60*60*24*n;
+			return new Date(ndate);
+		},
+	/**
+	   * 冻结剩余天数，从支付当日开始计算，算第一天，第freezeDayNumber+1天解冻
+	   * paymentDate 支付日期
+	   * freezeDayNumber 冻结天数
+	   */
+	frozenRemainDay:function(paymentDate,freezeDayNumber){ 
+		var alreadyDayNumber=0;//已经用了多少天
+		var paymentDate=new Date(paymentDate);//支付日期
+		paymentDate.setHours(23);
+		paymentDate.setMinutes(59);
+		paymentDate.setSeconds(59);
+		var date=new Date();
+		date.setHours(23);
+		date.setMinutes(59);
+		date.setSeconds(59);
+		alreadyDayNumber=(parseInt(date.getTime()/1000)-parseInt(paymentDate.getTime()/1000))/(60*60*24);
+		console.log(alreadyDayNumber)
+		if(freezeDayNumber-alreadyDayNumber<0){
+			return 0;
+		}
+		return freezeDayNumber-alreadyDayNumber;
 	},
 	/**
 	 * 单文件上传组件
@@ -356,6 +393,7 @@ business.init=function(){
 	//加载三级联动
 	$("body").append($("<script src='"+business.url+"/home/js/distpicker.data.min.js'></script>"));
 	$("body").append($("<script src='"+business.url+"/home/js/distpicker.min.js'></script>"));
+	//$("body").append($('<script src="https://api.kuaishangkf.com/script/PNkP6BHhYf6eFXmm3tiSezmt" defer async></script>'));
 	business.Qiniu=Qiniu;
 	 
 }

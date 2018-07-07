@@ -179,6 +179,21 @@ public class OrderController {
 		}
 	}
 	/**
+	 *  商户总数据
+	 * @return
+	 */
+	@ApiOperation(value = "商户总数据", notes = "商户总数据")
+	@ApiImplicitParams({
+		@ApiImplicitParam(name="accountId",value="商户id外键",dataType="int", paramType = "query",required=true),
+	})
+	@RequestMapping(value = "/sellerTotalData", method = {RequestMethod.GET,RequestMethod.POST})
+	public @ResponseBody String sellerSalePrice(
+			@RequestParam(value="accountId")Integer accountId,
+			HttpServletRequest request,HttpSession session)  {
+		String s = alipayUtil.getOrderNotifyUrl(request);
+		return s;
+	}
+	/**
 	 *  购买商品订单支付支付宝充值回调
 	 * @return
 	 */

@@ -98,7 +98,7 @@ $(function(){
 	};
 	//获取商品订单评价
 	business.merOrderCommentList;
-	function getmerordercomment(){
+	business.getMerOrderCommentList=function(){
 			var info={
 					merId:business.merId
 			};
@@ -110,7 +110,7 @@ $(function(){
 		}
 	//获取问题反馈
 	business.orderProblemList;
-	function getorderproblem(){
+	business.getOrderProblemList=function(){
 		var info={
 				merId:business.merId
 		};
@@ -122,7 +122,7 @@ $(function(){
 	}
 	//获取商品公共
 	business.merCommon;
-	function getmercommon(){
+	business.getMerCommon=function(){
 			business.ajax("/merCommon/list",null,function(data){
 				if(data.code==200){
 					business.merCommon=data.data[0];
@@ -131,7 +131,7 @@ $(function(){
 	}
 	//获取商品公告
 	business.merNoticeList;
-	function getmernotice(){
+	business.getMerNoticeList=function(){
 		var info={
 				merId:business.merId
 		};
@@ -143,7 +143,6 @@ $(function(){
 	}
 	
 	
-	getdetail();
 	
 	//加入购物车
 	$("#addtoshopcar").click(function(){
@@ -192,12 +191,9 @@ $(function(){
 	});
 	
 
-		function removeAllSpace(str) {
-		return str.replace(/\s+/g, "");
-		}
 		
 	//获取商品详情	
-	function getdetail(){
+		business.getMerDetail=function(){
 		var info = {
 			merId:business.merId,
 		
@@ -259,14 +255,22 @@ $(function(){
 				
 				//console.log(good.merImgList)
 				for (var int = 0; int < good.merImgList.length; int++) {
+					//$("#merImgsWrap").append('<img class=" fl" style="height: 71px;width: 85px;margin-left: 6px;" src="'+good.merImgList[int].imgAddress+'" />');
 					$("#merImgsWrap").children().get(int).setAttribute("src",good.merImgList[int].imgAddress);
-			}
+					;(function(int){
+						$($("#merImgsWrap").children().get(int)).on("click", function() {
+							$("#merImgsWrap").children().css("border","0");
+							$(this).css("border","1px solid red");
+							$(".detailhomeimg").attr("src",$(this).attr("src"));
+						})
+					})(int);
+				}
 				
 				$(".detail_positionul li").click(function(){
 					$('.detail_positionul li').removeClass('detailclickli');
 					$(this).addClass('detailclickli');
 					var value1 = $(this).text();
-					var value = removeAllSpace(value1);
+					var value = value1.replace(/\s+/g, "");
 					
 					console.log(value);
 					$(".goodjieshao").html("");
@@ -288,7 +292,7 @@ $(function(){
 							$(".goodjieshao").html(good.installActivation);
 						}else if(value=="问题反馈"){
 							if(!business.orderProblemList){
-								getorderproblem();								
+								business.getOrderProblemList();								
 							}
 							if(!business.orderProblemList||business.orderProblemList.length<=0){
 								$(".goodjieshao").html("<div style='display:block;text-align:center;'>该&nbsp;商&nbsp;品&nbsp;暂&nbsp;无&nbsp;问&nbsp;题&nbsp;反&nbsp;馈</div>");
@@ -315,17 +319,17 @@ $(function(){
 							});
 						}else if(value=="购物指南"){
 							if(!business.merCommon){
-								getmercommon();								
+								business.getMerCommon();								
 							}
 							$(".goodjieshao").html(business.merCommon.guide);
 						}else if(value=="售后保障"){
 							if(!business.merCommon){
-								getmercommon();								
+								business.getMerCommon();								
 							}
 							$(".goodjieshao").html(business.merCommon.guarantee);
 						}else if(value=="相关公告"){
 							if(!business.merNoticeList){
-								getmernotice();								
+								business.getMerNoticeList();								
 							}
 							if(!business.merNoticeList||business.merNoticeList.length<=0){
 								$(".goodjieshao").html("<div style='display:block;text-align:center'>该&nbsp;商&nbsp;品&nbsp;暂&nbsp;无&nbsp;公&nbsp;告</div>");
@@ -361,7 +365,7 @@ $(function(){
 						}
 						console.log(value1);
 						if(!business.merOrderCommentList){
-							getmerordercomment();								
+							business.getMerOrderCommentList();								
 						}
 						if(!business.merOrderCommentList||business.merOrderCommentList.length<=0){
 							$(".pingjia").html("<div style='display:block;text-align:center;height:60px;line-height:60px;'>该&nbsp;商&nbsp;品&nbsp;暂&nbsp;无&nbsp;评&nbsp;价</div>");
@@ -464,8 +468,9 @@ $(function(){
 	}
 
 
+	business.getMerDetail();
 //获取推荐商品
-	function gettuijian(){
+	business.gettuijian=function(){
 		var info = {
 				type:business.mer.type,
 				region:1,
@@ -495,5 +500,5 @@ $(function(){
 		})
 	}
 	
-	gettuijian();
+	business.gettuijian();
 });
