@@ -53,9 +53,9 @@ public class Notice  implements Serializable{
 	@ApiModelProperty(value="内容",example="内容")
 	private String content;
 	/**
-	 *状态，默认为1审核中，2申请成功，3申请失败
+	 *状态，0正常，1审核中，2申请成功，3申请失败
 	 */
-	@ApiModelProperty(value="状态，默认为1审核中，2申请成功，3申请失败",example="状态，默认为1审核中，2申请成功，3申请失败")
+	@ApiModelProperty(value="状态，0正常，1审核中，2申请成功，3申请失败",example="状态，0正常，1审核中，2申请成功，3申请失败")
 	private Integer status;
 	/**
 	 *创建时间

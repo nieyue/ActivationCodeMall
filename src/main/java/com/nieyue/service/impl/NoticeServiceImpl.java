@@ -10,10 +10,12 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.nieyue.bean.Account;
+import com.nieyue.bean.Mer;
 import com.nieyue.bean.Notice;
 import com.nieyue.business.NoticeBusiness;
 import com.nieyue.dao.NoticeDao;
 import com.nieyue.service.AccountService;
+import com.nieyue.service.MerService;
 import com.nieyue.service.NoticeService;
 @Service
 public class NoticeServiceImpl implements NoticeService{
@@ -23,6 +25,8 @@ public class NoticeServiceImpl implements NoticeService{
 	AccountService accountService;
 	@Resource
 	NoticeBusiness noticeBusiness;
+	@Resource
+	MerService merService;
 	@Transactional(propagation=Propagation.REQUIRED)
 	@Override
 	public boolean addNotice(Notice notice) {
@@ -119,6 +123,12 @@ public class NoticeServiceImpl implements NoticeService{
 					});
 				}
 			}).start();
+		}else if(b&&notice.getType().equals(2)&&notice.getStatus().equals(2)){
+			//申请新产品销售 ,审核通过
+			Notice n = noticeDao.loadNotice(notice.getNoticeId());
+			Mer mer = merService.loadMer(n.getBusinessId());
+			mer.setStatus(1);//上架
+			merService.updateMer(mer);
 		}
 		return b;
 	}
