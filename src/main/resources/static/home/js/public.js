@@ -1,6 +1,19 @@
+//if (!!window.ActiveXObject || "ActiveXObject" in window){
+if (navigator.userAgent.indexOf("MSIE")>=1){
+	$("body").html("<div style='text-align:center;margin-top:50px;font-size:30px;'>请升级高版本浏览器使用！</div>")
+}
 var business={
 	url:"http://localhost:9000",
 	//url:"http://app.nalu888.cn",
+	/**
+	 * 过滤ie10以下版本
+	 */
+	isIE : function() {
+		if (navigator.userAgent.indexOf("MSIE")>0){
+			return true;
+		}
+		return false;
+	},
 	//验证规则
 	userVerification:{
 		username:{code:/(^[\u4E00-\u9FA5]{2,16}$)|(^[a-zA-Z\/ ]{2,16}$)/,value:'中文或英文2-16位'},//中文或英文2-16位
@@ -397,6 +410,7 @@ business.init=function(){
 	business.Qiniu=Qiniu;
 	 
 }
+
 business.init();
 //获取配置
 business.getConfig=function(){
@@ -1332,9 +1346,8 @@ business.getintarll=function(){
 	 * 修改密码
 	 */
 	//显示修改密码界面
-	$("#updatePasswordWrap").hide();
-	$(".updatapassword").unbind();
-	$(".updatapassword").click(function(){	
+	//$("#updatePasswordWrap").hide();
+	$(".updatapassword").off().click(function(){	
 		//隐藏安全设置
 		$("#setdiv").hide();
 		//显示修改密码栏

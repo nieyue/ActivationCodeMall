@@ -19,6 +19,8 @@ public interface MerService {
 	public boolean updateMer(Mer mer);
 	/** 商户商品增加提交审核 */	
 	public Mer addSellerMer(Integer sellerAccountId,Integer merId,Double unitPrice,Double discount,Integer merCardCipherType,String merCardCiphers);	
+	/** 商户商品增加卡密 */	
+	public Mer addMerCardCipher(Integer sellerAccountId,Integer merId,Integer merCardCipherType,String merCardCiphers);	
 	/** 装载商品 */	
 	public Mer loadMer(Integer merId);	
 	/** 商品总共数目 */	

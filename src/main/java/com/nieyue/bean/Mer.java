@@ -154,7 +154,11 @@ public class Mer implements Serializable{
 	 */
 	@ApiModelProperty(value="商品图片",example="商品图片")
 	private List<MerImg> merImgList;
-	
+	/**
+	 * 商户账户
+	 */
+	@ApiModelProperty(value="商户账户",example="商户账户")
+	private Account sellerAccount;
 	public Integer getMerId() {
 		return merId;
 	}
@@ -319,6 +323,12 @@ public class Mer implements Serializable{
 	}
 	public void setMerCate(MerCate merCate) {
 		this.merCate = merCate;
+	}
+	public Account getSellerAccount() {
+		return sellerAccount;
+	}
+	public void setSellerAccount(Account sellerAccount) {
+		this.sellerAccount = sellerAccount;
 	}
 
 }

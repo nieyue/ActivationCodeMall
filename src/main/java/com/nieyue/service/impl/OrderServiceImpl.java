@@ -112,7 +112,10 @@ public class OrderServiceImpl implements OrderService{
 			}*/
 			return result;
 		}else if(payType==2){//微信
-			return "暂未开通";
+			payment.setNotifyUrl(activationCodeMallProjectDomainUrl+"/order/alipayOrderNotifyUrl");
+			//测试环境
+			result=paymentBusiness.getPaymentNotify(payment);
+			return result;
 		}else if(payType==3){//百度钱包
 			return "暂未开通";
 		}else if(payType==4){//Paypay

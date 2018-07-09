@@ -210,10 +210,14 @@ $(function(){
 					//不显示“我要出售此商品”
 					$("#sellerMer").remove();
 					//设置logo
-					$("#accountIcon").attr("src",business.account.icon);
+					if(business.mer.sellerAccount){
+						$("#accountIcon").attr("src",business.mer.sellerAccount.icon);						
+					}
 					//设置昵称
-					$("#accountNickname").text(business.account.nickname);
+					if(business.mer.sellerAccount){
+					$("#accountNickname").text(business.mer.sellerAccount.nickname);
 					$("#accountNickname").css("margin-top","20px");
+					}
 				}
 				//获取商品关系数据
 				business.getMerRelationList(business.mer.merId);

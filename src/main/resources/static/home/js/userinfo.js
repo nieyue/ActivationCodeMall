@@ -213,89 +213,9 @@ $(function(){
 			$(".safebindphone").toggle();
 		}
 		
-		/*//显示修改密码界面
+		//显示修改密码界面
 		$("#updatePasswordWrap").hide();
-		$(".updatapassword").unbind();
-		$(".updatapassword").click(function(){	
-			//隐藏安全设置
-			$("#setdiv").hide();
-			//显示修改密码栏
-			$("#updatePasswordWrap").show();
-			//显示修改密码栏第一步
-			$("#updatePassword1").show();
-			//显示邮箱
-			$(".updatePasswordGetEmail").text(business.account.email);
-			
-		});
-		//点击修改密码发送邮箱
-		$("#updatePassword1SendEmail").click(function(){
-			//显示修改密码栏第2步
-			if(business.checkEmail(business.account.email)){
-			var info = {
-					adminName:business.account.email,
-					templateCode:2//修改密码
-				}
-			business.ajax("/account/validCode",info,function(data){
-				if(data.code==200){
-		        	if(data.msg=="已经验证"){
-		        		//alert(data.msg);
-		        		business.myLoadingToast(data.msg);
-			        	return;
-			        }else{
-			        	business.myLoadingToast("验证码发送成功，请注意查收");
-			        	//alert("验证码发送成功，请注意查收");		
-			        	//显示修改密码栏第2步
-			        	$("#updatePassword1").hide();
-						$("#updatePassword2").show();
-			        }
-			        }else{
-			        	//alert(data.msg);
-			        	business.myLoadingToast(data.msg);
-			        }
-                });
-			}
-		});
-		//点击进入第三步，激活
-		$("#updatePassword2ValidEmail").click(function(){
-			//显示修改密码栏第3步
-        	$("#updatePassword2").hide();
-			$("#updatePassword3").show();
-		});
-		//取消修改密码
-		$("#updatePassword3Cancel").click(function(){
-			$("#setdiv").show();
-			$("#updatePasswordWrap").hide();
-			$("#updatePassword3").hide();
-		});
-		//确认修改密码
-		$("#updatePassword3Sure").click(function(){
-			var password1 = $("#password1").val();
-			var password2 = $("#password2").val();
-			var email = Request["email"];
-			if(business.equalspassword(password1,password2)){
-				var info = {
-						adminName:business.account.email,
-						password:password1
-					}
-				business.ajax("/account/updatePassword",info,function(data){
-					if(data.code==200){
-						business.account = data.data[0];
-						sessionStorage.setItem("account",JSON.stringify(business.account));
-						//alert("修改成功");
-						business.myLoadingToast("修改成功");
-						$("#setdiv").show();
-						$("#updatePasswordWrap").hide();
-						$("#updatePassword3").hide();
-					}else{
-						//alert(data.msg);
-						business.myLoadingToast(data.msg);
-					}
-	                    
-				        
-	                });
-				
-			}
-		});*/
+		
 		
 	}else if(value=="我的收货地址"){
 		//初始化三级联动

@@ -13,7 +13,11 @@
 		<link rel="stylesheet" type="text/css" href="../css/index.css" />
 		<link rel="stylesheet" href="../css/sell_index.css" />
 
-		<!--<link rel="stylesheet" href="css/bootstrap.min.css" />-->
+		<style>
+			.goodjieshao img{
+			width:100%;
+			}
+		</style>
 	</head>
 
 	<body class="bg_eeeeee">
@@ -203,7 +207,7 @@
 					</div>
 
 					<div style="float: left;">
-						<a class="otherbtn" style="">补货</a>
+						<a class="otherbtn" style="" id="addMerCardCipherBtn">补货</a>
 						<a class="otherbtn" style="" id="applyRegion3">申请自营</a>
 						<a class="otherbtn1" style="" id="undercarriage">下架该商品</a>
 					</div>
@@ -259,7 +263,71 @@
 					</div>
 
 				</div>
-
+				<!-- 商品卡密 -->
+				<div id="addCardCipherWrap" style="display:none;">
+					<p style="color: #FF7400;margin-left: 20px;margin-top: 20px;font-weight: bold;">商品卡密</p>
+					<div style="margin-top: 10px;background: white;padding-bottom:20px;">
+						<div style="height: 40px;background: white;">
+							<ul class="sellnew_positionul clearfix">
+	
+								<li class="clicknewli" id="addMerCardCipherType1">
+									<a>上传文件</a>
+								</li>
+								<li id="addMerCardCipherType2">
+									<a>上传文字卡密</a>
+								</li>
+								<li id="addMerCardCipherType3">
+									<a>上传图片</a>
+								</li>
+	
+							</ul>
+						</div>
+	
+						<div id="addMerCardCipherWrap1">
+							<div style="margin:8px;">
+								备注：上传文件为xls和xlsx的excel格式，以第一列为单位，依次向下。点击上传回显后，必须点击 “提交申请”按钮后，才算成功。
+							</div>
+							<div style="color:red;">
+								已经上传的卡密：
+							</div>
+							<div id="addMerCardCipherFileCodes">
+							
+							</div>
+							<div id="addMerCardCipherFileUpload" style="height: 80px;width:80px;margin:20px;border:1px solid #ececec;">
+								<div style="display:inline-block;width:80px;height:80px;text-align:center;font-size:5rem;line-height:4rem;cursor:pointer">+</div>
+							</div>
+							<input type="file" style="display:none;" id="addMerCardCipherFile"/>
+						</div>
+						<div id="addMerCardCipherWrap2" style="display:none;">
+							<div style="margin:8px;">
+								备注：多个文字卡密以英文逗号隔开“,”。
+							</div>
+							<textarea id="addMerCardCipherText" placeholder="请输入文字卡密，如：abcd32,cdbd34,ccccdd2"  style="margin-left: 50px;border:1px solid #ececec;cursor:text;overflow-y:auto;width:500px;height:200px;" /></textarea>
+						</div>
+						<div id="addMerCardCipherWrap3" style="display:none;">
+							<div style="margin:8px;">
+								备注：上传文件为jpg,png格式。
+							</div>
+							<div style="margin-left: 50px;" id="merCardCipherImgList">
+								<!-- <img class="detailimg" style="float:none;" src="../img/tu1_.png" />
+								<img class="detailimg" style="float:none;"  src="../img/tu1_.png" />
+								<img class="detailimg" style="float:none;"  src="../img/tu1_.png" /> -->
+							</div>
+							<div id="addMerCardCipherImgUpload" style="height: 80px;width:80px;margin:20px;border:1px solid #ececec;">
+								<div style="display:inline-block;width:80px;height:80px;text-align:center;font-size:5rem;line-height:4rem;cursor:pointer">+</div>
+							</div>
+							<input type="file" style="display:none;" id="addMerCardCipherImg"/>
+						</div>
+						
+						
+					</div>
+	
+					<div style="margin-top: 30px;text-align: center;">
+						<a style="line-height: 30px;border-radius: 8px;background: #FF7400;width: 150px;color: white;" id="addMerCardCipher">增加卡密</a>
+					</div>
+				</div>
+				
+				<!-- 商品  详情 -->
 				<div style="margin-top: 10px;background: white;">
 					<div style="height: 40px;background: rgba(218, 218, 218, 1);">
 						<ul class="detail_positionul clearfix">
@@ -295,13 +363,13 @@
 					<div class="goodjieshao" style="height:auto;padding:10px;">
 						<p>商品介绍</p>
 					</div>
-					
+				
 					<!--评论-->
 					<div class="pingjia"  style="display: none;">
 						<div style="height: 40px;line-height: 40px;padding-left: 20px;padding-right: 20px;">
-							<p style="font-size: 14px;float: left;">评价数：123</p>
+							<p style="font-size: 14px;float: left;">评价数：<span id="merOrderCommentNumber">0</span></p>
 							<div style="float: left;margin-top: 3px;margin-left: 10px;">
-								<ul class="comment">
+								<ul class="comment" id="merScoreXing">
 								    <li class="commentli">☆</li>
 								    <li class="commentli">☆</li>
 								    <li class="commentli">☆</li>
@@ -309,96 +377,97 @@
 								    <li class="commentli">☆</li>
 								</ul>
 							</div>
-							<p style="float: left;margin-left: 5px;">0%</p>
-							<div style="float: right;">
+							<p style="float: left;margin-left: 5px;" id="merScore">0分</p>
+							<!-- <div style="float: right;">
 								
 								<input type="radio" name="radio" value="1" checked="checked" style="margin-left: 20px;">好评
 								<input type="radio" name="radio" value="2" style="margin-left: 20px;">中评
 								<input type="radio" name="radio" value="3" style="margin-left: 20px;">差评
-							</div>
+							</div> -->
 						</div>
 						<hr width="100%" size="1" color="#EBEBEB" style="margin: 0;"/>
-						<div class="clearfix" style="border: solid;border-color: #EBEBEB;border-width: 0px 0px 1px 0px;width: 960px;">
-							<img style="margin-top: 20px;margin-left: 20px;width: 60px;height: 60px;float: left;"  src="../img/touxiang1.png"/>
-						
-							<div style="float: left;margin-left: 20px;margin-top: 20px;width: 810px;">
-								<div style="" class="clearfix">
-									<p style="font-size: 14px;float: left;">lalal</p>
-									<p style="font-size: 14px;float: left;margin-left: 15px;color: #a6a6a6;">国籍：中国</p>
-									<p style="font-size: 14px;float: right;color: #a6a6a6;">2018-09-09     13:40</p>
-								</div>
-								<div class=" clearfix" >
-									<div style="float: left;">
-										<ul class="comment">
-										    <li class="commentli">☆</li>
-										    <li class="commentli">☆</li>
-										    <li class="commentli">☆</li>
-										    <li class="commentli">☆</li>
-										    <li class="commentli">☆</li>
-										</ul>
+						<div id="pingjialist">
+							<!-- <div class="clearfix" style="border: solid;border-color: #EBEBEB;border-width: 0px 0px 1px 0px;width: 960px;">
+								<img style="margin-top: 20px;margin-left: 20px;width: 60px;height: 60px;float: left;"  src="../img/touxiang1.png"/>
+							
+								<div style="float: left;margin-left: 20px;margin-top: 20px;width: 810px;">
+									<div style="" class="clearfix">
+										<p style="font-size: 14px;float: left;">lalal</p>
+										<p style="font-size: 14px;float: left;margin-left: 15px;color: #a6a6a6;">国籍：中国</p>
+										<p style="font-size: 14px;float: right;color: #a6a6a6;">2018-09-09     13:40</p>
 									</div>
-									<p style="float: left;line-height: 30px;margin-left: 10px;">0</p>
-								</div>
-								
-								<p style="font-size: 16px;width: ;">很好，很棒，客服很细心，教我怎么操作，秒充成功。我一直在这家买暗黑的东西，信得过，速度飞一般的到了，充值神速100%的诚信！</p>
-							</div>
-						</div>
-						
-						
-						<div class="clearfix" style="border: solid;border-color: #EBEBEB;border-width: 0px 0px 1px 0px;width: 960px;">
-							<img style="margin-top: 20px;margin-left: 20px;width: 60px;height: 60px;float: left;"  src="../img/touxiang1.png"/>
-						
-							<div style="float: left;margin-left: 20px;margin-top: 20px;width: 810px;">
-								<div style="" class="clearfix">
-									<p style="font-size: 14px;float: left;">lalal</p>
-									<p style="font-size: 14px;float: left;margin-left: 15px;color: #a6a6a6;">国籍：中国</p>
-									<p style="font-size: 14px;float: right;color: #a6a6a6;">2018-09-09     13:40</p>
-								</div>
-								<div class=" clearfix" >
-									<div style="float: left;">
-										<ul class="comment">
-										    <li class="commentli">☆</li>
-										    <li class="commentli">☆</li>
-										    <li class="commentli">☆</li>
-										    <li class="commentli">☆</li>
-										    <li class="commentli">☆</li>
-										</ul>
+									<div class=" clearfix" >
+										<div style="float: left;">
+											<ul class="comment">
+											    <li class="commentli">☆</li>
+											    <li class="commentli">☆</li>
+											    <li class="commentli">☆</li>
+											    <li class="commentli">☆</li>
+											    <li class="commentli">☆</li>
+											</ul>
+										</div>
+										<p style="float: left;line-height: 30px;margin-left: 10px;">0</p>
 									</div>
-									<p style="float: left;line-height: 30px;margin-left: 10px;">0</p>
+									
+									<p style="font-size: 16px;width: ;">很好，很棒，客服很细心，教我怎么操作，秒充成功。我一直在这家买暗黑的东西，信得过，速度飞一般的到了，充值神速100%的诚信！</p>
 								</div>
-								
-								<p style="font-size: 16px;width: ;">很好，很棒，客服很细心，教我怎么操作，秒充成功。我一直在这家买暗黑的东西，信得过，速度飞一般的到了，充值神速100%的诚信！</p>
 							</div>
-						</div>
-						
-						
-						<div class="clearfix" style="border: solid;border-color: #EBEBEB;border-width: 0px 0px 1px 0px;width: 960px;">
-							<img style="margin-top: 20px;margin-left: 20px;width: 60px;height: 60px;float: left;"  src="../img/touxiang1.png"/>
-						
-							<div style="float: left;margin-left: 20px;margin-top: 20px;width: 810px;">
-								<div style="" class="clearfix">
-									<p style="font-size: 14px;float: left;">lalal</p>
-									<p style="font-size: 14px;float: left;margin-left: 15px;color: #a6a6a6;">国籍：中国</p>
-									<p style="font-size: 14px;float: right;color: #a6a6a6;">2018-09-09     13:40</p>
-								</div>
-								<div class=" clearfix" >
-									<div style="float: left;">
-										<ul class="comment">
-										    <li class="commentli">☆</li>
-										    <li class="commentli">☆</li>
-										    <li class="commentli">☆</li>
-										    <li class="commentli">☆</li>
-										    <li class="commentli">☆</li>
-										</ul>
+							
+							
+							<div class="clearfix" style="border: solid;border-color: #EBEBEB;border-width: 0px 0px 1px 0px;width: 960px;">
+								<img style="margin-top: 20px;margin-left: 20px;width: 60px;height: 60px;float: left;"  src="../img/touxiang1.png"/>
+							
+								<div style="float: left;margin-left: 20px;margin-top: 20px;width: 810px;">
+									<div style="" class="clearfix">
+										<p style="font-size: 14px;float: left;">lalal</p>
+										<p style="font-size: 14px;float: left;margin-left: 15px;color: #a6a6a6;">国籍：中国</p>
+										<p style="font-size: 14px;float: right;color: #a6a6a6;">2018-09-09     13:40</p>
 									</div>
-									<p style="float: left;line-height: 30px;margin-left: 10px;">0</p>
+									<div class=" clearfix" >
+										<div style="float: left;">
+											<ul class="comment">
+											    <li class="commentli">☆</li>
+											    <li class="commentli">☆</li>
+											    <li class="commentli">☆</li>
+											    <li class="commentli">☆</li>
+											    <li class="commentli">☆</li>
+											</ul>
+										</div>
+										<p style="float: left;line-height: 30px;margin-left: 10px;">0</p>
+									</div>
+									
+									<p style="font-size: 16px;width: ;">很好，很棒，客服很细心，教我怎么操作，秒充成功。我一直在这家买暗黑的东西，信得过，速度飞一般的到了，充值神速100%的诚信！</p>
 								</div>
-								
-								<p style="font-size: 16px;width: ;">很好，很棒，客服很细心，教我怎么操作，秒充成功。我一直在这家买暗黑的东西，信得过，速度飞一般的到了，充值神速100%的诚信！</p>
 							</div>
-						</div>
+							
+							
+							<div class="clearfix" style="border: solid;border-color: #EBEBEB;border-width: 0px 0px 1px 0px;width: 960px;">
+								<img style="margin-top: 20px;margin-left: 20px;width: 60px;height: 60px;float: left;"  src="../img/touxiang1.png"/>
+							
+								<div style="float: left;margin-left: 20px;margin-top: 20px;width: 810px;">
+									<div style="" class="clearfix">
+										<p style="font-size: 14px;float: left;">lalal</p>
+										<p style="font-size: 14px;float: left;margin-left: 15px;color: #a6a6a6;">国籍：中国</p>
+										<p style="font-size: 14px;float: right;color: #a6a6a6;">2018-09-09     13:40</p>
+									</div>
+									<div class=" clearfix" >
+										<div style="float: left;">
+											<ul class="comment">
+											    <li class="commentli">☆</li>
+											    <li class="commentli">☆</li>
+											    <li class="commentli">☆</li>
+											    <li class="commentli">☆</li>
+											    <li class="commentli">☆</li>
+											</ul>
+										</div>
+										<p style="float: left;line-height: 30px;margin-left: 10px;">0</p>
+									</div>
+									
+									<p style="font-size: 16px;width: ;">很好，很棒，客服很细心，教我怎么操作，秒充成功。我一直在这家买暗黑的东西，信得过，速度飞一般的到了，充值神速100%的诚信！</p>
+								</div>
+							</div> -->
 					</div>
-					
+					</div>
 				</div>
 
 			</div>

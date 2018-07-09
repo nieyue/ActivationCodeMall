@@ -143,6 +143,32 @@ public class MerController {
 		return ResultUtil.getSlefSRFailList(null);
 	}
 	/**
+	 * 商户商品增加卡密
+	 * @return 
+	 */
+	@ApiOperation(value = "商户商品增加卡密", notes = "商户商品增加卡密")
+	@ApiImplicitParams({
+		@ApiImplicitParam(name="accountId",value="商户账户id",dataType="int", paramType = "query",required=true),
+		@ApiImplicitParam(name="merId",value="官方自营商品id",dataType="int", paramType = "query",required=true),
+		@ApiImplicitParam(name="merCardCipherType",value="卡密类型，1上传文件的字符串文字，2字符串文字，3字符串图片",dataType="int", paramType = "query",required=true),
+		@ApiImplicitParam(name="merCardCiphers",value="商品卡密集合，如：2323dfsf,sdf23",dataType="string", paramType = "query",required=true),
+	})
+	@RequestMapping(value = "/addMerCardCipher", method = {RequestMethod.GET,RequestMethod.POST})
+	public @ResponseBody StateResultList<List<Mer>> addMerCardCipher(
+			@RequestParam(value="accountId")Integer sellerAccountId,
+			@RequestParam(value="merId")Integer merId,
+			@RequestParam(value="merCardCipherType")Integer merCardCipherType,
+			@RequestParam(value="merCardCiphers")String merCardCiphers,
+			HttpSession session) { 
+		Mer mer = merService.addMerCardCipher(sellerAccountId, merId,merCardCipherType, merCardCiphers);
+		if(mer!=null){
+			List<Mer> list=new ArrayList<>();
+			list.add(mer);
+			return ResultUtil.getSlefSRSuccessList(list);
+		}
+		return ResultUtil.getSlefSRFailList(null);
+	}
+	/**
 	 * 商品删除
 	 * @return
 	 */

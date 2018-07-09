@@ -82,6 +82,8 @@ public class MerServiceImpl implements MerService{
 		r.setMerCate(merCate);
 		List<MerImg> mil=merImgService.browsePagingMerImg(merId, 1, Integer.MAX_VALUE, "mer_img_id", "asc");
 		r.setMerImgList(mil);
+		Account sa = accountService.loadAccount(r.getSellerAccountId());
+		r.setSellerAccount(sa);
 		return r;
 	}
 
@@ -156,6 +158,8 @@ public class MerServiceImpl implements MerService{
 			m.setMerCate(merCate);
 			List<MerImg> mil=merImgService.browsePagingMerImg(m.getMerId(), 1, Integer.MAX_VALUE, "mer_img_id", "asc");
 			m.setMerImgList(mil);
+			Account sa = accountService.loadAccount(m.getSellerAccountId());
+			m.setSellerAccount(sa);
 		});
 		return l;
 	}
@@ -286,6 +290,48 @@ public class MerServiceImpl implements MerService{
 		notice.setType(2);//类型，1系统消息，2申请新产品销售，3新增商品类型，4商品申请自营，5提现申请，6问题单反馈,7订单商品动态
 		noticeService.addNotice(notice);
 		return sellerMer;
+	}
+	@Override
+	public Mer addMerCardCipher(Integer sellerAccountId, Integer merId, Integer merCardCipherType,
+			String merCardCiphers) {
+		if(merCardCiphers.length()<=0){
+			throw new CommonRollbackException("缺失卡密");			
+		}
+		String[] mccs = merCardCiphers.replace(" ","").split(",");
+		if(merCardCipherType!=1&&merCardCipherType!=2&&merCardCipherType!=3){
+			throw new CommonRollbackException("卡密类型错误");			
+		}
+		Account sa = accountService.loadAccount(sellerAccountId);
+		if(sa==null){
+			throw new AccountIsNotExistException();
+		}
+		if(!sa.getRoleName().equals("商户")){
+			throw new MySessionException();
+		}
+		Mer mer = this.loadMer(merId);
+		if(mer==null){
+			throw new CommonRollbackException("商品不存在");
+		}
+		boolean b=false;
+		//添加商户商品图片卡密
+		for (int i = 0; i < mccs.length; i++) {
+			String mcc = mccs[i];
+			MerCardCipher merCardCipher=new MerCardCipher();
+			if(merCardCipherType==1||merCardCipherType==2){
+				merCardCipher.setCode(mcc);				
+			}
+			if(merCardCipherType==3){
+				merCardCipher.setImgAddress(mcc);
+			}
+			merCardCipher.setCreateDate(new Date());
+			merCardCipher.setMerId(mer.getMerId());
+			b=merCardCipherService.addMerCardCipher(merCardCipher);
+			if(!b){
+				throw new CommonRollbackException("增加商品卡密失败");
+			}
+		}
+		mer.setMerCate(mer.getMerCate());
+		return mer;
 	}
 
 	
