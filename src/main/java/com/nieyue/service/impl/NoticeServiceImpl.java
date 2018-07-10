@@ -11,12 +11,16 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.nieyue.bean.Account;
 import com.nieyue.bean.Mer;
+import com.nieyue.bean.MerCate;
 import com.nieyue.bean.Notice;
 import com.nieyue.business.NoticeBusiness;
 import com.nieyue.dao.NoticeDao;
 import com.nieyue.service.AccountService;
+import com.nieyue.service.MerCateService;
 import com.nieyue.service.MerService;
 import com.nieyue.service.NoticeService;
+
+import net.sf.json.JSONObject;
 @Service
 public class NoticeServiceImpl implements NoticeService{
 	@Resource
@@ -27,6 +31,8 @@ public class NoticeServiceImpl implements NoticeService{
 	NoticeBusiness noticeBusiness;
 	@Resource
 	MerService merService;
+	@Resource
+	MerCateService merCateService;
 	@Transactional(propagation=Propagation.REQUIRED)
 	@Override
 	public boolean addNotice(Notice notice) {
@@ -100,8 +106,9 @@ public class NoticeServiceImpl implements NoticeService{
 	@Override
 	public boolean updateNotice(Notice notice) {
 		notice.setUpdateDate(new Date());
-		boolean b = noticeDao.updateNotice(notice);
-		if(b&&notice.getType().equals(1)){
+		boolean b =false;
+		if(notice.getType().equals(1)){
+			b = noticeDao.updateNotice(notice);
 			//通知到所有人
 			new Thread(new Runnable() {
 				
@@ -123,12 +130,34 @@ public class NoticeServiceImpl implements NoticeService{
 					});
 				}
 			}).start();
-		}else if(b&&notice.getType().equals(2)&&notice.getStatus().equals(2)){
+		}else if(notice.getType().equals(2)&&notice.getStatus().equals(2)){
 			//申请新产品销售 ,审核通过
+			b = noticeDao.updateNotice(notice);
 			Notice n = noticeDao.loadNotice(notice.getNoticeId());
 			Mer mer = merService.loadMer(n.getBusinessId());
 			mer.setStatus(1);//上架
-			merService.updateMer(mer);
+			b=merService.updateMer(mer);
+		}else if(notice.getType().equals(3)&&notice.getStatus().equals(2)){
+			//新增商品类型 ,审核通过
+			Notice n = noticeDao.loadNotice(notice.getNoticeId());
+			MerCate merCate=new MerCate();
+			JSONObject json=JSONObject.fromObject(n.getContent());
+			merCate.setName(json.getString("merCateName"));
+			merCate.setSummary(json.getString("merCateSummary"));
+			merCateService.addMerCate(merCate);
+			notice.setBusinessId(merCate.getMerCateId());
+			b = noticeDao.updateNotice(notice);
+		}else if(notice.getType().equals(4)&&notice.getStatus().equals(2)){
+			//商品申请自营 ,审核通过
+			b = noticeDao.updateNotice(notice);
+			Notice n = noticeDao.loadNotice(notice.getNoticeId());
+			Mer mer = merService.loadMer(n.getBusinessId());
+			JSONObject json=JSONObject.fromObject(n.getContent());
+			mer.setPlatformProportion(json.getDouble("merPlatformProportion"));
+			mer.setRegion(3);//商户自营
+			b=merService.updateMer(mer);
+		}else{
+			b = noticeDao.updateNotice(notice); 
 		}
 		return b;
 	}

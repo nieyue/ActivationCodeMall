@@ -178,6 +178,8 @@ public class OrderServiceImpl implements OrderService{
 	public int countAll(
 			Integer type,
 			Integer payType,
+			Integer region,
+			Integer merType,
 			Integer merchantAccountId,
 			Integer spreadAccountId,
 			Integer accountId,
@@ -187,7 +189,8 @@ public class OrderServiceImpl implements OrderService{
 			Date updateDate
 			) {
 		int c = orderDao.countAll(
-				type,payType, merchantAccountId, spreadAccountId,accountId,status,substatus,createDate,updateDate);
+				type,payType,  region,
+				 merType,merchantAccountId, spreadAccountId,accountId,status,substatus,createDate,updateDate);
 		return c;
 	}
 
@@ -195,6 +198,8 @@ public class OrderServiceImpl implements OrderService{
 	public List<Order> browsePagingOrder(
 			Integer type,
 			Integer payType,
+			Integer region,
+			Integer merType,
 			Integer merchantAccountId,
 			Integer spreadAccountId,
 			Integer accountId,
@@ -213,6 +218,8 @@ public class OrderServiceImpl implements OrderService{
 		List<Order> l = orderDao.browsePagingOrder(
 				type,
 				payType,
+				region,
+				merType,
 				merchantAccountId,
 				spreadAccountId,
 				accountId,

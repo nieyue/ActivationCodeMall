@@ -11,6 +11,9 @@
    		 order_number,
    		 type,
    		 pay_type,
+   		 region,
+   		 platform_proportion,
+   		 mer_type,
    		 merchant_account_id,
    		 spread_account_id,
    		 account_id,
@@ -25,6 +28,9 @@
     	 #{orderNumber},
     	 #{type},
     	 #{payType},
+    	 #{region},
+    	 #{platformProportion},
+    	 #{merType},
     	 #{merchantAccountId},
     	 #{spreadAccountId},
     	 #{accountId},
@@ -48,6 +54,15 @@
     	</if>
     	<if test="payType!=null">
     	pay_type=#{payType},
+    	</if>
+    	<if test="region!=null">
+    	region=#{region},
+    	</if>
+    	<if test="platformProportion!=null">
+    	platform_proportion=#{platformProportion},
+    	</if>
+    	<if test="merType!=null">
+    	mer_type=#{merType},
     	</if>
     	<if test="merchantAccountId!=null">
     	merchant_account_id=#{merchantAccountId},
@@ -90,6 +105,9 @@ SELECT
 	 	 order_number,
    		 type,
    		 pay_type,
+   		 region,
+   		 platform_proportion,
+   		 mer_type,
    		 merchant_account_id,
    		 spread_account_id,
    		 account_id,
@@ -109,6 +127,9 @@ WHERE order_id=#{orderId}
 	 	 order_number,
    		 type,
    		 pay_type,
+   		 region,
+   		 platform_proportion,
+   		 mer_type,
    		 merchant_account_id,
    		 spread_account_id,
    		 account_id,
@@ -124,6 +145,12 @@ WHERE order_id=#{orderId}
 		</if>
 	<if test="payType!=null">
 		AND  pay_type=#{payType}
+		</if>
+	<if test="region!=null">
+		AND  region=#{region}
+		</if>
+	<if test="merType!=null">
+		AND  mer_type=#{merType}
 		</if>
 	<if test="merchantAccountId!=null">
 		AND  merchant_account_id=#{merchantAccountId}
@@ -160,6 +187,12 @@ WHERE order_id=#{orderId}
 		</if>
 		<if test="payType!=null">
 		AND  pay_type=#{payType}
+		</if>
+		<if test="region!=null">
+		AND  region=#{region}
+		</if>
+	<if test="merType!=null">
+		AND  mer_type=#{merType}
 		</if>
 		<if test="merchantAccountId!=null">
 		AND  merchant_account_id=#{merchantAccountId}
@@ -205,6 +238,12 @@ WHERE order_id=#{orderId}
 		</if>
 	<if test="payType!=null">
 		AND  pay_type=#{payType}
+		</if>
+		<if test="region!=null">
+		AND  region=#{region}
+		</if>
+	<if test="merType!=null">
+		AND  mer_type=#{merType}
 		</if>
 		<if test="merchantAccountId!=null">
 		AND  merchant_account_id=#{merchantAccountId}

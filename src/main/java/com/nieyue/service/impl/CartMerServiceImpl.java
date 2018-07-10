@@ -222,6 +222,11 @@ public class CartMerServiceImpl implements CartMerService{
 				order.setSubstatus(1);
 				//类型，1购买商品，2账户提现，3退款，4诚信押金
 				order.setType(1);
+				//范围，1官网自营，2商户非自营，3商户自营
+				order.setRegion(mer.getRegion());
+				order.setPlatformProportion(mer.getPlatformProportion());
+				//商品类型，1普通商品，2降价商品，3预购商品
+				order.setMerType(mer.getType());
 				order.setUpdateDate(new Date());
 				//商户id
 				if(e.getMer().getSellerAccountId()!=null){

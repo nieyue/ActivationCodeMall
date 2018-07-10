@@ -227,6 +227,8 @@ $(document).ready(function(){
 				$("#merStockNumber").text(good.stockNumber);
 				//商品种类
 				$("#merCateName").text(good.merCate.name);
+				//平台分成
+				$("#platformProportion").text(good.platformProportion);
 				//更新时间
 				$("#updateDate").text(good.updateDate);
 				
@@ -902,7 +904,10 @@ $(document).ready(function(){
 				business.ajax("/mer/addSellerMer",info,function(data){
 					if(data.code==200){
 						business.myLoadingToast("添加成功")
-						sessionStorage.removeItem("sellerMer")
+						sessionStorage.removeItem("sellerMer");
+						setTimeout(function(){
+							location.href="../sell/sell_index.html";
+						},1000);
 					}else{
 						business.myLoadingToast(data.msg)
 					}
@@ -1255,7 +1260,7 @@ $(document).ready(function(){
 									//平台提成
 									$("#platformPrice").text(parseFloat(business.order.orderDetailList[0].totalPrice*business.mer.platformProportion/100).toFixed(2))
 									//订单收入
-									$("#sellerOrderPrice").text(business.order.orderDetailList[0].totalPrice-parseFloat(business.order.orderDetailList[0].totalPrice*business.mer.platformProportion/100).toFixed(2));
+									$("#sellerOrderPrice").text((business.order.orderDetailList[0].totalPrice-parseFloat(business.order.orderDetailList[0].totalPrice*business.mer.platformProportion/100)).toFixed(2));
 									}});
 									var info3 = {
 											accountId:business.account.accountId,//商户id
@@ -1334,6 +1339,11 @@ $(document).ready(function(){
 			
 	};
 	business.getOrderList5();
+	}else if(location.href.indexOf("/sell/sell_questiondetail.html")>=0){
+	/**
+	 * 问题单详情
+	 */	
+		
 	}else if(location.href.indexOf("/sell/sell_record.html")>=0){
 	/**
 	 * 进账记录

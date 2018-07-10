@@ -27,6 +27,8 @@ public interface OrderDao {
 	public int countAll(
 			@Param("type")Integer type,
 			@Param("payType")Integer payType,
+			@Param("region")Integer region,
+			@Param("merType")Integer merType,
 			@Param("merchantAccountId")Integer merchantAccountId,
 			@Param("spreadAccountId")Integer spreadAccountId,
 			@Param("accountId")Integer accountId,
@@ -39,6 +41,8 @@ public interface OrderDao {
 	public List<Order> browsePagingOrder(
 			@Param("type")Integer type,
 			@Param("payType")Integer payType,
+			@Param("region")Integer region,
+			@Param("merType")Integer merType,
 			@Param("merchantAccountId")Integer merchantAccountId,
 			@Param("spreadAccountId")Integer spreadAccountId,
 			@Param("accountId")Integer accountId,

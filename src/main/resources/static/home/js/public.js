@@ -3,8 +3,8 @@ if (navigator.userAgent.indexOf("MSIE")>=1){
 	$("body").html("<div style='text-align:center;margin-top:50px;font-size:30px;'>请升级高版本浏览器使用！</div>")
 }
 var business={
-	url:"http://localhost:9000",
-	//url:"http://app.nalu888.cn",
+	//url:"http://localhost:9000",
+	url:"http://app.nalu888.cn",
 	/**
 	 * 过滤ie10以下版本
 	 */
@@ -38,8 +38,12 @@ var business={
 	mer:{},
 	//全局封装ajax
 	ajax:function(url,info,success,async){
+		var URL=business.url+url;
+		if(url.indexOf("http")>=0){
+			URL=url;
+		}
 				$.ajax({
-					url:business.url+url,
+					url:URL,
 					data:info,
 					async:async==false?false:true,
 					dataType:'json',//服务器返回json格式数据
@@ -1158,10 +1162,26 @@ business.getintarll=function(){
 	 */
 	//设置客服电话<span class="customerServicePhone"></span>
 	$(".customerServicePhone").text(business.config.customerServicePhone);
-		
+	//客服系统js
+	business.kefu='<a id="mibew-agent-button" style="display:none;"  href="http://59.110.221.143:1433/index.php/chat?locale=zh-cn"' 
+		+'target="_blank" onclick="Mibew.Objects.ChatPopups[\'5b444c5243a82924\'].open();return false;">' 
+		+'to chat</a>'
+		+'<script type="text/javascript">Mibew.ChatPopup.init({"id":"5b444c5243a82924","url":"http://59.110.221.143:1433/index.php/chat?locale=zh-cn","preferIFrame":true,"modSecurity":false,"forceSecure":false,"width":640,"height":480,"resizable":true,"styleLoader":"http://59.110.221.143:1433/index.php/chat/style/popup"});</script>';
+	$("html").append('<script type="text/javascript" src="http://59.110.221.143:1433/js/compiled/chat_popup.js"></script>');
+	setTimeout(function(){
+		$("html").append(business.kefu);		
+	},200);
+	
+	//点击在线客服咨询
+	$(".kefu_a").on("click", function() {
+	location.href="http://59.110.221.143:1433/index.php/chat?locale=zh-cn";
+		//$("#mibew-agent-button").click();
+	})
 	//点击客服
-	/*$(".kefu_a").on("click", function() {
-	})*/
+	$("#kefuChat").on("click", function() {
+		location.href="http://59.110.221.143:1433/index.php/chat?locale=zh-cn";
+		//$("#mibew-agent-button").click();
+	})
 		
 	if(!business.account){
 		return;

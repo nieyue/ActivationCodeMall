@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.nieyue.bean.MerCate;
 import com.nieyue.dao.MerCateDao;
+import com.nieyue.exception.CommonRollbackException;
 import com.nieyue.service.MerCateService;
 @Service
 public class MerCateServiceImpl implements MerCateService{
@@ -20,6 +21,12 @@ public class MerCateServiceImpl implements MerCateService{
 	@Override
 	public boolean addMerCate(MerCate merCate) {
 		merCate.setUpdateDate(new Date());
+		List<MerCate> mcl = this.browsePagingMerCate(1, Integer.MAX_VALUE, "mer_cate_id", "asc");
+		mcl.forEach(e->{
+			if(e.getName().equals(merCate.getName())){
+				throw new CommonRollbackException(e.getName()+"已经存在");
+			}
+		});
 		boolean b = merCateDao.addMerCate(merCate);
 		return b;
 	}

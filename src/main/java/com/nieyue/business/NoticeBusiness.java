@@ -157,13 +157,17 @@ public class NoticeBusiness {
 						){
 					throw new NoticeException("商品申请自营异常");
 				}
-				List<Notice> nl = noticeService.browsePagingNotice(2, 4, null, 1, notice.getAccountId(), notice.getBusinessId(), 1, 1, "notice_id", "asc");
-				if(nl.size()>0){
-					throw new NoticeException("商品申请自营已经存在，待审核后才能再次申请");
-				}
 				Mer mer4=merService.loadMer(notice.getBusinessId());
 				if(ObjectUtils.isEmpty(mer4)){
 					throw new NoticeException("商品申请自营异常");
+				}
+				List<Notice> nl = noticeService.browsePagingNotice(2, 4, null, null, notice.getAccountId(), notice.getBusinessId(), 1, 1, "notice_id", "asc");
+				if(nl.size()>0){
+					nl.forEach(e->{
+						if(e.getStatus().equals(1)){
+							throw new NoticeException("商品申请自营已经存在，待审核后才能再次申请");							
+						}
+					});
 				}
 				/*JSONObject json4=new JSONObject();
 				json4.put("merName", mer4.getName());//商品名称

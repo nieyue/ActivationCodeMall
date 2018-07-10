@@ -38,6 +38,21 @@ public class Order implements Serializable {
 	@ApiModelProperty(value="方式，1支付宝，2微信,3百度钱包,4Paypal,5网银",example="方式，1支付宝，2微信,3百度钱包,4Paypal,5网银")
 	private Integer payType;
 	/**
+	 * 范围，1官网自营，2商户非自营，3商户自营
+	 */
+	@ApiModelProperty(value="范围，1官网自营，2商户非自营，3商户自营",example="范围，1官网自营，2商户非自营，3商户自营")
+	private Integer region;
+	/**
+	 * 平台分成比例，单位%
+	 */
+	@ApiModelProperty(value="平台分成比例，单位%",example="平台分成比例，单位%")
+	private Double platformProportion;
+	/**
+	 * 商品类型，1普通商品，2降价商品，3预购商品
+	 */
+	@ApiModelProperty(value="商品类型，1普通商品，2降价商品，3预购商品",example="商品类型，1普通商品，2降价商品，3预购商品")
+	private Integer merType;
+	/**
 	 * 创建时间
 	 */
 	@ApiModelProperty(value="创建时间",example="创建时间")
@@ -182,5 +197,22 @@ public class Order implements Serializable {
 	public void setOrderProblemList(List<OrderProblem> orderProblemList) {
 		this.orderProblemList = orderProblemList;
 	}
-	
+	public Integer getRegion() {
+		return region;
+	}
+	public void setRegion(Integer region) {
+		this.region = region;
+	}
+	public Double getPlatformProportion() {
+		return platformProportion;
+	}
+	public void setPlatformProportion(Double platformProportion) {
+		this.platformProportion = platformProportion;
+	}
+	public Integer getMerType() {
+		return merType;
+	}
+	public void setMerType(Integer merType) {
+		this.merType = merType;
+	}
 }
