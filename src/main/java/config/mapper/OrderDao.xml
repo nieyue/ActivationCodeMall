@@ -173,6 +173,9 @@ WHERE order_id=#{orderId}
 	<if test="updateDate!=null">
 		AND  DATE(update_date)=DATE(#{updateDate})
 		</if>
+	<if test="paymentDate!=null">
+		AND  DATE(payment_date)<![CDATA[<= ]]>DATE(#{paymentDate})
+		</if>
 	AND ${orderName} 
 	<if test="orderWay=='asc'">
 	<![CDATA[>=]]> 
@@ -214,6 +217,9 @@ WHERE order_id=#{orderId}
 		</if>
 	<if test="updateDate!=null">
 		AND  DATE(update_date)=DATE(#{updateDate})
+		</if>
+		<if test="paymentDate!=null">
+		AND  DATE(payment_date)<![CDATA[<= ]]>DATE(#{paymentDate})
 		</if>
 		</where>
 		ORDER BY 
@@ -265,6 +271,9 @@ WHERE order_id=#{orderId}
 		</if>
 	<if test="updateDate!=null">
 		AND  DATE(update_date)=DATE(#{updateDate})
+		</if>
+		<if test="paymentDate!=null">
+		AND  DATE(payment_date)<![CDATA[<= ]]>DATE(#{paymentDate})
 		</if>
 		</where>
 </select>   

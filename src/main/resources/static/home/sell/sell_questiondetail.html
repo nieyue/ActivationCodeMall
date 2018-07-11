@@ -177,7 +177,7 @@
 						<p style="font-weight: bold;float: left;line-height: 110px;font-size: 20px;">问题单详情</p>
 						<div style="float: right;margin-top: 30px;">
 							<!-- <p>2017-09-20   14:26</p> -->
-							<p>申请人：强**</p>
+							<p>申请人：<span id="orderProblemAccountName"></span></p>
 						</div>
 					</div>
 					
@@ -186,25 +186,25 @@
 							<p class="titlep">订单详情</p>
 							<div>
 								<div style="width: 50%;float: left;">
-									<p style="margin-left: 20px;float: left;">商品名称：暗黑破坏神3-《死靈法師的崛起》台服版本</p>
+									<p style="margin-left: 20px;float: left;">商品名称：<span id="merName"></span></p>
 								</div>
 								<div style="width: 50%;float: left;">
-									<p style="margin-left: 20px;float: left;">商品种类：暗黑破坏神</p>
+									<p style="margin-left: 20px;float: left;">商品种类：<span id="merCateName"></span></p>
 								</div>
 							</div>
 							
 							<div>
 								<div style="width: 25%;float: left;">
-									<p style="margin-left: 20px;float: left;">单价：￥80</p>
+									<p style="margin-left: 20px;float: left;">单价：￥<span id="unitPrice"></span></p>
 								</div>
 								<div style="width: 25%;float: left;">
-									<p style="margin-left: 20px;float: left;">数量：3</p>
+									<p style="margin-left: 20px;float: left;">数量：<span id="number"></span></p>
 								</div>
 								<div style="width: 25%;float: left;">
-									<p style="margin-left: 20px;float: left;">折扣券：未使用</p>
+									<p style="margin-left: 20px;float: left;">折扣券：<span id="coupon"></span></p>
 								</div>
 								<div style="width: 25%;float: left;">
-									<p style="margin-left: 20px;float: left;">总金额：<p style="color: #e04600;float: left;">￥80</p></p>
+									<p style="margin-left: 20px;float: left;">总金额：<p style="color: #e04600;float: left;">￥<span class="totalPrice"></span></p>
 								</div>
 							</div>
 						</div>
@@ -213,25 +213,25 @@
 						<div style="height: 40px;line-height: 40px;" class="clearfix">
 							
 							<div style="width: 33%;float: left;height: 40px;">
-								<p style="margin-left: 20px;float: left;">订单编号：<p style="color: #FF7400;float: left;">31312455667</p></p>
+								<p style="margin-left: 20px;float: left;">订单编号：<p style="color: #FF7400;float: left;"><span id="orderNumber"></span></p>
 							</div>
 							<div style="width: 33%;float: left;height: 40px;">
-								<p style="margin-left: 20px;float: left;">下单时间：2017-09-21   11:34</p>
+								<p style="margin-left: 20px;float: left;">下单时间：<span id="createDate"></span></p>
 							</div>
 							<div style="width: 33%;float: left;height: 40px;">
-								<p style="margin-left: 20px;float: left;">支付日期：2017-09-21   11:34</p>
+								<p style="margin-left: 20px;float: left;">支付日期：<span id="paymentDate"></span></p>
 							</div>
 						</div>
 						<div style="height: 50px;line-height: 40px;" class="clearfix">
 							
 							<div style="width: 33%;float: left;height: 40px;">
-								<p style="margin-left: 20px;float: left;">卡密：iasf5*******2345  </p>
+								<p style="margin-left: 20px;float: left;">卡密：<span id="merOrderCardCipherList"></span> </p>
 							</div>
 							<div style="width: 33%;float: left;height: 40px;">
-								<p style="margin-left: 20px;float: left;">收货人：强****</p>
+								<p style="margin-left: 20px;float: left;">收货人：<span id="orderReceiptInfoName"></span></p>
 							</div>
 							<div style="width: 33%;float: left;height: 40px;">
-								<p style="margin-left: 20px;float: left;">收货邮箱：**********@qq.com</p>
+								<p style="margin-left: 20px;float: left;">收货邮箱：<span id="orderReceiptInfoEmail"></span></p>
 							</div>
 						</div>
 					</div>
@@ -250,11 +250,11 @@
 								    <li class="commentli">☆</li>
 								</ul>
 							</div>
-							<p style="float: right;color: #a6a6a6;">2018-09-09     13:40</p>
+							<p style="float: right;color: #a6a6a6;"><span id="merOrderCommentCreateDate"></span></p>
 							</div>
 							
 							<div style="margin-left: 20px;background: #EBEBEB;padding: 20px;">
-								<p class="font_size16">用户暂未评价</p>
+								<p class="font_size16" ><span id="merOrderCommentContent">用户暂未评价</span></p>
 							</div>
 							
 						</div>
@@ -262,8 +262,8 @@
 					</div>
 					
 					<div class="bg_fff" style="margin-top: 10px;padding-left: 20px;padding-right: 20px;">
-						<div style="padding-top: 20px;">
-							<div class="clearfix" style="line-height: 20px;">
+						<div style="padding-top: 20px;" id="orderProblemListWrap">
+							<!-- <div class="clearfix" style="line-height: 20px;">
 								<p class="titlep" style="float: left;width: 140px;">问题申请历史</p>
 								<p style="float: left;margin-left: 30px;">申请次数：2</p>
 								<p style="float: left;margin-left: 20px;">问题状态：</p>
@@ -290,14 +290,14 @@
 								</div>
 								<p style="width: 25%;float: left;padding-left: 20px;">申请时间：2017-11-03  12:30</p>
 								
-							</div>
+							</div> -->
 						</div>
 					</div>
 					
 					
 					<div style="width: 960px;text-align: center;margin-top: 30px;">
-						<a class="tuikuanbtn">退款给买家</a>
-						<a class="finishquestionbtn">已解决</a>
+						<a class="tuikuanbtn" id="refundSuccess">退款给买家</a>
+						<a class="finishquestionbtn" id="alreadyResolve">已解决</a>
 					</div>
 					
 				</div>
@@ -409,6 +409,7 @@
 <script src="../js/metisMenu.min.js"></script>
 <script src="../js/public.js" type="text/javascript" charset="utf-8"></script>
 <script src="../js/sell.js"></script>
+<script src="../js/sell/questiondetail.js"></script>
 <script>
 	business.getMerSearchList();
     $(function () {

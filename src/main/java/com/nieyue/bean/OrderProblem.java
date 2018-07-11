@@ -60,6 +60,11 @@ public class OrderProblem implements Serializable{
 	@ApiModelProperty(value="提问人id外键",example="提问人id外键")
 	private Integer accountId;
 	/**
+	 * 提问人
+	 */
+	@ApiModelProperty(value="提问人",example="提问人")
+	private Account account;
+	/**
 	 * 订单问题反馈
 	 */
 	@ApiModelProperty(value="订单问题反馈",example="订单问题反馈")
@@ -120,6 +125,12 @@ public class OrderProblem implements Serializable{
 	}
 	public void setOrderProblemAnswerList(List<OrderProblemAnswer> orderProblemAnswerList) {
 		this.orderProblemAnswerList = orderProblemAnswerList;
+	}
+	public Account getAccount() {
+		return account;
+	}
+	public void setAccount(Account account) {
+		this.account = account;
 	}
 	
 }

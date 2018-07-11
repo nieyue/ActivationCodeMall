@@ -9,11 +9,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.nieyue.bean.Account;
 import com.nieyue.bean.Order;
 import com.nieyue.bean.OrderProblem;
 import com.nieyue.bean.OrderProblemAnswer;
 import com.nieyue.dao.OrderProblemDao;
 import com.nieyue.exception.CommonRollbackException;
+import com.nieyue.service.AccountService;
 import com.nieyue.service.OrderProblemAnswerService;
 import com.nieyue.service.OrderProblemService;
 import com.nieyue.service.OrderService;
@@ -23,6 +25,8 @@ public class OrderProblemServiceImpl implements OrderProblemService{
 	OrderProblemDao orderProblemDao;
 	@Resource
 	OrderService orderService;
+	@Resource
+	AccountService accountService;
 	@Resource
 	OrderProblemAnswerService orderProblemAnswerService;
 	@Transactional(propagation=Propagation.REQUIRED)
@@ -64,6 +68,8 @@ public class OrderProblemServiceImpl implements OrderProblemService{
 		OrderProblem r = orderProblemDao.loadOrderProblem(orderProblemId);
 		List<OrderProblemAnswer> orderProblemAnswerList = orderProblemAnswerService.browsePagingOrderProblemAnswer(r.getOrderProblemId(), null, 1, Integer.MAX_VALUE, "order_problem_answer_id", "asc");
 		r.setOrderProblemAnswerList(orderProblemAnswerList);
+		Account account = accountService.loadAccount(r.getAccountId());
+		r.setAccount(account);
 		return r;
 	}
 
@@ -96,7 +102,8 @@ public class OrderProblemServiceImpl implements OrderProblemService{
 		l.forEach((op)->{
 			List<OrderProblemAnswer> orderProblemAnswerList = orderProblemAnswerService.browsePagingOrderProblemAnswer(op.getOrderProblemId(), null, 1, Integer.MAX_VALUE, "order_problem_answer_id", "asc");
 			op.setOrderProblemAnswerList(orderProblemAnswerList);
-			
+			Account account = accountService.loadAccount(op.getAccountId());
+			op.setAccount(account);
 		});
 		return l;
 	}

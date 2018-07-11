@@ -75,6 +75,7 @@ public class OrderController {
 	  @ApiImplicitParam(name="substatus",value="子状态，2（1待支付），3（1冻结单,2已完成），4（1等待发货），5（1待解决（买家提问后），2解决中（卖家回复后），3申请退款，4已退款，5已解决），6（1正常取消,2订单商品库存不够），7（1已删除）",dataType="int", paramType = "query"),
 	  @ApiImplicitParam(name="createDate",value="创建时间",dataType="date-time", paramType = "query"),
 	  @ApiImplicitParam(name="updateDate",value="更新时间",dataType="date-time", paramType = "query"),
+	  @ApiImplicitParam(name="paymentDate",value="支付时间",dataType="date-time", paramType = "query"),
 	  @ApiImplicitParam(name="pageNum",value="页头数位",dataType="int", paramType = "query",defaultValue="1"),
 	  @ApiImplicitParam(name="pageSize",value="每页数目",dataType="int", paramType = "query",defaultValue="10"),
 	  @ApiImplicitParam(name="orderName",value="排序字段",dataType="string", paramType = "query",defaultValue="create_date"),
@@ -93,12 +94,13 @@ public class OrderController {
 			@RequestParam(value="substatus",required=false)Integer substatus,
 			@RequestParam(value="createDate",required=false)Date createDate,
 			@RequestParam(value="updateDate",required=false)Date updateDate,
+			@RequestParam(value="paymentDate",required=false)Date paymentDate,
 			@RequestParam(value="pageNum",defaultValue="1",required=false)int pageNum,
 			@RequestParam(value="pageSize",defaultValue="10",required=false) int pageSize,
 			@RequestParam(value="orderName",required=false,defaultValue="create_date") String orderName,
 			@RequestParam(value="orderWay",required=false,defaultValue="desc") String orderWay)  {
 			List<Order> list = new ArrayList<Order>();
-			list= orderService.browsePagingOrder(type,payType,region,merType,merchantAccountId,spreadAccountId,accountId,status,substatus,createDate,updateDate,pageNum, pageSize, orderName, orderWay);
+			list= orderService.browsePagingOrder(type,payType,region,merType,merchantAccountId,spreadAccountId,accountId,status,substatus,createDate,updateDate,paymentDate,pageNum, pageSize, orderName, orderWay);
 			if(list.size()>0){
 				return ResultUtil.getSlefSRSuccessList(list);
 			}else{
@@ -128,7 +130,7 @@ public class OrderController {
 			@RequestParam(value="substatus",required=false)Integer substatus
 			)  {
 		//类型，1购买商品，2账户提现，3退款，4诚信押金"
-		List<Order> orderListAll= orderService.browsePagingOrder(1,null,null,null,null,null,accountId,status,substatus,null,null,1, Integer.MAX_VALUE, "order_id", "asc");
+		List<Order> orderListAll= orderService.browsePagingOrder(1,null,null,null,null,null,accountId,status,substatus,null,null,null,1, Integer.MAX_VALUE, "order_id", "asc");
 		if(orderListAll.size()>0){
 			List<Map<String,Object>> list=new ArrayList<Map<String,Object>>();
 			Map<String,Object> map=new HashMap<>();
@@ -319,8 +321,9 @@ public class OrderController {
 			@RequestParam(value="substatus",required=false)Integer substatus,
 			@RequestParam(value="createDate",required=false)Date createDate,
 			@RequestParam(value="updateDate",required=false)Date updateDate,
+			@RequestParam(value="paymentDate",required=false)Date paymentDate,
 			HttpSession session)  {
-		int count = orderService.countAll(type,payType,region,merType,merchantAccountId,spreadAccountId,accountId,status,substatus,createDate,updateDate);
+		int count = orderService.countAll(type,payType,region,merType,merchantAccountId,spreadAccountId,accountId,status,substatus,createDate,updateDate,paymentDate);
 		return count;
 	}
 	/**

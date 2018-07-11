@@ -39,7 +39,8 @@ public interface OrderService {
 			Integer status,
 			Integer substatus,
 			Date createDate,
-			Date updateDate
+			Date updateDate,
+			Date paymentDate
 			);
 	/** 分页订单信息 */
 	public List<Order> browsePagingOrder(
@@ -54,6 +55,7 @@ public interface OrderService {
 			Integer substatus,
 			Date createDate,
 			Date updateDate,
+			Date paymentDate,
 			int pageNum,
 			int pageSize,
 			String orderName,

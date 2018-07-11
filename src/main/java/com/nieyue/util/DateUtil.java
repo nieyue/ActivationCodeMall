@@ -499,6 +499,6 @@ public class DateUtil {
 		//System.err.println(StringUtils.isEmpty(aaa));
 		String bbb="a";
 		System.err.println(aaa.equals(bbb));
-		
+		System.err.println(DateUtil.getStartTime(new Date(new Date().getTime()+1000*60*60*24*7)));
     }  
 }

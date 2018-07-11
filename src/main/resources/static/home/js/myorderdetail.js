@@ -274,25 +274,25 @@ business.orderProblemList=function(order){
 			for (var i = 0; i < opl.length; i++) {
 				var child=opl[i];
 				var djc="初";
-				if(i==0){
+				if(child.number==1){
 					djc="初";
-				}else if(i==1){
+				}else if(child.number==2){
 					djc="二";
-				}else if(i==2){
+				}else if(child.number==3){
 					djc="三";
-				}else if(i==3){
+				}else if(child.number==4){
 					djc="四";
-				}else if(i==4){
+				}else if(child.number==5){
 					djc="五";
-				}else if(i==5){
+				}else if(child.number==6){
 					djc="六";
-				}else if(i==6){
+				}else if(child.number==7){
 					djc="七";
-				}else if(i==7){
+				}else if(child.number==8){
 					djc="八";
-				}else if(i==8){
+				}else if(child.number==9){
 					djc="九";
-				}else if(i==9){
+				}else if(child.number==10){
 					djc="十";
 				}else {
 					djc=(i+1);
@@ -341,34 +341,38 @@ business.orderProblemList=function(order){
 			});
 			//申请退款
 			$("#applyRefund").click(function() {
-				var info={
-						orderId:order.orderId,
-						status:5,
-						substatus:3,
-						accountId:business.account!=null?business.account.accountId:null
-				};
-				business.ajax("/order/update",info,function(data){
-					if(data.code==200){
-						//console.log(data)
-						business.myLoadingToast("申请成功！")
-						location.reload();
-					}
+				business.myConfirm("确定申请退款？",function(){
+					var info={
+							orderId:order.orderId,
+							status:5,
+							substatus:3,
+							accountId:business.account!=null?business.account.accountId:null
+					};
+					business.ajax("/order/update",info,function(data){
+						if(data.code==200){
+							//console.log(data)
+							business.myLoadingToast("申请成功！")
+							location.reload();
+						}
+					});
 				});
 			});
 			//已解决
 			$("#alreadyResolve").click(function() {
-				var info={
-						orderId:order.orderId,
-						status:5,
-						substatus:5,
-						accountId:business.account!=null?business.account.accountId:null
-				};
-				business.ajax("/order/update",info,function(data){
-					if(data.code==200){
-						//console.log(data)
-						business.myLoadingToast("提交成功！")
-						location.reload();
-					}
+				business.myConfirm("确定已经解决？",function(){
+					var info={
+							orderId:order.orderId,
+							status:5,
+							substatus:5,
+							accountId:business.account!=null?business.account.accountId:null
+					};
+					business.ajax("/order/update",info,function(data){
+						if(data.code==200){
+							//console.log(data)
+							business.myLoadingToast("提交成功！")
+							location.reload();
+						}
+					});
 				});
 			});
 			

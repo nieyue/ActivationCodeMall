@@ -3,8 +3,8 @@ if (navigator.userAgent.indexOf("MSIE")>=1){
 	$("body").html("<div style='text-align:center;margin-top:50px;font-size:30px;'>请升级高版本浏览器使用！</div>")
 }
 var business={
-	//url:"http://localhost:9000",
-	url:"http://app.nalu888.cn",
+	url:"http://localhost:9000",
+	//url:"http://app.nalu888.cn",
 	/**
 	 * 过滤ie10以下版本
 	 */

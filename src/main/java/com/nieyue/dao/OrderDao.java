@@ -35,7 +35,8 @@ public interface OrderDao {
 			@Param("status")Integer status,
 			@Param("substatus")Integer substatus,
 			@Param("createDate")Date createDate,
-			@Param("updateDate")Date updateDate
+			@Param("updateDate")Date updateDate,
+			@Param("paymentDate")Date paymentDate
 			);	
 	/** 分页订单信息 */
 	public List<Order> browsePagingOrder(
@@ -50,6 +51,7 @@ public interface OrderDao {
 			@Param("substatus")Integer substatus,
 			@Param("createDate")Date createDate,
 			@Param("updateDate")Date updateDate,
+			@Param("paymentDate")Date paymentDate,
 			@Param("pageNum")int pageNum,
 			@Param("pageSize")int pageSize,
 			@Param("orderName")String orderName,

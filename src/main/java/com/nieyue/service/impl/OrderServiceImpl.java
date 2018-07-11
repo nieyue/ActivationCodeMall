@@ -186,11 +186,12 @@ public class OrderServiceImpl implements OrderService{
 			Integer status,
 			Integer substatus,
 			Date createDate,
-			Date updateDate
+			Date updateDate,
+			Date paymentDate
 			) {
 		int c = orderDao.countAll(
 				type,payType,  region,
-				 merType,merchantAccountId, spreadAccountId,accountId,status,substatus,createDate,updateDate);
+				 merType,merchantAccountId, spreadAccountId,accountId,status,substatus,createDate,updateDate, paymentDate);
 		return c;
 	}
 
@@ -207,6 +208,7 @@ public class OrderServiceImpl implements OrderService{
 			Integer substatus,
 			Date createDate,
 			Date updateDate,
+			Date paymentDate,
 			int pageNum, int pageSize,
 			String orderName, String orderWay) {
 		if(pageNum<1){
@@ -227,6 +229,7 @@ public class OrderServiceImpl implements OrderService{
 				substatus,
 				createDate,
 				updateDate,
+				paymentDate,
 				pageNum-1,
 				pageSize,
 				orderName,

@@ -510,13 +510,13 @@ public class PaymentBusiness {
 			/**
 			 * 18.推广户金额
 			 */
-				List<Finance> mafl=financeService.browsePagingFinance(null, merchantAccount.getAccountId(), 1, 1, "finance_id", "asc");
-				if(mafl.size()>0){
-					Finance maf = mafl.get(0);
+				List<Finance> sal=financeService.browsePagingFinance(null, spreadAccount.getAccountId(), 1, 1, "finance_id", "asc");
+				if(sal.size()>0){
+					Finance sa = sal.get(0);
 					//增加冻结金额
 					//冻结金额=已有冻结金额+推广金额
-					maf.setFrozen(Arith.add(maf.getMoney(),Arith.mul(orderDetail.getTotalPrice(),Arith.div(config.getSpreadProportion(), 100))));
-					b=financeService.updateFinance(maf);
+					sa.setFrozen(Arith.add(sa.getMoney(),Arith.mul(orderDetail.getTotalPrice(),Arith.div(config.getSpreadProportion(), 100))));
+					b=financeService.updateFinance(sa);
 				}
 			}
 			
