@@ -74,6 +74,8 @@ public class OrderTask {
 			}
 			//获取当前商品
 			Mer mer = merService.loadMer(completeOrder.getOrderDetailList().get(0).getMerId());
+			mer.setSaleNumber(mer.getSaleNumber()+orderDetail.getNumber());
+			merService.updateMer(mer);
 			//获取商户
 			Account merchantAccount=null;
 			if(completeOrder.getMerchantAccountId()!=null){

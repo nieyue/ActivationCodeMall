@@ -50,6 +50,11 @@ public class OrderProblem implements Serializable{
 	@ApiModelProperty(value="商品id",example="商品id")
 	private Integer merId;
 	/**
+	 * 商品
+	 */
+	@ApiModelProperty(value="商品",example="商品")
+	private Mer mer;
+	/**
 	 * 订单id外键
 	 */
 	@ApiModelProperty(value="订单id外键",example="订单id外键")
@@ -131,6 +136,12 @@ public class OrderProblem implements Serializable{
 	}
 	public void setAccount(Account account) {
 		this.account = account;
+	}
+	public Mer getMer() {
+		return mer;
+	}
+	public void setMer(Mer mer) {
+		this.mer = mer;
 	}
 	
 }

@@ -10,12 +10,14 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.nieyue.bean.Account;
+import com.nieyue.bean.Mer;
 import com.nieyue.bean.Order;
 import com.nieyue.bean.OrderProblem;
 import com.nieyue.bean.OrderProblemAnswer;
 import com.nieyue.dao.OrderProblemDao;
 import com.nieyue.exception.CommonRollbackException;
 import com.nieyue.service.AccountService;
+import com.nieyue.service.MerService;
 import com.nieyue.service.OrderProblemAnswerService;
 import com.nieyue.service.OrderProblemService;
 import com.nieyue.service.OrderService;
@@ -27,6 +29,8 @@ public class OrderProblemServiceImpl implements OrderProblemService{
 	OrderService orderService;
 	@Resource
 	AccountService accountService;
+	@Resource
+	MerService merService;
 	@Resource
 	OrderProblemAnswerService orderProblemAnswerService;
 	@Transactional(propagation=Propagation.REQUIRED)
@@ -70,6 +74,8 @@ public class OrderProblemServiceImpl implements OrderProblemService{
 		r.setOrderProblemAnswerList(orderProblemAnswerList);
 		Account account = accountService.loadAccount(r.getAccountId());
 		r.setAccount(account);
+		Mer mer = merService.loadMer(r.getMerId());
+		r.setMer(mer);
 		return r;
 	}
 
@@ -104,6 +110,8 @@ public class OrderProblemServiceImpl implements OrderProblemService{
 			op.setOrderProblemAnswerList(orderProblemAnswerList);
 			Account account = accountService.loadAccount(op.getAccountId());
 			op.setAccount(account);
+			Mer mer = merService.loadMer(op.getMerId());
+			op.setMer(mer);
 		});
 		return l;
 	}
