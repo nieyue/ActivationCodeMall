@@ -8,8 +8,11 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.poi.hssf.usermodel.HSSFCellStyle;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.HorizontalAlignment;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -96,42 +99,46 @@ public class MyExcel {
      * @param exportFilePath
      */
     @SuppressWarnings("resource")
-	public static void exportData(List<String> list,String templetFilePath, String exportFilePath){
+	public static void exportData(List<String> list, String exportFilePath){
         try {
             File exportFile=new File(exportFilePath);
-            File templetFile= new File(templetFilePath);
             Workbook workBook;
 
             if(!exportFile.exists()){
                 exportFile.createNewFile();
             }
-
             FileOutputStream out = new FileOutputStream(exportFile);
-            FileInputStream fis = new FileInputStream(templetFile);
-            if(isExcel2007(templetFile.getPath())){
-                workBook=new XSSFWorkbook(fis);
+            if(isExcel2007(exportFile.getPath())){
+                workBook=new XSSFWorkbook();
             }else {
-                workBook=new HSSFWorkbook(fis);
+                workBook=new HSSFWorkbook();
             }
-
-            Sheet sheet=workBook.getSheetAt(0);
-
+             CellStyle style = workBook.createCellStyle();  
+            style.setAlignment(HorizontalAlignment.CENTER); 
+            //Sheet sheet=workBook.getSheetAt(0);
+            Sheet sheet=workBook.createSheet("测试");
+            workBook.setSheetName(0, "我的工作簿1");//设置名字（以及编码）
+            Row headrow =sheet.createRow(0);
+            Cell headrowcell0 = headrow.createCell(0);
+            headrowcell0.setCellValue("序号");
             int rowIndex = 1 ;
             for (String item :list) {
                 Row row=sheet.createRow(rowIndex);
                 row.createCell(0).setCellValue(item);
                 rowIndex++;
             }
-
             workBook.write(out);
             out.flush();
             out.close();
-
-            fis.close();
 
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
+    public static void main(String[] args) {
+    	ArrayList<String> list = new ArrayList<String>();
+    	list.add("sdfdsf");
+    	exportData(list,"D://home/d.xls");
+	}
     
 }
