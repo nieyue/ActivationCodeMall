@@ -57,8 +57,8 @@ public class FinanceRecordController {
 	@ApiImplicitParams({
 	  @ApiImplicitParam(name="accountId",value="账户Id",dataType="int", paramType = "query"),
 	  @ApiImplicitParam(name="status",value="状态，默认1待处理，2成功，3已拒绝",dataType="int", paramType = "query"),
-	  @ApiImplicitParam(name="method",value="方式，1支付宝，2微信,3余额支付,4ios内购",dataType="int", paramType = "query"),
-	  @ApiImplicitParam(name="type",value="类型，1账户充值，2账户提现,3招收学员佣金,4推荐佣金,5团购账单,6拆分账单,7二级团购奖励,8vip购买,9分发奖励，10二级购买vip奖励,11付费课程购买",dataType="int", paramType = "query"),
+	  @ApiImplicitParam(name="method",value="方式，1支付宝，2微信,3百度钱包,4Paypal,5网银",dataType="int", paramType = "query"),
+	  @ApiImplicitParam(name="type",value="类型，1购买商品，2提现记录，3退款记录（用户），4诚信押金，5进账记录，6被退款记录（商户），7申请退保证金",dataType="int", paramType = "query"),
 	  @ApiImplicitParam(name="transactionNumber",value="交易单号",dataType="int", paramType = "query"),
 	  @ApiImplicitParam(name="createDate",value="创建时间",dataType="date-time", paramType = "query"),
 	  @ApiImplicitParam(name="updateDate",value="更新时间",dataType="date-time", paramType = "query"),
@@ -129,8 +129,8 @@ public class FinanceRecordController {
 	@ApiImplicitParams({
 		  @ApiImplicitParam(name="accountId",value="账户Id",dataType="int", paramType = "query"),
 		  @ApiImplicitParam(name="status",value="状态，默认1待处理，2成功，3已拒绝",dataType="int", paramType = "query"),
-		  @ApiImplicitParam(name="method",value="方式，1支付宝，2微信,3余额支付,4ios内购",dataType="int", paramType = "query"),
-		  @ApiImplicitParam(name="type",value="类型，1账户充值，2账户提现,3招收学员佣金,4推荐佣金,5团购账单,6拆分账单,7二级团购奖励,8vip购买,9分发奖励，10二级购买vip奖励,11付费课程购买",dataType="int", paramType = "query"),
+		  @ApiImplicitParam(name="method",value="方式，1支付宝，2微信,3百度钱包,4Paypal,5网银",dataType="int", paramType = "query"),
+		  @ApiImplicitParam(name="type",value="类型，1购买商品，2提现记录，3退款记录（用户），4诚信押金，5进账记录，6被退款记录（商户），7申请退保证金",dataType="int", paramType = "query"),
 		  @ApiImplicitParam(name="transactionNumber",value="交易单号",dataType="int", paramType = "query"),
 		  @ApiImplicitParam(name="createDate",value="创建时间",dataType="date-time", paramType = "query"),
 		  @ApiImplicitParam(name="updateDate",value="更新时间",dataType="date-time", paramType = "query")

@@ -28,9 +28,9 @@ public class FinanceRecord implements Serializable {
 	@ApiModelProperty(value="方式，1支付宝，2微信,3百度钱包,4Paypal,5网银",example="方式，1支付宝，2微信,3百度钱包,4Paypal,5网银")
 	private Integer method;
 	/**
-	 * 类型，1购买商品，2账户提现，3退款，4诚信押金
+	 * 类型，1购买商品，2提现记录，3退款记录（用户），4诚信押金，5进账记录，6被退款记录（商户），7申请退保证金
 	 */
-	@ApiModelProperty(value="类型，1购买商品，2账户提现，3退款，4诚信押金",example="类型，1购买商品，2账户提现，3退款，4诚信押金")
+	@ApiModelProperty(value="类型，1购买商品，2提现记录，3退款记录（用户），4诚信押金，5进账记录，6被退款记录（商户），7申请退保证金",example="类型，1购买商品，2提现记录，3退款记录（用户），4诚信押金，5进账记录，6被退款记录（商户），7申请退保证金")
 	private Integer type;
 	/**
 	 * 交易单号
