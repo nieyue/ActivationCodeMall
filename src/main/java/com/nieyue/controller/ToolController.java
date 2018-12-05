@@ -166,7 +166,7 @@ public class ToolController {
 	 * @throws IllegalStateException 
 	 */
 	@RequestMapping(value = "/importExcel", method = {RequestMethod.GET,RequestMethod.POST})
-	public StateResultList<List<String>> importExcel(
+	public StateResultList<List<?>> importExcel(
 			@RequestParam("excel") MultipartFile multipartFile,
 			HttpSession	 session
 			) throws IllegalStateException, IOException{
@@ -174,7 +174,7 @@ public class ToolController {
 		name=rootPath+locationPath+"/"+SnowflakeIdWorker.getId().toString()+multipartFile.getOriginalFilename();
 		File file = new File(name);
 		multipartFile.transferTo(file);
-		List<String> list = MyExcel.importData(file);
+		List<?> list = MyExcel.importData(file);
 		
 		return ResultUtil.getSlefSRSuccessList(list);
 	}
